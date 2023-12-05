@@ -1,6 +1,8 @@
 package meal.decider
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
@@ -15,6 +17,9 @@ class GameViewModel (context: Context) : ViewModel() {
 
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var colorListRunnable = Runnable {}
 
     fun createSquareList() {
         _boardUiState.update { currentState ->
@@ -45,6 +50,12 @@ class GameViewModel (context: Context) : ViewModel() {
         return list
     }
 
+    fun updateColorList(list: SnapshotStateList<Color>) {
+        _boardUiState.update { currentState ->
+            currentState.copy(colorList = list)
+        }
+    }
+
     fun updateColorListItem(index: Int, color: Color) {
         val list = SnapshotStateList<Color>()
         for (i in SquareDataObject.squareValuesList) {
@@ -55,6 +66,32 @@ class GameViewModel (context: Context) : ViewModel() {
         _boardUiState.update { currentState ->
             currentState.copy(colorList = list)
         }
+    }
+
+    fun colorListWithRandomIndexChanged(color: Color): SnapshotStateList<Color> {
+        val list = SnapshotStateList<Color>()
+        val roll = Random.nextInt(0, squareList.size)
+        for (i in squareList) {
+            list.add(Color.Gray)
+        }
+        list[roll] = color
+
+        return list
+    }
+
+    fun postColorListLooper() {
+        var delay: Long = 1000
+
+        colorListRunnable = Runnable {
+            val indexRoll = rollRandomSquare(squareList.size)
+            val newColorList = colorListWithRandomIndexChanged(Color.Red)
+            updateColorList(newColorList)
+
+            handler.postDelayed(colorListRunnable, delay)
+            delay -= 100
+        }
+
+        handler.post((colorListRunnable))
     }
 
     fun updateSelectedSquare(square: Int) {

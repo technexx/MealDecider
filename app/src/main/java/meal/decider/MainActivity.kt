@@ -82,7 +82,7 @@ fun SelectionGrid() {
 //    showLog("test", "${gameViewModel.colorList.size}")
 
     LazyVerticalGrid(
-        columns = GridCells.Fixed(4),
+        columns = GridCells.Adaptive(minSize = 128.dp),
 
         // content padding
         contentPadding = PaddingValues(
@@ -106,7 +106,8 @@ fun SelectionGrid() {
                             onClick = {
                                 val roll = gameViewModel.rollRandomSquare(boardUiState.value.squareList.size)
                                 gameViewModel.updateColorListItem(index, Color.Red)
-                                showLog("test", "roll is $roll")
+
+
                             }
                         ),
                 ) {
