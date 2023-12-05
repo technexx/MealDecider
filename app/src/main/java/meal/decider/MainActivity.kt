@@ -75,8 +75,11 @@ fun Board() {
 
 @Composable
 fun SelectionGrid() {
-    val boardUiState = gameViewModel.boardUiState.collectAsState()
+    val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
     gameViewModel.createSquareList()
+    gameViewModel.createColorList()
+
+//    showLog("test", "${gameViewModel.colorList.size}")
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(4),
@@ -91,16 +94,19 @@ fun SelectionGrid() {
         content = {
             items(boardUiState.value.squareList.size) { index ->
                 Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    ),
+//                    colors = CardDefaults.cardColors(
+//                        containerColor = squareColor,
+//                    ),
                     modifier = Modifier
                         .padding(4.dp)
                         .fillMaxWidth()
+                        .background(gameViewModel.colorList[index])
                         .selectable(
                             selected = true,
                             onClick = {
-
+                                val roll = gameViewModel.rollRandomSquare(boardUiState.value.squareList.size)
+                                gameViewModel.updateColorListItem(roll, Color.Red)
+                                showLog("test", "roll is $roll")
                             }
                         ),
                 ) {
