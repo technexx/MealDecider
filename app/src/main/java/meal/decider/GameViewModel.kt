@@ -28,4 +28,19 @@ class GameViewModel (context: Context) : ViewModel() {
         return list
     }
 
+    //    fun updateSquareDataObject(object: SquareDataObject) {
+//        _boardUiState.update { currentState ->
+//            currentState.copy()
+//        }
+//    }
+
+    fun updateSelectedSquare(square: Int) {
+        _boardUiState.update { currentState ->
+            currentState.copy(selectedSquare = square)
+        }
+    }
+
+    val selectedSquare = boardUiState.value.selectedSquare
+    val numberList = boardUiState.value.numberList
+    val squareList = boardUiState.value.squareList
 }
