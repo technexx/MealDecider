@@ -26,6 +26,30 @@ object SquareDataObject {
         ),
         SquareValues(
             "Italian"
-        )
+        ),
+        SquareValues(
+            "Greek"
+        ),
+        SquareValues(
+            "Indian"
+        ),
+        SquareValues(
+            "Korean"
+        ),
+        SquareValues(
+            "Thai"
+        ),
+        SquareValues(
+            "Vietnamese"
+        ),
+        SquareValues(
+            "Cuban"
+        ),
+        SquareValues(
+            "Ethiopian"
+        ),
+        SquareValues(
+            "French"
+        ),
     )
 }
