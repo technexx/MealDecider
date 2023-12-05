@@ -94,18 +94,18 @@ fun SelectionGrid() {
         content = {
             items(boardUiState.value.squareList.size) { index ->
                 Card(
-//                    colors = CardDefaults.cardColors(
-//                        containerColor = squareColor,
-//                    ),
+                    colors = CardDefaults.cardColors(
+                        containerColor = gameViewModel.colorList[index],
+                    ),
                     modifier = Modifier
                         .padding(4.dp)
                         .fillMaxWidth()
-                        .background(gameViewModel.colorList[index])
+//                        .background(gameViewModel.colorList[index])
                         .selectable(
                             selected = true,
                             onClick = {
                                 val roll = gameViewModel.rollRandomSquare(boardUiState.value.squareList.size)
-                                gameViewModel.updateColorListItem(roll, Color.Red)
+                                gameViewModel.updateColorListItem(index, Color.Red)
                                 showLog("test", "roll is $roll")
                             }
                         ),
