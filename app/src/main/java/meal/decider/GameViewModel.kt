@@ -84,19 +84,9 @@ class GameViewModel (context: Context) : ViewModel() {
         }
     }
 
-    fun updateColorListItem(index: Int, color: Color) {
-        val list = SnapshotStateList<Color>()
-        for (i in SquareDataObject.squareValuesList) {
-            list.add(Color.Gray)
-        }
-        list[index] = color
-
-        updateColorList(list)
-    }
-
-    fun updateSelectedSquare(square: Int) {
+    fun updateSelectedSquare(squareValues: SquareValues) {
         _boardUiState.update { currentState ->
-            currentState.copy(selectedSquare = square)
+            currentState.copy(selectedSquare = squareValues)
         }
     }
 
@@ -105,7 +95,6 @@ class GameViewModel (context: Context) : ViewModel() {
     }
 
     val selectedSquare get() = boardUiState.value.selectedSquare
-    val numberList get() = boardUiState.value.numberList
     val squareList get() = boardUiState.value.squareList
     val colorList get() = boardUiState.value.colorList
 }

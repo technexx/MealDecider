@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Meal Decider</string>
+    <string name="meal_decided">%1$s it is!</string>
 </resources>

@@ -5,11 +5,10 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
 
 data class BoardValues(
-    var selectedSquare: Int = 0,
-    var numberList: SnapshotStateList<Int> = mutableStateListOf(),
+    var selectedSquare: SquareValues = SquareDataObject.squareValuesList[0],
     var squareList: SnapshotStateList<SquareValues> = mutableStateListOf(),
     var colorList: SnapshotStateList<Color> = mutableStateListOf(),
-
+    var rollFinished: Boolean = false,
 )
 
 data class SquareValues(

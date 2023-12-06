@@ -9,8 +9,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,7 +73,7 @@ fun Board() {
 
     Column (modifier = Modifier
         .fillMaxWidth()
-        .height((screenHeight() * .8).dp)
+        .height((screenHeight() * 1).dp)
         .background(Color.Blue)
     ) {
         SelectionGrid()
@@ -80,6 +83,8 @@ fun Board() {
 @Composable
 fun SelectionGrid() {
     val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
     gameViewModel.createSquareList()
     gameViewModel.createColorList()
 
@@ -122,7 +127,7 @@ fun SelectionGrid() {
         }
     )
 
-    Spacer(modifier = Modifier.height(12.dp))
+    Spacer(modifier = Modifier.height(24.dp))
 
     Column (
         modifier = Modifier
@@ -132,9 +137,31 @@ fun SelectionGrid() {
         Button(onClick = {
             gameViewModel.updateColorListLooper()
         }) {
-            Text(text = "Decide!", color = Color.White, fontSize = 20.sp)
+            ButtonUi(text = "Decide")
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
+        
+        Text(text = context.getString(R.string.meal_decided, gameViewModel.selectedSquare.name), color = Color.White, fontSize = 22.sp)
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row (
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            ButtonUi(text = "Roll Again")
+            ButtonUi(text = "Open Maps")
+        }
+
     }
+}
+
+@Composable
+fun ButtonUi(text: String) {
+    Text(text = text, color = Color.White, fontSize = 20.sp)
+
 }
 
 @Composable
