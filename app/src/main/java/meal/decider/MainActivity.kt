@@ -149,10 +149,18 @@ fun SelectionGrid() {
         Row (
             modifier = Modifier
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.Center
         ) {
-            ButtonUi(text = "Roll Again")
-            ButtonUi(text = "Open Maps")
+            Button(onClick = {
+
+            }) {
+                ButtonUi(text = "Roll Again")
+            }
+            Button(onClick = {
+
+            }) {
+                ButtonUi(text = "Open Maps")
+            }
         }
 
     }

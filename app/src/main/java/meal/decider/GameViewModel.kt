@@ -32,7 +32,6 @@ class GameViewModel (context: Context) : ViewModel() {
         for (i in SquareDataObject.squareValuesList) {
             list.add(i)
         }
-        showLog("test", "list size is ${list.size}")
         return list
     }
 
@@ -54,37 +53,43 @@ class GameViewModel (context: Context) : ViewModel() {
         var delay: Long = 500
 
         colorListRunnable = Runnable {
-            val indexRoll = rollRandomSquare(squareList.size)
-            val newColorList = colorListWithRandomIndexChanged(Color.Red)
+            val indexRoll = Random.nextInt(0, squareList.size)
+
+            val newColorList = colorListWithRandomIndexChanged(Color.Red, indexRoll)
             updateColorList(newColorList)
 
             handler.postDelayed(colorListRunnable, delay)
             delay -= 20
 
-            if (delay < 100) handler.removeCallbacks(colorListRunnable)
+            if (delay < 100) {
+                showLog("test", "final roll is $indexRoll")
+                updateSelectedSquare(SquareDataObject.squareValuesList[indexRoll])
+                showLog("test", "selected square is $selectedSquare")
+
+                handler.removeCallbacks(colorListRunnable)
+            }
         }
 
         handler.post((colorListRunnable))
     }
 
-    private fun colorListWithRandomIndexChanged(color: Color): SnapshotStateList<Color> {
+    private fun colorListWithRandomIndexChanged(color: Color, index: Int): SnapshotStateList<Color> {
         val list = SnapshotStateList<Color>()
-        val roll = Random.nextInt(0, squareList.size)
         for (i in squareList) {
             list.add(Color.Gray)
         }
-        list[roll] = color
+        list[index] = color
 
         return list
     }
 
-    fun updateColorList(list: SnapshotStateList<Color>) {
+    private fun updateColorList(list: SnapshotStateList<Color>) {
         _boardUiState.update { currentState ->
             currentState.copy(colorList = list)
         }
     }
 
-    fun updateSelectedSquare(squareValues: SquareValues) {
+    private fun updateSelectedSquare(squareValues: SquareValues) {
         _boardUiState.update { currentState ->
             currentState.copy(selectedSquare = squareValues)
         }
