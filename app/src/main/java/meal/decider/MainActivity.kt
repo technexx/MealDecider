@@ -141,28 +141,31 @@ fun SelectionGrid() {
         }
 
         Spacer(modifier = Modifier.height(24.dp))
-        
-        Text(text = context.getString(R.string.meal_decided, gameViewModel.selectedSquare.name), color = Color.White, fontSize = 22.sp)
 
-        Spacer(modifier = Modifier.height(12.dp))
+        showLog("test", "rollFinished is ${gameViewModel.rollFinished}")
 
-        Row (
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(onClick = {
+        if (boardUiState.value.rollFinished) {
+            Text(text = context.getString(R.string.meal_decided, gameViewModel.selectedSquare.name), color = Color.White, fontSize = 22.sp)
 
-            }) {
-                ButtonUi(text = "Roll Again")
-            }
-            Button(onClick = {
+            Spacer(modifier = Modifier.height(12.dp))
 
-            }) {
-                ButtonUi(text = "Open Maps")
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Button(onClick = {
+
+                }) {
+                    ButtonUi(text = "Roll Again")
+                }
+                Button(onClick = {
+
+                }) {
+                    ButtonUi(text = "Open Maps")
+                }
             }
         }
-
     }
 }
 

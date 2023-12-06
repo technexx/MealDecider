@@ -21,6 +21,24 @@ class GameViewModel (context: Context) : ViewModel() {
     private val handler = Handler(Looper.getMainLooper())
     private var colorListRunnable = Runnable {}
 
+    private fun updateColorList(list: SnapshotStateList<Color>) {
+        _boardUiState.update { currentState ->
+            currentState.copy(colorList = list)
+        }
+    }
+
+    private fun updateSelectedSquare(squareValues: SquareValues) {
+        _boardUiState.update { currentState ->
+            currentState.copy(selectedSquare = squareValues)
+        }
+    }
+
+    private fun updateRollFinished(finished: Boolean) {
+        _boardUiState.update { currentState ->
+            currentState.copy(rollFinished = finished)
+        }
+    }
+
     fun createSquareList() {
         _boardUiState.update { currentState ->
             currentState.copy(squareList = starterSquareList())
@@ -62,9 +80,8 @@ class GameViewModel (context: Context) : ViewModel() {
             delay -= 20
 
             if (delay < 100) {
-                showLog("test", "final roll is $indexRoll")
                 updateSelectedSquare(SquareDataObject.squareValuesList[indexRoll])
-                showLog("test", "selected square is $selectedSquare")
+                updateRollFinished(true)
 
                 handler.removeCallbacks(colorListRunnable)
             }
@@ -83,18 +100,6 @@ class GameViewModel (context: Context) : ViewModel() {
         return list
     }
 
-    private fun updateColorList(list: SnapshotStateList<Color>) {
-        _boardUiState.update { currentState ->
-            currentState.copy(colorList = list)
-        }
-    }
-
-    private fun updateSelectedSquare(squareValues: SquareValues) {
-        _boardUiState.update { currentState ->
-            currentState.copy(selectedSquare = squareValues)
-        }
-    }
-
     fun rollRandomSquare(numberOfSquares: Int): Int {
         return Random.nextInt(0, numberOfSquares)
     }
@@ -102,4 +107,5 @@ class GameViewModel (context: Context) : ViewModel() {
     val selectedSquare get() = boardUiState.value.selectedSquare
     val squareList get() = boardUiState.value.squareList
     val colorList get() = boardUiState.value.colorList
+    val rollFinished get() = boardUiState.value.rollFinished
 }
