@@ -4,12 +4,14 @@ package meal.decider
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +27,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -79,8 +83,6 @@ fun SelectionGrid() {
     gameViewModel.createSquareList()
     gameViewModel.createColorList()
 
-//    showLog("test", "${gameViewModel.colorList.size}")
-
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 128.dp),
 
@@ -100,14 +102,9 @@ fun SelectionGrid() {
                     modifier = Modifier
                         .padding(4.dp)
                         .fillMaxWidth()
-//                        .background(gameViewModel.colorList[index])
                         .selectable(
                             selected = true,
                             onClick = {
-                                gameViewModel.updateColorListLooper()
-//                                val roll = gameViewModel.rollRandomSquare(boardUiState.value.squareList.size)
-//                                gameViewModel.updateColorListItem(index, Color.Red)
-
 
                             }
                         ),
@@ -124,6 +121,20 @@ fun SelectionGrid() {
             }
         }
     )
+
+    Spacer(modifier = Modifier.height(12.dp))
+
+    Column (
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(onClick = {
+            gameViewModel.updateColorListLooper()
+        }) {
+            Text(text = "Decide!", color = Color.White, fontSize = 20.sp)
+        }
+    }
 }
 
 @Composable
