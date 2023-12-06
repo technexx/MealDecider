@@ -50,6 +50,34 @@ class GameViewModel (context: Context) : ViewModel() {
         return list
     }
 
+    fun updateColorListLooper() {
+        var delay: Long = 500
+
+        colorListRunnable = Runnable {
+            val indexRoll = rollRandomSquare(squareList.size)
+            val newColorList = colorListWithRandomIndexChanged(Color.Red)
+            updateColorList(newColorList)
+
+            handler.postDelayed(colorListRunnable, delay)
+            delay -= 20
+
+            if (delay < 100) handler.removeCallbacks(colorListRunnable)
+        }
+
+        handler.post((colorListRunnable))
+    }
+
+    private fun colorListWithRandomIndexChanged(color: Color): SnapshotStateList<Color> {
+        val list = SnapshotStateList<Color>()
+        val roll = Random.nextInt(0, squareList.size)
+        for (i in squareList) {
+            list.add(Color.Gray)
+        }
+        list[roll] = color
+
+        return list
+    }
+
     fun updateColorList(list: SnapshotStateList<Color>) {
         _boardUiState.update { currentState ->
             currentState.copy(colorList = list)
@@ -63,35 +91,7 @@ class GameViewModel (context: Context) : ViewModel() {
         }
         list[index] = color
 
-        _boardUiState.update { currentState ->
-            currentState.copy(colorList = list)
-        }
-    }
-
-    fun colorListWithRandomIndexChanged(color: Color): SnapshotStateList<Color> {
-        val list = SnapshotStateList<Color>()
-        val roll = Random.nextInt(0, squareList.size)
-        for (i in squareList) {
-            list.add(Color.Gray)
-        }
-        list[roll] = color
-
-        return list
-    }
-
-    fun postColorListLooper() {
-        var delay: Long = 1000
-
-        colorListRunnable = Runnable {
-            val indexRoll = rollRandomSquare(squareList.size)
-            val newColorList = colorListWithRandomIndexChanged(Color.Red)
-            updateColorList(newColorList)
-
-            handler.postDelayed(colorListRunnable, delay)
-            delay -= 100
-        }
-
-        handler.post((colorListRunnable))
+        updateColorList(list)
     }
 
     fun updateSelectedSquare(square: Int) {

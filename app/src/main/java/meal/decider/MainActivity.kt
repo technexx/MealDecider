@@ -104,8 +104,9 @@ fun SelectionGrid() {
                         .selectable(
                             selected = true,
                             onClick = {
-                                val roll = gameViewModel.rollRandomSquare(boardUiState.value.squareList.size)
-                                gameViewModel.updateColorListItem(index, Color.Red)
+                                gameViewModel.updateColorListLooper()
+//                                val roll = gameViewModel.rollRandomSquare(boardUiState.value.squareList.size)
+//                                gameViewModel.updateColorListItem(index, Color.Red)
 
 
                             }
