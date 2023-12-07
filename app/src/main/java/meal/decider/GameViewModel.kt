@@ -81,7 +81,7 @@ class GameViewModel (context: Context) : ViewModel() {
 
             if (delay < 100) {
                 updateSelectedSquare(SquareDataObject.squareValuesList[indexRoll])
-//                updateRollFinished(true)
+                updateRollFinished(true)
 
                 handler.removeCallbacks(colorListRunnable)
             }

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.selection.selectable
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import meal.decider.ui.theme.MealDeciderTheme
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 
 private lateinit var gameViewModel : GameViewModel
@@ -155,11 +157,12 @@ fun InteractionLayout() {
         if (boardUiState.value.rollFinished) {
             Text(text = context.getString(R.string.meal_decided, gameViewModel.selectedSquare.name), color = Color.White, fontSize = 22.sp)
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
             Row (
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(onClick = {
@@ -167,6 +170,9 @@ fun InteractionLayout() {
                 }) {
                     ButtonUi(text = "Roll Again")
                 }
+
+                Spacer(modifier = Modifier.width(12.dp))
+
                 Button(onClick = {
 
                 }) {
