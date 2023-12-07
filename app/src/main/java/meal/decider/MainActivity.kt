@@ -76,12 +76,14 @@ fun Board() {
         .height((screenHeight() * 1).dp)
         .background(Color.Blue)
     ) {
-        SelectionGrid()
+        SelectionGridLayout()
+        Spacer(modifier = Modifier.height(24.dp))
+        InteractionLayout()
     }
 }
 
 @Composable
-fun SelectionGrid() {
+fun SelectionGridLayout() {
     val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
@@ -99,6 +101,8 @@ fun SelectionGrid() {
             bottom = 16.dp
         ),
         content = {
+            showLog("test", "recomp grid!")
+
             items(boardUiState.value.squareList.size) { index ->
                 Card(
                     colors = CardDefaults.cardColors(
@@ -126,8 +130,12 @@ fun SelectionGrid() {
             }
         }
     )
+}
 
-    Spacer(modifier = Modifier.height(24.dp))
+@Composable
+fun InteractionLayout() {
+    val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     Column (
         modifier = Modifier
@@ -135,14 +143,14 @@ fun SelectionGrid() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(onClick = {
-            gameViewModel.updateColorListLooper()
+            gameViewModel.updateColorListWithinLooper()
         }) {
             ButtonUi(text = "Decide")
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        showLog("test", "rollFinished is ${gameViewModel.rollFinished}")
+        showLog("test", "recomp interaction!")
 
         if (boardUiState.value.rollFinished) {
             Text(text = context.getString(R.string.meal_decided, gameViewModel.selectedSquare.name), color = Color.White, fontSize = 22.sp)

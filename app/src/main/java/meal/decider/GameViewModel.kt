@@ -33,7 +33,7 @@ class GameViewModel (context: Context) : ViewModel() {
         }
     }
 
-    private fun updateRollFinished(finished: Boolean) {
+    fun updateRollFinished(finished: Boolean) {
         _boardUiState.update { currentState ->
             currentState.copy(rollFinished = finished)
         }
@@ -67,7 +67,7 @@ class GameViewModel (context: Context) : ViewModel() {
         return list
     }
 
-    fun updateColorListLooper() {
+    fun updateColorListWithinLooper() {
         var delay: Long = 500
 
         colorListRunnable = Runnable {
@@ -81,7 +81,7 @@ class GameViewModel (context: Context) : ViewModel() {
 
             if (delay < 100) {
                 updateSelectedSquare(SquareDataObject.squareValuesList[indexRoll])
-                updateRollFinished(true)
+//                updateRollFinished(true)
 
                 handler.removeCallbacks(colorListRunnable)
             }
