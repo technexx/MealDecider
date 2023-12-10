@@ -9,6 +9,7 @@ data class BoardValues(
     var squareList: SnapshotStateList<SquareValues> = mutableStateListOf(),
     var colorList: SnapshotStateList<Color> = mutableStateListOf(),
     var rollFinished: Boolean = false,
+    var showMap: Boolean = false,
 )
 
 data class SquareValues(

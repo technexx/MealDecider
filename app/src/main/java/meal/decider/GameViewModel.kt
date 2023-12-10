@@ -39,6 +39,13 @@ class GameViewModel (context: Context) : ViewModel() {
         }
     }
 
+    fun updateShowMap(showMap: Boolean) {
+        _boardUiState.update { currentState ->
+            currentState.copy(showMap = showMap)
+        }
+    }
+
+
     fun createSquareList() {
         _boardUiState.update { currentState ->
             currentState.copy(squareList = starterSquareList())
@@ -71,8 +78,9 @@ class GameViewModel (context: Context) : ViewModel() {
         var delay: Long = 500
 
         colorListRunnable = Runnable {
-            val indexRoll = Random.nextInt(0, squareList.size)
+            handler.removeCallbacks(colorListRunnable)
 
+            val indexRoll = Random.nextInt(0, squareList.size)
             val newColorList = colorListWithRandomIndexChanged(Color.Red, indexRoll)
             updateColorList(newColorList)
 
@@ -108,4 +116,5 @@ class GameViewModel (context: Context) : ViewModel() {
     val squareList get() = boardUiState.value.squareList
     val colorList get() = boardUiState.value.colorList
     val rollFinished get() = boardUiState.value.rollFinished
+    val showMap get() = boardUiState.value.showMap
 }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -41,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.maps.android.compose.GoogleMap
 import meal.decider.ui.theme.MealDeciderTheme
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
@@ -78,9 +80,13 @@ fun Board() {
         .height((screenHeight() * 1).dp)
         .background(Color.Blue)
     ) {
-        SelectionGridLayout()
-        Spacer(modifier = Modifier.height(24.dp))
-        InteractionLayout()
+        if (boardUiState.value.showMap) {
+            GoogleMapView()
+        } else {
+            SelectionGridLayout()
+            Spacer(modifier = Modifier.height(24.dp))
+            InteractionLayout()
+        }
     }
 }
 
@@ -154,6 +160,7 @@ fun InteractionLayout() {
 
         showLog("test", "recomp interaction!")
 
+
         if (boardUiState.value.rollFinished) {
             Text(text = context.getString(R.string.meal_decided, gameViewModel.selectedSquare.name), color = Color.White, fontSize = 22.sp)
 
@@ -166,7 +173,7 @@ fun InteractionLayout() {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(onClick = {
-
+                    gameViewModel.updateColorListWithinLooper()
                 }) {
                     ButtonUi(text = "Roll Again")
                 }
@@ -174,13 +181,25 @@ fun InteractionLayout() {
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Button(onClick = {
-
+                    gameViewModel.updateShowMap(true)
                 }) {
                     ButtonUi(text = "Open Maps")
                 }
             }
         }
     }
+}
+
+@Composable
+fun GoogleMapView() {
+    Column (modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight()) {
+        GoogleMap {
+
+        }
+    }
+
 }
 
 @Composable
