@@ -50,6 +50,7 @@ import meal.decider.ui.theme.MealDeciderTheme
 import android.Manifest;
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.location.Location
 import android.widget.Toast
@@ -162,19 +163,32 @@ fun SelectionGridLayout() {
     )
 }
 
+@SuppressLint("MissingPermission")
 @Composable
 fun InteractionLayout() {
     val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    //Retrieves location
+    //Retrieves last known location of device
     val fusedLocationProviderClient = remember { LocationServices.getFusedLocationProviderClient(context) }
     //Stores location
     var lastKnownLocation by remember { mutableStateOf<Location?>(null) }
     //Lat/long of location
     var deviceLatLng by remember { mutableStateOf(LatLng(0.0, 0.0)) }
     //Camera position in Maps
-    val cameraPositionState = rememberCameraPositionState {position = CameraPosition.fromLatLngZoom(deviceLatLng, 18f)}
+    val cameraPositionState = rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(deviceLatLng, 18f)}
+
+    val locationResult = fusedLocationProviderClient.lastLocation
+    locationResult.addOnCompleteListener(context as MainActivity) { task ->
+        if (task.isSuccessful) {
+            lastKnownLocation = task.result
+            deviceLatLng = LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
+            cameraPositionState.position = CameraPosition.fromLatLngZoom(deviceLatLng, 18f)
+        } else {
+            Log.d(TAG, "Current location is null. Using defaults.")
+            Log.e(TAG, "Exception: %s", task.exception)
+        }
+    }
 
     Column (
         modifier = Modifier
