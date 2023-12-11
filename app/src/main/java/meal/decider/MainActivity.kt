@@ -51,13 +51,22 @@ import android.Manifest;
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.location.Location
+import android.widget.Toast
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.rememberCameraPositionState
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 
 private lateinit var gameViewModel : GameViewModel
 @SuppressLint("StaticFieldLeak")
-private lateinit var context : Context
+private lateinit var activityContext : Context
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +74,7 @@ class MainActivity : ComponentActivity() {
 
         gameViewModel = GameViewModel(applicationContext)
 //        context = applicationContext
-        context = this@MainActivity
+        activityContext = this@MainActivity
 
         setContent {
             MealDeciderTheme {
@@ -158,6 +167,15 @@ fun InteractionLayout() {
     val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
+    //Retrieves location
+    val fusedLocationProviderClient = remember { LocationServices.getFusedLocationProviderClient(context) }
+    //Stores location
+    var lastKnownLocation by remember { mutableStateOf<Location?>(null) }
+    //Lat/long of location
+    var deviceLatLng by remember { mutableStateOf(LatLng(0.0, 0.0)) }
+    //Camera position in Maps
+    val cameraPositionState = rememberCameraPositionState {position = CameraPosition.fromLatLngZoom(deviceLatLng, 18f)}
+
     Column (
         modifier = Modifier
             .fillMaxWidth(),
@@ -193,8 +211,11 @@ fun InteractionLayout() {
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Button(onClick = {
-
-                    gameViewModel.updateShowMap(true)
+                    if (getLocationPermission()) {
+                        gameViewModel.updateShowMap(true)
+                    } else {
+                        Toast.makeText(context, "Nooo!", Toast.LENGTH_SHORT).show()
+                    }
                 }) {
                     ButtonUi(text = "Open Maps")
                 }
@@ -220,12 +241,13 @@ fun ButtonUi(text: String) {
     Text(text = text, color = Color.White, fontSize = 20.sp)
 }
 
-private fun getLocationPermission() {
+//If user grants location permission, returns true.
+private fun getLocationPermission() : Boolean {
     val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1234
     val locationPermissionGranted = mutableStateOf(false)
 
     if (ContextCompat.checkSelfPermission(
-            context,
+            activityContext,
             Manifest.permission.ACCESS_FINE_LOCATION
         )
         == PackageManager.PERMISSION_GRANTED
@@ -233,10 +255,23 @@ private fun getLocationPermission() {
         locationPermissionGranted.value = true//we already have the permission
     } else {
         ActivityCompat.requestPermissions(
-            context as Activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            activityContext as Activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
             PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
         )
     }
+
+    fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode== PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            locationPermissionGranted.value=true
+        }
+    }
+
+    return locationPermissionGranted.value
 }
 
 @Composable
