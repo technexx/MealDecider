@@ -61,6 +61,8 @@ import androidx.compose.runtime.setValue
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.MarkerInfoWindowContent
+import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
@@ -169,27 +171,6 @@ fun InteractionLayout() {
     val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    //Retrieves last known location of device
-    val fusedLocationProviderClient = remember { LocationServices.getFusedLocationProviderClient(context) }
-    //Stores location
-    var lastKnownLocation by remember { mutableStateOf<Location?>(null) }
-    //Lat/long of location
-    var deviceLatLng by remember { mutableStateOf(LatLng(0.0, 0.0)) }
-    //Camera position in Maps
-    val cameraPositionState = rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(deviceLatLng, 18f)}
-
-    val locationResult = fusedLocationProviderClient.lastLocation
-    locationResult.addOnCompleteListener(context as MainActivity) { task ->
-        if (task.isSuccessful) {
-            lastKnownLocation = task.result
-            deviceLatLng = LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
-            cameraPositionState.position = CameraPosition.fromLatLngZoom(deviceLatLng, 18f)
-        } else {
-            Log.d(TAG, "Current location is null. Using defaults.")
-            Log.e(TAG, "Exception: %s", task.exception)
-        }
-    }
-
     Column (
         modifier = Modifier
             .fillMaxWidth(),
@@ -238,13 +219,44 @@ fun InteractionLayout() {
     }
 }
 
+@SuppressLint("MissingPermission")
 @Composable
 fun GoogleMapView() {
+    val context = LocalContext.current
+
+    //Retrieves last known location of device
+    val fusedLocationProviderClient = remember { LocationServices.getFusedLocationProviderClient(context) }
+    //Stores location
+    var lastKnownLocation by remember { mutableStateOf<Location?>(null) }
+    //Lat/long of location
+    var deviceLatLng by remember { mutableStateOf(LatLng(0.0, 0.0)) }
+    //Camera position in Maps
+    val cameraPositionState = rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(deviceLatLng, 18f)}
+
+    val locationResult = fusedLocationProviderClient.lastLocation
+    locationResult.addOnCompleteListener(context as MainActivity) { task ->
+        if (task.isSuccessful) {
+            lastKnownLocation = task.result
+            deviceLatLng = LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
+            cameraPositionState.position = CameraPosition.fromLatLngZoom(deviceLatLng, 18f)
+        } else {
+            Log.d(TAG, "Current location is null. Using defaults.")
+            Log.e(TAG, "Exception: %s", task.exception)
+        }
+    }
+
     Column (modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight()) {
-        GoogleMap {
-
+        GoogleMap (
+            cameraPositionState = cameraPositionState
+        ){
+            MarkerInfoWindowContent (
+                state = MarkerState(
+                    position = deviceLatLng
+                )
+            ){
+                Text("Test", color = Color.Red)            }
         }
     }
 
