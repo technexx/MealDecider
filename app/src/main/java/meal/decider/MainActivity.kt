@@ -87,6 +87,7 @@ fun Board() {
             Spacer(modifier = Modifier.height(24.dp))
             InteractionLayout()
         }
+
     }
 }
 
@@ -159,7 +160,6 @@ fun InteractionLayout() {
         Spacer(modifier = Modifier.height(24.dp))
 
         showLog("test", "recomp interaction!")
-
 
         if (boardUiState.value.rollFinished) {
             Text(text = context.getString(R.string.meal_decided, gameViewModel.selectedSquare.name), color = Color.White, fontSize = 22.sp)
