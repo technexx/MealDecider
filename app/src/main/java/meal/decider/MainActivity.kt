@@ -2,6 +2,7 @@ package meal.decider
 
 
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -41,19 +42,30 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.maps.android.compose.GoogleMap
 import meal.decider.ui.theme.MealDeciderTheme
+import android.Manifest;
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import androidx.compose.runtime.mutableStateOf
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 
 private lateinit var gameViewModel : GameViewModel
+@SuppressLint("StaticFieldLeak")
+private lateinit var context : Context
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         gameViewModel = GameViewModel(applicationContext)
+//        context = applicationContext
+        context = this@MainActivity
 
         setContent {
             MealDeciderTheme {
@@ -181,6 +193,7 @@ fun InteractionLayout() {
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Button(onClick = {
+
                     gameViewModel.updateShowMap(true)
                 }) {
                     ButtonUi(text = "Open Maps")
@@ -205,7 +218,25 @@ fun GoogleMapView() {
 @Composable
 fun ButtonUi(text: String) {
     Text(text = text, color = Color.White, fontSize = 20.sp)
+}
 
+private fun getLocationPermission() {
+    val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1234
+    val locationPermissionGranted = mutableStateOf(false)
+
+    if (ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        == PackageManager.PERMISSION_GRANTED
+    ) {
+        locationPermissionGranted.value = true//we already have the permission
+    } else {
+        ActivityCompat.requestPermissions(
+            context as Activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+        )
+    }
 }
 
 @Composable
