@@ -138,8 +138,6 @@ fun SelectionGridLayout() {
             bottom = 16.dp
         ),
         content = {
-            showLog("test", "recomp grid!")
-
             items(boardUiState.value.squareList.size) { index ->
                 Card(
                     colors = CardDefaults.cardColors(
@@ -174,6 +172,7 @@ fun SelectionGridLayout() {
 fun InteractionLayout() {
     val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    var foodUri by remember { mutableStateOf("") }
 
     Column (
         modifier = Modifier
@@ -188,9 +187,9 @@ fun InteractionLayout() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        showLog("test", "recomp interaction!")
-
         if (boardUiState.value.rollFinished) {
+            foodUri = "geo:0,0?q=" + gameViewModel.selectedSquare.name
+
             Text(text = context.getString(R.string.meal_decided, gameViewModel.selectedSquare.name), color = Color.White, fontSize = 22.sp)
 
             Spacer(modifier = Modifier.weight(1f))
@@ -210,12 +209,7 @@ fun InteractionLayout() {
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Button(onClick = {
-                    mapIntent(Uri.parse("https://www.google.com/maps/dir/?api=1&food"))
-//                    if (getLocationPermission()) {
-//                        gameViewModel.updateShowMap(true)
-//                    } else {
-//                        Toast.makeText(context, "Nooo!", Toast.LENGTH_SHORT).show()
-//                    }
+                    mapIntent(Uri.parse(foodUri))
                 }) {
                     ButtonUi(text = "Open Maps")
                 }
