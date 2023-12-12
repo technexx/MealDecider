@@ -52,7 +52,9 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
 import android.location.Location
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,6 +67,7 @@ import com.google.maps.android.compose.MarkerInfoWindowContent
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+import java.net.URI
 
 
 private lateinit var gameViewModel : GameViewModel
@@ -105,7 +108,8 @@ fun Board() {
         .background(Color.Blue)
     ) {
         if (boardUiState.value.showMap) {
-            GoogleMapView()
+//            GoogleMapView()
+            mapIntent(Uri.parse("https://www.google.com/maps/search/?api=1&food"))
         } else {
             SelectionGridLayout()
             Spacer(modifier = Modifier.height(24.dp))
@@ -206,17 +210,25 @@ fun InteractionLayout() {
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Button(onClick = {
-                    if (getLocationPermission()) {
-                        gameViewModel.updateShowMap(true)
-                    } else {
-                        Toast.makeText(context, "Nooo!", Toast.LENGTH_SHORT).show()
-                    }
+                    mapIntent(Uri.parse("https://www.google.com/maps/dir/?api=1&food"))
+//                    if (getLocationPermission()) {
+//                        gameViewModel.updateShowMap(true)
+//                    } else {
+//                        Toast.makeText(context, "Nooo!", Toast.LENGTH_SHORT).show()
+//                    }
                 }) {
                     ButtonUi(text = "Open Maps")
                 }
             }
         }
     }
+}
+
+fun mapIntent(uri: Uri) {
+    val intent = Intent(Intent.ACTION_VIEW, uri)
+    intent.setPackage("com.google.android.apps.maps")
+
+    activityContext.startActivity(intent)
 }
 
 @SuppressLint("MissingPermission")
