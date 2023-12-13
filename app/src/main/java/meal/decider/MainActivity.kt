@@ -112,7 +112,7 @@ fun Board() {
             mapIntent(Uri.parse("https://www.google.com/maps/search/?api=1&food"))
         } else {
             SelectionGridLayout()
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             InteractionLayout()
         }
 
@@ -179,40 +179,36 @@ fun InteractionLayout() {
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = {
-            gameViewModel.updateColorListWithinLooper()
-        }) {
-            ButtonUi(text = "Decide")
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
+        foodUri = "geo:0,0?q=" + gameViewModel.selectedSquare.name
 
         if (boardUiState.value.rollFinished) {
-            foodUri = "geo:0,0?q=" + gameViewModel.selectedSquare.name
-
             Text(text = context.getString(R.string.meal_decided, gameViewModel.selectedSquare.name), color = Color.White, fontSize = 22.sp)
 
-            Spacer(modifier = Modifier.weight(1f))
+        }
 
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(onClick = {
-                    gameViewModel.updateColorListWithinLooper()
-                }) {
-                    ButtonUi(text = "Roll Again")
-                }
+        Spacer(modifier = Modifier.height(16.dp))
 
-                Spacer(modifier = Modifier.width(12.dp))
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 12.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(onClick = {
+                gameViewModel.updateColorListWithinLooper()
+            }) {
+                ButtonUi(text = "Decide")
+            }
 
-                Button(onClick = {
+            Spacer(modifier = Modifier.width(24.dp))
+
+            Button(onClick = {
+                if (gameViewModel.selectedSquare.name != "") {
                     mapIntent(Uri.parse(foodUri))
-                }) {
-                    ButtonUi(text = "Open Maps")
-                }
+                } else {
+                    Toast.makeText(activityContext, "Need a decision!", Toast.LENGTH_SHORT).show()                }
+            }) {
+                ButtonUi(text = "Open Maps")
             }
         }
     }
@@ -223,6 +219,11 @@ fun mapIntent(uri: Uri) {
     intent.setPackage("com.google.android.apps.maps")
 
     activityContext.startActivity(intent)
+}
+
+@Composable
+fun ButtonUi(text: String) {
+    Text(text = text, color = Color.White, fontSize = 20.sp)
 }
 
 @SuppressLint("MissingPermission")
@@ -266,11 +267,6 @@ fun GoogleMapView() {
         }
     }
 
-}
-
-@Composable
-fun ButtonUi(text: String) {
-    Text(text = text, color = Color.White, fontSize = 20.sp)
 }
 
 //If user grants location permission, returns true.

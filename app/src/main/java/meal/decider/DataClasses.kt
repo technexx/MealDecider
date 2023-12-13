@@ -8,6 +8,7 @@ data class BoardValues(
     var selectedSquare: SquareValues = SquareDataObject.squareValuesList[0],
     var squareList: SnapshotStateList<SquareValues> = mutableStateListOf(),
     var colorList: SnapshotStateList<Color> = mutableStateListOf(),
+    var rollEngaged: Boolean = false,
     var rollFinished: Boolean = false,
     var showMap: Boolean = false,
 )

@@ -33,9 +33,24 @@ class GameViewModel (context: Context) : ViewModel() {
         }
     }
 
+    fun updateRollEngaged(finished: Boolean) {
+        _boardUiState.update { currentState ->
+            currentState.copy(rollEngaged = finished)
+        }
+    }
+
     fun updateRollFinished(finished: Boolean) {
         _boardUiState.update { currentState ->
             currentState.copy(rollFinished = finished)
+        }
+    }
+
+    fun updateSelectedSquareName(index: Int, name: String) {
+        val list = squareList
+        list[index].name = name
+
+        _boardUiState.update { currentState ->
+            currentState.copy(squareList = list)
         }
     }
 
@@ -44,7 +59,6 @@ class GameViewModel (context: Context) : ViewModel() {
             currentState.copy(showMap = showMap)
         }
     }
-
 
     fun createSquareList() {
         _boardUiState.update { currentState ->
@@ -71,6 +85,8 @@ class GameViewModel (context: Context) : ViewModel() {
         for (i in SquareDataObject.squareValuesList) {
             list.add(Color.Gray)
         }
+
+        list[0] = Color.Red
         return list
     }
 
@@ -115,6 +131,7 @@ class GameViewModel (context: Context) : ViewModel() {
     val selectedSquare get() = boardUiState.value.selectedSquare
     val squareList get() = boardUiState.value.squareList
     val colorList get() = boardUiState.value.colorList
+    val rollEngaged get() = boardUiState.value.rollFinished
     val rollFinished get() = boardUiState.value.rollFinished
     val showMap get() = boardUiState.value.showMap
 }
