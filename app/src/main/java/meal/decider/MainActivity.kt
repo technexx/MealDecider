@@ -140,18 +140,21 @@ fun TopBar() {
                                 contentDescription = "More"
                             )
                         }
-
                         DropdownMenu(
                             expanded = expanded,
                             onDismissRequest = { expanded = false }
                         ) {
                             DropdownMenuItem(
-                                text = { Text("Load") },
-                                onClick = { Toast.makeText(context, "Load", Toast.LENGTH_SHORT).show() }
+                                text = { Text("Edit Cuisines") },
+                                onClick = {
+
+                                }
                             )
                             DropdownMenuItem(
-                                text = { Text("Save") },
-                                onClick = { Toast.makeText(context, "Save", Toast.LENGTH_SHORT).show() }
+                                text = { Text("Restore Defaults") },
+                                onClick = {
+
+                                }
                             )
                         }
                     }

@@ -45,18 +45,18 @@ class GameViewModel (context: Context) : ViewModel() {
         }
     }
 
+    fun updateEditMode(editing: Boolean) {
+        _boardUiState.update { currentState ->
+            currentState.copy(editMode = editing)
+        }
+    }
+
     fun updateSelectedSquareName(index: Int, name: String) {
         val list = squareList
         list[index].name = name
 
         _boardUiState.update { currentState ->
             currentState.copy(squareList = list)
-        }
-    }
-
-    fun updateShowMap(showMap: Boolean) {
-        _boardUiState.update { currentState ->
-            currentState.copy(showMap = showMap)
         }
     }
 
@@ -136,5 +136,5 @@ class GameViewModel (context: Context) : ViewModel() {
     val colorList get() = boardUiState.value.colorList
     val rollEngaged get() = boardUiState.value.rollEngaged
     val rollFinished get() = boardUiState.value.rollFinished
-    val showMap get() = boardUiState.value.showMap
+    val editMode get() = boardUiState.value.editMode
 }
