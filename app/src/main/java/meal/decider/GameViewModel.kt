@@ -33,9 +33,9 @@ class GameViewModel (context: Context) : ViewModel() {
         }
     }
 
-    fun updateRollEngaged(finished: Boolean) {
+    fun updateRollEngaged(engaged: Boolean) {
         _boardUiState.update { currentState ->
-            currentState.copy(rollEngaged = finished)
+            currentState.copy(rollEngaged = engaged)
         }
     }
 
@@ -93,9 +93,11 @@ class GameViewModel (context: Context) : ViewModel() {
     fun updateColorListWithinLooper() {
         var delay: Long = 500
 
-        colorListRunnable = Runnable {
-            handler.removeCallbacks(colorListRunnable)
+        handler.removeCallbacks(colorListRunnable)
+        updateRollEngaged(true)
+        showLog("test", rollEngaged.toString())
 
+        colorListRunnable = Runnable {
             val indexRoll = Random.nextInt(0, squareList.size)
             val newColorList = colorListWithRandomIndexChanged(Color.Red, indexRoll)
             updateColorList(newColorList)
@@ -103,8 +105,9 @@ class GameViewModel (context: Context) : ViewModel() {
             handler.postDelayed(colorListRunnable, delay)
             delay -= 20
 
-            if (delay < 100) {
+            if (delay < 20) {
                 updateSelectedSquare(SquareDataObject.squareValuesList[indexRoll])
+                updateRollEngaged(false)
                 updateRollFinished(true)
 
                 handler.removeCallbacks(colorListRunnable)
@@ -131,7 +134,7 @@ class GameViewModel (context: Context) : ViewModel() {
     val selectedSquare get() = boardUiState.value.selectedSquare
     val squareList get() = boardUiState.value.squareList
     val colorList get() = boardUiState.value.colorList
-    val rollEngaged get() = boardUiState.value.rollFinished
+    val rollEngaged get() = boardUiState.value.rollEngaged
     val rollFinished get() = boardUiState.value.rollFinished
     val showMap get() = boardUiState.value.showMap
 }

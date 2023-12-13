@@ -179,14 +179,13 @@ fun InteractionLayout() {
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        foodUri = "geo:0,0?q=" + gameViewModel.selectedSquare.name
+        foodUri = "geo:0,0?q=" + gameViewModel.selectedSquare.name + " Food"
 
         if (boardUiState.value.rollFinished) {
             Text(text = context.getString(R.string.meal_decided, gameViewModel.selectedSquare.name), color = Color.White, fontSize = 22.sp)
-
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Row (
             modifier = Modifier
@@ -195,7 +194,9 @@ fun InteractionLayout() {
             horizontalArrangement = Arrangement.Center
         ) {
             Button(onClick = {
-                gameViewModel.updateColorListWithinLooper()
+                if (!gameViewModel.rollEngaged) {
+                    gameViewModel.updateColorListWithinLooper()
+                }
             }) {
                 ButtonUi(text = "Decide")
             }
@@ -203,10 +204,10 @@ fun InteractionLayout() {
             Spacer(modifier = Modifier.width(24.dp))
 
             Button(onClick = {
-                if (gameViewModel.selectedSquare.name != "") {
+//                showLog("test", gameViewModel.rollEngaged.toString())
+                if (!gameViewModel.rollEngaged) {
                     mapIntent(Uri.parse(foodUri))
-                } else {
-                    Toast.makeText(activityContext, "Need a decision!", Toast.LENGTH_SHORT).show()                }
+                }
             }) {
                 ButtonUi(text = "Open Maps")
             }
