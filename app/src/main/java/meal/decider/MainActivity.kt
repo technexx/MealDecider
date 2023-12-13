@@ -56,6 +56,14 @@ import android.content.Intent
 import android.location.Location
 import android.net.Uri
 import android.widget.Toast
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -90,10 +98,45 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Column {
-                        Board()
+                        TopBar()
                     }
                 }
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBar() {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+                title = {
+                    Text("Meal Decider")
+                },
+                actions = {
+                    IconButton(onClick = {
+
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Menu,
+                            contentDescription = "Localized description"
+                        )
+                    }
+                }
+            )
+        },
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding),
+        ) {
+            Board()
         }
     }
 }
@@ -225,82 +268,6 @@ fun mapIntent(uri: Uri) {
 @Composable
 fun ButtonUi(text: String) {
     Text(text = text, color = Color.White, fontSize = 20.sp)
-}
-
-@SuppressLint("MissingPermission")
-@Composable
-fun GoogleMapView() {
-    val context = LocalContext.current
-
-    //Retrieves last known location of device
-    val fusedLocationProviderClient = remember { LocationServices.getFusedLocationProviderClient(context) }
-    //Stores location
-    var lastKnownLocation by remember { mutableStateOf<Location?>(null) }
-    //Lat/long of location
-    var deviceLatLng by remember { mutableStateOf(LatLng(0.0, 0.0)) }
-    //Camera position in Maps
-    val cameraPositionState = rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(deviceLatLng, 18f)}
-
-    val locationResult = fusedLocationProviderClient.lastLocation
-    locationResult.addOnCompleteListener(context as MainActivity) { task ->
-        if (task.isSuccessful) {
-            lastKnownLocation = task.result
-            deviceLatLng = LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
-            cameraPositionState.position = CameraPosition.fromLatLngZoom(deviceLatLng, 18f)
-        } else {
-            Log.d(TAG, "Current location is null. Using defaults.")
-            Log.e(TAG, "Exception: %s", task.exception)
-        }
-    }
-
-    Column (modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight()) {
-        GoogleMap (
-            cameraPositionState = cameraPositionState
-        ){
-            MarkerInfoWindowContent (
-                state = MarkerState(
-                    position = deviceLatLng
-                )
-            ){
-                Text("Test", color = Color.Red)            }
-        }
-    }
-
-}
-
-//If user grants location permission, returns true.
-private fun getLocationPermission() : Boolean {
-    val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1234
-    val locationPermissionGranted = mutableStateOf(false)
-
-    if (ContextCompat.checkSelfPermission(
-            activityContext,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
-        == PackageManager.PERMISSION_GRANTED
-    ) {
-        locationPermissionGranted.value = true//we already have the permission
-    } else {
-        ActivityCompat.requestPermissions(
-            activityContext as Activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
-        )
-    }
-
-    fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode== PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            locationPermissionGranted.value=true
-        }
-    }
-
-    return locationPermissionGranted.value
 }
 
 @Composable
