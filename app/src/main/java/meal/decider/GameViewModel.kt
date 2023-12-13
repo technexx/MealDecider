@@ -95,7 +95,6 @@ class GameViewModel (context: Context) : ViewModel() {
 
         handler.removeCallbacks(colorListRunnable)
         updateRollEngaged(true)
-        showLog("test", rollEngaged.toString())
 
         colorListRunnable = Runnable {
             val indexRoll = Random.nextInt(0, squareList.size)

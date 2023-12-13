@@ -56,6 +56,7 @@ import android.content.Intent
 import android.location.Location
 import android.net.Uri
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
@@ -147,7 +148,8 @@ fun TopBar() {
                             DropdownMenuItem(
                                 text = { Text("Edit Cuisines") },
                                 onClick = {
-
+                                    gameViewModel.updateEditMode(!gameViewModel.editMode)
+                                    showLog("test", gameViewModel.editMode.toString())
                                 }
                             )
                             DropdownMenuItem(
@@ -181,15 +183,9 @@ fun Board() {
         .height((screenHeight() * 1).dp)
         .background(Color.Blue)
     ) {
-        if (boardUiState.value.showMap) {
-//            GoogleMapView()
-            mapIntent(Uri.parse("https://www.google.com/maps/search/?api=1&food"))
-        } else {
-            SelectionGridLayout()
-            Spacer(modifier = Modifier.height(16.dp))
-            InteractionLayout()
-        }
-
+        SelectionGridLayout()
+        Spacer(modifier = Modifier.height(16.dp))
+        InteractionLayout()
     }
 }
 
@@ -197,9 +193,16 @@ fun Board() {
 fun SelectionGridLayout() {
     val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    var borderStroke: BorderStroke
 
     gameViewModel.createSquareList()
     gameViewModel.createColorList()
+
+    if (boardUiState.value.editMode) {
+        borderStroke = BorderStroke(4.dp,Color.Black)
+    } else {
+        borderStroke = BorderStroke(0.dp,Color.Black)
+    }
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 128.dp),
@@ -217,6 +220,8 @@ fun SelectionGridLayout() {
                     colors = CardDefaults.cardColors(
                         containerColor = gameViewModel.colorList[index],
                     ),
+
+                    border = borderStroke,
                     modifier = Modifier
                         .padding(4.dp)
                         .fillMaxWidth()
