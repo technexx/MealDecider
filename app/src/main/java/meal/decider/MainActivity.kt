@@ -218,11 +218,17 @@ fun SelectionGridLayout() {
     gameViewModel.createSquareList()
     gameViewModel.createColorList()
 
-    if (boardUiState.value.editMode) {
-        borderStroke = BorderStroke(4.dp,Color.Black)
-    } else {
-        borderStroke = BorderStroke(0.dp,Color.Black)
-    }
+    borderStroke = BorderStroke(4.dp,Color.Black)
+
+    //Todo: Causing continuous recomp. Any change in uiState will cause the contents of uiState to update.
+    //Todo: Should not be using uiState with booleans.
+//    if (boardUiState.value.editMode) {
+//        borderStroke = BorderStroke(4.dp,Color.Black)
+//    } else {
+//        borderStroke = BorderStroke(0.dp,Color.Black)
+//    }
+
+    showLog("test", "recomp")
 
     if (boardUiState.value.editingItem) {
         EditDialog()
@@ -244,7 +250,6 @@ fun SelectionGridLayout() {
                     colors = CardDefaults.cardColors(
                         containerColor = gameViewModel.colorList[index],
                     ),
-
                     border = borderStroke,
                     modifier = Modifier
                         .padding(4.dp)
