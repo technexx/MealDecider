@@ -51,6 +51,12 @@ class GameViewModel (context: Context) : ViewModel() {
         }
     }
 
+    fun updateEditingItem(editing: Boolean) {
+        _boardUiState.update { currentState ->
+            currentState.copy(editingItem = editing)
+        }
+    }
+
     fun updateSelectedSquareName(index: Int, name: String) {
         val list = squareList
         list[index].name = name
@@ -136,4 +142,5 @@ class GameViewModel (context: Context) : ViewModel() {
     val rollEngaged get() = boardUiState.value.rollEngaged
     val rollFinished get() = boardUiState.value.rollFinished
     val editMode get() = boardUiState.value.editMode
+    val editingItem get() = boardUiState.value.editingItem
 }

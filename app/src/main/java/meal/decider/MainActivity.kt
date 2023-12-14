@@ -62,12 +62,14 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -149,7 +151,6 @@ fun TopBar() {
                                 text = { Text("Edit Cuisines") },
                                 onClick = {
                                     gameViewModel.updateEditMode(!gameViewModel.editMode)
-                                    showLog("test", gameViewModel.editMode.toString())
                                 }
                             )
                             DropdownMenuItem(
@@ -190,6 +191,25 @@ fun Board() {
 }
 
 @Composable
+fun EditDialog() {
+    AlertDialog(
+        onDismissRequest = {  gameViewModel.updateEditingItem(false) },
+        title = { Text("Are you sure you want to delete this?") },
+        text = { Text("This action cannot be undone") },
+        confirmButton = {
+            TextButton(onClick = { /* TODO */}) {
+                Text("Delete it".uppercase())
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = { gameViewModel.updateEditingItem(false) }) {
+                Text("Cancel".uppercase())
+            }
+        },
+    )
+}
+
+@Composable
 fun SelectionGridLayout() {
     val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -202,6 +222,10 @@ fun SelectionGridLayout() {
         borderStroke = BorderStroke(4.dp,Color.Black)
     } else {
         borderStroke = BorderStroke(0.dp,Color.Black)
+    }
+
+    if (boardUiState.value.editingItem) {
+        EditDialog()
     }
 
     LazyVerticalGrid(
@@ -228,7 +252,7 @@ fun SelectionGridLayout() {
                         .selectable(
                             selected = true,
                             onClick = {
-
+                                gameViewModel.updateEditingItem(true)
                             }
                         ),
                 ) {

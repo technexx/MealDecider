@@ -11,6 +11,7 @@ data class BoardValues(
     var rollEngaged: Boolean = false,
     var rollFinished: Boolean = false,
     var editMode: Boolean = false,
+    var editingItem: Boolean = false,
 )
 
 data class SquareValues(
