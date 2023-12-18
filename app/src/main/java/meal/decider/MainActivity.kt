@@ -99,6 +99,9 @@ class MainActivity : ComponentActivity() {
 //        context = applicationContext
         activityContext = this@MainActivity
 
+        gameViewModel.createSquareList()
+        gameViewModel.createColorList()
+
         setContent {
             MealDeciderTheme {
                 // A surface container using the 'background' color from the theme
@@ -150,7 +153,7 @@ fun TopBar() {
                             DropdownMenuItem(
                                 text = { Text("Edit Cuisines") },
                                 onClick = {
-                                    gameViewModel.updateEditMode(!gameViewModel.editMode)
+                                    gameViewModel.updateEditMode(!gameViewModel.getEditMode)
                                 }
                             )
                             DropdownMenuItem(
@@ -193,7 +196,7 @@ fun Board() {
 @Composable
 fun EditDialog() {
     AlertDialog(
-        onDismissRequest = {  gameViewModel.updateEditingItem(false) },
+        onDismissRequest = {  gameViewModel.updateActiveEdit(false) },
         title = { Text("Are you sure you want to delete this?") },
         text = { Text("This action cannot be undone") },
         confirmButton = {
@@ -202,7 +205,7 @@ fun EditDialog() {
             }
         },
         dismissButton = {
-            TextButton(onClick = { gameViewModel.updateEditingItem(false) }) {
+            TextButton(onClick = { gameViewModel.updateActiveEdit(false) }) {
                 Text("Cancel".uppercase())
             }
         },
@@ -212,25 +215,23 @@ fun EditDialog() {
 @Composable
 fun SelectionGridLayout() {
     val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
+    val editState = gameViewModel.editMode.collectAsStateWithLifecycle()
+    val activeEdit = gameViewModel.activeEdit.collectAsStateWithLifecycle()
+
     val context = LocalContext.current
     var borderStroke: BorderStroke
 
-    gameViewModel.createSquareList()
-    gameViewModel.createColorList()
-
     borderStroke = BorderStroke(4.dp,Color.Black)
 
-    //Todo: Causing continuous recomp. Any change in uiState will cause the contents of uiState to update.
-    //Todo: Should not be using uiState with booleans.
-//    if (boardUiState.value.editMode) {
-//        borderStroke = BorderStroke(4.dp,Color.Black)
-//    } else {
-//        borderStroke = BorderStroke(0.dp,Color.Black)
-//    }
+    if (editState.value) {
+        borderStroke = BorderStroke(4.dp,Color.Black)
+    } else {
+        borderStroke = BorderStroke(0.dp,Color.Black)
+    }
 
     showLog("test", "recomp")
 
-    if (boardUiState.value.editingItem) {
+    if (activeEdit.value) {
         EditDialog()
     }
 
@@ -257,7 +258,8 @@ fun SelectionGridLayout() {
                         .selectable(
                             selected = true,
                             onClick = {
-                                gameViewModel.updateEditingItem(true)
+                                gameViewModel.updateActiveEdit(true)
+                                showLog("test", "active edit is {${gameViewModel.getActiveEdit}")
                             }
                         ),
                 ) {
