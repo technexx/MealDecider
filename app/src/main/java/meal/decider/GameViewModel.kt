@@ -55,7 +55,7 @@ class GameViewModel (context: Context) : ViewModel() {
     }
 
     fun updateActiveEdit(activeEdit: Boolean) {
-        _editMode.value = activeEdit
+        _activeEdit.value = activeEdit
     }
 
     fun updateSelectedSquareName(index: Int, name: String) {
