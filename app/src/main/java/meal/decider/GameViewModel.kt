@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.update
 import kotlin.random.Random
 
 class GameViewModel (context: Context) : ViewModel() {
+    val mContext = context
+
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
 
@@ -26,7 +28,7 @@ class GameViewModel (context: Context) : ViewModel() {
     private val handler = Handler(Looper.getMainLooper())
     private var colorListRunnable = Runnable {}
 
-    private fun updateColorList(list: SnapshotStateList<Color>) {
+    private fun updateColorList(list: SnapshotStateList<Int>) {
         _boardUiState.update { currentState ->
             currentState.copy(colorList = list)
         }
@@ -87,13 +89,13 @@ class GameViewModel (context: Context) : ViewModel() {
         }
     }
 
-    private fun starterColorList() : SnapshotStateList<Color> {
-        val list = mutableStateListOf<Color>()
+    private fun starterColorList() : SnapshotStateList<Int> {
+        val list = mutableStateListOf<Int>()
         for (i in SquareDataObject.squareValuesList) {
-            list.add(Color.Gray)
+            list.add(R.color.grey_300)
         }
 
-        list[0] = Color.Red
+        list[0] = R.color.red_a700
         return list
     }
 
@@ -105,7 +107,7 @@ class GameViewModel (context: Context) : ViewModel() {
 
         colorListRunnable = Runnable {
             val indexRoll = Random.nextInt(0, squareList.size)
-            val newColorList = colorListWithRandomIndexChanged(Color.Red, indexRoll)
+            val newColorList = colorListWithRandomIndexChanged(R.color.red_a700, indexRoll)
             updateColorList(newColorList)
 
             handler.postDelayed(colorListRunnable, delay)
@@ -123,10 +125,10 @@ class GameViewModel (context: Context) : ViewModel() {
         handler.post((colorListRunnable))
     }
 
-    private fun colorListWithRandomIndexChanged(color: Color, index: Int): SnapshotStateList<Color> {
-        val list = SnapshotStateList<Color>()
+    private fun colorListWithRandomIndexChanged(color: Int, index: Int): SnapshotStateList<Int> {
+        val list = SnapshotStateList<Int>()
         for (i in squareList) {
-            list.add(Color.Gray)
+            list.add(R.color.grey_300)
         }
         list[index] = color
 

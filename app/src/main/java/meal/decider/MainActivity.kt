@@ -50,6 +50,7 @@ import meal.decider.ui.theme.MealDeciderTheme
 import android.Manifest;
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Application
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
@@ -77,6 +78,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.colorResource
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -87,6 +89,7 @@ import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import java.net.URI
 
 
+@SuppressLint("StaticFieldLeak")
 private lateinit var gameViewModel : GameViewModel
 @SuppressLint("StaticFieldLeak")
 private lateinit var activityContext : Context
@@ -95,7 +98,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        gameViewModel = GameViewModel(applicationContext)
+        gameViewModel = GameViewModel(application)
 //        context = applicationContext
         activityContext = this@MainActivity
 
@@ -186,7 +189,7 @@ fun Board() {
     Column (modifier = Modifier
         .fillMaxWidth()
         .height((screenHeight() * 1).dp)
-        .background(Color.Blue)
+        .background(colorResource(id = R.color.grey_50))
     ) {
         SelectionGridLayout()
         Spacer(modifier = Modifier.height(16.dp))
@@ -230,8 +233,6 @@ fun SelectionGridLayout() {
         borderStroke = BorderStroke(0.dp,Color.Black)
     }
 
-    showLog("test", "recomp")
-
     if (activeEdit.value) {
         EditDialog()
     }
@@ -250,7 +251,8 @@ fun SelectionGridLayout() {
             items(boardUiState.value.squareList.size) { index ->
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = gameViewModel.colorList[index],
+                        //TODO: Looking for ID, not int resource.
+                        containerColor = colorResource(id = gameViewModel.colorList[index]),
                     ),
                     border = borderStroke,
                     modifier = Modifier
