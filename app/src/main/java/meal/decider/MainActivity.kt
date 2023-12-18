@@ -154,6 +154,7 @@ fun TopBar() {
                                 text = { Text("Edit Cuisines") },
                                 onClick = {
                                     gameViewModel.updateEditMode(!gameViewModel.getEditMode)
+                                    expanded = false
                                 }
                             )
                             DropdownMenuItem(
@@ -258,8 +259,9 @@ fun SelectionGridLayout() {
                         .selectable(
                             selected = true,
                             onClick = {
-                                gameViewModel.updateActiveEdit(true)
-                                showLog("test", "active edit is {${gameViewModel.getActiveEdit}")
+                                if (gameViewModel.getEditMode) {
+                                    gameViewModel.updateActiveEdit(true)
+                                }
                             }
                         ),
                 ) {
@@ -314,7 +316,6 @@ fun InteractionLayout() {
             Spacer(modifier = Modifier.width(24.dp))
 
             Button(onClick = {
-//                showLog("test", gameViewModel.rollEngaged.toString())
                 if (!gameViewModel.rollEngaged) {
                     mapIntent(Uri.parse(foodUri))
                 }
