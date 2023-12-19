@@ -65,6 +65,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults.titleContentColor
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -307,22 +308,28 @@ fun InteractionLayout() {
                 .padding(bottom = 12.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            Button(onClick = {
-                if (!gameViewModel.rollEngaged) {
-                    gameViewModel.updateColorListWithinLooper()
-                }
-            }) {
-                ButtonUi(text = "Decide")
+            Button(
+                onClick = {
+                    if (!gameViewModel.rollEngaged) {
+                        gameViewModel.updateColorListWithinLooper()
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
+            ) {
+                ButtonText(text = "Decide")
             }
 
             Spacer(modifier = Modifier.width(24.dp))
 
-            Button(onClick = {
-                if (!gameViewModel.rollEngaged) {
-                    mapIntent(Uri.parse(foodUri))
-                }
-            }) {
-                ButtonUi(text = "Open Maps")
+            Button(
+                onClick = {
+                    if (!gameViewModel.rollEngaged) {
+                        mapIntent(Uri.parse(foodUri))
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400))
+            ) {
+                ButtonText(text = "Open Maps")
             }
         }
     }
@@ -336,7 +343,7 @@ fun mapIntent(uri: Uri) {
 }
 
 @Composable
-fun ButtonUi(text: String) {
+fun ButtonText(text: String) {
     Text(text = text, color = Color.Black, fontSize = 20.sp)
 }
 
