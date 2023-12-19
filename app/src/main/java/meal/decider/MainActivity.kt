@@ -339,9 +339,9 @@ fun mapIntent(uri: Uri) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditDialog() {
+    //Needs to be remembered since we're recomposing each onValueChanged.
     var txtField by remember { mutableStateOf("") }
     txtField = gameViewModel.selectedSquare.name
-//    var selectedCuisine = gameViewModel.selectedSquare.name
 
     Dialog(onDismissRequest = { gameViewModel.updateActiveEdit(false)}) {
         Surface(
@@ -372,22 +372,31 @@ fun EditDialog() {
                         .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.Close,
-                            contentDescription = "",
-                            tint = colorResource(android.R.color.holo_red_light),
-                            modifier = Modifier
-                                .width(50.dp)
-                                .height(50.dp)
-                        )
-                        Icon(
-                            imageVector = Icons.Filled.Check,
-                            contentDescription = "",
-                            tint = colorResource(android.R.color.holo_green_light),
-                            modifier = Modifier
-                                .width(50.dp)
-                                .height(50.dp)
-                        )
+                        IconButton(onClick = {
+
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Close,
+                                contentDescription = "",
+                                tint = colorResource(android.R.color.holo_red_light),
+                                modifier = Modifier
+                                    .width(50.dp)
+                                    .height(50.dp)
+                            )
+                        }
+                        IconButton(onClick = {
+                            showLog("test", "boo")
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Check,
+                                contentDescription = "",
+                                tint = colorResource(android.R.color.holo_green_light),
+                                modifier = Modifier
+                                    .width(50.dp)
+                                    .height(50.dp)
+                            )
+                        }
+
                     }
 
                 }
