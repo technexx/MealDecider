@@ -64,6 +64,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults.titleContentColor
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -132,8 +133,8 @@ fun TopBar() {
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = colorResource(id = R.color.blue_600),
+                    titleContentColor = Color.White,
                 ),
                 title = {
                     Text("Meal Decider")
@@ -230,7 +231,7 @@ fun SelectionGridLayout() {
     if (editState.value) {
         borderStroke = BorderStroke(4.dp,Color.Black)
     } else {
-        borderStroke = BorderStroke(0.dp,Color.Black)
+        borderStroke = BorderStroke(1.dp,Color.Black)
     }
 
     if (activeEdit.value) {
@@ -251,7 +252,6 @@ fun SelectionGridLayout() {
             items(boardUiState.value.squareList.size) { index ->
                 Card(
                     colors = CardDefaults.cardColors(
-                        //TODO: Looking for ID, not int resource.
                         containerColor = colorResource(id = gameViewModel.colorList[index]),
                     ),
                     border = borderStroke,
@@ -271,7 +271,7 @@ fun SelectionGridLayout() {
                         text = boardUiState.value.squareList[index].name,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
-                        color = Color(0xFFFFFFFF),
+                        color = Color.Black,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(16.dp)
                     )
@@ -296,7 +296,7 @@ fun InteractionLayout() {
         foodUri = "geo:0,0?q=" + gameViewModel.selectedSquare.name + " Food"
 
         if (boardUiState.value.rollFinished) {
-            Text(text = context.getString(R.string.meal_decided, gameViewModel.selectedSquare.name), color = Color.White, fontSize = 22.sp)
+            Text(text = context.getString(R.string.meal_decided, gameViewModel.selectedSquare.name), color = Color.Black, fontSize = 22.sp)
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -337,7 +337,7 @@ fun mapIntent(uri: Uri) {
 
 @Composable
 fun ButtonUi(text: String) {
-    Text(text = text, color = Color.White, fontSize = 20.sp)
+    Text(text = text, color = Color.Black, fontSize = 20.sp)
 }
 
 @Composable

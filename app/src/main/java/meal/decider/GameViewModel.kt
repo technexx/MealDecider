@@ -95,7 +95,7 @@ class GameViewModel (context: Context) : ViewModel() {
             list.add(R.color.grey_300)
         }
 
-        list[0] = R.color.red_a700
+        list[0] = R.color.red_200
         return list
     }
 
@@ -107,7 +107,7 @@ class GameViewModel (context: Context) : ViewModel() {
 
         colorListRunnable = Runnable {
             val indexRoll = Random.nextInt(0, squareList.size)
-            val newColorList = colorListWithRandomIndexChanged(R.color.red_a700, indexRoll)
+            val newColorList = colorListWithRandomIndexChanged(R.color.red_200, indexRoll)
             updateColorList(newColorList)
 
             handler.postDelayed(colorListRunnable, delay)

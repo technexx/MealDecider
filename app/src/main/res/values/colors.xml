@@ -10,4 +10,9 @@
     <color name="grey_50">#FFFAFAFA</color>
     <color name="grey_300">#FFE0E0E0</color>
     <color name="red_a700">#FFD50000</color>
+    <color name="light_blue200">#81D4FA</color>
+    <color name="light_blue_100">#B3E5FC</color>
+    <color name="blue_grey800">#37474F</color>
+    <color name="blue_600">#1E88E5</color>
+    <color name="red_200">#EF9A9A</color>
 </resources>
