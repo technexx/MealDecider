@@ -64,6 +64,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
@@ -344,21 +347,38 @@ fun EditDialog() {
         ) {
             Box(modifier = Modifier
                 .size(height = 200.dp, width = 300.dp),
-                contentAlignment = Alignment.Center
             ) {
-                Column(modifier = Modifier.padding(20.dp)) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                Column(modifier = Modifier.padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally)
+                {
+                    TextField(
+                        value = selectedCuisine,
+                        onValueChange = { selectedCuisine = it },
+                        maxLines = 1,
+                        textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            containerColor = colorResource(id = R.color.grey_50),
+                        ),
+                    )
+//                    Spacer(modifier = Modifier.weight(1f))
+                    Row (
+                        horizontalArrangement = Arrangement.SpaceAround,
                     ) {
-                        TextField(
-                            value = selectedCuisine,
-                            onValueChange = { selectedCuisine = it },
-                            maxLines = 1,
-                            textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                containerColor = colorResource(id = R.color.grey_50),
-                            )
+                        Icon(
+                            imageVector = Icons.Filled.Close,
+                            contentDescription = "",
+                            tint = colorResource(android.R.color.holo_red_light),
+                            modifier = Modifier
+                                .width(50.dp)
+                                .height(50.dp)
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = "",
+                            tint = colorResource(android.R.color.holo_green_light),
+                            modifier = Modifier
+                                .width(50.dp)
+                                .height(50.dp)
                         )
                     }
 
