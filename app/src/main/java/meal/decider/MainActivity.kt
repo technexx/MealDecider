@@ -348,9 +348,13 @@ fun EditDialog() {
             Box(modifier = Modifier
                 .size(height = 200.dp, width = 300.dp),
             ) {
-                Column(modifier = Modifier.padding(20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally)
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceEvenly)
                 {
+                    Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = selectedCuisine,
                         onValueChange = { selectedCuisine = it },
@@ -360,9 +364,10 @@ fun EditDialog() {
                             containerColor = colorResource(id = R.color.grey_50),
                         ),
                     )
-//                    Spacer(modifier = Modifier.weight(1f))
-                    Row (
-                        horizontalArrangement = Arrangement.SpaceAround,
+                    Spacer(modifier = Modifier.weight(1f))
+                    Row (modifier = Modifier
+                        .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Close,
