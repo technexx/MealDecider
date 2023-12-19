@@ -92,6 +92,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.window.Dialog
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition
@@ -338,7 +339,9 @@ fun mapIntent(uri: Uri) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditDialog() {
-    var selectedCuisine = gameViewModel.selectedSquare.name
+    var txtField by remember { mutableStateOf("") }
+    txtField = gameViewModel.selectedSquare.name
+//    var selectedCuisine = gameViewModel.selectedSquare.name
 
     Dialog(onDismissRequest = { gameViewModel.updateActiveEdit(false)}) {
         Surface(
@@ -356,8 +359,8 @@ fun EditDialog() {
                 {
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
-                        value = selectedCuisine,
-                        onValueChange = { selectedCuisine = it },
+                        value = txtField,
+                        onValueChange = { txtField = it },
                         maxLines = 1,
                         textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
