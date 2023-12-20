@@ -119,7 +119,6 @@ class MainActivity : ComponentActivity() {
         activityContext = this@MainActivity
 
         gameViewModel.createSquareList()
-        gameViewModel.createColorList()
 
         setContent {
             MealDeciderTheme {
@@ -257,7 +256,7 @@ fun SelectionGridLayout() {
             items(boardUiState.value.squareList.size) { index ->
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = colorResource(id = gameViewModel.getColorList[index]),
+                        containerColor = colorResource(id = gameViewModel.getSquareList[index].color),
                     ),
                     border = borderStroke,
                     modifier = Modifier
@@ -317,7 +316,7 @@ fun InteractionLayout() {
             Button(
                 onClick = {
                     if (!gameViewModel.getRollEngaged && !gameViewModel.getEditMode) {
-                        gameViewModel.updateColorListWithinLooper()
+                        gameViewModel.updateColorOfSquareValuesList()
                     }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
@@ -411,7 +410,7 @@ fun DialogBox(editing: Boolean) {
                         }
                         IconButton(onClick = {
                             if (editing) {
-                                gameViewModel.updateSelectedSquareName(gameViewModel.getSquareToEdit, txtField)
+                                gameViewModel.updateSquareName(gameViewModel.getSquareToEdit, txtField)
                                 gameViewModel.updateActiveEdit(false)
                             } else {
                                 gameViewModel.addSquareToList(txtField)

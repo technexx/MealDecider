@@ -38,12 +38,6 @@ class GameViewModel (context: Context) : ViewModel() {
         }
     }
 
-    private fun updateColorList(list: SnapshotStateList<Int>) {
-        _boardUiState.update { currentState ->
-            currentState.copy(colorList = list)
-        }
-    }
-
     private fun updateSelectedSquare(squareValues: SquareValues) {
         _boardUiState.update { currentState ->
             currentState.copy(selectedSquare = squareValues)
@@ -85,7 +79,7 @@ class GameViewModel (context: Context) : ViewModel() {
         updateSquareList(squareList)
     }
 
-    fun updateSelectedSquareName(index: Int, name: String) {
+    fun updateSquareName(index: Int, name: String) {
         val list = getSquareList
         list[index].name = name
 
@@ -102,29 +96,13 @@ class GameViewModel (context: Context) : ViewModel() {
 
     private fun starterSquareList(): SnapshotStateList<SquareValues> {
         val list = mutableStateListOf<SquareValues>()
-        for (i in SquareDataObject.squareValuesList) {
-            list.add(i)
+        for (i in starterCuisineList) {
+            list.add(SquareValues(i, R.color.grey_300))
         }
         return list
     }
 
-    fun createColorList() {
-        _boardUiState.update { currentState ->
-            currentState.copy(colorList = starterColorList())
-        }
-    }
-
-    private fun starterColorList() : SnapshotStateList<Int> {
-        val list = mutableStateListOf<Int>()
-        for (i in SquareDataObject.squareValuesList) {
-            list.add(R.color.grey_300)
-        }
-
-        list[0] = R.color.red_200
-        return list
-    }
-
-    fun updateColorListWithinLooper() {
+    fun updateColorOfSquareValuesList() {
         var delay: Long = 500
 
         handler.removeCallbacks(colorListRunnable)
@@ -132,14 +110,18 @@ class GameViewModel (context: Context) : ViewModel() {
 
         colorListRunnable = Runnable {
             val indexRoll = Random.nextInt(0, getSquareList.size)
+            val squareList = getSquareList
             val newColorList = colorListWithRandomIndexChanged(R.color.red_200, indexRoll)
-            updateColorList(newColorList)
+
+            //Updates the color object in random entry in SquareValues list.
+            squareList[indexRoll] = (SquareValues(squareList[indexRoll].name, newColorList[indexRoll]))
+            updateSquareList(squareList)
 
             handler.postDelayed(colorListRunnable, delay)
             delay -= 20
 
             if (delay < 20) {
-                updateSelectedSquare(SquareDataObject.squareValuesList[indexRoll])
+                updateSelectedSquare(getSquareList[indexRoll])
                 updateRollEngaged(false)
                 updateRollFinished(true)
 
@@ -160,13 +142,8 @@ class GameViewModel (context: Context) : ViewModel() {
         return list
     }
 
-    fun rollRandomSquare(numberOfSquares: Int): Int {
-        return Random.nextInt(0, numberOfSquares)
-    }
-
     val getSelectedSquare get() = boardUiState.value.selectedSquare
     val getSquareList get() = boardUiState.value.squareList
-    val getColorList get() = boardUiState.value.colorList
     val getRollEngaged get() = boardUiState.value.rollEngaged
     val getRollFinished get() = boardUiState.value.rollFinished
 
