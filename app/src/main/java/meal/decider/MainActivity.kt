@@ -169,6 +169,12 @@ fun TopBar() {
                             onDismissRequest = { expanded = false }
                         ) {
                             DropdownMenuItem(
+                                text = { Text("Add Cuisine") },
+                                onClick = {
+                                    gameViewModel.updateAddMode(true)
+                                }
+                            )
+                            DropdownMenuItem(
                                 text = { Text("Edit Cuisines") },
                                 onClick = {
                                     gameViewModel.updateEditMode(!gameViewModel.getEditMode)
@@ -215,22 +221,27 @@ fun Board() {
 @Composable
 fun SelectionGridLayout() {
     val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
-    val editStateUiState = gameViewModel.editMode.collectAsStateWithLifecycle()
-    val activeEditUiState = gameViewModel.activeEdit.collectAsStateWithLifecycle()
+    val addMode = gameViewModel.addMode.collectAsStateWithLifecycle()
+    val editState = gameViewModel.editMode.collectAsStateWithLifecycle()
+    val activeEdit = gameViewModel.activeEdit.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     var borderStroke: BorderStroke
 
     borderStroke = BorderStroke(4.dp,Color.Black)
 
-    if (editStateUiState.value) {
+    if (editState.value) {
         borderStroke = BorderStroke(4.dp,Color.Black)
     } else {
         borderStroke = BorderStroke(1.dp,Color.Black)
     }
 
-    if (activeEditUiState.value) {
-        EditDialog()
+    if (addMode.value) {
+        DialogBox(editing = false)
+    }
+
+    if (activeEdit.value) {
+        DialogBox(editing = true)
     }
 
     LazyVerticalGrid(
@@ -340,12 +351,21 @@ fun mapIntent(uri: Uri) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditDialog() {
+fun DialogBox(editing: Boolean) {
     //Needs to be remembered since we're recomposing each onValueChanged.
     var txtField by remember { mutableStateOf("") }
-    txtField = gameViewModel.getSquareList[gameViewModel.getSquareToEdit].name
 
-    Dialog(onDismissRequest = { gameViewModel.updateActiveEdit(false)}) {
+    if (editing) {
+       txtField = gameViewModel.getSquareList[gameViewModel.getSquareToEdit].name
+    }
+
+    Dialog(onDismissRequest = {
+        if (editing) {
+            gameViewModel.updateActiveEdit(false)
+        } else {
+            gameViewModel.updateAddMode(false)
+        }})
+    {
         Surface(
             shape = RoundedCornerShape(16.dp),
             color = colorResource(id = R.color.grey_300)
@@ -375,7 +395,11 @@ fun EditDialog() {
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         IconButton(onClick = {
-                            gameViewModel.updateActiveEdit(false)
+                            if (editing) {
+                                gameViewModel.updateActiveEdit(false)
+                            } else {
+                                gameViewModel.updateAddMode(false)
+                            }
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Close,
@@ -387,8 +411,12 @@ fun EditDialog() {
                             )
                         }
                         IconButton(onClick = {
-                            gameViewModel.updateSelectedSquareName(gameViewModel.getSquareToEdit, txtField)
-                            gameViewModel.updateActiveEdit(false)
+                            if (editing) {
+                                gameViewModel.updateSelectedSquareName(gameViewModel.getSquareToEdit, txtField)
+                                gameViewModel.updateActiveEdit(false)
+                            } else {
+                                gameViewModel.addSquareToList(txtField)
+                            }
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Check,

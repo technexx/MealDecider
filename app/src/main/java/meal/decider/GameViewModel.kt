@@ -17,6 +17,9 @@ class GameViewModel (context: Context) : ViewModel() {
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
 
+    private val _addMode = MutableStateFlow(false)
+    val addMode : StateFlow<Boolean> = _addMode.asStateFlow()
+
     private val _editMode = MutableStateFlow(false)
     val editMode : StateFlow<Boolean> = _editMode.asStateFlow()
 
@@ -28,6 +31,12 @@ class GameViewModel (context: Context) : ViewModel() {
 
     private val handler = Handler(Looper.getMainLooper())
     private var colorListRunnable = Runnable {}
+
+    fun updateSquareList(list: SnapshotStateList<SquareValues>) {
+        _boardUiState.update { currentState ->
+            currentState.copy(squareList = list)
+        }
+    }
 
     private fun updateColorList(list: SnapshotStateList<Int>) {
         _boardUiState.update { currentState ->
@@ -53,6 +62,10 @@ class GameViewModel (context: Context) : ViewModel() {
         }
     }
 
+    fun updateAddMode(addMode: Boolean) {
+        _addMode.value = addMode
+    }
+
     fun updateEditMode(editMode: Boolean) {
         _editMode.value = editMode
     }
@@ -65,11 +78,15 @@ class GameViewModel (context: Context) : ViewModel() {
         _squareToEdit.value = square
     }
 
+    fun addSquareToList(name: String) {
+        val squareList = getSquareList
+        squareList.add(SquareValues("name"))
+        updateSquareList(squareList)
+    }
+
     fun updateSelectedSquareName(index: Int, name: String) {
         val list = getSquareList
         list[index].name = name
-
-//        showLog("test", squareList[index].name)
 
         _boardUiState.update { currentState ->
             currentState.copy(squareList = list)
@@ -152,6 +169,7 @@ class GameViewModel (context: Context) : ViewModel() {
     val getRollEngaged get() = boardUiState.value.rollEngaged
     val getRollFinished get() = boardUiState.value.rollFinished
 
+    val getAddMode get() = addMode.value
     val getEditMode get() = editMode.value
     val getActiveEdit get() = activeEdit.value
     val getSquareToEdit get() = squareToEdit.value
