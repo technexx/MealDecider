@@ -258,6 +258,7 @@ fun SelectionGridLayout() {
                             onClick = {
                                 if (gameViewModel.getEditMode) {
                                     gameViewModel.updateActiveEdit(true)
+                                    gameViewModel.updateSquareToEdit(index)
                                 }
                             }
                         ),
@@ -341,7 +342,7 @@ fun mapIntent(uri: Uri) {
 fun EditDialog() {
     //Needs to be remembered since we're recomposing each onValueChanged.
     var txtField by remember { mutableStateOf("") }
-    txtField = gameViewModel.selectedSquare.name
+    txtField = gameViewModel.squareList[gameViewModel.getSquareToEdit].name
 
     Dialog(onDismissRequest = { gameViewModel.updateActiveEdit(false)}) {
         Surface(
@@ -385,7 +386,7 @@ fun EditDialog() {
                             )
                         }
                         IconButton(onClick = {
-                            showLog("test", "boo")
+
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Check,
@@ -396,7 +397,6 @@ fun EditDialog() {
                                     .height(50.dp)
                             )
                         }
-
                     }
 
                 }

@@ -14,8 +14,6 @@ import kotlinx.coroutines.flow.update
 import kotlin.random.Random
 
 class GameViewModel (context: Context) : ViewModel() {
-    val mContext = context
-
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
 
@@ -24,6 +22,9 @@ class GameViewModel (context: Context) : ViewModel() {
 
     private val _activeEdit = MutableStateFlow(false)
     val activeEdit : StateFlow<Boolean> = _activeEdit.asStateFlow()
+
+    private val _squareToEdit = MutableStateFlow(0)
+    val squareToEdit : StateFlow<Int> = _squareToEdit.asStateFlow()
 
     private val handler = Handler(Looper.getMainLooper())
     private var colorListRunnable = Runnable {}
@@ -58,6 +59,10 @@ class GameViewModel (context: Context) : ViewModel() {
 
     fun updateActiveEdit(activeEdit: Boolean) {
         _activeEdit.value = activeEdit
+    }
+
+    fun updateSquareToEdit(square: Int) {
+        _squareToEdit.value = square
     }
 
     fun updateSelectedSquareName(index: Int, name: String) {
@@ -144,6 +149,8 @@ class GameViewModel (context: Context) : ViewModel() {
     val colorList get() = boardUiState.value.colorList
     val rollEngaged get() = boardUiState.value.rollEngaged
     val rollFinished get() = boardUiState.value.rollFinished
+
     val getEditMode get() = editMode.value
     val getActiveEdit get() = activeEdit.value
+    val getSquareToEdit get() = squareToEdit.value
 }
