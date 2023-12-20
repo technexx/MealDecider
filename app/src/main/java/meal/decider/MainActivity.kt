@@ -215,21 +215,21 @@ fun Board() {
 @Composable
 fun SelectionGridLayout() {
     val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
-    val editState = gameViewModel.editMode.collectAsStateWithLifecycle()
-    val activeEdit = gameViewModel.activeEdit.collectAsStateWithLifecycle()
+    val editStateUiState = gameViewModel.editMode.collectAsStateWithLifecycle()
+    val activeEditUiState = gameViewModel.activeEdit.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     var borderStroke: BorderStroke
 
     borderStroke = BorderStroke(4.dp,Color.Black)
 
-    if (editState.value) {
+    if (editStateUiState.value) {
         borderStroke = BorderStroke(4.dp,Color.Black)
     } else {
         borderStroke = BorderStroke(1.dp,Color.Black)
     }
 
-    if (activeEdit.value) {
+    if (activeEditUiState.value) {
         EditDialog()
     }
 
@@ -258,6 +258,7 @@ fun SelectionGridLayout() {
                             onClick = {
                                 if (gameViewModel.getEditMode) {
                                     gameViewModel.updateActiveEdit(true)
+                                    gameViewModel.updateEditMode(false)
                                     gameViewModel.updateSquareToEdit(index)
                                 }
                             }
@@ -374,7 +375,7 @@ fun EditDialog() {
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         IconButton(onClick = {
-
+                            gameViewModel.updateActiveEdit(false)
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Close,
