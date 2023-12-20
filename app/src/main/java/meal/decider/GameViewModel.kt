@@ -30,7 +30,7 @@ class GameViewModel (context: Context) : ViewModel() {
     val squareToEdit : StateFlow<Int> = _squareToEdit.asStateFlow()
 
     private val handler = Handler(Looper.getMainLooper())
-    private var colorListRunnable = Runnable {}
+    private var squareColorChangeRunnable = Runnable {}
 
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
@@ -105,19 +105,16 @@ class GameViewModel (context: Context) : ViewModel() {
     fun updateColorOfSquareValuesList() {
         var delay: Long = 500
 
-        handler.removeCallbacks(colorListRunnable)
+        handler.removeCallbacks(squareColorChangeRunnable)
         updateRollEngaged(true)
 
-        colorListRunnable = Runnable {
+        squareColorChangeRunnable = Runnable {
             val indexRoll = Random.nextInt(0, getSquareList.size)
-            val squareList = getSquareList
-            val newColorList = colorListWithRandomIndexChanged(R.color.red_200, indexRoll)
+            val newSquareList = SquareListWithRandomColorChanged(R.color.red_200, indexRoll)
 
-            //Updates the color object in random entry in SquareValues list.
-            squareList[indexRoll] = (SquareValues(squareList[indexRoll].name, newColorList[indexRoll]))
-            updateSquareList(squareList)
+            updateSquareList(newSquareList)
 
-            handler.postDelayed(colorListRunnable, delay)
+            handler.postDelayed(squareColorChangeRunnable, delay)
             delay -= 20
 
             if (delay < 20) {
@@ -125,11 +122,24 @@ class GameViewModel (context: Context) : ViewModel() {
                 updateRollEngaged(false)
                 updateRollFinished(true)
 
-                handler.removeCallbacks(colorListRunnable)
+                handler.removeCallbacks(squareColorChangeRunnable)
             }
         }
 
-        handler.post((colorListRunnable))
+        handler.post((squareColorChangeRunnable))
+    }
+
+    private fun SquareListWithRandomColorChanged(newColor: Int, index: Int): SnapshotStateList<SquareValues> {
+        val currentList = getSquareList
+        val newList = SnapshotStateList<SquareValues>()
+
+        for (i in currentList) {
+            newList.add(SquareValues(i.name, R.color.grey_300))
+        }
+
+        newList[index].color = newColor
+
+        return newList
     }
 
     private fun colorListWithRandomIndexChanged(color: Int, index: Int): SnapshotStateList<Int> {
