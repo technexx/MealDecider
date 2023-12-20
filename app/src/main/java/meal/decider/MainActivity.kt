@@ -103,6 +103,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import java.net.URI
 
+//TODO: Categories (Vegan, etc.)
 
 @SuppressLint("StaticFieldLeak")
 private lateinit var gameViewModel : GameViewModel
@@ -172,6 +173,7 @@ fun TopBar() {
                                 text = { Text("Add Cuisine") },
                                 onClick = {
                                     gameViewModel.updateAddMode(true)
+                                    expanded = false
                                 }
                             )
                             DropdownMenuItem(
@@ -184,7 +186,7 @@ fun TopBar() {
                             DropdownMenuItem(
                                 text = { Text("Restore Defaults") },
                                 onClick = {
-
+                                    expanded = false
                                 }
                             )
                         }
@@ -205,8 +207,6 @@ fun TopBar() {
 
 @Composable
 fun Board() {
-    val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
-
     Column (modifier = Modifier
         .fillMaxWidth()
         .height((screenHeight() * 1).dp)
@@ -225,7 +225,6 @@ fun SelectionGridLayout() {
     val editState = gameViewModel.editMode.collectAsStateWithLifecycle()
     val activeEdit = gameViewModel.activeEdit.collectAsStateWithLifecycle()
 
-    val context = LocalContext.current
     var borderStroke: BorderStroke
 
     borderStroke = BorderStroke(4.dp,Color.Black)
@@ -428,7 +427,6 @@ fun DialogBox(editing: Boolean) {
                             )
                         }
                     }
-
                 }
             }
         }

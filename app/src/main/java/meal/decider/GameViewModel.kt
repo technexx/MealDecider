@@ -80,7 +80,8 @@ class GameViewModel (context: Context) : ViewModel() {
 
     fun addSquareToList(name: String) {
         val squareList = getSquareList
-        squareList.add(SquareValues("name"))
+        squareList.add(SquareValues(name))
+
         updateSquareList(squareList)
     }
 
