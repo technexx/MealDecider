@@ -66,7 +66,7 @@ class GameViewModel (context: Context) : ViewModel() {
     }
 
     fun updateSelectedSquareName(index: Int, name: String) {
-        val list = squareList
+        val list = getSquareList
         list[index].name = name
 
 //        showLog("test", squareList[index].name)
@@ -113,7 +113,7 @@ class GameViewModel (context: Context) : ViewModel() {
         updateRollEngaged(true)
 
         colorListRunnable = Runnable {
-            val indexRoll = Random.nextInt(0, squareList.size)
+            val indexRoll = Random.nextInt(0, getSquareList.size)
             val newColorList = colorListWithRandomIndexChanged(R.color.red_200, indexRoll)
             updateColorList(newColorList)
 
@@ -134,7 +134,7 @@ class GameViewModel (context: Context) : ViewModel() {
 
     private fun colorListWithRandomIndexChanged(color: Int, index: Int): SnapshotStateList<Int> {
         val list = SnapshotStateList<Int>()
-        for (i in squareList) {
+        for (i in getSquareList) {
             list.add(R.color.grey_300)
         }
         list[index] = color
@@ -146,11 +146,11 @@ class GameViewModel (context: Context) : ViewModel() {
         return Random.nextInt(0, numberOfSquares)
     }
 
-    val selectedSquare get() = boardUiState.value.selectedSquare
-    val squareList get() = boardUiState.value.squareList
-    val colorList get() = boardUiState.value.colorList
-    val rollEngaged get() = boardUiState.value.rollEngaged
-    val rollFinished get() = boardUiState.value.rollFinished
+    val getSelectedSquare get() = boardUiState.value.selectedSquare
+    val getSquareList get() = boardUiState.value.squareList
+    val getColorList get() = boardUiState.value.colorList
+    val getRollEngaged get() = boardUiState.value.rollEngaged
+    val getRollFinished get() = boardUiState.value.rollFinished
 
     val getEditMode get() = editMode.value
     val getActiveEdit get() = activeEdit.value

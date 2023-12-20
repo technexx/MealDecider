@@ -247,7 +247,7 @@ fun SelectionGridLayout() {
             items(boardUiState.value.squareList.size) { index ->
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = colorResource(id = gameViewModel.colorList[index]),
+                        containerColor = colorResource(id = gameViewModel.getColorList[index]),
                     ),
                     border = borderStroke,
                     modifier = Modifier
@@ -290,10 +290,10 @@ fun InteractionLayout() {
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        foodUri = "geo:0,0?q=" + gameViewModel.selectedSquare.name + " Food"
+        foodUri = "geo:0,0?q=" + gameViewModel.getSelectedSquare.name + " Food"
 
         if (boardUiState.value.rollFinished) {
-            Text(text = context.getString(R.string.meal_decided, gameViewModel.selectedSquare.name), color = Color.Black, fontSize = 22.sp)
+            Text(text = context.getString(R.string.meal_decided, gameViewModel.getSelectedSquare.name), color = Color.Black, fontSize = 22.sp)
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -306,7 +306,7 @@ fun InteractionLayout() {
         ) {
             Button(
                 onClick = {
-                    if (!gameViewModel.rollEngaged) {
+                    if (!gameViewModel.getRollEngaged && !gameViewModel.getEditMode) {
                         gameViewModel.updateColorListWithinLooper()
                     }
                 },
@@ -319,7 +319,7 @@ fun InteractionLayout() {
 
             Button(
                 onClick = {
-                    if (!gameViewModel.rollEngaged) {
+                    if (!gameViewModel.getRollEngaged && !gameViewModel.getEditMode) {
                         mapIntent(Uri.parse(foodUri))
                     }
                 },
@@ -343,7 +343,7 @@ fun mapIntent(uri: Uri) {
 fun EditDialog() {
     //Needs to be remembered since we're recomposing each onValueChanged.
     var txtField by remember { mutableStateOf("") }
-    txtField = gameViewModel.squareList[gameViewModel.getSquareToEdit].name
+    txtField = gameViewModel.getSquareList[gameViewModel.getSquareToEdit].name
 
     Dialog(onDismissRequest = { gameViewModel.updateActiveEdit(false)}) {
         Surface(
@@ -387,7 +387,6 @@ fun EditDialog() {
                             )
                         }
                         IconButton(onClick = {
-                            //TODO: Update cuisine list.
                             gameViewModel.updateSelectedSquareName(gameViewModel.getSquareToEdit, txtField)
                             gameViewModel.updateActiveEdit(false)
                         }) {
