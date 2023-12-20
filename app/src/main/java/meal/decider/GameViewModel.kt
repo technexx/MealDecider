@@ -69,6 +69,8 @@ class GameViewModel (context: Context) : ViewModel() {
         val list = squareList
         list[index].name = name
 
+//        showLog("test", squareList[index].name)
+
         _boardUiState.update { currentState ->
             currentState.copy(squareList = list)
         }

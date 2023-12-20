@@ -363,7 +363,7 @@ fun EditDialog() {
                     TextField(
                         value = txtField,
                         onValueChange = { txtField = it },
-                        maxLines = 1,
+                        singleLine = true,
                         textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             containerColor = colorResource(id = R.color.grey_50),
@@ -387,7 +387,9 @@ fun EditDialog() {
                             )
                         }
                         IconButton(onClick = {
-
+                            //TODO: Update cuisine list.
+                            gameViewModel.updateSelectedSquareName(gameViewModel.getSquareToEdit, txtField)
+                            gameViewModel.updateActiveEdit(false)
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Check,
