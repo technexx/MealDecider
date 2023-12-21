@@ -211,7 +211,6 @@ fun Board() {
         .height((screenHeight() * 1).dp)
         .background(colorResource(id = R.color.grey_50))
     ) {
-        FullCuisineList(cuisines = fullCuisineList)
         SelectionGridLayout()
         Spacer(modifier = Modifier.height(16.dp))
         InteractionLayout()
@@ -236,11 +235,11 @@ fun SelectionGridLayout() {
     }
 
     if (addMode.value) {
-        DialogBox(editing = false)
+        EditDialogBox(editing = false)
     }
 
     if (activeEdit.value) {
-        DialogBox(editing = true)
+        EditDialogBox(editing = true)
     }
 
     LazyVerticalGrid(
@@ -342,41 +341,25 @@ fun InteractionLayout() {
 }
 
 @Composable
-fun FullCuisineList(cuisines: List<String>) {
-    LazyColumn {
+fun FullCuisineList(cuisines: MutableList<String>) {
+    LazyColumn (modifier = Modifier
+    ){
         items (cuisines.size) { index ->
             Text(fontSize = 16.sp,
                 color = Color.Black,
                 text = cuisines[index])
         }
     }
-
-//    Column {
-//        //"cuisine" refers to each item within passed in "cuisines" list.
-//        cuisines.forEach { cuisine ->
-//            Text(fontSize = 16.sp,
-//                color = Color.Black,
-//                text = cuisine)
-//        }
-//    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DialogBox(editing: Boolean) {
-    //Needs to be remembered since we're recomposing each onValueChanged.
+fun AddDialogBox() {
     var txtField by remember { mutableStateOf("") }
 
-    if (editing) {
-       txtField = gameViewModel.getSquareList[gameViewModel.getSquareToEdit].name
-    }
-
     Dialog(onDismissRequest = {
-        if (editing) {
-            gameViewModel.updateActiveEdit(false)
-        } else {
-            gameViewModel.updateAddMode(false)
-        }})
+        gameViewModel.updateAddMode(false)
+    })
     {
         Surface(
             shape = RoundedCornerShape(16.dp),
@@ -407,11 +390,7 @@ fun DialogBox(editing: Boolean) {
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         IconButton(onClick = {
-                            if (editing) {
-                                gameViewModel.updateActiveEdit(false)
-                            } else {
-                                gameViewModel.updateAddMode(false)
-                            }
+                            gameViewModel.updateAddMode(false)
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Close,
@@ -423,13 +402,80 @@ fun DialogBox(editing: Boolean) {
                             )
                         }
                         IconButton(onClick = {
-                            if (editing) {
-                                gameViewModel.updateSquareName(gameViewModel.getSquareToEdit, txtField)
-                                gameViewModel.updateActiveEdit(false)
-                            } else {
-                                gameViewModel.addSquareToList(txtField)
-                                gameViewModel.updateAddMode(false)
-                            }
+                            gameViewModel.addSquareToList(txtField)
+                            gameViewModel.updateAddMode(false)
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Check,
+                                contentDescription = "",
+                                tint = colorResource(android.R.color.holo_green_light),
+                                modifier = Modifier
+                                    .width(50.dp)
+                                    .height(50.dp)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EditDialogBox(editing: Boolean) {
+    var txtField by remember { mutableStateOf("") }
+
+    txtField = gameViewModel.getSquareList[gameViewModel.getSquareToEdit].name
+
+    Dialog(onDismissRequest = {
+        gameViewModel.updateActiveEdit(false)
+    })
+    {
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = colorResource(id = R.color.grey_300)
+        ) {
+            Box(modifier = Modifier
+                .size(height = 200.dp, width = 300.dp),
+            ) {
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceEvenly)
+                {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    TextField(
+                        value = txtField,
+                        onValueChange = { txtField = it },
+                        singleLine = true,
+                        textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            containerColor = colorResource(id = R.color.grey_50),
+                        ),
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Row (modifier = Modifier
+                        .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        IconButton(onClick = {
+                            gameViewModel.updateActiveEdit(false)
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Close,
+                                contentDescription = "",
+                                tint = colorResource(android.R.color.holo_red_light),
+                                modifier = Modifier
+                                    .width(50.dp)
+                                    .height(50.dp)
+                            )
+                        }
+                        IconButton(onClick = {
+                            gameViewModel.updateSquareName(gameViewModel.getSquareToEdit, txtField)
+                            gameViewModel.updateActiveEdit(false)
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Check,
