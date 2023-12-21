@@ -62,6 +62,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -342,14 +343,22 @@ fun InteractionLayout() {
 
 @Composable
 fun FullCuisineList(cuisines: List<String>) {
-    Column {
-        //"cuisine" refers to each item within passed in "cuisines" list.
-        cuisines.forEach { cuisine ->
+    LazyColumn {
+        items (cuisines.size) { index ->
             Text(fontSize = 16.sp,
                 color = Color.Black,
-                text = cuisine)
+                text = cuisines[index])
         }
     }
+
+//    Column {
+//        //"cuisine" refers to each item within passed in "cuisines" list.
+//        cuisines.forEach { cuisine ->
+//            Text(fontSize = 16.sp,
+//                color = Color.Black,
+//                text = cuisine)
+//        }
+//    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
