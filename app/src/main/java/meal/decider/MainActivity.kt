@@ -210,6 +210,7 @@ fun Board() {
         .height((screenHeight() * 1).dp)
         .background(colorResource(id = R.color.grey_50))
     ) {
+        FullCuisineList(cuisines = fullCuisineList)
         SelectionGridLayout()
         Spacer(modifier = Modifier.height(16.dp))
         InteractionLayout()
@@ -289,7 +290,6 @@ fun SelectionGridLayout() {
 @SuppressLint("MissingPermission")
 @Composable
 fun InteractionLayout() {
-    val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
     val rollFinished = gameViewModel.rollFinished.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var foodUri by remember { mutableStateOf("") }
@@ -341,8 +341,15 @@ fun InteractionLayout() {
 }
 
 @Composable
-fun FullCuisineList() {
-
+fun FullCuisineList(cuisines: List<String>) {
+    Column {
+        //"cuisine" refers to each item within passed in "cuisines" list.
+        cuisines.forEach { cuisine ->
+            Text(fontSize = 16.sp,
+                color = Color.Black,
+                text = cuisine)
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
