@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.update
 import kotlin.random.Random
 
 class GameViewModel (context: Context) : ViewModel() {
+    val chosenSquareColor = R.color.red_200
+
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
 
@@ -99,6 +101,7 @@ class GameViewModel (context: Context) : ViewModel() {
         for (i in starterCuisineList) {
             list.add(SquareValues(i, R.color.grey_300))
         }
+        list[0] = SquareValues(list[0].name, chosenSquareColor)
         return list
     }
 
@@ -110,7 +113,7 @@ class GameViewModel (context: Context) : ViewModel() {
 
         squareColorChangeRunnable = Runnable {
             val indexRoll = Random.nextInt(0, getSquareList.size)
-            val newSquareList = SquareListWithRandomColorChanged(R.color.red_200, indexRoll)
+            val newSquareList = SquareListWithRandomColorChanged(indexRoll)
 
             updateSquareList(newSquareList)
 
@@ -129,7 +132,7 @@ class GameViewModel (context: Context) : ViewModel() {
         handler.post((squareColorChangeRunnable))
     }
 
-    private fun SquareListWithRandomColorChanged(newColor: Int, index: Int): SnapshotStateList<SquareValues> {
+    private fun SquareListWithRandomColorChanged(index: Int): SnapshotStateList<SquareValues> {
         val currentList = getSquareList
         val newList = SnapshotStateList<SquareValues>()
 
@@ -137,19 +140,9 @@ class GameViewModel (context: Context) : ViewModel() {
             newList.add(SquareValues(i.name, R.color.grey_300))
         }
 
-        newList[index].color = newColor
+        newList[index].color = chosenSquareColor
 
         return newList
-    }
-
-    private fun colorListWithRandomIndexChanged(color: Int, index: Int): SnapshotStateList<Int> {
-        val list = SnapshotStateList<Int>()
-        for (i in getSquareList) {
-            list.add(R.color.grey_300)
-        }
-        list[index] = color
-
-        return list
     }
 
     val getSelectedSquare get() = boardUiState.value.selectedSquare
