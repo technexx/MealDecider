@@ -414,6 +414,7 @@ fun DialogBox(editing: Boolean) {
                                 gameViewModel.updateActiveEdit(false)
                             } else {
                                 gameViewModel.addSquareToList(txtField)
+                                gameViewModel.updateAddMode(false)
                             }
                         }) {
                             Icon(

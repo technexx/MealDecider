@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.update
 import kotlin.random.Random
 
 class GameViewModel (context: Context) : ViewModel() {
-    val chosenSquareColor = R.color.red_200
+    private val genericSquareColor = R.color.grey_300
+    private val chosenSquareColor = R.color.red_200
 
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
@@ -76,7 +77,7 @@ class GameViewModel (context: Context) : ViewModel() {
 
     fun addSquareToList(name: String) {
         val squareList = getSquareList
-        squareList.add(SquareValues(name))
+        squareList.add(SquareValues(name, genericSquareColor))
 
         updateSquareList(squareList)
     }
@@ -99,7 +100,7 @@ class GameViewModel (context: Context) : ViewModel() {
     private fun starterSquareList(): SnapshotStateList<SquareValues> {
         val list = mutableStateListOf<SquareValues>()
         for (i in starterCuisineList) {
-            list.add(SquareValues(i, R.color.grey_300))
+            list.add(SquareValues(i, genericSquareColor))
         }
         list[0] = SquareValues(list[0].name, chosenSquareColor)
         return list
@@ -137,7 +138,7 @@ class GameViewModel (context: Context) : ViewModel() {
         val newList = SnapshotStateList<SquareValues>()
 
         for (i in currentList) {
-            newList.add(SquareValues(i.name, R.color.grey_300))
+            newList.add(SquareValues(i.name, genericSquareColor))
         }
 
         newList[index].color = chosenSquareColor
