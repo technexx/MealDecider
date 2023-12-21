@@ -115,7 +115,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         gameViewModel = GameViewModel(application)
-//        context = applicationContext
         activityContext = this@MainActivity
 
         gameViewModel.createSquareList()
@@ -291,6 +290,7 @@ fun SelectionGridLayout() {
 @Composable
 fun InteractionLayout() {
     val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
+    val rollFinished = gameViewModel.rollFinished.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var foodUri by remember { mutableStateOf("") }
 
@@ -301,7 +301,7 @@ fun InteractionLayout() {
     ) {
         foodUri = "geo:0,0?q=" + gameViewModel.getSelectedSquare.name + " Food"
 
-        if (boardUiState.value.rollFinished) {
+        if (rollFinished.value) {
             Text(text = context.getString(R.string.meal_decided, gameViewModel.getSelectedSquare.name), color = Color.Black, fontSize = 22.sp)
         }
 
@@ -340,11 +340,9 @@ fun InteractionLayout() {
     }
 }
 
-fun mapIntent(uri: Uri) {
-    val intent = Intent(Intent.ACTION_VIEW, uri)
-    intent.setPackage("com.google.android.apps.maps")
+@Composable
+fun FullCuisineList() {
 
-    activityContext.startActivity(intent)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -433,6 +431,14 @@ fun DialogBox(editing: Boolean) {
 
     }
 }
+
+fun mapIntent(uri: Uri) {
+    val intent = Intent(Intent.ACTION_VIEW, uri)
+    intent.setPackage("com.google.android.apps.maps")
+
+    activityContext.startActivity(intent)
+}
+
 
 @Composable
 fun ButtonText(text: String) {

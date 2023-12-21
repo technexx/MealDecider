@@ -14,8 +14,6 @@ var fullCuisineList = mutableStateListOf(
 data class BoardValues(
     var selectedSquare: SquareValues = SquareValues("", 0),
     var squareList: SnapshotStateList<SquareValues> = mutableStateListOf(),
-    var rollEngaged: Boolean = false,
-    var rollFinished: Boolean = false,
 )
 
 data class SquareValues(

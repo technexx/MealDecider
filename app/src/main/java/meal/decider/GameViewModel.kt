@@ -20,6 +20,12 @@ class GameViewModel (context: Context) : ViewModel() {
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
 
+    private val _rollEngaged = MutableStateFlow(false)
+    val rollEngaged : StateFlow<Boolean> = _rollEngaged.asStateFlow()
+
+    private val _rollFinished = MutableStateFlow(false)
+    val rollFinished : StateFlow<Boolean> = _rollFinished.asStateFlow()
+
     private val _addMode = MutableStateFlow(false)
     val addMode : StateFlow<Boolean> = _addMode.asStateFlow()
 
@@ -31,6 +37,7 @@ class GameViewModel (context: Context) : ViewModel() {
 
     private val _squareToEdit = MutableStateFlow(0)
     val squareToEdit : StateFlow<Int> = _squareToEdit.asStateFlow()
+
 
     private val handler = Handler(Looper.getMainLooper())
     private var squareColorChangeRunnable = Runnable {}
@@ -48,15 +55,11 @@ class GameViewModel (context: Context) : ViewModel() {
     }
 
     fun updateRollEngaged(engaged: Boolean) {
-        _boardUiState.update { currentState ->
-            currentState.copy(rollEngaged = engaged)
-        }
+        _rollEngaged.value = engaged
     }
 
     fun updateRollFinished(finished: Boolean) {
-        _boardUiState.update { currentState ->
-            currentState.copy(rollFinished = finished)
-        }
+        _rollFinished.value = finished
     }
 
     fun updateAddMode(addMode: Boolean) {
@@ -148,8 +151,9 @@ class GameViewModel (context: Context) : ViewModel() {
 
     val getSelectedSquare get() = boardUiState.value.selectedSquare
     val getSquareList get() = boardUiState.value.squareList
-    val getRollEngaged get() = boardUiState.value.rollEngaged
-    val getRollFinished get() = boardUiState.value.rollFinished
+
+    val getRollEngaged get() = rollEngaged.value
+    val getRollFinished get() = rollFinished.value
 
     val getAddMode get() = addMode.value
     val getEditMode get() = editMode.value
