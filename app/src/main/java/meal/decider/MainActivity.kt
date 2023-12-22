@@ -342,18 +342,21 @@ fun InteractionLayout() {
 }
 @Composable
 fun FullCuisineList() {
-    Column(modifier = Modifier.background(Color.Blue)) {
-        LazyColumn (modifier = Modifier
-            .weight(1f)
-            .padding(12.dp)
-            .background(Color.Red)
-        ){
-            items (fullCuisineList.size) { index ->
-                Text(fontSize = 16.sp,
-                    color = Color.Black,
-                    text = fullCuisineList[index])
-            }
+    LazyColumn (
+        modifier = Modifier
+        .height(200.dp)
+        .fillMaxWidth()
+        .padding(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        items (fullCuisineList.size) { index ->
+            Text(fontSize = 16.sp,
+                color = Color.Black,
+                text = fullCuisineList[index])
         }
+    }
+    Column(modifier = Modifier.background(Color.Blue)) {
+
     }
 }
 
@@ -393,8 +396,6 @@ fun AddDialogBox() {
                     Spacer(modifier = Modifier.height(10.dp))
 
                     FullCuisineList()
-
-//                    Spacer(modifier = Modifier.weight(1f))
 
                     Row (modifier = Modifier
                         .fillMaxWidth(),
