@@ -94,6 +94,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.window.Dialog
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition
@@ -235,11 +236,11 @@ fun SelectionGridLayout() {
     }
 
     if (addMode.value) {
-        EditDialogBox(editing = false)
+        AddDialogBox()
     }
 
     if (activeEdit.value) {
-        EditDialogBox(editing = true)
+        EditDialogBox()
     }
 
     LazyVerticalGrid(
@@ -339,15 +340,19 @@ fun InteractionLayout() {
         }
     }
 }
-
 @Composable
-fun FullCuisineList(cuisines: MutableList<String>) {
-    LazyColumn (modifier = Modifier
-    ){
-        items (cuisines.size) { index ->
-            Text(fontSize = 16.sp,
-                color = Color.Black,
-                text = cuisines[index])
+fun FullCuisineList() {
+    Column(modifier = Modifier.background(Color.Blue)) {
+        LazyColumn (modifier = Modifier
+            .weight(1f)
+            .padding(12.dp)
+            .background(Color.Red)
+        ){
+            items (fullCuisineList.size) { index ->
+                Text(fontSize = 16.sp,
+                    color = Color.Black,
+                    text = fullCuisineList[index])
+            }
         }
     }
 }
@@ -366,7 +371,7 @@ fun AddDialogBox() {
             color = colorResource(id = R.color.grey_300)
         ) {
             Box(modifier = Modifier
-                .size(height = 200.dp, width = 300.dp),
+                .size(height = 400.dp, width = 300.dp),
             ) {
                 Column(modifier = Modifier
                     .fillMaxSize()
@@ -384,7 +389,13 @@ fun AddDialogBox() {
                             containerColor = colorResource(id = R.color.grey_50),
                         ),
                     )
-                    Spacer(modifier = Modifier.weight(1f))
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    FullCuisineList()
+
+//                    Spacer(modifier = Modifier.weight(1f))
+
                     Row (modifier = Modifier
                         .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -424,7 +435,7 @@ fun AddDialogBox() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditDialogBox(editing: Boolean) {
+fun EditDialogBox() {
     var txtField by remember { mutableStateOf("") }
 
     txtField = gameViewModel.getSquareList[gameViewModel.getSquareToEdit].name
