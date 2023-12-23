@@ -49,6 +49,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -73,6 +74,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.window.Dialog
 
 //TODO: Categories (Vegan, etc.)
@@ -370,6 +372,7 @@ fun AddDialogBox() {
                 {
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
+                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
                         value = txtField,
                         onValueChange = {
                             txtField = it
@@ -454,6 +457,7 @@ fun EditDialogBox() {
                 {
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
+                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
                         value = txtField,
                         onValueChange = { txtField = it },
                         singleLine = true,
