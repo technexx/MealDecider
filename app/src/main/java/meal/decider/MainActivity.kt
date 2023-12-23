@@ -332,9 +332,20 @@ fun FullCuisineList(listToDisplay: State<List<String>>) {
     }
 }
 
-fun filterList(list: List<String>, searchString: String) {
+fun filterList(list: List<String>, searchString: String) : List<String> {
     //If search string equals the first X characters typed, filter list with just those matching entries.
-    list.filter { a -> a.substring(0, searchString.length+1) == searchString}
+    var filteredList = list.filter { a -> a.substring(0, searchString.length).equals(searchString, true) }
+
+    var subStr = ""
+    subStr = list[0].substring(0, searchString.length)
+
+    showLog("test", "substring is $subStr")
+    showLog("test", "search is $searchString")
+
+    for (i in filteredList) {
+        showLog("test", i)
+    }
+    return list.filter { a -> a.substring(0, searchString.length+1) == searchString}
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -369,8 +380,10 @@ fun AddDialogBox() {
                             searchTerms = fullCuisineList.filter { a -> a.contains(it)}.toMutableList()
                             gameViewModel.updateDisplayedCuisineList(searchTerms)
 
-                            for (i in searchTerms) {
-//                                showLog("test", i)
+                            val testList = filterList(fullCuisineList, txtField)
+
+                            for (i in testList) {
+                                showLog("test", i)
                             }},
                         singleLine = true,
                         textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
@@ -381,7 +394,6 @@ fun AddDialogBox() {
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    showLog("test", "recomp")
                     FullCuisineList(displayedList)
 
                     Row (modifier = Modifier
