@@ -333,8 +333,12 @@ fun FullCuisineList(listToDisplay: State<List<String>>) {
 }
 
 fun filterList(list: List<String>, searchString: String) : List<String> {
-    //If search string equals the first X characters typed, filter list with just those matching entries.
-    return list.filter { a -> a.substring(0, searchString.length).equals(searchString, true) }
+    //If search string equals the first X characters typed, filter list with just those matching entries. If search string is empty, display full list.
+    if (searchString != "") {
+        return list.filter { a -> a.substring(0, searchString.length).equals(searchString, true) }
+    } else {
+        return list
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -343,6 +347,9 @@ fun AddDialogBox() {
     var txtField by remember { mutableStateOf("") }
     val displayedList = gameViewModel.displayedCuisineList.collectAsStateWithLifecycle()
     var searchTerms : List<String> = listOf()
+
+    //Search box will begin with full list shown.
+    gameViewModel.updateDisplayedCuisineList(fullCuisineList)
 
     Dialog(onDismissRequest = {
         gameViewModel.updateAddMode(false)
