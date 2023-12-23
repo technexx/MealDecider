@@ -334,18 +334,7 @@ fun FullCuisineList(listToDisplay: State<List<String>>) {
 
 fun filterList(list: List<String>, searchString: String) : List<String> {
     //If search string equals the first X characters typed, filter list with just those matching entries.
-    var filteredList = list.filter { a -> a.substring(0, searchString.length).equals(searchString, true) }
-
-    var subStr = ""
-    subStr = list[0].substring(0, searchString.length)
-
-    showLog("test", "substring is $subStr")
-    showLog("test", "search is $searchString")
-
-    for (i in filteredList) {
-        showLog("test", i)
-    }
-    return list.filter { a -> a.substring(0, searchString.length+1) == searchString}
+    return list.filter { a -> a.substring(0, searchString.length).equals(searchString, true) }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -353,7 +342,7 @@ fun filterList(list: List<String>, searchString: String) : List<String> {
 fun AddDialogBox() {
     var txtField by remember { mutableStateOf("") }
     val displayedList = gameViewModel.displayedCuisineList.collectAsStateWithLifecycle()
-    var searchTerms : MutableList<String> = mutableListOf()
+    var searchTerms : List<String> = listOf()
 
     Dialog(onDismissRequest = {
         gameViewModel.updateAddMode(false)
@@ -377,12 +366,11 @@ fun AddDialogBox() {
                         value = txtField,
                         onValueChange = {
                             txtField = it
-                            searchTerms = fullCuisineList.filter { a -> a.contains(it)}.toMutableList()
+//                            searchTerms = fullCuisineList.filter { a -> a.contains(it)}
+                            searchTerms = filterList(fullCuisineList, txtField)
                             gameViewModel.updateDisplayedCuisineList(searchTerms)
 
-                            val testList = filterList(fullCuisineList, txtField)
-
-                            for (i in testList) {
+                            for (i in searchTerms) {
                                 showLog("test", i)
                             }},
                         singleLine = true,

@@ -80,7 +80,7 @@ class GameViewModel (context: Context) : ViewModel() {
         _squareToEdit.value = square
     }
 
-    fun updateDisplayedCuisineList(list: MutableList<String>) {
+    fun updateDisplayedCuisineList(list: List<String>) {
         _displayedCuisineList.value = list
     }
 
