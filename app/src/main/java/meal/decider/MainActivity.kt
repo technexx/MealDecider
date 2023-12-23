@@ -310,6 +310,8 @@ fun InteractionLayout() {
         }
     }
 }
+
+//List (or any object) in State<Object> is accessed w/ (Var).value.
 @Composable
 fun FullCuisineList(listToDisplay: State<List<String>>) {
     LazyColumn (
@@ -328,6 +330,11 @@ fun FullCuisineList(listToDisplay: State<List<String>>) {
     Column(modifier = Modifier.background(Color.Blue)) {
 
     }
+}
+
+fun filterList(list: List<String>, searchString: String) {
+    //If search string equals the first X characters typed, filter list with just those matching entries.
+    list.filter { a -> a.substring(0, searchString.length+1) == searchString}
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
