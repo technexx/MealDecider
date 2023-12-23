@@ -344,9 +344,9 @@ fun InteractionLayout() {
 fun FullCuisineList() {
     LazyColumn (
         modifier = Modifier
-        .height(200.dp)
-        .fillMaxWidth()
-        .padding(12.dp),
+            .height(200.dp)
+            .fillMaxWidth()
+            .padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         items (fullCuisineList.size) { index ->
@@ -364,6 +364,7 @@ fun FullCuisineList() {
 @Composable
 fun AddDialogBox() {
     var txtField by remember { mutableStateOf("") }
+    var searchTerms : MutableList<String> = mutableListOf()
 
     Dialog(onDismissRequest = {
         gameViewModel.updateAddMode(false)
@@ -385,7 +386,13 @@ fun AddDialogBox() {
                     Spacer(modifier = Modifier.height(10.dp))
                     TextField(
                         value = txtField,
-                        onValueChange = { txtField = it },
+                        onValueChange = {
+                            txtField = it
+                            searchTerms = fullCuisineList.filter { a -> a.contains(it)}.toMutableList()
+                            for (i in searchTerms) {
+                                showLog("test", i)
+                            }
+                                        },
                         singleLine = true,
                         textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
                         colors = TextFieldDefaults.outlinedTextFieldColors(

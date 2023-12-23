@@ -38,6 +38,8 @@ class GameViewModel (context: Context) : ViewModel() {
     private val _squareToEdit = MutableStateFlow(0)
     val squareToEdit : StateFlow<Int> = _squareToEdit.asStateFlow()
 
+    private val _searchText = MutableStateFlow("")
+    val searchText : StateFlow<String> = _searchText.asStateFlow()
 
     private val handler = Handler(Looper.getMainLooper())
     private var squareColorChangeRunnable = Runnable {}
@@ -76,6 +78,10 @@ class GameViewModel (context: Context) : ViewModel() {
 
     fun updateSquareToEdit(square: Int) {
         _squareToEdit.value = square
+    }
+
+    fun updateSearchText(text: String) {
+        _searchText.value = text
     }
 
     fun addSquareToList(name: String) {
@@ -159,4 +165,5 @@ class GameViewModel (context: Context) : ViewModel() {
     val getEditMode get() = editMode.value
     val getActiveEdit get() = activeEdit.value
     val getSquareToEdit get() = squareToEdit.value
+    val getSearchText get() = searchText.value
 }
