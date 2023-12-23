@@ -2,20 +2,16 @@ package meal.decider
 
 
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,7 +27,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,23 +37,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.maps.android.compose.GoogleMap
 import meal.decider.ui.theme.MealDeciderTheme
-import android.Manifest;
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.Application
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
-import android.location.Location
 import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -67,43 +52,28 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.AlertDialogDefaults.titleContentColor
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.window.Dialog
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.MarkerInfoWindowContent
-import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.rememberCameraPositionState
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
-import java.net.URI
 
 //TODO: Categories (Vegan, etc.)
 
@@ -341,7 +311,7 @@ fun InteractionLayout() {
     }
 }
 @Composable
-fun FullCuisineList() {
+fun FullCuisineList(listToDisplay: State<List<String>>) {
     LazyColumn (
         modifier = Modifier
             .height(200.dp)
@@ -349,10 +319,10 @@ fun FullCuisineList() {
             .padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        items (fullCuisineList.size) { index ->
+        items (listToDisplay.value.size) { index ->
             Text(fontSize = 16.sp,
                 color = Color.Black,
-                text = fullCuisineList[index])
+                text = listToDisplay.value[index])
         }
     }
     Column(modifier = Modifier.background(Color.Blue)) {
@@ -364,6 +334,7 @@ fun FullCuisineList() {
 @Composable
 fun AddDialogBox() {
     var txtField by remember { mutableStateOf("") }
+    val displayedList = gameViewModel.displayedCuisineList.collectAsStateWithLifecycle()
     var searchTerms : MutableList<String> = mutableListOf()
 
     Dialog(onDismissRequest = {
@@ -389,10 +360,11 @@ fun AddDialogBox() {
                         onValueChange = {
                             txtField = it
                             searchTerms = fullCuisineList.filter { a -> a.contains(it)}.toMutableList()
+                            gameViewModel.updateDisplayedCuisineList(searchTerms)
+
                             for (i in searchTerms) {
-                                showLog("test", i)
-                            }
-                                        },
+//                                showLog("test", i)
+                            }},
                         singleLine = true,
                         textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -402,7 +374,8 @@ fun AddDialogBox() {
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    FullCuisineList()
+                    showLog("test", "recomp")
+                    FullCuisineList(displayedList)
 
                     Row (modifier = Modifier
                         .fillMaxWidth(),
