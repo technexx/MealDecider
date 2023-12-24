@@ -57,6 +57,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -232,6 +233,9 @@ fun SelectionGridLayout() {
                         containerColor = colorResource(id = gameViewModel.getSquareList[index].color),
                     ),
                     border = borderStroke,
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 6.dp
+                    ),
                     modifier = Modifier
                         .padding(4.dp)
                         .fillMaxWidth()
@@ -249,7 +253,7 @@ fun SelectionGridLayout() {
                     Text(
                         text = boardUiState.value.squareList[index].name,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
+                        fontSize = 18.sp,
                         color = Color.Black,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(16.dp)
@@ -292,7 +296,9 @@ fun InteractionLayout() {
                         gameViewModel.updateColorOfSquareValuesList()
                     }
                 },
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
+
             ) {
                 ButtonText(text = "Decide")
             }
@@ -305,7 +311,8 @@ fun InteractionLayout() {
                         mapIntent(Uri.parse(foodUri))
                     }
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400))
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
             ) {
                 ButtonText(text = "Open Maps")
             }
@@ -324,22 +331,19 @@ fun FullCuisineList(listToDisplay: State<List<String>>) {
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         items (listToDisplay.value.size) { index ->
-            Text(fontSize = 16.sp,
+            Text(fontSize = 18.sp,
                 color = Color.Black,
                 text = listToDisplay.value[index])
         }
-    }
-    Column(modifier = Modifier.background(Color.Blue)) {
-
     }
 }
 
 fun filterList(list: List<String>, searchString: String) : List<String> {
     //If search string equals the first X characters typed, filter list with just those matching entries. If search string is empty, display full list.
-    if (searchString != "") {
-        return list.filter { a -> a.substring(0, searchString.length).equals(searchString, true) }
+    return if (searchString != "") {
+        list.filter { a -> a.substring(0, searchString.length).equals(searchString, true) }
     } else {
-        return list
+        list
     }
 }
 
@@ -348,7 +352,7 @@ fun filterList(list: List<String>, searchString: String) : List<String> {
 fun AddDialogBox() {
     var txtField by remember { mutableStateOf("") }
     val displayedList = gameViewModel.displayedCuisineList.collectAsStateWithLifecycle()
-    var searchTerms : List<String> = listOf()
+    var searchTerms : List<String>
 
     //Search box will begin with full list shown.
     gameViewModel.updateDisplayedCuisineList(fullCuisineList)
