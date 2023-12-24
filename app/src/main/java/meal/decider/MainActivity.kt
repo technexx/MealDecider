@@ -43,6 +43,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -386,8 +387,12 @@ fun CuisineListUi(list: List<String>, index: Int, text: String) {
         .selectable(
             selected = true,
             onClick = {
-                gameViewModel.addSquareToList(list[index])
-                gameViewModel.updateAddMode(false)
+                if (!doesCuisineExistsOnBoard(list[index], gameViewModel.getSelectedSquareNameList())) {
+                    gameViewModel.addSquareToList(list[index])
+                    gameViewModel.updateAddMode(false)
+                } else {
+                    Toast.makeText(activityContext, "Cuisine already exists!", Toast.LENGTH_SHORT).show()
+                }
             }
         )) {
         Text(modifier = Modifier
@@ -407,7 +412,7 @@ fun filterList(list: List<String>, searchString: String) : List<String> {
     }
 }
 
-fun checkIfCuisineExistsOnBoard(cuisineToAdd: String, listOfCuisines: List<String>): Boolean {
+fun doesCuisineExistsOnBoard(cuisineToAdd: String, listOfCuisines: List<String>): Boolean {
     for (i in listOfCuisines) {
         if (cuisineToAdd.equals(i, true)) return true
     }
@@ -477,8 +482,13 @@ fun AddDialogBox() {
                             )
                         }
                         IconButton(onClick = {
-                            gameViewModel.addSquareToList(txtField)
-                            gameViewModel.updateAddMode(false)
+                            if (!doesCuisineExistsOnBoard(txtField, gameViewModel.getSelectedSquareNameList())) {
+                                gameViewModel.addSquareToList(txtField)
+                                gameViewModel.updateAddMode(false)
+                            } else {
+                                Toast.makeText(activityContext, "Cuisine already exists!", Toast.LENGTH_SHORT).show()
+                            }
+
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Check,
