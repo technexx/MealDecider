@@ -73,6 +73,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
@@ -160,6 +161,8 @@ fun TopBar() {
                             DropdownMenuItem(
                                 text = { Text("Sort Alphabetically") },
                                 onClick = {
+                                    val currentSquareList = gameViewModel.getSquareList
+                                    val newSquareList: SnapshotStateList<SquareValues> = SnapshotStateList()
                                     var squareNames = mutableListOf<String>()
 
                                     for (i in gameViewModel.getSquareList) {
@@ -167,6 +170,14 @@ fun TopBar() {
                                     }
 
                                     squareNames = squareNames.sorted().toMutableList()
+
+                                    for (i in 0 until squareNames.size) {
+                                        newSquareList.add(SquareValues(squareNames[i], currentSquareList[i].color))
+                                    }
+
+                                    gameViewModel.updateSquareList(newSquareList)
+
+                                    println(newSquareList)
 
                                     expanded = false
                                 }
