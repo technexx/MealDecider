@@ -44,6 +44,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -238,7 +239,6 @@ fun SelectionGridLayout() {
                     ),
                     modifier = Modifier
                         .padding(4.dp)
-                        .fillMaxWidth()
                         .selectable(
                             selected = true,
                             onClick = {
@@ -331,11 +331,37 @@ fun FullCuisineList(listToDisplay: State<List<String>>) {
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         items (listToDisplay.value.size) { index ->
-            Text(fontSize = 18.sp,
-                color = Color.Black,
-                text = listToDisplay.value[index])
+            CuisineListUi(list = listToDisplay.value, index, text = listToDisplay.value[index])
+//            Text(modifier = Modifier
+//                .padding(4.dp),
+////                .selectable(
+////                    selected = true,
+////                    onClick = {
+////                        showLog("test", "{$index clicked")
+////                    }
+////                ),
+//                fontSize = 20.sp,
+//                color = Color.Black,
+//                text = listToDisplay.value[index])
         }
     }
+}
+
+@Composable
+fun CuisineListUi(list: List<String>, index: Int, text: String) {
+    Column (modifier = Modifier
+        .padding(4.dp)
+        .selectable(
+            selected = true,
+            onClick = {
+                showLog("test", "$index clicked ")
+            }
+        )) {
+        Text(modifier = Modifier
+            .padding(4.dp),
+            fontSize = 20.sp,
+            color = Color.Black,
+            text = text )    }
 }
 
 fun filterList(list: List<String>, searchString: String) : List<String> {
@@ -382,11 +408,7 @@ fun AddDialogBox() {
                             txtField = it
 //                            searchTerms = fullCuisineList.filter { a -> a.contains(it)}
                             searchTerms = filterList(fullCuisineList, txtField)
-                            gameViewModel.updateDisplayedCuisineList(searchTerms)
-
-                            for (i in searchTerms) {
-                                showLog("test", i)
-                            }},
+                            gameViewModel.updateDisplayedCuisineList(searchTerms)},
                         singleLine = true,
                         textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
