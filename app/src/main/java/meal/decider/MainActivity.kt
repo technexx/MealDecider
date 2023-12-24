@@ -344,7 +344,7 @@ fun CuisineListUi(list: List<String>, index: Int, text: String) {
             selected = true,
             onClick = {
                 gameViewModel.addSquareToList(list[index])
-                gameViewModel.updateActiveEdit(false)
+                gameViewModel.updateAddMode(false)
             }
         )) {
         Text(modifier = Modifier
