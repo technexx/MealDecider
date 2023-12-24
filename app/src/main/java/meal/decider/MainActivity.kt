@@ -95,6 +95,7 @@ class MainActivity : ComponentActivity() {
         activityContext = this@MainActivity
 
         gameViewModel.createSquareList()
+        gameViewModel.updateSelectedSquare(gameViewModel.getSquareList[0])
 
         setContent {
             MealDeciderTheme {
@@ -195,9 +196,10 @@ fun TopBar() {
 }
 
 fun sortAndUpdateCuisineList(typeOfSort: String) {
+    var squareNames = mutableListOf<String>()
     val currentSquareList = gameViewModel.getSquareList
     val newSquareList: SnapshotStateList<SquareValues> = SnapshotStateList()
-    var squareNames = mutableListOf<String>()
+    val selectedSquareName = gameViewModel.getSelectedSquare.name
 
     for (i in gameViewModel.getSquareList) {
         squareNames.add(i.name)
@@ -208,6 +210,14 @@ fun sortAndUpdateCuisineList(typeOfSort: String) {
 
     for (i in 0 until squareNames.size) {
         newSquareList.add(SquareValues(squareNames[i], currentSquareList[i].color))
+    }
+
+    for (i in 0 until newSquareList.size) {
+        if (!newSquareList[i].name.equals(selectedSquareName, true)) {
+            newSquareList[i] = SquareValues(newSquareList[i].name, gameViewModel.genericSquareColor)
+        } else {
+            newSquareList[i] = SquareValues(newSquareList[i].name, gameViewModel.chosenSquareColor)
+        }
     }
 
     gameViewModel.updateSquareList(newSquareList)

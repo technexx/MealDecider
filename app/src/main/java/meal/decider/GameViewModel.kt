@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.update
 import kotlin.random.Random
 
 class GameViewModel (context: Context) : ViewModel() {
-    private val genericSquareColor = R.color.grey_300
-    private val chosenSquareColor = R.color.red_200
+    val genericSquareColor = R.color.grey_300
+    val chosenSquareColor = R.color.red_200
 
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
@@ -50,7 +50,7 @@ class GameViewModel (context: Context) : ViewModel() {
         }
     }
 
-    private fun updateSelectedSquare(squareValues: SquareValues) {
+    fun updateSelectedSquare(squareValues: SquareValues) {
         _boardUiState.update { currentState ->
             currentState.copy(selectedSquare = squareValues)
         }
