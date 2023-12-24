@@ -80,6 +80,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.window.Dialog
 
+//TODO: Edit should not allow changing cuisine.
 //TODO: Categories (Vegan, etc.)
 
 @SuppressLint("StaticFieldLeak")
@@ -245,10 +246,10 @@ fun SelectionGridLayout() {
 
     var borderStroke: BorderStroke
 
-    borderStroke = BorderStroke(4.dp,Color.Black)
+    borderStroke = BorderStroke(3.dp,Color.Black)
 
     if (editState.value) {
-        borderStroke = BorderStroke(4.dp,Color.Black)
+        borderStroke = BorderStroke(3.dp,Color.Black)
     } else {
         borderStroke = BorderStroke(1.dp,Color.Black)
     }
@@ -406,7 +407,12 @@ fun filterList(list: List<String>, searchString: String) : List<String> {
     }
 }
 
-
+fun checkIfCuisineExistsOnBoard(cuisineToAdd: String, listOfCuisines: List<String>): Boolean {
+    for (i in listOfCuisines) {
+        if (cuisineToAdd.equals(i, true)) return true
+    }
+    return false
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -441,7 +447,6 @@ fun AddDialogBox() {
                         value = txtField,
                         onValueChange = {
                             txtField = it
-//                            searchTerms = fullCuisineList.filter { a -> a.contains(it)}
                             searchTerms = filterList(fullCuisineList, txtField)
                             gameViewModel.updateDisplayedCuisineList(searchTerms)},
                         singleLine = true,

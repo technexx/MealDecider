@@ -155,6 +155,22 @@ class GameViewModel (context: Context) : ViewModel() {
         return newList
     }
 
+    fun getSelectedSquareNameList(): List<String> {
+        val listToReturn = mutableListOf<String>()
+        for (i in getSquareList) {
+            listToReturn.add(i.name)
+        }
+        return listToReturn
+    }
+
+    fun getSelectedSquareColorList(): List<Int> {
+        val listToReturn = mutableListOf<Int>()
+        for (i in getSquareList) {
+            listToReturn.add(i.color)
+        }
+        return listToReturn
+    }
+
     val getSelectedSquare get() = boardUiState.value.selectedSquare
     val getSquareList get() = boardUiState.value.squareList
 
