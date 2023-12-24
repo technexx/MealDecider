@@ -158,6 +158,26 @@ fun TopBar() {
                                 }
                             )
                             DropdownMenuItem(
+                                text = { Text("Sort Alphabetically") },
+                                onClick = {
+                                    var squareNames = mutableListOf<String>()
+
+                                    for (i in gameViewModel.getSquareList) {
+                                        squareNames.add(i.name)
+                                    }
+
+                                    squareNames = squareNames.sorted().toMutableList()
+
+                                    expanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Sort Randomly") },
+                                onClick = {
+                                    expanded = false
+                                }
+                            )
+                            DropdownMenuItem(
                                 text = { Text("Restore Defaults") },
                                 onClick = {
                                     expanded = false
@@ -351,7 +371,8 @@ fun CuisineListUi(list: List<String>, index: Int, text: String) {
             .padding(4.dp),
             fontSize = 20.sp,
             color = Color.Black,
-            text = text )    }
+            text = text )
+    }
 }
 
 fun filterList(list: List<String>, searchString: String) : List<String> {
@@ -362,6 +383,8 @@ fun filterList(list: List<String>, searchString: String) : List<String> {
         list
     }
 }
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
