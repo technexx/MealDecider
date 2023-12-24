@@ -332,17 +332,6 @@ fun FullCuisineList(listToDisplay: State<List<String>>) {
     ){
         items (listToDisplay.value.size) { index ->
             CuisineListUi(list = listToDisplay.value, index, text = listToDisplay.value[index])
-//            Text(modifier = Modifier
-//                .padding(4.dp),
-////                .selectable(
-////                    selected = true,
-////                    onClick = {
-////                        showLog("test", "{$index clicked")
-////                    }
-////                ),
-//                fontSize = 20.sp,
-//                color = Color.Black,
-//                text = listToDisplay.value[index])
         }
     }
 }
@@ -354,7 +343,8 @@ fun CuisineListUi(list: List<String>, index: Int, text: String) {
         .selectable(
             selected = true,
             onClick = {
-                showLog("test", "$index clicked ")
+                gameViewModel.addSquareToList(list[index])
+                gameViewModel.updateActiveEdit(false)
             }
         )) {
         Text(modifier = Modifier
