@@ -161,30 +161,14 @@ fun TopBar() {
                             DropdownMenuItem(
                                 text = { Text("Sort Alphabetically") },
                                 onClick = {
-                                    val currentSquareList = gameViewModel.getSquareList
-                                    val newSquareList: SnapshotStateList<SquareValues> = SnapshotStateList()
-                                    var squareNames = mutableListOf<String>()
-
-                                    for (i in gameViewModel.getSquareList) {
-                                        squareNames.add(i.name)
-                                    }
-
-                                    squareNames = squareNames.sorted().toMutableList()
-
-                                    for (i in 0 until squareNames.size) {
-                                        newSquareList.add(SquareValues(squareNames[i], currentSquareList[i].color))
-                                    }
-
-                                    gameViewModel.updateSquareList(newSquareList)
-
-                                    println(newSquareList)
-
+                                    sortAndUpdateCuisineList("alphabetical")
                                     expanded = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = { Text("Sort Randomly") },
                                 onClick = {
+                                    sortAndUpdateCuisineList("random")
                                     expanded = false
                                 }
                             )
@@ -208,6 +192,25 @@ fun TopBar() {
             Board()
         }
     }
+}
+
+fun sortAndUpdateCuisineList(typeOfSort: String) {
+    val currentSquareList = gameViewModel.getSquareList
+    val newSquareList: SnapshotStateList<SquareValues> = SnapshotStateList()
+    var squareNames = mutableListOf<String>()
+
+    for (i in gameViewModel.getSquareList) {
+        squareNames.add(i.name)
+    }
+
+    if (typeOfSort == "alphabetical") squareNames = squareNames.sorted().toMutableList()
+    if (typeOfSort == "random") squareNames = squareNames.shuffled().toMutableList()
+
+    for (i in 0 until squareNames.size) {
+        newSquareList.add(SquareValues(squareNames[i], currentSquareList[i].color))
+    }
+
+    gameViewModel.updateSquareList(newSquareList)
 }
 
 @Composable
@@ -250,8 +253,6 @@ fun SelectionGridLayout() {
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 128.dp),
-
-        // content padding
         contentPadding = PaddingValues(
             start = 12.dp,
             top = 16.dp,
