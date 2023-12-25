@@ -294,7 +294,6 @@ fun SelectionGridLayout() {
                                 //Todo: Grey background and bring up trash icon in Scaffold.
                                 if (gameViewModel.getEditMode) {
                                     toggleEditCuisineHighlight(index)
-                                    addSquareToListOfSquaresToUpdate(index)
 
 //                                    gameViewModel.updateActiveEdit(true)
 //                                    gameViewModel.updateEditMode(false)
@@ -317,32 +316,54 @@ fun SelectionGridLayout() {
     )
 }
 
-//TODO: Add or delete depending on highlight
-fun addSquareToListOfSquaresToUpdate(index: Int) {
-    val tempList = gameViewModel.getListOfSquaresToEdit.toMutableList()
-    tempList.add(gameViewModel.getSquareList[index])
-    gameViewModel.updateListOfSquaresToEdit(tempList)
-}
-
 fun toggleEditCuisineHighlight(index: Int) {
     val tempSquareList = gameViewModel.getSquareList
 
     if (index == gameViewModel.getSelectedSquareIndex) {
         if (tempSquareList[index].color == chosenSquareColor) {
             tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
+            addSquareToListOfSquaresToUpdate(index)
         } else {
             tempSquareList[index] = SquareValues(tempSquareList[index].name, chosenSquareColor)
+            removeSquareFromListOfSquaresToUpdate(index)
         }
     } else {
         if (tempSquareList[index].color == defaultSquareColor) {
             tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
+            addSquareToListOfSquaresToUpdate(index)
         } else {
             tempSquareList[index] = SquareValues(tempSquareList[index].name, defaultSquareColor)
+            removeSquareFromListOfSquaresToUpdate(index)
         }
     }
 
     gameViewModel.updateSquareList(tempSquareList)
+
+//    println(gameViewModel.getListOfSquaresToEdit)
 }
+
+fun addSquareToListOfSquaresToUpdate(index: Int) {
+    val tempList = gameViewModel.getListOfSquaresToEdit.toMutableList()
+    println("add: pre-add $tempList")
+    tempList.add(gameViewModel.getSquareList[index])
+    println("add: post-add $tempList")
+    gameViewModel.updateListOfSquaresToEdit(tempList)
+}
+
+fun removeSquareFromListOfSquaresToUpdate(index: Int) {
+    val tempList = gameViewModel.getListOfSquaresToEdit.toMutableList()
+    //If index exists in list's indices.
+    //TODO:
+    println("remove: pre-remove $tempList")
+    if (index in tempList.indices) {
+        println("remove: post-remove $tempList")
+        tempList.removeAt(index)
+        println(tempList)
+
+        gameViewModel.updateListOfSquaresToEdit(tempList)
+    }
+}
+
 
 @SuppressLint("MissingPermission")
 @Composable
