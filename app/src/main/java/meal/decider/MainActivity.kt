@@ -81,6 +81,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.window.Dialog
+import java.util.stream.Collectors.toList
 
 //TODO: Edit should not allow changing cuisine.
 //TODO: Categories (Vegan, etc.)
@@ -238,15 +239,61 @@ fun sortAndUpdateCuisineList(typeOfSort: String) {
     gameViewModel.updateSquareList(newSquareList)
 }
 
+fun toggleEditCuisineHighlight(index: Int) {
+    val tempSquareList = gameViewModel.getSquareList
+
+    if (index == gameViewModel.getSelectedSquareIndex) {
+        if (tempSquareList[index].color == chosenSquareColor) {
+            tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
+            addSquareToListOfSquaresToUpdate(index)
+        } else {
+            tempSquareList[index] = SquareValues(tempSquareList[index].name, chosenSquareColor)
+            removeSquareFromListOfSquaresToUpdate(index)
+        }
+    } else {
+        if (tempSquareList[index].color == defaultSquareColor) {
+            tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
+            addSquareToListOfSquaresToUpdate(index)
+        } else {
+            tempSquareList[index] = SquareValues(tempSquareList[index].name, defaultSquareColor)
+            removeSquareFromListOfSquaresToUpdate(index)
+        }
+    }
+
+    gameViewModel.updateSquareList(tempSquareList)
+
+    println("index list (as added) is ${gameViewModel.getListOfSquareIndicesToEdit}")
+
+}
+
+fun addSquareToListOfSquaresToUpdate(index: Int) {
+    val tempList = gameViewModel.getListOfSquareIndicesToEdit.toMutableList()
+    tempList.add(index)
+    gameViewModel.updateListOfSquareIndicesToEdit(tempList)
+}
+
+fun removeSquareFromListOfSquaresToUpdate(index: Int) {
+    val tempList = gameViewModel.getListOfSquareIndicesToEdit.toMutableList()
+    tempList.remove(index)
+    gameViewModel.updateListOfSquareIndicesToEdit(tempList)
+}
+
+//TODO: Some wrong deletions.
 fun deleteSelectedCuisines() {
     val listOfIndices = gameViewModel.getListOfSquareIndicesToEdit
     val tempList = gameViewModel.getSquareList
 
+    println("index list (deleting) is $listOfIndices")
+    println("square list pre delete is ${tempList.toList()}")
+
     for (i in listOfIndices) {
         if (i <= tempList.size-1) {
+            println("removing at index $i")
          tempList.removeAt(i)
         }
     }
+
+    println("square list post delete is ${tempList.toList()}")
 
     gameViewModel.updateListOfSquareIndicesToEdit(listOf())
     gameViewModel.updateSquareList(tempList)
@@ -346,10 +393,6 @@ fun SelectionGridLayout() {
                                 //Todo: Grey background and bring up trash icon in Scaffold.
                                 if (gameViewModel.getEditMode) {
                                     toggleEditCuisineHighlight(index)
-
-//                                    gameViewModel.updateActiveEdit(true)
-//                                    gameViewModel.updateEditMode(false)
-//                                    gameViewModel.updateSquareToEdit(index)
                                 }
                             }
                         ),
@@ -367,46 +410,6 @@ fun SelectionGridLayout() {
         }
     )
 }
-
-fun toggleEditCuisineHighlight(index: Int) {
-    val tempSquareList = gameViewModel.getSquareList
-
-    if (index == gameViewModel.getSelectedSquareIndex) {
-        if (tempSquareList[index].color == chosenSquareColor) {
-            tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
-            addSquareToListOfSquaresToUpdate(index)
-        } else {
-            tempSquareList[index] = SquareValues(tempSquareList[index].name, chosenSquareColor)
-            removeSquareFromListOfSquaresToUpdate(index)
-        }
-    } else {
-        if (tempSquareList[index].color == defaultSquareColor) {
-            tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
-            addSquareToListOfSquaresToUpdate(index)
-        } else {
-            tempSquareList[index] = SquareValues(tempSquareList[index].name, defaultSquareColor)
-            removeSquareFromListOfSquaresToUpdate(index)
-        }
-    }
-
-    gameViewModel.updateSquareList(tempSquareList)
-
-}
-
-fun addSquareToListOfSquaresToUpdate(index: Int) {
-    val tempList = gameViewModel.getListOfSquareIndicesToEdit.toMutableList()
-    tempList.add(index)
-    gameViewModel.updateListOfSquareIndicesToEdit(tempList)
-}
-
-fun removeSquareFromListOfSquaresToUpdate(index: Int) {
-    val tempList = gameViewModel.getListOfSquareIndicesToEdit.toMutableList()
-    tempList.remove(index)
-    println(tempList)
-
-    gameViewModel.updateListOfSquareIndicesToEdit(tempList)
-}
-
 
 @SuppressLint("MissingPermission")
 @Composable
