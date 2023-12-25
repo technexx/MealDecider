@@ -339,29 +339,22 @@ fun toggleEditCuisineHighlight(index: Int) {
 
     gameViewModel.updateSquareList(tempSquareList)
 
-//    println(gameViewModel.getListOfSquaresToEdit)
+    println(gameViewModel.getListOfSquareIndicesToEdit)
 }
 
 fun addSquareToListOfSquaresToUpdate(index: Int) {
-    val tempList = gameViewModel.getListOfSquaresToEdit.toMutableList()
-    println("add: pre-add $tempList")
-    tempList.add(gameViewModel.getSquareList[index])
-    println("add: post-add $tempList")
-    gameViewModel.updateListOfSquaresToEdit(tempList)
+    val tempList = gameViewModel.getListOfSquareIndicesToEdit.toMutableList()
+    tempList.add(index)
+    gameViewModel.updateListOfSquareIndicesToEdit(tempList)
 }
 
 fun removeSquareFromListOfSquaresToUpdate(index: Int) {
-    val tempList = gameViewModel.getListOfSquaresToEdit.toMutableList()
+    val tempList = gameViewModel.getListOfSquareIndicesToEdit.toMutableList()
     //If index exists in list's indices.
-    //TODO:
-    println("remove: pre-remove $tempList")
-    if (index in tempList.indices) {
-        println("remove: post-remove $tempList")
-        tempList.removeAt(index)
-        println(tempList)
+    tempList.remove(index)
+    println(tempList)
 
-        gameViewModel.updateListOfSquaresToEdit(tempList)
-    }
+    gameViewModel.updateListOfSquareIndicesToEdit(tempList)
 }
 
 

@@ -35,8 +35,8 @@ class GameViewModel (context: Context) : ViewModel() {
     private val _squareToEdit = MutableStateFlow(0)
     val squareToEdit : StateFlow<Int> = _squareToEdit.asStateFlow()
 
-    private val _listOfSquaresToEdit = MutableStateFlow(emptyList<SquareValues>())
-    val listOfSquaresToEdit : StateFlow<List<SquareValues>> = _listOfSquaresToEdit
+    private val _listOfSquaresIndicesToEdit = MutableStateFlow(emptyList<Int>())
+    val listOfSquareIndicesToEdit : StateFlow<List<Int>> = _listOfSquaresIndicesToEdit
 
     private val _selectedSquareIndex = MutableStateFlow(0)
     val selectedSquareIndex : StateFlow<Int> = _selectedSquareIndex.asStateFlow()
@@ -83,8 +83,8 @@ class GameViewModel (context: Context) : ViewModel() {
         _squareToEdit.value = square
     }
 
-    fun updateListOfSquaresToEdit(list: List<SquareValues>) {
-        _listOfSquaresToEdit.value = list
+    fun updateListOfSquareIndicesToEdit(list: List<Int>) {
+        _listOfSquaresIndicesToEdit.value = list
     }
 
     fun updateSelectedSquareIndex(index: Int) {
@@ -186,7 +186,7 @@ class GameViewModel (context: Context) : ViewModel() {
     val getSelectedSquare get() = boardUiState.value.selectedSquare
     val getSquareList get() = boardUiState.value.squareList
     val getSelectedSquareIndex get() = selectedSquareIndex.value
-    val getListOfSquaresToEdit get() = listOfSquaresToEdit.value
+    val getListOfSquareIndicesToEdit get() = listOfSquareIndicesToEdit.value
 
     val getRollEngaged get() = rollEngaged.value
     val getRollFinished get() = rollFinished.value
