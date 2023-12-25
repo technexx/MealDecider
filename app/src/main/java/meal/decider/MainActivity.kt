@@ -216,9 +216,9 @@ fun sortAndUpdateCuisineList(typeOfSort: String) {
 
     for (i in 0 until newSquareList.size) {
         if (!newSquareList[i].name.equals(selectedSquareName, true)) {
-            newSquareList[i] = SquareValues(newSquareList[i].name, gameViewModel.genericSquareColor)
+            newSquareList[i] = SquareValues(newSquareList[i].name, defaultSquareColor)
         } else {
-            newSquareList[i] = SquareValues(newSquareList[i].name, gameViewModel.chosenSquareColor)
+            newSquareList[i] = SquareValues(newSquareList[i].name, chosenSquareColor)
         }
     }
 
@@ -286,10 +286,13 @@ fun SelectionGridLayout() {
                         .selectable(
                             selected = true,
                             onClick = {
+                                //Todo: Grey background and bring up trash icon in Scaffold.
                                 if (gameViewModel.getEditMode) {
-                                    gameViewModel.updateActiveEdit(true)
-                                    gameViewModel.updateEditMode(false)
-                                    gameViewModel.updateSquareToEdit(index)
+                                    toggleEditCuisineHighlight(index)
+
+//                                    gameViewModel.updateActiveEdit(true)
+//                                    gameViewModel.updateEditMode(false)
+//                                    gameViewModel.updateSquareToEdit(index)
                                 }
                             }
                         ),
@@ -306,6 +309,16 @@ fun SelectionGridLayout() {
             }
         }
     )
+}
+
+fun toggleEditCuisineHighlight(index: Int) {
+    val tempSquareList = gameViewModel.getSquareList
+    if (tempSquareList[index].color != editSquareColor) {
+        tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
+    } else {
+        tempSquareList[index] = SquareValues(tempSquareList[index].name, defaultSquareColor)
+    }
+    gameViewModel.updateSquareList(tempSquareList)
 }
 
 @SuppressLint("MissingPermission")
