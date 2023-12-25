@@ -294,6 +294,7 @@ fun SelectionGridLayout() {
                                 //Todo: Grey background and bring up trash icon in Scaffold.
                                 if (gameViewModel.getEditMode) {
                                     toggleEditCuisineHighlight(index)
+                                    addSquareToListOfSquaresToUpdate(index)
 
 //                                    gameViewModel.updateActiveEdit(true)
 //                                    gameViewModel.updateEditMode(false)
@@ -314,6 +315,13 @@ fun SelectionGridLayout() {
             }
         }
     )
+}
+
+//TODO: Add or delete depending on highlight
+fun addSquareToListOfSquaresToUpdate(index: Int) {
+    val tempList = gameViewModel.getListOfSquaresToEdit.toMutableList()
+    tempList.add(gameViewModel.getSquareList[index])
+    gameViewModel.updateListOfSquaresToEdit(tempList)
 }
 
 fun toggleEditCuisineHighlight(index: Int) {
