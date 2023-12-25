@@ -135,7 +135,11 @@ fun TopBar() {
                 },
                 actions = {
                     if (listOfSquareIndicesToEdit.value.isNotEmpty()) {
-                        IconButton(onClick = { expanded = !expanded }) {
+                        IconButton(onClick = {
+                            expanded = !expanded
+                            deleteSelectedCuisines(gameViewModel.getListOfSquareIndicesToEdit)
+                            gameViewModel.updateListOfSquareIndicesToEdit(listOf())
+                        }) {
                             Icon(
                                 imageVector = Icons.Filled.Delete,
                                 contentDescription = "Delete"
@@ -237,6 +241,16 @@ fun sortAndUpdateCuisineList(typeOfSort: String) {
     }
 
     gameViewModel.updateSquareList(newSquareList)
+}
+
+fun deleteSelectedCuisines(list: List<Int>) {
+    val tempList = gameViewModel.getSquareList
+    for (i in list) {
+        if (i <= tempList.size) {
+         tempList.removeAt(i)
+        }
+    }
+    gameViewModel.updateSquareList(tempList)
 }
 
 @Composable
