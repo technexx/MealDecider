@@ -256,14 +256,30 @@ fun deleteSelectedCuisines() {
 fun resetSquareColors() {
     val squareList = gameViewModel.getSquareList
     val selectedSquare = gameViewModel.getSelectedSquare
+
     for (i in squareList) {
         i.color = defaultSquareColor
         if (i.name.equals(selectedSquare.name, true)) {
             i.color = chosenSquareColor
-        } else {
-            squareList[0].color = chosenSquareColor
         }
     }
+
+    //Set first square index to selected if previous one no longer exists.
+//    if (!doesSelectedSquareExist()) {
+//        squareList[0].color = chosenSquareColor
+//        gameViewModel.updateSelectedSquare(squareList[0])
+//        gameViewModel.updateSelectedSquareIndex(0)
+//    }
+}
+
+fun doesSelectedSquareExist() : Boolean {
+    val squareList = gameViewModel.getSquareList
+    val selectedSquare = gameViewModel.getSelectedSquare
+
+    for (i in squareList) {
+        if (i.name.equals(selectedSquare.name)) return true
+    }
+    return false
 }
 
 @Composable
@@ -372,8 +388,6 @@ fun toggleEditCuisineHighlight(index: Int) {
             removeSquareFromListOfSquaresToUpdate(index)
         }
     }
-
-    showLog("test", "list of indices (as added) is ${gameViewModel.getListOfSquareIndicesToEdit}")
 
     gameViewModel.updateSquareList(tempSquareList)
 
