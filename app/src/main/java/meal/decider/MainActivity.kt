@@ -55,6 +55,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -118,8 +119,8 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar() {
+    val listOfSquareIndicesToEdit = gameViewModel.listOfSquareIndicesToEdit.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -133,6 +134,14 @@ fun TopBar() {
                     Text("Meal Decider")
                 },
                 actions = {
+                    if (listOfSquareIndicesToEdit.value.isNotEmpty()) {
+                        IconButton(onClick = { expanded = !expanded }) {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = "Delete"
+                            )
+                        }
+                    }
                     Box(
                         modifier = Modifier
                             .wrapContentSize(Alignment.TopEnd)
@@ -437,11 +446,17 @@ fun CuisineListUi(list: List<String>, index: Int, text: String) {
         .selectable(
             selected = true,
             onClick = {
-                if (!doesCuisineExistsOnBoard(list[index], gameViewModel.getSelectedSquareNameList())) {
+                if (!doesCuisineExistsOnBoard(
+                        list[index],
+                        gameViewModel.getSelectedSquareNameList()
+                    )
+                ) {
                     gameViewModel.addSquareToList(list[index])
                     gameViewModel.updateAddMode(false)
                 } else {
-                    Toast.makeText(activityContext, "Cuisine already exists!", Toast.LENGTH_SHORT).show()
+                    Toast
+                        .makeText(activityContext, "Cuisine already exists!", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         )) {
