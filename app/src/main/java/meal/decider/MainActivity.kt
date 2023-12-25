@@ -136,9 +136,7 @@ fun TopBar() {
                 actions = {
                     if (listOfSquareIndicesToEdit.value.isNotEmpty()) {
                         IconButton(onClick = {
-                            expanded = !expanded
-                            deleteSelectedCuisines(gameViewModel.getListOfSquareIndicesToEdit)
-                            gameViewModel.updateListOfSquareIndicesToEdit(listOf())
+                            deleteSelectedCuisines()
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Delete,
@@ -243,13 +241,23 @@ fun sortAndUpdateCuisineList(typeOfSort: String) {
     gameViewModel.updateSquareList(newSquareList)
 }
 
-fun deleteSelectedCuisines(list: List<Int>) {
+fun deleteSelectedCuisines() {
+    val listOfIndices = gameViewModel.getListOfSquareIndicesToEdit
     val tempList = gameViewModel.getSquareList
-    for (i in list) {
-        if (i <= tempList.size) {
+
+    showLog("test", "temp list size pre-delete is ${tempList.size}")
+    showLog("test", "list of indices is $listOfIndices")
+
+    for (i in listOfIndices) {
+        if (i <= tempList.size -1) {
          tempList.removeAt(i)
         }
     }
+
+    showLog("test", "temp list size post-delete is ${tempList.size}")
+
+    //Zeroes out list of indices to edit and updates square list.
+    gameViewModel.updateListOfSquareIndicesToEdit(listOf())
     gameViewModel.updateSquareList(tempList)
 }
 
@@ -360,9 +368,10 @@ fun toggleEditCuisineHighlight(index: Int) {
         }
     }
 
+    showLog("test", "list of indices (as added) is ${gameViewModel.getListOfSquareIndicesToEdit}")
+
     gameViewModel.updateSquareList(tempSquareList)
 
-    println(gameViewModel.getListOfSquareIndicesToEdit)
 }
 
 fun addSquareToListOfSquaresToUpdate(index: Int) {
@@ -373,7 +382,6 @@ fun addSquareToListOfSquaresToUpdate(index: Int) {
 
 fun removeSquareFromListOfSquaresToUpdate(index: Int) {
     val tempList = gameViewModel.getListOfSquareIndicesToEdit.toMutableList()
-    //If index exists in list's indices.
     tempList.remove(index)
     println(tempList)
 
