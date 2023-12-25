@@ -167,7 +167,7 @@ class GameViewModel (context: Context) : ViewModel() {
         return newList
     }
 
-    fun getSelectedSquareNameList(): List<String> {
+    fun getSquaresNameList(): List<String> {
         val listToReturn = mutableListOf<String>()
         for (i in getSquareList) {
             listToReturn.add(i.name)
@@ -175,7 +175,7 @@ class GameViewModel (context: Context) : ViewModel() {
         return listToReturn
     }
 
-    fun getSelectedSquareColorList(): List<Int> {
+    fun getSquaresColorList(): List<Int> {
         val listToReturn = mutableListOf<Int>()
         for (i in getSquareList) {
             listToReturn.add(i.color)

@@ -214,19 +214,15 @@ fun TopBar() {
 }
 
 fun sortAndUpdateCuisineList(typeOfSort: String) {
-    var squareNames = mutableListOf<String>()
+    var squareNames = gameViewModel.getSquaresNameList()
     val currentSquareList = gameViewModel.getSquareList
     val newSquareList: SnapshotStateList<SquareValues> = SnapshotStateList()
     val selectedSquareName = gameViewModel.getSelectedSquare.name
 
-    for (i in gameViewModel.getSquareList) {
-        squareNames.add(i.name)
-    }
-
     if (typeOfSort == "alphabetical") squareNames = squareNames.sorted().toMutableList()
     if (typeOfSort == "random") squareNames = squareNames.shuffled().toMutableList()
 
-    for (i in 0 until squareNames.size) {
+    for (i in squareNames.indices) {
         newSquareList.add(SquareValues(squareNames[i], currentSquareList[i].color))
     }
 
@@ -241,6 +237,7 @@ fun sortAndUpdateCuisineList(typeOfSort: String) {
     gameViewModel.updateSquareList(newSquareList)
 }
 
+//TODO: Blue highlights remains on indices, of which the cuisine changes post-delete.
 fun deleteSelectedCuisines() {
     val listOfIndices = gameViewModel.getListOfSquareIndicesToEdit
     val tempList = gameViewModel.getSquareList
@@ -256,9 +253,20 @@ fun deleteSelectedCuisines() {
 
     showLog("test", "temp list size post-delete is ${tempList.size}")
 
-    //Zeroes out list of indices to edit and updates square list.
     gameViewModel.updateListOfSquareIndicesToEdit(listOf())
     gameViewModel.updateSquareList(tempList)
+    resetSquareColors()
+}
+
+fun resetSquareColors() {
+    val squareList = gameViewModel.getSquareList
+    val selectedSquare = gameViewModel.getSelectedSquare
+    for (i in squareList) {
+        i.color = defaultSquareColor
+        if (i.name.equals(selectedSquare.name, true)) {
+            i.color = chosenSquareColor
+        }
+    }
 }
 
 @Composable
@@ -470,7 +478,7 @@ fun CuisineListUi(list: List<String>, index: Int, text: String) {
             onClick = {
                 if (!doesCuisineExistsOnBoard(
                         list[index],
-                        gameViewModel.getSelectedSquareNameList()
+                        gameViewModel.getSquaresNameList()
                     )
                 ) {
                     gameViewModel.addSquareToList(list[index])
@@ -569,7 +577,7 @@ fun AddDialogBox() {
                             )
                         }
                         IconButton(onClick = {
-                            if (!doesCuisineExistsOnBoard(txtField, gameViewModel.getSelectedSquareNameList())) {
+                            if (!doesCuisineExistsOnBoard(txtField, gameViewModel.getSquaresNameList())) {
                                 gameViewModel.addSquareToList(txtField)
                                 gameViewModel.updateAddMode(false)
                             } else {
