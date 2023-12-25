@@ -137,6 +137,7 @@ fun TopBar() {
                     if (listOfSquareIndicesToEdit.value.isNotEmpty()) {
                         IconButton(onClick = {
                             deleteSelectedCuisines()
+                            gameViewModel.updateEditMode(false)
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Delete,
@@ -237,21 +238,15 @@ fun sortAndUpdateCuisineList(typeOfSort: String) {
     gameViewModel.updateSquareList(newSquareList)
 }
 
-//TODO: Blue highlights remains on indices, of which the cuisine changes post-delete.
 fun deleteSelectedCuisines() {
     val listOfIndices = gameViewModel.getListOfSquareIndicesToEdit
     val tempList = gameViewModel.getSquareList
 
-    showLog("test", "temp list size pre-delete is ${tempList.size}")
-    showLog("test", "list of indices is $listOfIndices")
-
     for (i in listOfIndices) {
-        if (i <= tempList.size -1) {
+        if (i <= tempList.size-1) {
          tempList.removeAt(i)
         }
     }
-
-    showLog("test", "temp list size post-delete is ${tempList.size}")
 
     gameViewModel.updateListOfSquareIndicesToEdit(listOf())
     gameViewModel.updateSquareList(tempList)
@@ -265,6 +260,8 @@ fun resetSquareColors() {
         i.color = defaultSquareColor
         if (i.name.equals(selectedSquare.name, true)) {
             i.color = chosenSquareColor
+        } else {
+            squareList[0].color = chosenSquareColor
         }
     }
 }
