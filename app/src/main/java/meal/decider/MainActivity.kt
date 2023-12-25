@@ -151,6 +151,7 @@ fun TopBar() {
                                 text = { Text("Add Cuisine") },
                                 onClick = {
                                     gameViewModel.updateAddMode(true)
+                                    gameViewModel.updateEditMode(false)
                                     expanded = false
                                 }
                             )
@@ -165,6 +166,7 @@ fun TopBar() {
                                 text = { Text("Sort Alphabetically") },
                                 onClick = {
                                     sortAndUpdateCuisineList("alphabetical")
+                                    gameViewModel.updateEditMode(false)
                                     expanded = false
                                 }
                             )
@@ -172,12 +174,15 @@ fun TopBar() {
                                 text = { Text("Sort Randomly") },
                                 onClick = {
                                     sortAndUpdateCuisineList("random")
+                                    gameViewModel.updateEditMode(false)
                                     expanded = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = { Text("Restore Defaults") },
                                 onClick = {
+                                    gameViewModel.updateEditMode(false)
+
                                     expanded = false
                                 }
                             )
@@ -313,11 +318,21 @@ fun SelectionGridLayout() {
 
 fun toggleEditCuisineHighlight(index: Int) {
     val tempSquareList = gameViewModel.getSquareList
-    if (tempSquareList[index].color != editSquareColor) {
-        tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
+
+    if (index == gameViewModel.getSelectedSquareIndex) {
+        if (tempSquareList[index].color == chosenSquareColor) {
+            tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
+        } else {
+            tempSquareList[index] = SquareValues(tempSquareList[index].name, chosenSquareColor)
+        }
     } else {
-        tempSquareList[index] = SquareValues(tempSquareList[index].name, defaultSquareColor)
+        if (tempSquareList[index].color == defaultSquareColor) {
+            tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
+        } else {
+            tempSquareList[index] = SquareValues(tempSquareList[index].name, defaultSquareColor)
+        }
     }
+
     gameViewModel.updateSquareList(tempSquareList)
 }
 

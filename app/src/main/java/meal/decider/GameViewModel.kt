@@ -35,6 +35,9 @@ class GameViewModel (context: Context) : ViewModel() {
     private val _squareToEdit = MutableStateFlow(0)
     val squareToEdit : StateFlow<Int> = _squareToEdit.asStateFlow()
 
+    private val _selectedSquareIndex = MutableStateFlow(0)
+    val selectedSquareIndex : StateFlow<Int> = _selectedSquareIndex.asStateFlow()
+
     private val _displayedCuisineList = MutableStateFlow(emptyList<String>().toList())
     val displayedCuisineList: StateFlow<List<String>> = _displayedCuisineList.asStateFlow()
 
@@ -75,6 +78,10 @@ class GameViewModel (context: Context) : ViewModel() {
 
     fun updateSquareToEdit(square: Int) {
         _squareToEdit.value = square
+    }
+
+    fun updateSelectedSquareIndex(index: Int) {
+        _selectedSquareIndex.value = index
     }
 
     fun updateDisplayedCuisineList(list: List<String>) {
@@ -129,6 +136,7 @@ class GameViewModel (context: Context) : ViewModel() {
 
             if (delay < 20) {
                 updateSelectedSquare(getSquareList[indexRoll])
+                updateSelectedSquareIndex(indexRoll)
                 updateRollEngaged(false)
                 updateRollFinished(true)
 
@@ -170,6 +178,7 @@ class GameViewModel (context: Context) : ViewModel() {
 
     val getSelectedSquare get() = boardUiState.value.selectedSquare
     val getSquareList get() = boardUiState.value.squareList
+    val getSelectedSquareIndex get() = selectedSquareIndex.value
 
     val getRollEngaged get() = rollEngaged.value
     val getRollFinished get() = rollFinished.value
