@@ -73,6 +73,7 @@ import meal.decider.ui.theme.MealDeciderTheme
 private lateinit var appViewModel : AppViewModel
 @SuppressLint("StaticFieldLeak")
 private lateinit var activityContext : Context
+@SuppressLint("StaticFieldLeak")
 private lateinit var dialogComposables : DialogComposables
 
 class MainActivity : ComponentActivity() {
@@ -108,6 +109,7 @@ fun TopBar() {
     val listOfSquaresToEdit = appViewModel.listOfSquaresToEdit.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var expanded by remember { mutableStateOf(false) }
+    var filterMenu by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -145,6 +147,12 @@ fun TopBar() {
                             expanded = expanded,
                             onDismissRequest = { expanded = false }
                         ) {
+                            DropdownMenuItem(
+                                text = { Text("Options") },
+                                onClick = {
+                                    filterMenu = !filterMenu
+                                }
+                            )
                             DropdownMenuItem(
                                 text = { Text("Add Cuisine") },
                                 onClick = {
@@ -199,6 +207,9 @@ fun TopBar() {
                 .padding(innerPadding),
         ) {
             Board()
+            if (filterMenu) {
+                dialogComposables.FilterDialog()
+            }
         }
     }
 }
