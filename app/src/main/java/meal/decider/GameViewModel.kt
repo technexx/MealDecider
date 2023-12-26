@@ -35,8 +35,8 @@ class GameViewModel (context: Context) : ViewModel() {
     private val _squareToEdit = MutableStateFlow(0)
     val squareToEdit : StateFlow<Int> = _squareToEdit.asStateFlow()
 
-    private val _listOfSquaresIndicesToEdit = MutableStateFlow(emptyList<Int>())
-    val listOfSquareIndicesToEdit : StateFlow<List<Int>> = _listOfSquaresIndicesToEdit
+    private val _listOfSquaresToEdit = MutableStateFlow(emptyList<SquareValues>())
+    val listOfSquareIndicesToEdit : StateFlow<List<SquareValues>> = _listOfSquaresToEdit
 
     private val _selectedSquareIndex = MutableStateFlow(0)
     val selectedSquareIndex : StateFlow<Int> = _selectedSquareIndex.asStateFlow()
@@ -83,8 +83,8 @@ class GameViewModel (context: Context) : ViewModel() {
         _squareToEdit.value = square
     }
 
-    fun updateListOfSquareIndicesToEdit(list: List<Int>) {
-        _listOfSquaresIndicesToEdit.value = list
+    fun updateListOfSquaresToEdit(list: List<SquareValues>) {
+        _listOfSquaresToEdit.value = list
     }
 
     fun updateSelectedSquareIndex(index: Int) {
@@ -134,7 +134,7 @@ class GameViewModel (context: Context) : ViewModel() {
 
         squareColorChangeRunnable = Runnable {
             val indexRoll = Random.nextInt(0, getSquareList.size)
-            val newSquareList = SquareListWithRandomColorChanged(indexRoll)
+            val newSquareList = squareListWithRandomColorChanged(indexRoll)
 
             updateSquareList(newSquareList)
 
@@ -154,7 +154,7 @@ class GameViewModel (context: Context) : ViewModel() {
         handler.post((squareColorChangeRunnable))
     }
 
-    private fun SquareListWithRandomColorChanged(index: Int): SnapshotStateList<SquareValues> {
+    private fun squareListWithRandomColorChanged(index: Int): SnapshotStateList<SquareValues> {
         val currentList = getSquareList
         val newList = SnapshotStateList<SquareValues>()
 

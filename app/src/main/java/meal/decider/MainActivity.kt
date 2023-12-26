@@ -268,34 +268,30 @@ fun toggleEditCuisineHighlight(index: Int) {
 
 fun addSquareToListOfSquareIndicesToUpdate(index: Int) {
     val tempList = gameViewModel.getListOfSquareIndicesToEdit.toMutableList()
-    tempList.add(index)
-    gameViewModel.updateListOfSquareIndicesToEdit(tempList)
+    val currentList = gameViewModel.getSquareList
+    tempList.add(currentList[index])
+    gameViewModel.updateListOfSquaresToEdit(tempList)
 }
 
 fun removeSquareFromListOfSquareIndicesToUpdate(index: Int) {
     val tempList = gameViewModel.getListOfSquareIndicesToEdit.toMutableList()
-    tempList.remove(index)
-    gameViewModel.updateListOfSquareIndicesToEdit(tempList)
+    val currentList = gameViewModel.getSquareList
+    tempList.remove(currentList[index])
+    gameViewModel.updateListOfSquaresToEdit(tempList)
 }
 
-//TODO: Some wrong deletions. Also deletes one less entry if last one is selected.
 fun deleteSelectedCuisines() {
-    val listOfIndices = gameViewModel.getListOfSquareIndicesToEdit
-    val tempList = gameViewModel.getSquareList
+    val listOfSquaresToEdit = gameViewModel.getListOfSquareIndicesToEdit
+    val currentSquaresList = gameViewModel.getSquareList
 
-    println("index list (deleting) is $listOfIndices")
-    println("square list pre delete is ${tempList.toList()}")
-
-    for (i in listOfIndices) {
-        if (i <= tempList.size-1) {
-         tempList.removeAt(i)
+    for (i in listOfSquaresToEdit) {
+        if (currentSquaresList.contains(i)) {
+            currentSquaresList.remove(i)
         }
     }
 
-    println("square list post delete is ${tempList.toList()}")
-
-    gameViewModel.updateListOfSquareIndicesToEdit(listOf())
-    gameViewModel.updateSquareList(tempList)
+    gameViewModel.updateListOfSquaresToEdit(listOf())
+    gameViewModel.updateSquareList(currentSquaresList)
     resetSquareColors()
 }
 
