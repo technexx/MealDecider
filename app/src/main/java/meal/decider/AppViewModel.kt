@@ -166,18 +166,10 @@ class AppViewModel () : ViewModel() {
         return newList
     }
 
-    fun getSquaresNameList(): List<String> {
+    fun squareNamesList(): List<String> {
         val listToReturn = mutableListOf<String>()
         for (i in getSquareList) {
             listToReturn.add(i.name)
-        }
-        return listToReturn
-    }
-
-    fun getSquaresColorList(): List<Int> {
-        val listToReturn = mutableListOf<Int>()
-        for (i in getSquareList) {
-            listToReturn.add(i.color)
         }
         return listToReturn
     }

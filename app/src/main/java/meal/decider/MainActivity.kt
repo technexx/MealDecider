@@ -212,7 +212,7 @@ fun TopBar() {
 }
 
 fun sortAndUpdateCuisineList(typeOfSort: String) {
-    var squareNames = appViewModel.getSquaresNameList()
+    var squareNames = appViewModel.squareNamesList()
     val currentSquareList = appViewModel.getSquareList
     val newSquareList: SnapshotStateList<SquareValues> = SnapshotStateList()
     val selectedSquareName = appViewModel.getSelectedSquare.name
@@ -479,7 +479,7 @@ fun CuisineListUi(list: List<String>, index: Int, text: String) {
             onClick = {
                 if (!doesCuisineExistsOnBoard(
                         list[index],
-                        appViewModel.getSquaresNameList()
+                        appViewModel.squareNamesList()
                     )
                 ) {
                     appViewModel.addSquareToList(list[index])
@@ -578,7 +578,7 @@ fun AddDialogBox() {
                             )
                         }
                         IconButton(onClick = {
-                            if (!doesCuisineExistsOnBoard(txtField, appViewModel.getSquaresNameList())) {
+                            if (!doesCuisineExistsOnBoard(txtField, appViewModel.squareNamesList())) {
                                 appViewModel.addSquareToList(txtField)
                                 appViewModel.updateAddMode(false)
                             } else {
