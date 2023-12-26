@@ -192,8 +192,11 @@ fun TopBar() {
                             DropdownMenuItem(
                                 text = { Text("Restore Defaults") },
                                 onClick = {
+                                    appViewModel.createSquareList()
+                                    appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
+                                    appViewModel.updateSelectedSquareIndex(0)
                                     appViewModel.updateEditMode(false)
-
+                                    appViewModel.updateRollFinished(false)
                                     expanded = false
                                 }
                             )
