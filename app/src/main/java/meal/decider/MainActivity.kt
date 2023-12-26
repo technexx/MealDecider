@@ -43,6 +43,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.widget.AutoCompleteTextView.OnDismissListener
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
@@ -74,6 +75,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -584,16 +586,8 @@ fun AddDialogBox() {
                             } else {
                                 Toast.makeText(activityContext, "Cuisine already exists!", Toast.LENGTH_SHORT).show()
                             }
-
                         }) {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription = "",
-                                tint = colorResource(android.R.color.holo_green_light),
-                                modifier = Modifier
-                                    .width(50.dp)
-                                    .height(50.dp)
-                            )
+                            DialogIcon(imageVector = Icons.Filled.Check, colorResource = android.R.color.holo_green_light)
                         }
                     }
                 }
@@ -646,27 +640,12 @@ fun EditDialogBox() {
                         IconButton(onClick = {
                             appViewModel.updateActiveEdit(false)
                         }) {
-                            Icon(
-                                imageVector = Icons.Filled.Close,
-                                contentDescription = "",
-                                tint = colorResource(android.R.color.holo_red_light),
-                                modifier = Modifier
-                                    .width(50.dp)
-                                    .height(50.dp)
-                            )
+                            DialogIcon(imageVector = Icons.Filled.Close, colorResource = android.R.color.holo_red_light)
                         }
                         IconButton(onClick = {
                             appViewModel.updateSquareName(appViewModel.getSquareToEdit, txtField)
                             appViewModel.updateActiveEdit(false)
                         }) {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription = "",
-                                tint = colorResource(android.R.color.holo_green_light),
-                                modifier = Modifier
-                                    .width(50.dp)
-                                    .height(50.dp)
-                            )
                         }
                     }
                 }
@@ -674,6 +653,18 @@ fun EditDialogBox() {
         }
 
     }
+}
+
+@Composable
+fun DialogIcon(imageVector: ImageVector, colorResource: Int) {
+    Icon(
+        imageVector = imageVector,
+        contentDescription = "",
+        tint = colorResource(colorResource),
+        modifier = Modifier
+            .width(50.dp)
+            .height(50.dp)
+    )
 }
 
 fun mapIntent(uri: Uri) {
