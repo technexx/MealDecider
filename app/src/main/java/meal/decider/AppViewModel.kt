@@ -186,4 +186,129 @@ class AppViewModel () : ViewModel() {
     val getEditMode get() = editMode.value
     val getActiveEdit get() = activeEdit.value
     val getSquareToEdit get() = squareToEdit.value
+
+
+
+    fun sortAndUpdateCuisineList(typeOfSort: String) {
+        var squareNames = squareNamesList()
+        val currentSquareList = getSquareList
+        val newSquareList: SnapshotStateList<SquareValues> = SnapshotStateList()
+        val selectedSquareName = getSelectedSquare.name
+
+        if (typeOfSort == "alphabetical") squareNames = squareNames.sorted().toMutableList()
+        if (typeOfSort == "random") squareNames = squareNames.shuffled().toMutableList()
+
+        for (i in squareNames.indices) {
+            newSquareList.add(SquareValues(squareNames[i], currentSquareList[i].color))
+        }
+
+        for (i in 0 until newSquareList.size) {
+            if (!newSquareList[i].name.equals(selectedSquareName, true)) {
+                newSquareList[i] = SquareValues(newSquareList[i].name, defaultSquareColor)
+            } else {
+                newSquareList[i] = SquareValues(newSquareList[i].name, chosenSquareColor)
+            }
+        }
+
+        updateSquareList(newSquareList)
+    }
+
+    fun toggleEditCuisineHighlight(index: Int) {
+        val tempSquareList = getSquareList
+
+        if (index == getSelectedSquareIndex) {
+            if (tempSquareList[index].color == chosenSquareColor) {
+                tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
+                addSquareToListOfSquareIndicesToUpdate(index)
+            } else {
+                tempSquareList[index] = SquareValues(tempSquareList[index].name, chosenSquareColor)
+                removeSquareFromListOfSquareIndicesToUpdate(index)
+            }
+        } else {
+            if (tempSquareList[index].color == defaultSquareColor) {
+                tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
+                addSquareToListOfSquareIndicesToUpdate(index)
+            } else {
+                tempSquareList[index] = SquareValues(tempSquareList[index].name, defaultSquareColor)
+                removeSquareFromListOfSquareIndicesToUpdate(index)
+            }
+        }
+
+        updateSquareList(tempSquareList)
+
+    }
+
+    fun addSquareToListOfSquareIndicesToUpdate(index: Int) {
+        val tempList = getListOfSquareIndicesToEdit.toMutableList()
+        val currentList = getSquareList
+        tempList.add(currentList[index])
+        updateListOfSquaresToEdit(tempList)
+    }
+
+    fun removeSquareFromListOfSquareIndicesToUpdate(index: Int) {
+        val tempList = getListOfSquareIndicesToEdit.toMutableList()
+        val currentList = getSquareList
+        tempList.remove(currentList[index])
+        updateListOfSquaresToEdit(tempList)
+    }
+
+    fun deleteSelectedCuisines() {
+        val listOfSquaresToEdit = getListOfSquareIndicesToEdit
+        val currentSquaresList = getSquareList
+
+        for (i in listOfSquaresToEdit) {
+            if (currentSquaresList.contains(i)) {
+                currentSquaresList.remove(i)
+            }
+        }
+
+        updateListOfSquaresToEdit(listOf())
+        updateSquareList(currentSquaresList)
+        resetSquareColors()
+    }
+
+    fun resetSquareColors() {
+        val squareList = getSquareList
+        val selectedSquare = getSelectedSquare
+
+        for (i in squareList) {
+            i.color = defaultSquareColor
+            if (i.name.equals(selectedSquare.name, true)) {
+                i.color = chosenSquareColor
+            }
+        }
+
+        //Set first square index to selected if previous one no longer exists.
+        if (!doesSelectedSquareExist()) {
+            squareList[0].color = chosenSquareColor
+            updateSelectedSquare(squareList[0])
+            updateSelectedSquareIndex(0)
+        }
+    }
+
+    fun doesSelectedSquareExist() : Boolean {
+        val squareList = getSquareList
+        val selectedSquare = getSelectedSquare
+
+        for (i in squareList) {
+            if (i.name.equals(selectedSquare.name)) return true
+        }
+        return false
+    }
+
+    fun filterList(list: List<String>, searchString: String) : List<String> {
+        //If search string equals the first X characters typed, filter list with just those matching entries. If search string is empty, display full list.
+        return if (searchString != "") {
+            list.filter { a -> a.substring(0, searchString.length).equals(searchString, true) }
+        } else {
+            list
+        }
+    }
+
+    fun doesCuisineExistsOnBoard(cuisineToAdd: String, listOfCuisines: List<String>): Boolean {
+        for (i in listOfCuisines) {
+            if (cuisineToAdd.equals(i, true)) return true
+        }
+        return false
+    }
 }
