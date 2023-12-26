@@ -135,7 +135,7 @@ fun TopBar() {
                 actions = {
                     if (listOfSquareIndicesToEdit.value.isNotEmpty()) {
                         IconButton(onClick = {
-                            deleteSelectedCuisines()
+                            appViewModel.deleteSelectedCuisines()
                             appViewModel.updateEditMode(false)
                         }) {
                             Icon(
@@ -176,7 +176,7 @@ fun TopBar() {
                             DropdownMenuItem(
                                 text = { Text("Sort Alphabetically") },
                                 onClick = {
-                                    sortAndUpdateCuisineList("alphabetical")
+                                    appViewModel.sortAndUpdateCuisineList("alphabetical")
                                     appViewModel.updateEditMode(false)
                                     expanded = false
                                 }
@@ -184,7 +184,7 @@ fun TopBar() {
                             DropdownMenuItem(
                                 text = { Text("Sort Randomly") },
                                 onClick = {
-                                    sortAndUpdateCuisineList("random")
+                                    appViewModel.sortAndUpdateCuisineList("random")
                                     appViewModel.updateEditMode(false)
                                     expanded = false
                                 }
@@ -211,113 +211,6 @@ fun TopBar() {
             Board()
         }
     }
-}
-
-fun sortAndUpdateCuisineList(typeOfSort: String) {
-    var squareNames = appViewModel.squareNamesList()
-    val currentSquareList = appViewModel.getSquareList
-    val newSquareList: SnapshotStateList<SquareValues> = SnapshotStateList()
-    val selectedSquareName = appViewModel.getSelectedSquare.name
-
-    if (typeOfSort == "alphabetical") squareNames = squareNames.sorted().toMutableList()
-    if (typeOfSort == "random") squareNames = squareNames.shuffled().toMutableList()
-
-    for (i in squareNames.indices) {
-        newSquareList.add(SquareValues(squareNames[i], currentSquareList[i].color))
-    }
-
-    for (i in 0 until newSquareList.size) {
-        if (!newSquareList[i].name.equals(selectedSquareName, true)) {
-            newSquareList[i] = SquareValues(newSquareList[i].name, defaultSquareColor)
-        } else {
-            newSquareList[i] = SquareValues(newSquareList[i].name, chosenSquareColor)
-        }
-    }
-
-    appViewModel.updateSquareList(newSquareList)
-}
-
-fun toggleEditCuisineHighlight(index: Int) {
-    val tempSquareList = appViewModel.getSquareList
-
-    if (index == appViewModel.getSelectedSquareIndex) {
-        if (tempSquareList[index].color == chosenSquareColor) {
-            tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
-            addSquareToListOfSquareIndicesToUpdate(index)
-        } else {
-            tempSquareList[index] = SquareValues(tempSquareList[index].name, chosenSquareColor)
-            removeSquareFromListOfSquareIndicesToUpdate(index)
-        }
-    } else {
-        if (tempSquareList[index].color == defaultSquareColor) {
-            tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
-            addSquareToListOfSquareIndicesToUpdate(index)
-        } else {
-            tempSquareList[index] = SquareValues(tempSquareList[index].name, defaultSquareColor)
-            removeSquareFromListOfSquareIndicesToUpdate(index)
-        }
-    }
-
-    appViewModel.updateSquareList(tempSquareList)
-
-}
-
-fun addSquareToListOfSquareIndicesToUpdate(index: Int) {
-    val tempList = appViewModel.getListOfSquareIndicesToEdit.toMutableList()
-    val currentList = appViewModel.getSquareList
-    tempList.add(currentList[index])
-    appViewModel.updateListOfSquaresToEdit(tempList)
-}
-
-fun removeSquareFromListOfSquareIndicesToUpdate(index: Int) {
-    val tempList = appViewModel.getListOfSquareIndicesToEdit.toMutableList()
-    val currentList = appViewModel.getSquareList
-    tempList.remove(currentList[index])
-    appViewModel.updateListOfSquaresToEdit(tempList)
-}
-
-fun deleteSelectedCuisines() {
-    val listOfSquaresToEdit = appViewModel.getListOfSquareIndicesToEdit
-    val currentSquaresList = appViewModel.getSquareList
-
-    for (i in listOfSquaresToEdit) {
-        if (currentSquaresList.contains(i)) {
-            currentSquaresList.remove(i)
-        }
-    }
-
-    appViewModel.updateListOfSquaresToEdit(listOf())
-    appViewModel.updateSquareList(currentSquaresList)
-    resetSquareColors()
-}
-
-fun resetSquareColors() {
-    val squareList = appViewModel.getSquareList
-    val selectedSquare = appViewModel.getSelectedSquare
-
-    for (i in squareList) {
-        i.color = defaultSquareColor
-        if (i.name.equals(selectedSquare.name, true)) {
-            i.color = chosenSquareColor
-        }
-    }
-
-    //Set first square index to selected if previous one no longer exists.
-    if (!doesSelectedSquareExist()) {
-        squareList[0].color = chosenSquareColor
-        appViewModel.updateSelectedSquare(squareList[0])
-        appViewModel.updateSelectedSquareIndex(0)
-    }
-}
-
-fun doesSelectedSquareExist() : Boolean {
-    val squareList = appViewModel.getSquareList
-    val selectedSquare = appViewModel.getSelectedSquare
-
-    for (i in squareList) {
-        if (i.name.equals(selectedSquare.name)) return true
-    }
-    return false
 }
 
 @Composable
@@ -382,7 +275,7 @@ fun SelectionGridLayout() {
                             selected = true,
                             onClick = {
                                 if (appViewModel.getEditMode) {
-                                    toggleEditCuisineHighlight(index)
+                                    appViewModel.toggleEditCuisineHighlight(index)
                                 }
                             }
                         ),
@@ -479,7 +372,7 @@ fun CuisineListUi(list: List<String>, index: Int, text: String) {
         .selectable(
             selected = true,
             onClick = {
-                if (!doesCuisineExistsOnBoard(
+                if (!appViewModel.doesCuisineExistsOnBoard(
                         list[index],
                         appViewModel.squareNamesList()
                     )
@@ -499,22 +392,6 @@ fun CuisineListUi(list: List<String>, index: Int, text: String) {
             color = Color.Black,
             text = text )
     }
-}
-
-fun filterList(list: List<String>, searchString: String) : List<String> {
-    //If search string equals the first X characters typed, filter list with just those matching entries. If search string is empty, display full list.
-    return if (searchString != "") {
-        list.filter { a -> a.substring(0, searchString.length).equals(searchString, true) }
-    } else {
-        list
-    }
-}
-
-fun doesCuisineExistsOnBoard(cuisineToAdd: String, listOfCuisines: List<String>): Boolean {
-    for (i in listOfCuisines) {
-        if (cuisineToAdd.equals(i, true)) return true
-    }
-    return false
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -550,7 +427,7 @@ fun AddDialogBox() {
                         value = txtField,
                         onValueChange = {
                             txtField = it
-                            searchTerms = filterList(fullCuisineList, txtField)
+                            searchTerms = appViewModel.filterList(fullCuisineList, txtField)
                             appViewModel.updateDisplayedCuisineList(searchTerms)},
                         singleLine = true,
                         textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
@@ -580,7 +457,7 @@ fun AddDialogBox() {
                             )
                         }
                         IconButton(onClick = {
-                            if (!doesCuisineExistsOnBoard(txtField, appViewModel.squareNamesList())) {
+                            if (!appViewModel.doesCuisineExistsOnBoard(txtField, appViewModel.squareNamesList())) {
                                 appViewModel.addSquareToList(txtField)
                                 appViewModel.updateAddMode(false)
                             } else {
@@ -673,7 +550,6 @@ fun mapIntent(uri: Uri) {
 
     activityContext.startActivity(intent)
 }
-
 
 @Composable
 fun ButtonText(text: String) {
