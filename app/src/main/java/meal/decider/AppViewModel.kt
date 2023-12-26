@@ -37,7 +37,7 @@ class AppViewModel () : ViewModel() {
     val squareToEdit : StateFlow<Int> = _squareToEdit.asStateFlow()
 
     private val _listOfSquaresToEdit = MutableStateFlow(emptyList<SquareValues>())
-    val listOfSquareIndicesToEdit : StateFlow<List<SquareValues>> = _listOfSquaresToEdit
+    val listOfSquaresToEdit : StateFlow<List<SquareValues>> = _listOfSquaresToEdit
 
     private val _selectedSquareIndex = MutableStateFlow(0)
     val selectedSquareIndex : StateFlow<Int> = _selectedSquareIndex.asStateFlow()
@@ -177,7 +177,7 @@ class AppViewModel () : ViewModel() {
     val getSquareList get() = boardUiState.value.squareList
     val getSelectedSquare get() = selectedSquare.value
     val getSelectedSquareIndex get() = selectedSquareIndex.value
-    val getListOfSquareIndicesToEdit get() = listOfSquareIndicesToEdit.value
+    val getListOfSquaresToEdit get() = listOfSquaresToEdit.value
 
     val getRollEngaged get() = rollEngaged.value
     val getRollFinished get() = rollFinished.value
@@ -239,21 +239,20 @@ class AppViewModel () : ViewModel() {
     }
 
     fun addSquareToListOfSquareIndicesToUpdate(index: Int) {
-        val tempList = getListOfSquareIndicesToEdit.toMutableList()
+        val tempList = getListOfSquaresToEdit.toMutableList()
         val currentList = getSquareList
         tempList.add(currentList[index])
         updateListOfSquaresToEdit(tempList)
     }
 
     fun removeSquareFromListOfSquareIndicesToUpdate(index: Int) {
-        val tempList = getListOfSquareIndicesToEdit.toMutableList()
-        val currentList = getSquareList
-        tempList.remove(currentList[index])
+        val tempList = getListOfSquaresToEdit.toMutableList()
+        tempList.removeLast()
         updateListOfSquaresToEdit(tempList)
     }
 
     fun deleteSelectedCuisines() {
-        val listOfSquaresToEdit = getListOfSquareIndicesToEdit
+        val listOfSquaresToEdit = getListOfSquaresToEdit
         val currentSquaresList = getSquareList
 
         for (i in listOfSquaresToEdit) {

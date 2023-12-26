@@ -81,8 +81,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.window.Dialog
 
-//TODO: Edit should not allow changing cuisine.
 //TODO: Categories (Vegan, etc.)
+//TODO: Regions/continents
 
 @SuppressLint("StaticFieldLeak")
 private lateinit var appViewModel : AppViewModel
@@ -118,7 +118,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar() {
-    val listOfSquareIndicesToEdit = appViewModel.listOfSquareIndicesToEdit.collectAsStateWithLifecycle()
+    val listOfSquaresToEdit = appViewModel.listOfSquaresToEdit.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var expanded by remember { mutableStateOf(false) }
 
@@ -133,7 +133,7 @@ fun TopBar() {
                     Text("Meal Decider")
                 },
                 actions = {
-                    if (listOfSquareIndicesToEdit.value.isNotEmpty()) {
+                    if (listOfSquaresToEdit.value.isNotEmpty()) {
                         IconButton(onClick = {
                             appViewModel.deleteSelectedCuisines()
                             appViewModel.updateEditMode(false)
@@ -240,10 +240,10 @@ fun SelectionGridLayout() {
 
     borderStroke = BorderStroke(3.dp,Color.Black)
 
-    if (editState.value) {
-        borderStroke = BorderStroke(3.dp,Color.Black)
+    borderStroke = if (editState.value) {
+        BorderStroke(3.dp,Color.Black)
     } else {
-        borderStroke = BorderStroke(1.dp,Color.Black)
+        BorderStroke(1.dp,Color.Black)
     }
 
     if (addMode.value) {
