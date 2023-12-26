@@ -45,7 +45,6 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -60,7 +59,6 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -76,18 +74,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.window.Dialog
-import java.util.stream.Collectors.toList
 
 //TODO: Edit should not allow changing cuisine.
 //TODO: Categories (Vegan, etc.)
 
 @SuppressLint("StaticFieldLeak")
-private lateinit var gameViewModel : GameViewModel
+private lateinit var appViewModel : AppViewModel
 @SuppressLint("StaticFieldLeak")
 private lateinit var activityContext : Context
 
@@ -95,11 +91,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        gameViewModel = GameViewModel(application)
+        appViewModel = AppViewModel()
         activityContext = this@MainActivity
 
-        gameViewModel.createSquareList()
-        gameViewModel.updateSelectedSquare(gameViewModel.getSquareList[0])
+        appViewModel.createSquareList()
+        appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
 
         setContent {
             MealDeciderTheme {
@@ -120,7 +116,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar() {
-    val listOfSquareIndicesToEdit = gameViewModel.listOfSquareIndicesToEdit.collectAsStateWithLifecycle()
+    val listOfSquareIndicesToEdit = appViewModel.listOfSquareIndicesToEdit.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var expanded by remember { mutableStateOf(false) }
 
@@ -138,7 +134,7 @@ fun TopBar() {
                     if (listOfSquareIndicesToEdit.value.isNotEmpty()) {
                         IconButton(onClick = {
                             deleteSelectedCuisines()
-                            gameViewModel.updateEditMode(false)
+                            appViewModel.updateEditMode(false)
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Delete,
@@ -163,15 +159,15 @@ fun TopBar() {
                             DropdownMenuItem(
                                 text = { Text("Add Cuisine") },
                                 onClick = {
-                                    gameViewModel.updateAddMode(true)
-                                    gameViewModel.updateEditMode(false)
+                                    appViewModel.updateAddMode(true)
+                                    appViewModel.updateEditMode(false)
                                     expanded = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = { Text("Edit Cuisines") },
                                 onClick = {
-                                    gameViewModel.updateEditMode(!gameViewModel.getEditMode)
+                                    appViewModel.updateEditMode(!appViewModel.getEditMode)
                                     expanded = false
                                 }
                             )
@@ -179,7 +175,7 @@ fun TopBar() {
                                 text = { Text("Sort Alphabetically") },
                                 onClick = {
                                     sortAndUpdateCuisineList("alphabetical")
-                                    gameViewModel.updateEditMode(false)
+                                    appViewModel.updateEditMode(false)
                                     expanded = false
                                 }
                             )
@@ -187,14 +183,14 @@ fun TopBar() {
                                 text = { Text("Sort Randomly") },
                                 onClick = {
                                     sortAndUpdateCuisineList("random")
-                                    gameViewModel.updateEditMode(false)
+                                    appViewModel.updateEditMode(false)
                                     expanded = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = { Text("Restore Defaults") },
                                 onClick = {
-                                    gameViewModel.updateEditMode(false)
+                                    appViewModel.updateEditMode(false)
 
                                     expanded = false
                                 }
@@ -216,10 +212,10 @@ fun TopBar() {
 }
 
 fun sortAndUpdateCuisineList(typeOfSort: String) {
-    var squareNames = gameViewModel.getSquaresNameList()
-    val currentSquareList = gameViewModel.getSquareList
+    var squareNames = appViewModel.getSquaresNameList()
+    val currentSquareList = appViewModel.getSquareList
     val newSquareList: SnapshotStateList<SquareValues> = SnapshotStateList()
-    val selectedSquareName = gameViewModel.getSelectedSquare.name
+    val selectedSquareName = appViewModel.getSelectedSquare.name
 
     if (typeOfSort == "alphabetical") squareNames = squareNames.sorted().toMutableList()
     if (typeOfSort == "random") squareNames = squareNames.shuffled().toMutableList()
@@ -236,13 +232,13 @@ fun sortAndUpdateCuisineList(typeOfSort: String) {
         }
     }
 
-    gameViewModel.updateSquareList(newSquareList)
+    appViewModel.updateSquareList(newSquareList)
 }
 
 fun toggleEditCuisineHighlight(index: Int) {
-    val tempSquareList = gameViewModel.getSquareList
+    val tempSquareList = appViewModel.getSquareList
 
-    if (index == gameViewModel.getSelectedSquareIndex) {
+    if (index == appViewModel.getSelectedSquareIndex) {
         if (tempSquareList[index].color == chosenSquareColor) {
             tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
             addSquareToListOfSquareIndicesToUpdate(index)
@@ -260,27 +256,27 @@ fun toggleEditCuisineHighlight(index: Int) {
         }
     }
 
-    gameViewModel.updateSquareList(tempSquareList)
+    appViewModel.updateSquareList(tempSquareList)
 
 }
 
 fun addSquareToListOfSquareIndicesToUpdate(index: Int) {
-    val tempList = gameViewModel.getListOfSquareIndicesToEdit.toMutableList()
-    val currentList = gameViewModel.getSquareList
+    val tempList = appViewModel.getListOfSquareIndicesToEdit.toMutableList()
+    val currentList = appViewModel.getSquareList
     tempList.add(currentList[index])
-    gameViewModel.updateListOfSquaresToEdit(tempList)
+    appViewModel.updateListOfSquaresToEdit(tempList)
 }
 
 fun removeSquareFromListOfSquareIndicesToUpdate(index: Int) {
-    val tempList = gameViewModel.getListOfSquareIndicesToEdit.toMutableList()
-    val currentList = gameViewModel.getSquareList
+    val tempList = appViewModel.getListOfSquareIndicesToEdit.toMutableList()
+    val currentList = appViewModel.getSquareList
     tempList.remove(currentList[index])
-    gameViewModel.updateListOfSquaresToEdit(tempList)
+    appViewModel.updateListOfSquaresToEdit(tempList)
 }
 
 fun deleteSelectedCuisines() {
-    val listOfSquaresToEdit = gameViewModel.getListOfSquareIndicesToEdit
-    val currentSquaresList = gameViewModel.getSquareList
+    val listOfSquaresToEdit = appViewModel.getListOfSquareIndicesToEdit
+    val currentSquaresList = appViewModel.getSquareList
 
     for (i in listOfSquaresToEdit) {
         if (currentSquaresList.contains(i)) {
@@ -288,14 +284,14 @@ fun deleteSelectedCuisines() {
         }
     }
 
-    gameViewModel.updateListOfSquaresToEdit(listOf())
-    gameViewModel.updateSquareList(currentSquaresList)
+    appViewModel.updateListOfSquaresToEdit(listOf())
+    appViewModel.updateSquareList(currentSquaresList)
     resetSquareColors()
 }
 
 fun resetSquareColors() {
-    val squareList = gameViewModel.getSquareList
-    val selectedSquare = gameViewModel.getSelectedSquare
+    val squareList = appViewModel.getSquareList
+    val selectedSquare = appViewModel.getSelectedSquare
 
     for (i in squareList) {
         i.color = defaultSquareColor
@@ -307,14 +303,14 @@ fun resetSquareColors() {
     //Set first square index to selected if previous one no longer exists.
     if (!doesSelectedSquareExist()) {
         squareList[0].color = chosenSquareColor
-        gameViewModel.updateSelectedSquare(squareList[0])
-        gameViewModel.updateSelectedSquareIndex(0)
+        appViewModel.updateSelectedSquare(squareList[0])
+        appViewModel.updateSelectedSquareIndex(0)
     }
 }
 
 fun doesSelectedSquareExist() : Boolean {
-    val squareList = gameViewModel.getSquareList
-    val selectedSquare = gameViewModel.getSelectedSquare
+    val squareList = appViewModel.getSquareList
+    val selectedSquare = appViewModel.getSelectedSquare
 
     for (i in squareList) {
         if (i.name.equals(selectedSquare.name)) return true
@@ -337,10 +333,10 @@ fun Board() {
 
 @Composable
 fun SelectionGridLayout() {
-    val boardUiState = gameViewModel.boardUiState.collectAsStateWithLifecycle()
-    val addMode = gameViewModel.addMode.collectAsStateWithLifecycle()
-    val editState = gameViewModel.editMode.collectAsStateWithLifecycle()
-    val activeEdit = gameViewModel.activeEdit.collectAsStateWithLifecycle()
+    val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
+    val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
+    val editState = appViewModel.editMode.collectAsStateWithLifecycle()
+    val activeEdit = appViewModel.activeEdit.collectAsStateWithLifecycle()
 
     var borderStroke: BorderStroke
 
@@ -372,7 +368,7 @@ fun SelectionGridLayout() {
             items(boardUiState.value.squareList.size) { index ->
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = colorResource(id = gameViewModel.getSquareList[index].color),
+                        containerColor = colorResource(id = appViewModel.getSquareList[index].color),
                     ),
                     border = borderStroke,
                     elevation = CardDefaults.cardElevation(
@@ -383,7 +379,7 @@ fun SelectionGridLayout() {
                         .selectable(
                             selected = true,
                             onClick = {
-                                if (gameViewModel.getEditMode) {
+                                if (appViewModel.getEditMode) {
                                     toggleEditCuisineHighlight(index)
                                 }
                             }
@@ -406,9 +402,9 @@ fun SelectionGridLayout() {
 @SuppressLint("MissingPermission")
 @Composable
 fun InteractionLayout() {
-    val rollFinished = gameViewModel.rollFinished.collectAsStateWithLifecycle()
+    val rollFinished = appViewModel.rollFinished.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val selectedSquare = gameViewModel.selectedSquare.collectAsStateWithLifecycle()
+    val selectedSquare = appViewModel.selectedSquare.collectAsStateWithLifecycle()
     val foodUri = "geo:0,0?q=" + selectedSquare.value.name + " Food"
 
     Column (
@@ -417,7 +413,7 @@ fun InteractionLayout() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (rollFinished.value) {
-            Text(text = context.getString(R.string.meal_decided, gameViewModel.getSelectedSquare.name), color = Color.Black, fontSize = 22.sp)
+            Text(text = context.getString(R.string.meal_decided, appViewModel.getSelectedSquare.name), color = Color.Black, fontSize = 22.sp)
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -430,8 +426,8 @@ fun InteractionLayout() {
         ) {
             Button(
                 onClick = {
-                    if (!gameViewModel.getRollEngaged && !gameViewModel.getEditMode) {
-                        gameViewModel.updateColorOfSquareValuesList()
+                    if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
+                        appViewModel.updateColorOfSquareValuesList()
                     }
                 },
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
@@ -445,7 +441,7 @@ fun InteractionLayout() {
 
             Button(
                 onClick = {
-                    if (!gameViewModel.getRollEngaged && !gameViewModel.getEditMode) {
+                    if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         mapIntent(Uri.parse(foodUri))
                     }
                 },
@@ -483,11 +479,11 @@ fun CuisineListUi(list: List<String>, index: Int, text: String) {
             onClick = {
                 if (!doesCuisineExistsOnBoard(
                         list[index],
-                        gameViewModel.getSquaresNameList()
+                        appViewModel.getSquaresNameList()
                     )
                 ) {
-                    gameViewModel.addSquareToList(list[index])
-                    gameViewModel.updateAddMode(false)
+                    appViewModel.addSquareToList(list[index])
+                    appViewModel.updateAddMode(false)
                 } else {
                     Toast
                         .makeText(activityContext, "Cuisine already exists!", Toast.LENGTH_SHORT)
@@ -523,14 +519,14 @@ fun doesCuisineExistsOnBoard(cuisineToAdd: String, listOfCuisines: List<String>)
 @Composable
 fun AddDialogBox() {
     var txtField by remember { mutableStateOf("") }
-    val displayedList = gameViewModel.displayedCuisineList.collectAsStateWithLifecycle()
+    val displayedList = appViewModel.displayedCuisineList.collectAsStateWithLifecycle()
     var searchTerms : List<String>
 
     //Search box will begin with full list shown.
-    gameViewModel.updateDisplayedCuisineList(fullCuisineList)
+    appViewModel.updateDisplayedCuisineList(fullCuisineList)
 
     Dialog(onDismissRequest = {
-        gameViewModel.updateAddMode(false)
+        appViewModel.updateAddMode(false)
     })
     {
         Surface(
@@ -553,7 +549,7 @@ fun AddDialogBox() {
                         onValueChange = {
                             txtField = it
                             searchTerms = filterList(fullCuisineList, txtField)
-                            gameViewModel.updateDisplayedCuisineList(searchTerms)},
+                            appViewModel.updateDisplayedCuisineList(searchTerms)},
                         singleLine = true,
                         textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -570,7 +566,7 @@ fun AddDialogBox() {
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         IconButton(onClick = {
-                            gameViewModel.updateAddMode(false)
+                            appViewModel.updateAddMode(false)
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Close,
@@ -582,9 +578,9 @@ fun AddDialogBox() {
                             )
                         }
                         IconButton(onClick = {
-                            if (!doesCuisineExistsOnBoard(txtField, gameViewModel.getSquaresNameList())) {
-                                gameViewModel.addSquareToList(txtField)
-                                gameViewModel.updateAddMode(false)
+                            if (!doesCuisineExistsOnBoard(txtField, appViewModel.getSquaresNameList())) {
+                                appViewModel.addSquareToList(txtField)
+                                appViewModel.updateAddMode(false)
                             } else {
                                 Toast.makeText(activityContext, "Cuisine already exists!", Toast.LENGTH_SHORT).show()
                             }
@@ -612,10 +608,10 @@ fun AddDialogBox() {
 fun EditDialogBox() {
     var txtField by remember { mutableStateOf("") }
 
-    txtField = gameViewModel.getSquareList[gameViewModel.getSquareToEdit].name
+    txtField = appViewModel.getSquareList[appViewModel.getSquareToEdit].name
 
     Dialog(onDismissRequest = {
-        gameViewModel.updateActiveEdit(false)
+        appViewModel.updateActiveEdit(false)
     })
     {
         Surface(
@@ -648,7 +644,7 @@ fun EditDialogBox() {
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         IconButton(onClick = {
-                            gameViewModel.updateActiveEdit(false)
+                            appViewModel.updateActiveEdit(false)
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Close,
@@ -660,8 +656,8 @@ fun EditDialogBox() {
                             )
                         }
                         IconButton(onClick = {
-                            gameViewModel.updateSquareName(gameViewModel.getSquareToEdit, txtField)
-                            gameViewModel.updateActiveEdit(false)
+                            appViewModel.updateSquareName(appViewModel.getSquareToEdit, txtField)
+                            appViewModel.updateActiveEdit(false)
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Check,
