@@ -262,8 +262,6 @@ fun toggleEditCuisineHighlight(index: Int) {
 
     gameViewModel.updateSquareList(tempSquareList)
 
-    println("index list (as added) is ${gameViewModel.getListOfSquareIndicesToEdit}")
-
 }
 
 fun addSquareToListOfSquareIndicesToUpdate(index: Int) {
@@ -307,11 +305,11 @@ fun resetSquareColors() {
     }
 
     //Set first square index to selected if previous one no longer exists.
-//    if (!doesSelectedSquareExist()) {
-//        squareList[0].color = chosenSquareColor
-//        gameViewModel.updateSelectedSquare(squareList[0])
-//        gameViewModel.updateSelectedSquareIndex(0)
-//    }
+    if (!doesSelectedSquareExist()) {
+        squareList[0].color = chosenSquareColor
+        gameViewModel.updateSelectedSquare(squareList[0])
+        gameViewModel.updateSelectedSquareIndex(0)
+    }
 }
 
 fun doesSelectedSquareExist() : Boolean {
@@ -410,15 +408,14 @@ fun SelectionGridLayout() {
 fun InteractionLayout() {
     val rollFinished = gameViewModel.rollFinished.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    var foodUri by remember { mutableStateOf("") }
+    val selectedSquare = gameViewModel.selectedSquare.collectAsStateWithLifecycle()
+    val foodUri = "geo:0,0?q=" + selectedSquare.value.name + " Food"
 
     Column (
         modifier = Modifier
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        foodUri = "geo:0,0?q=" + gameViewModel.getSelectedSquare.name + " Food"
-
         if (rollFinished.value) {
             Text(text = context.getString(R.string.meal_decided, gameViewModel.getSelectedSquare.name), color = Color.Black, fontSize = 22.sp)
         }

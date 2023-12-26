@@ -5,7 +5,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
 
 data class BoardValues(
-    var selectedSquare: SquareValues = SquareValues("", 0),
     var squareList: SnapshotStateList<SquareValues> = mutableStateListOf(),
 )
 
