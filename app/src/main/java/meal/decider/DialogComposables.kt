@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.selection.selectable
@@ -26,7 +27,6 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -225,17 +225,11 @@ class DialogComposables(private val activityContext: Context, private val appVie
     @Composable
     fun OptionsDialogUi() {
         Column (modifier = Modifier
-            .fillMaxWidth()){
-            Text(text = "Restrictions",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                color = Color.Black,
-                textAlign = TextAlign.Center)
-        }
-        Spacer(modifier = Modifier.height(10.dp))
-        Column(modifier = Modifier
             .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally) {
+            OptionsHeaderTextUi(text = "Restrictions")
+
+            Spacer(modifier = Modifier.height(10.dp))
             DietaryRestrictionsFlowRow()
         }
     }
@@ -248,13 +242,14 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 items(restrictionsList.size) { index ->
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = colorResource(id = appViewModel.getSquareList[index].color),
+                            containerColor = Color.White,
                         ),
                         border =  BorderStroke(1.dp,Color.Black),
                         elevation = CardDefaults.cardElevation(
                             defaultElevation = 6.dp
                         ),
                         modifier = Modifier
+                            .wrapContentSize()
                             .padding(4.dp)
                             .selectable(
                                 selected = true,
@@ -278,16 +273,12 @@ class DialogComposables(private val activityContext: Context, private val appVie
     }
 
     @Composable
-    fun CheckBoxUi(text: String) {
-        val checked = remember { mutableStateOf(false) }
-
-        Checkbox(
-            checked = checked.value,
-            onCheckedChange = { isChecked -> checked.value = isChecked }
-        )
-        Text (text = text,
-            fontSize = 16.sp,
-            color = Color.Black,)
+    fun OptionsHeaderTextUi(text: String) {
+        Text(text = text,
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            color = Color.Black,
+            textAlign = TextAlign.Center)
     }
 
     @Composable
