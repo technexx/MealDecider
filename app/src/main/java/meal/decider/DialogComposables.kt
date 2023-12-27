@@ -186,8 +186,9 @@ class DialogComposables(private val activityContext: Context, private val appVie
     }
 
     @Composable
-    fun FilterDialog() {
+    fun OptionsDialog() {
         Dialog(onDismissRequest = {
+            appViewModel.updateOptionsMode(false)
         })
         {
             val windowProvider = LocalView.current.parent as DialogWindowProvider

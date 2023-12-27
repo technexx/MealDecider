@@ -30,6 +30,9 @@ class AppViewModel () : ViewModel() {
     private val _activeEdit = MutableStateFlow(false)
     val activeEdit : StateFlow<Boolean> = _activeEdit.asStateFlow()
 
+    private val _optionsMode = MutableStateFlow(false)
+    val optiosMode : StateFlow<Boolean> = _optionsMode
+
     private val _selectedSquare = MutableStateFlow(SquareValues())
     var selectedSquare: StateFlow<SquareValues> = _selectedSquare.asStateFlow()
 
@@ -72,6 +75,10 @@ class AppViewModel () : ViewModel() {
 
     fun updateActiveEdit(activeEdit: Boolean) {
         _activeEdit.value = activeEdit
+    }
+
+    fun updateOptionsMode(optionsMode: Boolean) {
+        _optionsMode.value = optionsMode
     }
 
     fun updateSelectedSquare(selectedSquare: SquareValues) {
@@ -184,6 +191,7 @@ class AppViewModel () : ViewModel() {
 
     val getAddMode get() = addMode.value
     val getEditMode get() = editMode.value
+    val getOptionsMode get() = optiosMode.value
     val getActiveEdit get() = activeEdit.value
     val getSquareToEdit get() = squareToEdit.value
 

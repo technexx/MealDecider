@@ -150,7 +150,8 @@ fun TopBar() {
                             DropdownMenuItem(
                                 text = { Text("Options") },
                                 onClick = {
-                                    filterMenu = !filterMenu
+                                    appViewModel.updateOptionsMode(true)
+                                    expanded = false
                                 }
                             )
                             DropdownMenuItem(
@@ -207,9 +208,6 @@ fun TopBar() {
                 .padding(innerPadding),
         ) {
             Board()
-            if (filterMenu) {
-                dialogComposables.FilterDialog()
-            }
         }
     }
 }
@@ -233,12 +231,9 @@ fun SelectionGridLayout() {
     val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
     val editState = appViewModel.editMode.collectAsStateWithLifecycle()
     val activeEdit = appViewModel.activeEdit.collectAsStateWithLifecycle()
+    val activeOptions = appViewModel.optiosMode.collectAsStateWithLifecycle()
 
-    var borderStroke: BorderStroke
-
-    borderStroke = BorderStroke(3.dp,Color.Black)
-
-    borderStroke = if (editState.value) {
+    val borderStroke: BorderStroke = if (editState.value) {
         BorderStroke(3.dp,Color.Black)
     } else {
         BorderStroke(1.dp,Color.Black)
@@ -250,6 +245,10 @@ fun SelectionGridLayout() {
 
     if (activeEdit.value) {
         dialogComposables.EditDialogBox()
+    }
+
+    if (activeOptions.value) {
+        dialogComposables.OptionsDialog()
     }
 
     LazyVerticalGrid(
