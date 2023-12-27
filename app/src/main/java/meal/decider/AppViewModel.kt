@@ -31,7 +31,7 @@ class AppViewModel () : ViewModel() {
     val activeEdit : StateFlow<Boolean> = _activeEdit.asStateFlow()
 
     private val _optionsMode = MutableStateFlow(false)
-    val optiosMode : StateFlow<Boolean> = _optionsMode
+    val optionsMode : StateFlow<Boolean> = _optionsMode
 
     private val _selectedSquare = MutableStateFlow(SquareValues())
     var selectedSquare: StateFlow<SquareValues> = _selectedSquare.asStateFlow()
@@ -191,7 +191,7 @@ class AppViewModel () : ViewModel() {
 
     val getAddMode get() = addMode.value
     val getEditMode get() = editMode.value
-    val getOptionsMode get() = optiosMode.value
+    val getOptionsMode get() = optionsMode.value
     val getActiveEdit get() = activeEdit.value
     val getSquareToEdit get() = squareToEdit.value
 
@@ -223,30 +223,23 @@ class AppViewModel () : ViewModel() {
 
     fun toggleEditCuisineHighlight(index: Int) {
         val tempSquareList = getSquareList
-
-        if (index == getSelectedSquareIndex) {
-            if (tempSquareList[index].color == chosenSquareColor) {
-                tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
-                addSquareToListOfSquareIndicesToUpdate(index)
-            } else {
-                tempSquareList[index] = SquareValues(tempSquareList[index].name, chosenSquareColor)
-                removeSquareFromListOfSquareIndicesToUpdate(index)
-            }
+        if (tempSquareList[index].color == chosenSquareColor || tempSquareList[index].color == defaultSquareColor) {
+            tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
+            addSquareToListOfSquaresToEdit(index)
         } else {
-            if (tempSquareList[index].color == defaultSquareColor) {
-                tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
-                addSquareToListOfSquareIndicesToUpdate(index)
+            if (tempSquareList[index].name == selectedSquare.value.name) {
+                tempSquareList[index] = SquareValues(tempSquareList[index].name, chosenSquareColor)
             } else {
                 tempSquareList[index] = SquareValues(tempSquareList[index].name, defaultSquareColor)
-                removeSquareFromListOfSquareIndicesToUpdate(index)
             }
+            removeSquareFromListOfSquareIndicesToUpdate(index)
         }
 
         updateSquareList(tempSquareList)
 
     }
 
-    fun addSquareToListOfSquareIndicesToUpdate(index: Int) {
+    fun addSquareToListOfSquaresToEdit(index: Int) {
         val tempList = getListOfSquaresToEdit.toMutableList()
         val currentList = getSquareList
         tempList.add(currentList[index])

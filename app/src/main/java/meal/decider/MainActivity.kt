@@ -151,6 +151,7 @@ fun TopBar() {
                                 text = { Text("Options") },
                                 onClick = {
                                     appViewModel.updateOptionsMode(true)
+                                    appViewModel.updateEditMode(false)
                                     expanded = false
                                 }
                             )
@@ -229,11 +230,11 @@ fun Board() {
 fun SelectionGridLayout() {
     val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
     val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
-    val editState = appViewModel.editMode.collectAsStateWithLifecycle()
+    val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
     val activeEdit = appViewModel.activeEdit.collectAsStateWithLifecycle()
-    val activeOptions = appViewModel.optiosMode.collectAsStateWithLifecycle()
+    val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
 
-    val borderStroke: BorderStroke = if (editState.value) {
+    val borderStroke: BorderStroke = if (editMode.value) {
         BorderStroke(3.dp,Color.Black)
     } else {
         BorderStroke(1.dp,Color.Black)
@@ -247,7 +248,7 @@ fun SelectionGridLayout() {
         dialogComposables.EditDialogBox()
     }
 
-    if (activeOptions.value) {
+    if (optionsMode.value) {
         dialogComposables.OptionsDialog()
     }
 
