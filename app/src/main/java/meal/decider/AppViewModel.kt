@@ -45,6 +45,8 @@ class AppViewModel () : ViewModel() {
     private val _displayedCuisineList = MutableStateFlow(emptyList<String>().toList())
     val displayedCuisineList: StateFlow<List<String>> = _displayedCuisineList.asStateFlow()
 
+
+
     private val handler = Handler(Looper.getMainLooper())
     private var squareColorChangeRunnable = Runnable {}
 
@@ -80,10 +82,6 @@ class AppViewModel () : ViewModel() {
 
     fun updateSelectedSquare(selectedSquare: SquareValues) {
         _selectedSquare.value = selectedSquare
-    }
-
-    fun updateSquareToEdit(square: Int) {
-        _squareToEdit.value = square
     }
 
     fun updateListOfSquaresToEdit(list: List<SquareValues>) {

@@ -258,14 +258,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                 }
                             ),
                     ) {
-                        Text(
-                            text = restrictionsList[index],
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            color = Color.Black,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(8.dp)
-                        )
+                        OptionsBoxesUi(text = restrictionsList[index])
                     }
                 }
             }
@@ -279,6 +272,17 @@ class DialogComposables(private val activityContext: Context, private val appVie
             fontSize = 20.sp,
             color = Color.Black,
             textAlign = TextAlign.Center)
+    }
+
+    @Composable
+    fun OptionsBoxesUi(text: String) {
+        Text(
+            text = text,
+            fontSize = 18.sp,
+            color = Color.Black,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(12.dp)
+        )
     }
 
     @Composable
