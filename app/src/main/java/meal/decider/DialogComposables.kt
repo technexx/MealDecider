@@ -3,13 +3,10 @@ package meal.decider
 import android.content.Context
 import android.view.Gravity
 import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -19,11 +16,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -47,7 +49,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -239,39 +240,41 @@ class DialogComposables(private val activityContext: Context, private val appVie
         }
     }
 
-    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     fun DietaryRestrictionsFlowRow() {
-        FlowRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(0.dp),
-            horizontalArrangement = Arrangement.Center,
-            maxItemsInEachRow = 3
-        ) {
-            restrictionsList.forEach { restriction ->
-                Box(modifier = Modifier
-                    .border(
-                        1.dp,
-                        Color.Black,
-                        RoundedCornerShape(5.dp)
-                    )
-                    .padding(8.dp)
-                    .background(color = Color.White),
-                ) {
-                    Text(
-                        text = restriction,
-                        fontSize = 16.sp,
-                        color = Color.Black,
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = 128.dp),
+            content = {
+                items(restrictionsList.size) { index ->
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = colorResource(id = appViewModel.getSquareList[index].color),
+                        ),
+                        border =  BorderStroke(1.dp,Color.Black),
+                        elevation = CardDefaults.cardElevation(
+                            defaultElevation = 6.dp
+                        ),
                         modifier = Modifier
-                            //Creates larger boxes since padding pushes away from text.
-                            .padding(20.dp),
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
-                    )
+                            .padding(4.dp)
+                            .selectable(
+                                selected = true,
+                                onClick = {
+
+                                }
+                            ),
+                    ) {
+                        Text(
+                            text = restrictionsList[index],
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            color = Color.Black,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(8.dp)
+                        )
+                    }
                 }
             }
-        }
+        )
     }
 
     @Composable
