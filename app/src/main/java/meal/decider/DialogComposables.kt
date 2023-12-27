@@ -142,7 +142,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
     fun EditDialogBox() {
         var txtField by remember { mutableStateOf("") }
 
-        txtField = appViewModel.getSquareList[appViewModel.getSquareToEdit].name
+        txtField = appViewModel.getSquareList[appViewModel.singleSquareIndexToEdit].name
 
         Dialog(onDismissRequest = {
             appViewModel.updateActiveEdit(false)
@@ -183,7 +183,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                 DialogIcon(imageVector = Icons.Filled.Close, colorResource = android.R.color.holo_red_light)
                             }
                             IconButton(onClick = {
-                                appViewModel.updateSquareName(appViewModel.getSquareToEdit, txtField)
+                                appViewModel.updateSquareName(appViewModel.singleSquareIndexToEdit, txtField)
                                 appViewModel.updateActiveEdit(false)
                             }) {
                             }
@@ -236,13 +236,23 @@ class DialogComposables(private val activityContext: Context, private val appVie
 
     @Composable
     fun DietaryRestrictionsFlowRow() {
+        val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
+        var cardColor: Color
+
+        showLog("test", "recomp")
+
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 128.dp),
             content = {
-                items(restrictionsList.size) { index ->
+                items(restrictionsUi.value.size) { index ->
+                    if (appViewModel.getRestrictionsList[index].selected) {
+                        cardColor = colorResource(id = R.color.grey_500)
+                    } else  {
+                        cardColor = Color.White
+                    }
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = Color.White,
+                            containerColor = cardColor,
                         ),
                         border =  BorderStroke(1.dp,Color.Black),
                         elevation = CardDefaults.cardElevation(
@@ -254,7 +264,10 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             .selectable(
                                 selected = true,
                                 onClick = {
-
+                                    val restrictionsList = appViewModel.getRestrictionsList
+                                    restrictionsList[index].selected =
+                                        !restrictionsList[index].selected
+                                    appViewModel.updateRestrictionsList(restrictionsList)
                                 }
                             ),
                     ) {

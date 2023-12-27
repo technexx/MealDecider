@@ -16,3 +16,13 @@ data class RestrictionsValues(
     var name: String = "",
     var selected: Boolean = false
 )
+
+object RestrictionsObject {
+    var Restrictions = listOf(
+        RestrictionsValues ("Vegan", false),
+        RestrictionsValues ("Vegetarian", false),
+        RestrictionsValues ("Gluten Free", false),
+        RestrictionsValues ("Kosher", false),
+        RestrictionsValues ("Halal", false),
+    )
+}

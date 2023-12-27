@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.update
 import kotlin.random.Random
 
 class AppViewModel () : ViewModel() {
+    var singleSquareIndexToEdit = 0
+
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
 
@@ -36,16 +38,14 @@ class AppViewModel () : ViewModel() {
     private val _selectedSquare = MutableStateFlow(SquareValues())
     var selectedSquare: StateFlow<SquareValues> = _selectedSquare.asStateFlow()
 
-    private val _squareToEdit = MutableStateFlow(0)
-    val squareToEdit : StateFlow<Int> = _squareToEdit.asStateFlow()
-
     private val _listOfSquaresToEdit = MutableStateFlow(emptyList<SquareValues>())
     val listOfSquaresToEdit : StateFlow<List<SquareValues>> = _listOfSquaresToEdit
 
     private val _displayedCuisineList = MutableStateFlow(emptyList<String>().toList())
     val displayedCuisineList: StateFlow<List<String>> = _displayedCuisineList.asStateFlow()
 
-
+    private val _restrictionsList = MutableStateFlow(RestrictionsObject.Restrictions)
+    val restrictionsList : StateFlow<List<RestrictionsValues>> = _restrictionsList.asStateFlow()
 
     private val handler = Handler(Looper.getMainLooper())
     private var squareColorChangeRunnable = Runnable {}
@@ -90,6 +90,10 @@ class AppViewModel () : ViewModel() {
 
     fun updateDisplayedCuisineList(list: List<String>) {
         _displayedCuisineList.value = list
+    }
+
+    fun updateRestrictionsList(list: List<RestrictionsValues>) {
+        _restrictionsList.value = list
     }
 
     fun addSquareToList(name: String) {
@@ -182,9 +186,8 @@ class AppViewModel () : ViewModel() {
     val getEditMode get() = editMode.value
     val getOptionsMode get() = optionsMode.value
     val getActiveEdit get() = activeEdit.value
-    val getSquareToEdit get() = squareToEdit.value
 
-
+    val getRestrictionsList get() = restrictionsList.value
 
     fun sortAndUpdateCuisineList(typeOfSort: String) {
         var squareNames = squareNamesList()
