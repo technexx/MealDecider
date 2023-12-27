@@ -106,10 +106,10 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar() {
+    val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
     val listOfSquaresToEdit = appViewModel.listOfSquaresToEdit.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var expanded by remember { mutableStateOf(false) }
-    var filterMenu by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -122,10 +122,9 @@ fun TopBar() {
                     Text("Meal Decider")
                 },
                 actions = {
-                    if (listOfSquaresToEdit.value.isNotEmpty()) {
+                    if (listOfSquaresToEdit.value.isNotEmpty() && editMode.value) {
                         IconButton(onClick = {
                             appViewModel.deleteSelectedCuisines()
-                            appViewModel.updateEditMode(false)
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Delete,
@@ -151,7 +150,7 @@ fun TopBar() {
                                 text = { Text("Options") },
                                 onClick = {
                                     appViewModel.updateOptionsMode(true)
-                                    appViewModel.updateEditMode(false)
+                                    appViewModel.disableEditModeAndClearListOfSquaresToEdit()
                                     expanded = false
                                 }
                             )
@@ -159,14 +158,18 @@ fun TopBar() {
                                 text = { Text("Add Cuisine") },
                                 onClick = {
                                     appViewModel.updateAddMode(true)
-                                    appViewModel.updateEditMode(false)
+                                    appViewModel.disableEditModeAndClearListOfSquaresToEdit()
                                     expanded = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = { Text("Edit Cuisines") },
                                 onClick = {
-                                    appViewModel.updateEditMode(!appViewModel.getEditMode)
+                                    if (!appViewModel.getEditMode) {
+                                        appViewModel.updateEditMode(true)
+                                    } else {
+                                        appViewModel.disableEditModeAndClearListOfSquaresToEdit()
+                                    }
                                     expanded = false
                                 }
                             )
@@ -174,7 +177,7 @@ fun TopBar() {
                                 text = { Text("Sort Alphabetically") },
                                 onClick = {
                                     appViewModel.sortAndUpdateCuisineList("alphabetical")
-                                    appViewModel.updateEditMode(false)
+                                    appViewModel.disableEditModeAndClearListOfSquaresToEdit()
                                     expanded = false
                                 }
                             )
@@ -182,7 +185,7 @@ fun TopBar() {
                                 text = { Text("Sort Randomly") },
                                 onClick = {
                                     appViewModel.sortAndUpdateCuisineList("random")
-                                    appViewModel.updateEditMode(false)
+                                    appViewModel.disableEditModeAndClearListOfSquaresToEdit()
                                     expanded = false
                                 }
                             )
@@ -191,7 +194,7 @@ fun TopBar() {
                                 onClick = {
                                     appViewModel.createSquareList()
                                     appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
-                                    appViewModel.updateEditMode(false)
+                                    appViewModel.disableEditModeAndClearListOfSquaresToEdit()
                                     appViewModel.updateRollFinished(false)
                                     expanded = false
                                 }
@@ -233,10 +236,15 @@ fun SelectionGridLayout() {
     val activeEdit = appViewModel.activeEdit.collectAsStateWithLifecycle()
     val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
 
-    val borderStroke: BorderStroke = if (editMode.value) {
-        BorderStroke(3.dp,Color.Black)
+    val borderStroke: BorderStroke
+
+    println(editMode.value)
+
+    if (editMode.value) {
+        borderStroke = BorderStroke(3.dp,Color.Black)
     } else {
-        BorderStroke(1.dp,Color.Black)
+        borderStroke = BorderStroke(1.dp,Color.Black)
+        appViewModel.resetSquareColors()
     }
 
     if (addMode.value) {

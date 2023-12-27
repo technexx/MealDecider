@@ -214,6 +214,7 @@ class AppViewModel () : ViewModel() {
 
     fun toggleEditCuisineHighlight(index: Int) {
         val tempSquareList = getSquareList
+
         if (tempSquareList[index].color == chosenSquareColor || tempSquareList[index].color == defaultSquareColor) {
             tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
             addSquareToListOfSquaresToEdit(index)
@@ -253,9 +254,9 @@ class AppViewModel () : ViewModel() {
             }
         }
 
-        updateListOfSquaresToEdit(listOf())
         updateSquareList(currentSquaresList)
         resetSquareColors()
+        disableEditModeAndClearListOfSquaresToEdit()
     }
 
     fun resetSquareColors() {
@@ -274,9 +275,11 @@ class AppViewModel () : ViewModel() {
             squareList[0].color = chosenSquareColor
             updateSelectedSquare(squareList[0])
         }
+
+        updateSquareList(squareList)
     }
 
-    fun doesSelectedSquareExist() : Boolean {
+    private fun doesSelectedSquareExist() : Boolean {
         val squareList = getSquareList
         val selectedSquare = getSelectedSquare
 
@@ -284,6 +287,11 @@ class AppViewModel () : ViewModel() {
             if (i.name.equals(selectedSquare.name)) return true
         }
         return false
+    }
+
+    fun disableEditModeAndClearListOfSquaresToEdit() {
+        updateListOfSquaresToEdit(listOf())
+        updateEditMode(false)
     }
 
     fun filterList(list: List<String>, searchString: String) : List<String> {
