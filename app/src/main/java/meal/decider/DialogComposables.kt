@@ -24,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -40,6 +41,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -200,21 +202,44 @@ class DialogComposables(private val activityContext: Context, private val appVie
             ) {
                 Box(modifier = Modifier
                     .fillMaxHeight()
-                    .width(200.dp),
-                    contentAlignment = Alignment.CenterEnd
+                    .fillMaxWidth(),
                 ) {
                     Column(modifier = Modifier
                         .fillMaxSize()
-
-                        .padding(20.dp),
-                        horizontalAlignment = Alignment.End,
-                        verticalArrangement = Arrangement.SpaceEvenly)
+                        .padding(20.dp),)
                     {
-
+                        OptionsDialogUi()
                     }
                 }
             }
         }
+    }
+
+    @Composable
+    fun OptionsDialogUi() {
+        Column (modifier = Modifier
+            .fillMaxWidth()){
+            Text(text = "Restrictions",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = Color.Black,
+                textAlign = TextAlign.Center)
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(modifier = Modifier
+            .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween) {
+            OptionsDialogueTextUi("Vegetarian")
+            OptionsDialogueTextUi("Vegan")
+            OptionsDialogueTextUi("Gluten Free")
+        }
+    }
+
+    @Composable
+    fun OptionsDialogueTextUi(text: String) {
+        Text (text = text,
+            fontSize = 16.sp,
+            color = Color.Black,)
     }
 
     @Composable
