@@ -42,9 +42,6 @@ class AppViewModel () : ViewModel() {
     private val _listOfSquaresToEdit = MutableStateFlow(emptyList<SquareValues>())
     val listOfSquaresToEdit : StateFlow<List<SquareValues>> = _listOfSquaresToEdit
 
-    private val _selectedSquareIndex = MutableStateFlow(0)
-    val selectedSquareIndex : StateFlow<Int> = _selectedSquareIndex.asStateFlow()
-
     private val _displayedCuisineList = MutableStateFlow(emptyList<String>().toList())
     val displayedCuisineList: StateFlow<List<String>> = _displayedCuisineList.asStateFlow()
 
@@ -91,10 +88,6 @@ class AppViewModel () : ViewModel() {
 
     fun updateListOfSquaresToEdit(list: List<SquareValues>) {
         _listOfSquaresToEdit.value = list
-    }
-
-    fun updateSelectedSquareIndex(index: Int) {
-        _selectedSquareIndex.value = index
     }
 
     fun updateDisplayedCuisineList(list: List<String>) {
@@ -149,7 +142,6 @@ class AppViewModel () : ViewModel() {
 
             if (delay < 20) {
                 updateSelectedSquare(getSquareList[indexRoll])
-                updateSelectedSquareIndex(indexRoll)
                 updateRollEngaged(false)
                 updateRollFinished(true)
 
@@ -183,7 +175,6 @@ class AppViewModel () : ViewModel() {
 
     val getSquareList get() = boardUiState.value.squareList
     val getSelectedSquare get() = selectedSquare.value
-    val getSelectedSquareIndex get() = selectedSquareIndex.value
     val getListOfSquaresToEdit get() = listOfSquaresToEdit.value
 
     val getRollEngaged get() = rollEngaged.value
@@ -282,7 +273,6 @@ class AppViewModel () : ViewModel() {
         if (!doesSelectedSquareExist()) {
             squareList[0].color = chosenSquareColor
             updateSelectedSquare(squareList[0])
-            updateSelectedSquareIndex(0)
         }
     }
 
