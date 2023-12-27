@@ -3,9 +3,13 @@ package meal.decider
 import android.content.Context
 import android.view.Gravity
 import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -20,6 +24,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,6 +47,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -226,17 +232,56 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 textAlign = TextAlign.Center)
         }
         Spacer(modifier = Modifier.height(10.dp))
-        Row(modifier = Modifier
+        Column(modifier = Modifier
             .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween) {
-            OptionsDialogueTextUi("Vegetarian")
-            OptionsDialogueTextUi("Vegan")
-            OptionsDialogueTextUi("Gluten Free")
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            DietaryRestrictionsFlowRow()
+        }
+    }
+
+    @OptIn(ExperimentalLayoutApi::class)
+    @Composable
+    fun DietaryRestrictionsFlowRow() {
+        FlowRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp),
+            horizontalArrangement = Arrangement.Center,
+            maxItemsInEachRow = 3
+        ) {
+            restrictionsList.forEach { restriction ->
+                Box(modifier = Modifier
+                    .border(
+                        1.dp,
+                        Color.Black,
+                        RoundedCornerShape(5.dp)
+                    )
+                    .padding(8.dp)
+                    .background(color = Color.White),
+                ) {
+                    Text(
+                        text = restriction,
+                        fontSize = 16.sp,
+                        color = Color.Black,
+                        modifier = Modifier
+                            //Creates larger boxes since padding pushes away from text.
+                            .padding(20.dp),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                }
+            }
         }
     }
 
     @Composable
-    fun OptionsDialogueTextUi(text: String) {
+    fun CheckBoxUi(text: String) {
+        val checked = remember { mutableStateOf(false) }
+
+        Checkbox(
+            checked = checked.value,
+            onCheckedChange = { isChecked -> checked.value = isChecked }
+        )
         Text (text = text,
             fontSize = 16.sp,
             color = Color.Black,)
