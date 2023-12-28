@@ -289,15 +289,18 @@ class DialogComposables(private val activityContext: Context, private val appVie
         val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
         var cardColor: Color
 
-        if (restrictionsUi.value[0] != RestrictionsValues("", false)) {
-            showLog("test", "recomp")
+        showLog("test", "parent recomp")
+
+        //Todo: This will recomp if list is set to 0 or list is changed to 1 item, so state flow is working.
+        if (restrictionsUi.value != null) {
+            showLog("test", "ok!")
         }
 
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 128.dp),
             content = {
                 items(restrictionsUi.value.size) { index ->
-                    showLog("test", "recomp")
+                    showLog("test", "items recomp")
 
                     if (appViewModel.getRestrictionsList[index].selected) {
                         cardColor = colorResource(id = R.color.grey_500)
@@ -318,9 +321,14 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             .selectable(
                                 selected = true,
                                 onClick = {
+                                    //Todo: I think the list is not changing enough.
                                     var list = appViewModel.getRestrictionsList
                                     list[index].selected = !list[index].selected
+
                                     appViewModel.updateRestrictionsList(list)
+
+//                                    appViewModel.updateRestrictionsList(list)
+//                                    appViewModel.updateRestrictionsList(listOf())
 
                                     showLog("test", "${list.toList()}")
                                 }
