@@ -44,8 +44,8 @@ class AppViewModel () : ViewModel() {
     private val _displayedCuisineList = MutableStateFlow(emptyList<String>().toList())
     val displayedCuisineList: StateFlow<List<String>> = _displayedCuisineList.asStateFlow()
 
-    private val _restrictionsList = MutableStateFlow(RestrictionsObject.Restrictions)
-    val restrictionsList : StateFlow<List<RestrictionsValues>> = _restrictionsList.asStateFlow()
+    private val _restrictionsList = MutableStateFlow(RestrictionsObject.RestrictionsList)
+    val restrictionsList : StateFlow<SnapshotStateList<RestrictionsValues>> = _restrictionsList.asStateFlow()
 
     private val handler = Handler(Looper.getMainLooper())
     private var squareColorChangeRunnable = Runnable {}
@@ -92,7 +92,7 @@ class AppViewModel () : ViewModel() {
         _displayedCuisineList.value = list
     }
 
-    fun updateRestrictionsList(list: List<RestrictionsValues>) {
+    fun updateRestrictionsList(list: SnapshotStateList<RestrictionsValues>) {
         _restrictionsList.value = list
     }
 

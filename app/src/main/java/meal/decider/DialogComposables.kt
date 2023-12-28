@@ -324,16 +324,16 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                     val list = appViewModel.getRestrictionsList
                                     list[index].selected = !list[index].selected
 
-                                    val updatedList = listOf<RestrictionsValues>().toMutableList()
-                                    updatedList.addAll(list)
-                                    updatedList.removeLast()
+//                                    val updatedList = mutableStateListOf<RestrictionsValues>()
+//                                    updatedList.addAll(list)
+//                                    updatedList.removeLast()
 //
                                     //Todo: Will only work if new item is added or item is subtracted.
 //                                    updatedList.add(RestrictionsValues("blah", false))
 
-                                    showLog("test", "new list is ${updatedList.toList()}")
+//                                    showLog("test", "new list is ${updatedList.toList()}")
 
-                                    appViewModel.updateRestrictionsList(updatedList)
+                                    appViewModel.updateRestrictionsList(list)
                                 }
                             ),
                     ) {

@@ -18,7 +18,7 @@ data class RestrictionsValues(
 )
 
 object RestrictionsObject {
-    var Restrictions = listOf(
+    var RestrictionsList : SnapshotStateList<RestrictionsValues> = mutableStateListOf(
         RestrictionsValues ("Vegan", false),
         RestrictionsValues ("Vegetarian", false),
         RestrictionsValues ("Gluten Free", false),
