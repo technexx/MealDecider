@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.selection.selectable
@@ -35,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -137,11 +139,59 @@ class DialogComposables(private val activityContext: Context, private val appVie
         }
     }
 
+    //List (or any object) in State<Object> is accessed w/ (Var).value.
+    @Composable
+    fun FullCuisineList(listToDisplay: State<List<String>>) {
+        LazyColumn (
+            modifier = Modifier
+                .height(200.dp)
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            items (listToDisplay.value.size) { index ->
+                CuisineListUi(list = listToDisplay.value, index, text = listToDisplay.value[index])
+            }
+        }
+    }
+
+    @Composable
+    fun CuisineListUi(list: List<String>, index: Int, text: String) {
+        Column (modifier = Modifier
+            .padding(4.dp)
+            .selectable(
+                selected = true,
+                onClick = {
+                    if (!appViewModel.doesCuisineExistsOnBoard(
+                            list[index],
+                            appViewModel.squareNamesList()
+                        )
+                    ) {
+                        appViewModel.addSquareToList(list[index])
+                        appViewModel.updateAddMode(false)
+                    } else {
+                        Toast
+                            .makeText(
+                                activityContext,
+                                "Cuisine already exists!",
+                                Toast.LENGTH_SHORT
+                            )
+                            .show()
+                    }
+                }
+            )) {
+            Text(modifier = Modifier
+                .padding(4.dp),
+                fontSize = 20.sp,
+                color = Color.Black,
+                text = text )
+        }
+    }
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun EditDialogBox() {
         var txtField by remember { mutableStateOf("") }
-
         txtField = appViewModel.getSquareList[appViewModel.singleSquareIndexToEdit].name
 
         Dialog(onDismissRequest = {
@@ -230,21 +280,25 @@ class DialogComposables(private val activityContext: Context, private val appVie
             OptionsHeaderTextUi(text = "Restrictions")
 
             Spacer(modifier = Modifier.height(10.dp))
-            DietaryRestrictionsFlowRow()
+            DietaryRestrictions()
         }
     }
 
     @Composable
-    fun DietaryRestrictionsFlowRow() {
+    fun DietaryRestrictions() {
         val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
         var cardColor: Color
 
-        showLog("test", "recomp")
+        if (restrictionsUi.value[0] != RestrictionsValues("", false)) {
+            showLog("test", "recomp")
+        }
 
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 128.dp),
             content = {
                 items(restrictionsUi.value.size) { index ->
+                    showLog("test", "recomp")
+
                     if (appViewModel.getRestrictionsList[index].selected) {
                         cardColor = colorResource(id = R.color.grey_500)
                     } else  {
@@ -264,14 +318,15 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             .selectable(
                                 selected = true,
                                 onClick = {
-                                    val restrictionsList = appViewModel.getRestrictionsList
-                                    restrictionsList[index].selected =
-                                        !restrictionsList[index].selected
-                                    appViewModel.updateRestrictionsList(restrictionsList)
+                                    var list = appViewModel.getRestrictionsList
+                                    list[index].selected = !list[index].selected
+                                    appViewModel.updateRestrictionsList(list)
+
+                                    showLog("test", "${list.toList()}")
                                 }
                             ),
                     ) {
-                        OptionsBoxesUi(text = restrictionsList[index])
+                        OptionsBoxesUi(text = appViewModel.getRestrictionsList[index].name)
                     }
                 }
             }

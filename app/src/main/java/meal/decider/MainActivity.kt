@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -23,7 +22,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.selection.selectable
@@ -47,7 +45,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -238,8 +235,6 @@ fun SelectionGridLayout() {
 
     val borderStroke: BorderStroke
 
-    println(editMode.value)
-
     if (editMode.value) {
         borderStroke = BorderStroke(3.dp,Color.Black)
     } else {
@@ -354,51 +349,6 @@ fun InteractionLayout() {
                 ButtonText(text = "Open Maps")
             }
         }
-    }
-}
-
-//List (or any object) in State<Object> is accessed w/ (Var).value.
-@Composable
-fun FullCuisineList(listToDisplay: State<List<String>>) {
-    LazyColumn (
-        modifier = Modifier
-            .height(200.dp)
-            .fillMaxWidth()
-            .padding(12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        items (listToDisplay.value.size) { index ->
-            CuisineListUi(list = listToDisplay.value, index, text = listToDisplay.value[index])
-        }
-    }
-}
-
-@Composable
-fun CuisineListUi(list: List<String>, index: Int, text: String) {
-    Column (modifier = Modifier
-        .padding(4.dp)
-        .selectable(
-            selected = true,
-            onClick = {
-                if (!appViewModel.doesCuisineExistsOnBoard(
-                        list[index],
-                        appViewModel.squareNamesList()
-                    )
-                ) {
-                    appViewModel.addSquareToList(list[index])
-                    appViewModel.updateAddMode(false)
-                } else {
-                    Toast
-                        .makeText(activityContext, "Cuisine already exists!", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
-        )) {
-        Text(modifier = Modifier
-            .padding(4.dp),
-            fontSize = 20.sp,
-            color = Color.Black,
-            text = text )
     }
 }
 
