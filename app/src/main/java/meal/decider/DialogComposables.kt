@@ -294,10 +294,8 @@ class DialogComposables(private val activityContext: Context, private val appVie
             columns = GridCells.Adaptive(minSize = 128.dp),
             content = {
                 items(restrictionsUi.value.size) { index ->
-                    showLog("test", "items recomp")
-
                     if (appViewModel.getRestrictionsList[index].selected) {
-                        cardColor = colorResource(id = R.color.grey_500)
+                        cardColor = colorResource(id = R.color.blue_grey_200)
                     } else  {
                         cardColor = Color.White
                     }

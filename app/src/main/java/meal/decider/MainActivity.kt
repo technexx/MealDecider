@@ -47,6 +47,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -230,6 +231,7 @@ fun Board() {
 @Composable
 fun OptionsBarLayout() {
     val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
+    var cardColor: Color
 
     Column (modifier = Modifier
         .fillMaxWidth()
@@ -244,9 +246,15 @@ fun OptionsBarLayout() {
             bottom = 16.dp),
             content = {
                 items(restrictionsUi.value.size) { index ->
+                    if (appViewModel.getRestrictionsList[index].selected) {
+                        cardColor = colorResource(id = R.color.blue_grey_100)
+                    } else  {
+                        cardColor = Color.White
+                    }
+
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = colorResource(id = R.color.grey_200),
+                            containerColor = cardColor,
                         ),
                         elevation = CardDefaults.cardElevation(
                             defaultElevation = 2.dp
@@ -256,9 +264,12 @@ fun OptionsBarLayout() {
                             .selectable(
                                 selected = true,
                                 onClick = {
-                                    if (appViewModel.getEditMode) {
-                                        appViewModel.toggleEditCuisineHighlight(index)
-                                    }
+                                    val list = appViewModel.getRestrictionsList
+                                    list[index].selected = !list[index].selected
+                                    val updatedList = mutableStateListOf<RestrictionsValues>()
+                                    updatedList.addAll(list)
+
+                                    appViewModel.updateRestrictionsList(updatedList)
                                 }
                             ),
                     ) {
