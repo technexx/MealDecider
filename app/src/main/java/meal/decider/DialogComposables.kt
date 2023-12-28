@@ -38,6 +38,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -321,19 +322,13 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             .selectable(
                                 selected = true,
                                 onClick = {
+                                    //Will only work if new item is added or item is subtracted w/ List, but will work w/ SnapshotStateList provided a new instance is created before update.
                                     val list = appViewModel.getRestrictionsList
                                     list[index].selected = !list[index].selected
+                                    val updatedList = mutableStateListOf<RestrictionsValues>()
+                                    updatedList.addAll(list)
 
-//                                    val updatedList = mutableStateListOf<RestrictionsValues>()
-//                                    updatedList.addAll(list)
-//                                    updatedList.removeLast()
-//
-                                    //Todo: Will only work if new item is added or item is subtracted.
-//                                    updatedList.add(RestrictionsValues("blah", false))
-
-//                                    showLog("test", "new list is ${updatedList.toList()}")
-
-                                    appViewModel.updateRestrictionsList(list)
+                                    appViewModel.updateRestrictionsList(updatedList)
                                 }
                             ),
                     ) {
