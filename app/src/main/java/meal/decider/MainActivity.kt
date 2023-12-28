@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.icons.Icons
@@ -219,9 +220,60 @@ fun Board() {
         .height((screenHeight() * 1).dp)
         .background(colorResource(id = R.color.grey_50))
     ) {
+        OptionsBarLayout()
         SelectionGridLayout()
         Spacer(modifier = Modifier.height(16.dp))
         InteractionLayout()
+    }
+}
+
+@Composable
+fun OptionsBarLayout() {
+    val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
+
+    Column (modifier = Modifier
+        .fillMaxWidth()
+        .height((screenHeight() * 0.1).dp)
+        .background(colorResource(id = R.color.grey_50))
+    ) {
+        LazyHorizontalGrid(rows = GridCells.Adaptive(minSize = 32.dp),
+            contentPadding = PaddingValues(
+            start = 12.dp,
+            top = 16.dp,
+            end = 12.dp,
+            bottom = 16.dp),
+            content = {
+                items(restrictionsUi.value.size) { index ->
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = colorResource(id = R.color.grey_200),
+                        ),
+                        elevation = CardDefaults.cardElevation(
+                            defaultElevation = 2.dp
+                        ),
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .selectable(
+                                selected = true,
+                                onClick = {
+                                    if (appViewModel.getEditMode) {
+                                        appViewModel.toggleEditCuisineHighlight(index)
+                                    }
+                                }
+                            ),
+                    ) {
+                        Text(
+                            text = restrictionsUi.value[index].name,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 14.sp,
+                            color = Color.Black,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(6.dp)
+                        )
+                    }
+                }
+            }
+        )
     }
 }
 

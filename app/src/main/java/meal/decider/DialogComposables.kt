@@ -290,13 +290,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
         val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
         var cardColor: Color
 
-        showLog("test", "parent recomp")
-
-        //Todo: This will recomp if list is set to 0 or list is changed to 1 item, so state flow is working.
-        if (restrictionsUi.value != null) {
-            showLog("test", "ok!")
-        }
-
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 128.dp),
             content = {
