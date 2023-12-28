@@ -321,16 +321,19 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             .selectable(
                                 selected = true,
                                 onClick = {
-                                    var list = appViewModel.getRestrictionsList
+                                    val list = appViewModel.getRestrictionsList
                                     list[index].selected = !list[index].selected
 
-                                    //Todo: This will update.
-                                    val testList = listOf(RestrictionsValues("blah", false))
-                                    appViewModel.updateRestrictionsList(testList)
+                                    val updatedList = listOf<RestrictionsValues>().toMutableList()
+                                    updatedList.addAll(list)
+                                    updatedList.removeLast()
+//
+                                    //Todo: Will only work if new item is added or item is subtracted.
+//                                    updatedList.add(RestrictionsValues("blah", false))
 
-//                                    appViewModel.updateRestrictionsList(list)
+                                    showLog("test", "new list is ${updatedList.toList()}")
 
-                                    showLog("test", "${list.toList()}")
+                                    appViewModel.updateRestrictionsList(updatedList)
                                 }
                             ),
                     ) {
