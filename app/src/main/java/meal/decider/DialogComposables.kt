@@ -321,14 +321,14 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             .selectable(
                                 selected = true,
                                 onClick = {
-                                    //Todo: I think the list is not changing enough.
                                     var list = appViewModel.getRestrictionsList
                                     list[index].selected = !list[index].selected
 
-                                    appViewModel.updateRestrictionsList(list)
+                                    //Todo: This will update.
+                                    val testList = listOf(RestrictionsValues("blah", false))
+                                    appViewModel.updateRestrictionsList(testList)
 
 //                                    appViewModel.updateRestrictionsList(list)
-//                                    appViewModel.updateRestrictionsList(listOf())
 
                                     showLog("test", "${list.toList()}")
                                 }
