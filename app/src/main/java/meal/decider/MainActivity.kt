@@ -251,7 +251,6 @@ fun OptionsBarLayout() {
                     } else  {
                         cardColor = Color.White
                     }
-
                     Card(
                         colors = CardDefaults.cardColors(
                             containerColor = cardColor,
@@ -360,13 +359,20 @@ fun SelectionGridLayout() {
     )
 }
 
+fun launchMaps() {
+
+}
+
 @SuppressLint("MissingPermission")
 @Composable
 fun InteractionLayout() {
-    val rollFinished = appViewModel.rollFinished.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val rollFinished = appViewModel.rollFinished.collectAsStateWithLifecycle()
     val selectedSquare = appViewModel.selectedSquare.collectAsStateWithLifecycle()
-    val foodUri = "geo:0,0?q=" + selectedSquare.value.name + " Food"
+    val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
+
+    val restrictionsString = appViewModel.foodRestrictionsString(restrictionsUi.value)
+    val foodUri = "geo:0,0?q=" + selectedSquare.value.name + " Food " + restrictionsString
 
     Column (
         modifier = Modifier
@@ -385,6 +391,8 @@ fun InteractionLayout() {
                 .padding(bottom = 12.dp),
             horizontalArrangement = Arrangement.Center
         ) {
+            showLog("test", "uri is $foodUri")
+
             Button(
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {

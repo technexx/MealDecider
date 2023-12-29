@@ -310,4 +310,14 @@ class AppViewModel () : ViewModel() {
         }
         return false
     }
+
+    fun foodRestrictionsString(list: SnapshotStateList<RestrictionsValues>): String {
+        var stringList = ""
+        for (i in list) {
+            if (i.selected) {
+                stringList = stringList+ " " + (i.name)
+            }
+        }
+        return stringList
+    }
 }

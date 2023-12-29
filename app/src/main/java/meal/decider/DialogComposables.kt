@@ -295,7 +295,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
             content = {
                 items(restrictionsUi.value.size) { index ->
                     if (appViewModel.getRestrictionsList[index].selected) {
-                        cardColor = colorResource(id = R.color.blue_grey_200)
+                        cardColor = colorResource(id = R.color.blue_grey_100)
                     } else  {
                         cardColor = Color.White
                     }
