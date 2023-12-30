@@ -70,6 +70,7 @@ import com.google.android.libraries.places.api.model.AutocompleteSessionToken
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.PlaceTypes
 import com.google.android.libraries.places.api.model.RectangularBounds
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import meal.decider.ui.theme.MealDeciderTheme
@@ -417,9 +418,10 @@ fun InteractionLayout() {
 
             Button(
                 onClick = {
-                    if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-                        mapIntent(Uri.parse(foodUri))
-                    }
+                          mapPlaces()
+//                    if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
+//                        mapIntent(Uri.parse(foodUri))
+//                    }
                 },
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
@@ -434,11 +436,13 @@ fun mapPlaces() {
     Places.initialize(appContext, "AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI", Locale.US)
 
     //TODO: Get Place IDs of autocompleted searches.
-    val placesClient = Places.createClient(activityContext)
+
     val placeId = ""
     val placeFields = listOf(Place.Field.ID, Place.Field.NAME)
-//    val request = FetchPlaceRequest.newInstance(placeId, placeFields)
-//    showLog("test", "$request")
+    val req = FetchPlaceRequest.newInstance(placeId, placeFields)
+
+    val placesClient = Places.createClient(activityContext)
+    placesClient.fetchPlace(req)
 
     val token = AutocompleteSessionToken.newInstance()
     val bounds = RectangularBounds.newInstance(
@@ -449,10 +453,11 @@ fun mapPlaces() {
     val request =
         FindAutocompletePredictionsRequest.builder()
             // Call either setLocationBias() OR setLocationRestriction().
-            .setLocationBias(bounds)
-            .setLocationRestriction(bounds)
-            .setOrigin(LatLng(-33.8749937, 151.2041382))
-            .setCountries("AU", "NZ")
+//            .setLocationBias(bounds)
+//            .setLocationRestriction(bounds)
+            //Our area.
+            .setOrigin(LatLng(-34.079190, 118.336552))
+//            .setCountries("AU", "NZ")
             .setTypesFilter(listOf(PlaceTypes.ADDRESS))
             .setSessionToken(token)
             .setQuery("Food")
@@ -460,10 +465,8 @@ fun mapPlaces() {
 
     placesClient.findAutocompletePredictions(request)
         .addOnSuccessListener { response: FindAutocompletePredictionsResponse ->
-            //Todo: Empty list.
-            Log.i("test", response.autocompletePredictions.toString())
             for (prediction in response.autocompletePredictions) {
-                Log.i("test", prediction.placeId)
+//                Log.i("test", prediction.placeId)
                 Log.i("test", prediction.getPrimaryText(null).toString())
             }
         }.addOnFailureListener { exception: Exception? ->
@@ -471,20 +474,6 @@ fun mapPlaces() {
                 Log.i("test", "Place not found: ${exception.statusCode}")
             }
         }
-
-
-//    placesClient.fetchPlace(request)
-//        .addOnSuccessListener { response: FetchPlaceResponse ->
-//            val place = response.place
-//            Log.i("maps", "Place found: ${place.name}")
-//        }.addOnFailureListener { exception: Exception ->
-//            if (exception is ApiException) {
-//                Log.i("maps", "Place not found: ${exception.message}")
-//                val statusCode = exception.statusCode
-//                TODO("Handle error with given status code")
-//            }
-//        }
-
 }
 
 fun mapIntent(uri: Uri) {
@@ -492,8 +481,6 @@ fun mapIntent(uri: Uri) {
     intent.setPackage("com.google.android.apps.maps")
 
     activityContext.startActivity(intent)
-
-    mapPlaces()
 }
 
 @Composable
