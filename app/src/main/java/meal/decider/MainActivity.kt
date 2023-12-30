@@ -63,18 +63,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.model.PlaceTypes
-import com.google.android.libraries.places.api.model.RectangularBounds
-import com.google.android.libraries.places.api.net.FetchPlaceRequest
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import meal.decider.ui.theme.MealDeciderTheme
-import java.util.Locale
 
 @SuppressLint("StaticFieldLeak")
 private lateinit var activityContext : Context
@@ -418,10 +407,9 @@ fun InteractionLayout() {
 
             Button(
                 onClick = {
-                          mapPlaces()
-//                    if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-//                        mapIntent(Uri.parse(foodUri))
-//                    }
+                    if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
+                        mapIntent(Uri.parse(foodUri))
+                    }
                 },
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
@@ -430,50 +418,6 @@ fun InteractionLayout() {
             }
         }
     }
-}
-
-fun mapPlaces() {
-    Places.initialize(appContext, "AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI", Locale.US)
-
-    //TODO: Get Place IDs of autocompleted searches.
-
-    val placeId = ""
-    val placeFields = listOf(Place.Field.ID, Place.Field.NAME)
-    val req = FetchPlaceRequest.newInstance(placeId, placeFields)
-
-    val placesClient = Places.createClient(activityContext)
-    placesClient.fetchPlace(req)
-
-    val token = AutocompleteSessionToken.newInstance()
-    val bounds = RectangularBounds.newInstance(
-        LatLng(-33.880490, 151.184363),
-        LatLng(-33.858754, 151.229596)
-    )
-
-    val request =
-        FindAutocompletePredictionsRequest.builder()
-            // Call either setLocationBias() OR setLocationRestriction().
-//            .setLocationBias(bounds)
-//            .setLocationRestriction(bounds)
-            //Our area.
-            .setOrigin(LatLng(-34.079190, 118.336552))
-//            .setCountries("AU", "NZ")
-            .setTypesFilter(listOf(PlaceTypes.ADDRESS))
-            .setSessionToken(token)
-            .setQuery("Food")
-            .build()
-
-    placesClient.findAutocompletePredictions(request)
-        .addOnSuccessListener { response: FindAutocompletePredictionsResponse ->
-            for (prediction in response.autocompletePredictions) {
-//                Log.i("test", prediction.placeId)
-                Log.i("test", prediction.getPrimaryText(null).toString())
-            }
-        }.addOnFailureListener { exception: Exception? ->
-            if (exception is ApiException) {
-                Log.i("test", "Place not found: ${exception.statusCode}")
-            }
-        }
 }
 
 fun mapIntent(uri: Uri) {
