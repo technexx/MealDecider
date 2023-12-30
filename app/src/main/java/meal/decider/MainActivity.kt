@@ -114,7 +114,8 @@ fun TopBar() {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var expanded by remember { mutableStateOf(false) }
 
-    Scaffold(
+    Scaffold(modifier = Modifier
+        .fillMaxSize(),
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.smallTopAppBarColors(
@@ -222,13 +223,13 @@ fun TopBar() {
 fun Board() {
     Column (modifier = Modifier
         .fillMaxWidth()
-        .height((screenHeight() * 1).dp)
+//        .height((screenHeight() * 1).dp)
         .background(colorResource(id = R.color.grey_50))
     ) {
         OptionsBarLayout((screenHeight() * 0.1))
-        SelectionGridLayout(screenHeight() * 0.6)
-        Spacer(modifier = Modifier.height(16.dp))
-        InteractionLayout(screenHeight() * 0.3)
+        SelectionGridLayout(screenHeight() * 0.65)
+//        Spacer(modifier = Modifier.height(16.dp))
+        InteractionLayout(screenHeight() * 0.15)
     }
 }
 
