@@ -64,10 +64,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken
 import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FetchPlaceRequest
-import com.google.android.libraries.places.api.net.FetchPlaceResponse
+import com.google.android.libraries.places.api.model.PlaceTypes
+import com.google.android.libraries.places.api.model.RectangularBounds
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import meal.decider.ui.theme.MealDeciderTheme
 import java.util.Locale
 
@@ -396,8 +400,6 @@ fun InteractionLayout() {
                 .padding(bottom = 12.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            showLog("test", "uri is $foodUri")
-
             Button(
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
@@ -431,24 +433,57 @@ fun InteractionLayout() {
 fun mapPlaces() {
     Places.initialize(appContext, "AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI", Locale.US)
 
+    //TODO: Get Place IDs of autocompleted searches.
     val placesClient = Places.createClient(activityContext)
     val placeId = ""
     val placeFields = listOf(Place.Field.ID, Place.Field.NAME)
-    val request = FetchPlaceRequest.newInstance(placeId, placeFields)
+//    val request = FetchPlaceRequest.newInstance(placeId, placeFields)
+//    showLog("test", "$request")
 
-    val placeTask = placesClient.fetchPlace(request)
+    val token = AutocompleteSessionToken.newInstance()
+    val bounds = RectangularBounds.newInstance(
+        LatLng(-33.880490, 151.184363),
+        LatLng(-33.858754, 151.229596)
+    )
 
-    placesClient.fetchPlace(request)
-        .addOnSuccessListener { response: FetchPlaceResponse ->
-            val place = response.place
-            Log.i("maps", "Place found: ${place.name}")
-        }.addOnFailureListener { exception: Exception ->
+    val request =
+        FindAutocompletePredictionsRequest.builder()
+            // Call either setLocationBias() OR setLocationRestriction().
+            .setLocationBias(bounds)
+            .setLocationRestriction(bounds)
+            .setOrigin(LatLng(-33.8749937, 151.2041382))
+            .setCountries("AU", "NZ")
+            .setTypesFilter(listOf(PlaceTypes.ADDRESS))
+            .setSessionToken(token)
+            .setQuery("Food")
+            .build()
+
+    placesClient.findAutocompletePredictions(request)
+        .addOnSuccessListener { response: FindAutocompletePredictionsResponse ->
+            //Todo: Empty list.
+            Log.i("test", response.autocompletePredictions.toString())
+            for (prediction in response.autocompletePredictions) {
+                Log.i("test", prediction.placeId)
+                Log.i("test", prediction.getPrimaryText(null).toString())
+            }
+        }.addOnFailureListener { exception: Exception? ->
             if (exception is ApiException) {
-                Log.i("maps", "Place not found: ${exception.message}")
-                val statusCode = exception.statusCode
-                TODO("Handle error with given status code")
+                Log.i("test", "Place not found: ${exception.statusCode}")
             }
         }
+
+
+//    placesClient.fetchPlace(request)
+//        .addOnSuccessListener { response: FetchPlaceResponse ->
+//            val place = response.place
+//            Log.i("maps", "Place found: ${place.name}")
+//        }.addOnFailureListener { exception: Exception ->
+//            if (exception is ApiException) {
+//                Log.i("maps", "Place not found: ${exception.message}")
+//                val statusCode = exception.statusCode
+//                TODO("Handle error with given status code")
+//            }
+//        }
 
 }
 
