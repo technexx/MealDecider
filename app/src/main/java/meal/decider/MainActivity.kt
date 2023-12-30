@@ -74,6 +74,7 @@ private lateinit var appViewModel : AppViewModel
 @SuppressLint("StaticFieldLeak")
 private lateinit var dialogComposables : DialogComposables
 
+//TODO: Scroll to Main UI (cuisine column does scroll).
 //TODO: Save settings to local database.
 //TODO: Selection between restaurants within category.
 
@@ -224,21 +225,21 @@ fun Board() {
         .height((screenHeight() * 1).dp)
         .background(colorResource(id = R.color.grey_50))
     ) {
-        OptionsBarLayout()
-        SelectionGridLayout()
+        OptionsBarLayout((screenHeight() * 0.1))
+        SelectionGridLayout(screenHeight() * 0.6)
         Spacer(modifier = Modifier.height(16.dp))
-        InteractionLayout()
+        InteractionLayout(screenHeight() * 0.3)
     }
 }
 
 @Composable
-fun OptionsBarLayout() {
+fun OptionsBarLayout(height: Double) {
     val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
     var cardColor: Color
 
     Column (modifier = Modifier
         .fillMaxWidth()
-        .height((screenHeight() * 0.1).dp)
+        .height(height.dp)
         .background(colorResource(id = R.color.grey_50))
     ) {
         LazyHorizontalGrid(rows = GridCells.Adaptive(minSize = 32.dp),
@@ -291,7 +292,7 @@ fun OptionsBarLayout() {
 }
 
 @Composable
-fun SelectionGridLayout() {
+fun SelectionGridLayout(height: Double) {
     val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
     val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
     val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
@@ -319,7 +320,8 @@ fun SelectionGridLayout() {
         dialogComposables.OptionsDialog()
     }
 
-    LazyVerticalGrid(
+    LazyVerticalGrid(modifier = Modifier
+        .height(height.dp),
         columns = GridCells.Adaptive(minSize = 128.dp),
         contentPadding = PaddingValues(
             start = 12.dp,
@@ -364,7 +366,7 @@ fun SelectionGridLayout() {
 
 @SuppressLint("MissingPermission")
 @Composable
-fun InteractionLayout() {
+fun InteractionLayout(height: Double) {
     val context = LocalContext.current
     val rollFinished = appViewModel.rollFinished.collectAsStateWithLifecycle()
     val selectedSquare = appViewModel.selectedSquare.collectAsStateWithLifecycle()
@@ -375,6 +377,7 @@ fun InteractionLayout() {
 
     Column (
         modifier = Modifier
+            .height(height.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

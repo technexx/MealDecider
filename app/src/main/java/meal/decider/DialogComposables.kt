@@ -271,9 +271,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
         Column (modifier = Modifier
             .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally) {
-            OptionsHeaderTextUi(text = "Restrictions")
 
-            Spacer(modifier = Modifier.height(10.dp))
         }
     }
 
