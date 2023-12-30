@@ -63,25 +63,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.gms.common.api.ApiException
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import meal.decider.ui.theme.MealDeciderTheme
+import java.util.Locale
 
-//TODO: Categories (Vegan, etc.)
-//TODO: Regions/continents
-
-@SuppressLint("StaticFieldLeak")
-private lateinit var appViewModel : AppViewModel
 @SuppressLint("StaticFieldLeak")
 private lateinit var activityContext : Context
 @SuppressLint("StaticFieldLeak")
+private lateinit var appContext : Context
+@SuppressLint("StaticFieldLeak")
+private lateinit var appViewModel : AppViewModel
+@SuppressLint("StaticFieldLeak")
 private lateinit var dialogComposables : DialogComposables
+
+//TODO: Save settings to local database.
+//TODO: Selection between restaurants within category.
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        appViewModel = AppViewModel()
         activityContext = this@MainActivity
+        appContext = applicationContext
 
+        appViewModel = AppViewModel()
         appViewModel.createSquareList()
         appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
 
@@ -359,10 +368,6 @@ fun SelectionGridLayout() {
     )
 }
 
-fun launchMaps() {
-
-}
-
 @SuppressLint("MissingPermission")
 @Composable
 fun InteractionLayout() {
@@ -423,11 +428,37 @@ fun InteractionLayout() {
     }
 }
 
+fun mapPlaces() {
+    Places.initialize(appContext, "AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI", Locale.US)
+
+    val placesClient = Places.createClient(activityContext)
+    val placeId = ""
+    val placeFields = listOf(Place.Field.ID, Place.Field.NAME)
+    val request = FetchPlaceRequest.newInstance(placeId, placeFields)
+
+    val placeTask = placesClient.fetchPlace(request)
+
+    placesClient.fetchPlace(request)
+        .addOnSuccessListener { response: FetchPlaceResponse ->
+            val place = response.place
+            Log.i("maps", "Place found: ${place.name}")
+        }.addOnFailureListener { exception: Exception ->
+            if (exception is ApiException) {
+                Log.i("maps", "Place not found: ${exception.message}")
+                val statusCode = exception.statusCode
+                TODO("Handle error with given status code")
+            }
+        }
+
+}
+
 fun mapIntent(uri: Uri) {
     val intent = Intent(Intent.ACTION_VIEW, uri)
     intent.setPackage("com.google.android.apps.maps")
 
     activityContext.startActivity(intent)
+
+    mapPlaces()
 }
 
 @Composable

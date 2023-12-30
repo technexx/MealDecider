@@ -3,7 +3,6 @@ package meal.decider
 import android.content.Context
 import android.view.Gravity
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,18 +15,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,7 +32,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -281,53 +274,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
             OptionsHeaderTextUi(text = "Restrictions")
 
             Spacer(modifier = Modifier.height(10.dp))
-            DietaryRestrictions()
         }
-    }
-
-    @Composable
-    fun DietaryRestrictions() {
-        val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
-        var cardColor: Color
-
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 128.dp),
-            content = {
-                items(restrictionsUi.value.size) { index ->
-                    if (appViewModel.getRestrictionsList[index].selected) {
-                        cardColor = colorResource(id = R.color.blue_grey_100)
-                    } else  {
-                        cardColor = Color.White
-                    }
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = cardColor,
-                        ),
-                        border =  BorderStroke(1.dp,Color.Black),
-                        elevation = CardDefaults.cardElevation(
-                            defaultElevation = 6.dp
-                        ),
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .padding(4.dp)
-                            .selectable(
-                                selected = true,
-                                onClick = {
-                                    //Will only work if new item is added or item is subtracted w/ List, but will work w/ SnapshotStateList provided a new instance is created before update.
-                                    val list = appViewModel.getRestrictionsList
-                                    list[index].selected = !list[index].selected
-                                    val updatedList = mutableStateListOf<RestrictionsValues>()
-                                    updatedList.addAll(list)
-
-                                    appViewModel.updateRestrictionsList(updatedList)
-                                }
-                            ),
-                    ) {
-                        OptionsBoxesUi(text = appViewModel.getRestrictionsList[index].name)
-                    }
-                }
-            }
-        )
     }
 
     @Composable
