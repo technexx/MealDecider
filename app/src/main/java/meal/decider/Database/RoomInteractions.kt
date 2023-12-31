@@ -2,9 +2,9 @@ package meal.decider.Database
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import meal.decider.SquareValues
+import meal.decider.AppViewModel
 
-class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase) {
+class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, val appViewModel: AppViewModel) {
     private val cuisineDao = cuisineDatabase.cuisineDao()
 
 //    fun getSingleCuisine(name: String): Cuisines { return cuisineDao.getCuisineByName(name) }
@@ -16,9 +16,10 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase) {
         function()
     }
 
-    suspend fun insertCuisine(cuisine: SquareValues) =
+    //Todo: Insert needs to get name and color from SquareValues object. We're saving it as "cuisine_name" and "cuisine_color" in database. SquareValues vars and our database are distinct from each other.
+    suspend fun insertCuisine() =
         withContext(Dispatchers.IO) {
-            cuisineDao.insertCuisine(cuisine)
+            cuisineDao.insertCuisine()
             println("insert is ${cuisineDao.getAllCuisines()}")
         }
 

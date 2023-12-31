@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
         appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
 
         cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
-        roomInteractions = RoomInteractions((cuisineDatabase))
+        roomInteractions = RoomInteractions(cuisineDatabase, appViewModel)
 
         dialogComposables = DialogComposables(activityContext, appViewModel)
 
