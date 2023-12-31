@@ -63,6 +63,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.room.Room
+import meal.decider.Database.CuisineDatabase
+import meal.decider.Database.RoomInteractions
 import meal.decider.ui.theme.MealDeciderTheme
 
 @SuppressLint("StaticFieldLeak")
@@ -71,11 +74,13 @@ private lateinit var activityContext : Context
 private lateinit var appContext : Context
 @SuppressLint("StaticFieldLeak")
 private lateinit var appViewModel : AppViewModel
+private lateinit var cuisineDatabase: CuisineDatabase.AppDatabase
 @SuppressLint("StaticFieldLeak")
 private lateinit var dialogComposables : DialogComposables
+private lateinit var roomInteractions: RoomInteractions
 
-//TODO: Scroll to Main UI (cuisine column does scroll).
 //TODO: Save settings to local database.
+    //TODO: Run co-routines for queries.
 //TODO: Selection between restaurants within category.
 
 class MainActivity : ComponentActivity() {
@@ -88,6 +93,9 @@ class MainActivity : ComponentActivity() {
         appViewModel = AppViewModel()
         appViewModel.createSquareList()
         appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
+
+        cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
+        roomInteractions = RoomInteractions((cuisineDatabase))
 
         dialogComposables = DialogComposables(activityContext, appViewModel)
 
