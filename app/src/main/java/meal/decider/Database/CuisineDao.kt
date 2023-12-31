@@ -8,18 +8,21 @@ import androidx.room.Query
 @Dao
 interface CuisineDao {
     @Query("SELECT * FROM cuisine")
-    fun getAll(): List<Cuisines>
+    fun getAllCuisines(): List<Cuisines>
 
     @Query("SELECT * FROM cuisine WHERE uid IN (:userIds)")
-    fun loadAllByIds(userIds: IntArray): List<Cuisines>
+    fun getAllCuisinesById(userIds: IntArray): List<Cuisines>
+
+    @Query("SELECT * FROM cuisine WHERE cuisine_name LIKE :name LIMIT 1")
+    fun getCuisineByName(name: String): Cuisines
 
     @Query("SELECT * FROM cuisine WHERE cuisine_name LIKE :name AND " +
             "cuisine_color LIKE :color LIMIT 1")
-    fun findByName(name: String, color: Int): Cuisines
+    fun getCuisineByNameAndColor(name: String, color: Int): Cuisines
 
     @Insert
-    fun insertAll(vararg cuisine: Cuisines)
+    fun insertCuisine(vararg cuisine: Cuisines)
 
     @Delete
-    fun delete(cuisine: Cuisines)
+    fun deleteCuisine(cuisine: Cuisines)
 }
