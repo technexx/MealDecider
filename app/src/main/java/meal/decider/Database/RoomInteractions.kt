@@ -7,11 +7,6 @@ import meal.decider.AppViewModel
 class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, val appViewModel: AppViewModel) {
     private val cuisineDao = cuisineDatabase.cuisineDao()
 
-//    fun getSingleCuisine(name: String): Cuisines { return cuisineDao.getCuisineByName(name) }
-//    fun getAllCuisines(): List<Cuisines> { return cuisineDao.getAllCuisines() }
-//    fun insertCuisine(cuisine: Cuisines) { return cuisineDao.insertCuisine(cuisine)}
-//    fun deleteCuisine(cuisine: Cuisines) { cuisineDao.deleteCuisine(cuisine) }
-
     suspend fun test(function: () -> Unit) {
         function()
     }
@@ -28,4 +23,6 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, val appVie
             cuisineDao.getAllCuisines()
             println("get all is ${cuisineDao.getAllCuisines()}")
         }
+
+    //(appViewModel.getSquareList[0].name, appViewModel.getSquareList[0].color)
 }

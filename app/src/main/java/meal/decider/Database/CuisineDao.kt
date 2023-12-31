@@ -3,6 +3,7 @@ package meal.decider.Database
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
@@ -20,7 +21,7 @@ interface CuisineDao {
             "cuisine_color LIKE :color LIMIT 1")
     fun getCuisineByNameAndColor(name: String, color: Int): Cuisines
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertCuisine(vararg cuisine: Cuisines)
 
     @Delete

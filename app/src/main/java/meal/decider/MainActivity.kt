@@ -365,18 +365,6 @@ fun SelectionGridLayout(height: Double) {
     )
 }
 
-fun insertCuisine(scope: CoroutineScope) {
-    scope.launch {
-        roomInteractions.insertCuisine(appViewModel.getSquareList[0].name, appViewModel.getSquareList[0].color)
-    }
-}
-
-fun getCuisines(scope: CoroutineScope) {
-    scope.launch {
-        roomInteractions.getAllCuisines()
-    }
-}
-
 @SuppressLint("MissingPermission")
 @Composable
 fun InteractionLayout(height: Double) {
@@ -455,6 +443,18 @@ fun InteractionLayout(height: Double) {
                 ButtonText(text = "Open Maps")
             }
         }
+    }
+}
+
+fun insertCuisine(scope: CoroutineScope) {
+    scope.launch {
+        roomInteractions.insertCuisine(appViewModel.getSquareList[0].name, appViewModel.getSquareList[0].color)
+    }
+}
+
+fun getCuisines(scope: CoroutineScope) {
+    scope.launch {
+        roomInteractions.getAllCuisines()
     }
 }
 
