@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -80,8 +78,11 @@ dependencies {
     //Accompanist (Permission)
     implementation ("com.google.accompanist:accompanist-permissions:0.31.3-beta")
 
-    //Hilt
-//    implementation ("com.google.dagger:hilt-android:2.44")
-//    implementation ("com.google.dagger:hilt-compiler:2.44")
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+
 
 }
