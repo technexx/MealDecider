@@ -65,6 +65,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.Room
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
@@ -364,6 +365,18 @@ fun SelectionGridLayout(height: Double) {
     )
 }
 
+fun insertCuisine(scope: CoroutineScope) {
+    scope.launch {
+        roomInteractions.insertCuisine(appViewModel.getSquareList[0].name, appViewModel.getSquareList[0].color)
+    }
+}
+
+fun getCuisines(scope: CoroutineScope) {
+    scope.launch {
+        roomInteractions.getAllCuisines()
+    }
+}
+
 @SuppressLint("MissingPermission")
 @Composable
 fun InteractionLayout(height: Double) {
@@ -382,9 +395,7 @@ fun InteractionLayout(height: Double) {
         .padding(bottom = 12.dp),) {
         Button(
             onClick = {
-                coroutineScope.launch {
-                    roomInteractions.insertCuisine(appViewModel.getSquareList[0].name, appViewModel.getSquareList[0].color)
-                }
+               insertCuisine(coroutineScope)
             },
         ) {
             ButtonText(text = "Insert")
@@ -392,9 +403,7 @@ fun InteractionLayout(height: Double) {
 
         Button(
             onClick = {
-                coroutineScope.launch {
-                    roomInteractions.getAllCuisines()
-                }
+                getCuisines(coroutineScope)
             },
         ) {
             ButtonText(text = "Retrieve")
