@@ -79,8 +79,6 @@ private lateinit var cuisineDatabase: CuisineDatabase.AppDatabase
 private lateinit var dialogComposables : DialogComposables
 private lateinit var roomInteractions: RoomInteractions
 
-//TODO: Save settings to local database.
-    //TODO: Run co-routines for queries.
 //TODO: Selection between restaurants within category.
 
 class MainActivity : ComponentActivity() {
@@ -418,6 +416,30 @@ fun InteractionLayout(height: Double) {
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
             ) {
                 ButtonText(text = "Open Maps")
+            }
+        }
+
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 12.dp),) {
+            Button(
+                onClick = {
+                    suspend fun insert() {
+                        roomInteractions.insertCuisine(appViewModel.getSquareList[0])
+                    }
+                },
+            ) {
+                ButtonText(text = "Insert")
+            }
+
+            Button(
+                onClick = {
+                   suspend fun retrieve() {
+                       roomInteractions.getAllCuisines()
+                   }
+                },
+            ) {
+                ButtonText(text = "Retrieve")
             }
         }
     }
