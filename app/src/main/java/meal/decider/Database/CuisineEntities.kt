@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+@Entity
 class Cuisines {
     @Entity
     data class Cuisine(
@@ -12,4 +13,3 @@ class Cuisines {
         @ColumnInfo(name = "cuisine_color") val color: Int?
     )
 }
-
