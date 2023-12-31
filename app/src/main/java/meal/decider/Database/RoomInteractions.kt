@@ -16,10 +16,10 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, val appVie
         function()
     }
 
-    //Todo: Insert needs to get name and color from SquareValues object. We're saving it as "cuisine_name" and "cuisine_color" in database. SquareValues vars and our database are distinct from each other.
-    suspend fun insertCuisine() =
+    //Todo: Insert needs to get name and color from SquareValues object. We're saving it as "cuisine_name" and "cuisine_color" in database. Also need a 3rd ("id") entry.
+    suspend fun insertCuisine(name: String, color: Int) =
         withContext(Dispatchers.IO) {
-            cuisineDao.insertCuisine()
+            cuisineDao.insertCuisine(Cuisines(null, name, color))
             println("insert is ${cuisineDao.getAllCuisines()}")
         }
 

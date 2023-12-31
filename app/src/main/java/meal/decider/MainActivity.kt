@@ -50,6 +50,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,6 +65,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.Room
+import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 import meal.decider.ui.theme.MealDeciderTheme
@@ -373,6 +375,32 @@ fun InteractionLayout(height: Double) {
     val restrictionsString = appViewModel.foodRestrictionsString(restrictionsUi.value)
     val foodUri = "geo:0,0?q=" + selectedSquare.value.name + " Food " + restrictionsString
 
+    val coroutineScope = rememberCoroutineScope()
+
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(bottom = 12.dp),) {
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    roomInteractions.insertCuisine(appViewModel.getSquareList[0].name, appViewModel.getSquareList[0].color)
+                }
+            },
+        ) {
+            ButtonText(text = "Insert")
+        }
+
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    roomInteractions.getAllCuisines()
+                }
+            },
+        ) {
+            ButtonText(text = "Retrieve")
+        }
+    }
+
     Column (
         modifier = Modifier
             .height(height.dp)
@@ -416,30 +444,6 @@ fun InteractionLayout(height: Double) {
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
             ) {
                 ButtonText(text = "Open Maps")
-            }
-        }
-
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 12.dp),) {
-            Button(
-                onClick = {
-                    suspend fun insert() {
-                        roomInteractions.insertCuisine(appViewModel.getSquareList[0])
-                    }
-                },
-            ) {
-                ButtonText(text = "Insert")
-            }
-
-            Button(
-                onClick = {
-                   suspend fun retrieve() {
-                       roomInteractions.getAllCuisines()
-                   }
-                },
-            ) {
-                ButtonText(text = "Retrieve")
             }
         }
     }
