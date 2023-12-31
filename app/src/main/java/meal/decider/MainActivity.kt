@@ -114,8 +114,9 @@ fun TopBar() {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var expanded by remember { mutableStateOf(false) }
 
-    Scaffold(modifier = Modifier
-        .fillMaxSize(),
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize(),
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.smallTopAppBarColors(
@@ -150,59 +151,41 @@ fun TopBar() {
                             expanded = expanded,
                             onDismissRequest = { expanded = false }
                         ) {
-                            DropdownMenuItem(
-                                text = { Text("Options") },
-                                onClick = {
-                                    appViewModel.updateOptionsMode(true)
+                            DropDownMenuItemUi(text = "Options") {
+                                appViewModel.updateOptionsMode(true)
+                                appViewModel.disableEditModeAndClearListOfSquaresToEdit()
+                                expanded = false
+                            }
+                            DropDownMenuItemUi(text = "Add Cuisine") {
+                                appViewModel.updateAddMode(true)
+                                appViewModel.disableEditModeAndClearListOfSquaresToEdit()
+                                expanded = false
+                            }
+                            DropDownMenuItemUi(text = "Edit Cuisins") {
+                                if (!appViewModel.getEditMode) {
+                                    appViewModel.updateEditMode(true)
+                                } else {
                                     appViewModel.disableEditModeAndClearListOfSquaresToEdit()
-                                    expanded = false
                                 }
-                            )
-                            DropdownMenuItem(
-                                text = { Text("Add Cuisine") },
-                                onClick = {
-                                    appViewModel.updateAddMode(true)
-                                    appViewModel.disableEditModeAndClearListOfSquaresToEdit()
-                                    expanded = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text("Edit Cuisines") },
-                                onClick = {
-                                    if (!appViewModel.getEditMode) {
-                                        appViewModel.updateEditMode(true)
-                                    } else {
-                                        appViewModel.disableEditModeAndClearListOfSquaresToEdit()
-                                    }
-                                    expanded = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text("Sort Alphabetically") },
-                                onClick = {
-                                    appViewModel.sortAndUpdateCuisineList("alphabetical")
-                                    appViewModel.disableEditModeAndClearListOfSquaresToEdit()
-                                    expanded = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text("Sort Randomly") },
-                                onClick = {
-                                    appViewModel.sortAndUpdateCuisineList("random")
-                                    appViewModel.disableEditModeAndClearListOfSquaresToEdit()
-                                    expanded = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text("Restore Defaults") },
-                                onClick = {
-                                    appViewModel.createSquareList()
-                                    appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
-                                    appViewModel.disableEditModeAndClearListOfSquaresToEdit()
-                                    appViewModel.updateRollFinished(false)
-                                    expanded = false
-                                }
-                            )
+                                expanded = false
+                            }
+                            DropDownMenuItemUi(text = "Sort Alphabetically") {
+                                appViewModel.sortAndUpdateCuisineList("alphabetical")
+                                appViewModel.disableEditModeAndClearListOfSquaresToEdit()
+                                expanded = false
+                            }
+                            DropDownMenuItemUi(text = "Sort Randomly") {
+                                appViewModel.sortAndUpdateCuisineList("random")
+                                appViewModel.disableEditModeAndClearListOfSquaresToEdit()
+                                expanded = false
+                            }
+                            DropDownMenuItemUi(text = "Restore Default") {
+                                appViewModel.createSquareList()
+                                appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
+                                appViewModel.disableEditModeAndClearListOfSquaresToEdit()
+                                appViewModel.updateRollFinished(false)
+                                expanded = false
+                            }
                         }
                     }
                 },
@@ -220,15 +203,23 @@ fun TopBar() {
 }
 
 @Composable
+fun DropDownMenuItemUi(text: String, function: () -> Unit) {
+    DropdownMenuItem(
+        text = { Text(text) },
+        onClick = {
+            function()
+        }
+    )
+}
+
+@Composable
 fun Board() {
     Column (modifier = Modifier
         .fillMaxWidth()
-//        .height((screenHeight() * 1).dp)
         .background(colorResource(id = R.color.grey_50))
     ) {
         OptionsBarLayout((screenHeight() * 0.1))
         SelectionGridLayout(screenHeight() * 0.65)
-//        Spacer(modifier = Modifier.height(16.dp))
         InteractionLayout(screenHeight() * 0.15)
     }
 }
