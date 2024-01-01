@@ -140,7 +140,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
 
     //List (or any object) in State<Object> is accessed w/ (Var).value.
     @Composable
-    fun FullCuisineList(listToDisplay: State<List<String>>) {
+    fun FullCuisineList(list: State<List<String>>) {
         LazyColumn (
             modifier = Modifier
                 .height(200.dp)
@@ -148,48 +148,41 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 .padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            items (listToDisplay.value.size) { index ->
-                CuisineListUi(list = listToDisplay.value, index, text = listToDisplay.value[index])
+            items (list.value.size) { index ->
+                val coroutineScope = rememberCoroutineScope()
 
-
-            }
-        }
-    }
-
-    @Composable
-    fun CuisineListUi(list: List<String>, index: Int, text: String) {
-        val coroutineScope = rememberCoroutineScope()
-
-        Column (modifier = Modifier
-            .padding(4.dp)
-            .selectable(
-                selected = true,
-                onClick = {
-                    if (!appViewModel.doesCuisineExistsOnBoard(
-                            list[index],
-                            appViewModel.squareNamesList()
-                        )) {
-                        appViewModel.addSquareToList(list[index])
-                        appViewModel.updateAddMode(false)
-                        coroutineScope.launch {
-                            roomInteractions.insertCuisine(list[index], defaultSquareColor)
+                Column (modifier = Modifier
+                    .padding(4.dp)
+                    .selectable(
+                        selected = true,
+                        onClick = {
+                            if (!appViewModel.doesCuisineExistsOnBoard(
+                                    list.value[index],
+                                    appViewModel.squareNamesList()
+                                )) {
+                                appViewModel.addSquareToList(list.value[index])
+                                appViewModel.updateAddMode(false)
+                                coroutineScope.launch {
+                                    roomInteractions.insertCuisine(list.value[index], defaultSquareColor)
+                                }
+                            } else {
+                                Toast
+                                    .makeText(
+                                        activityContext,
+                                        "Cuisine already exists!",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    .show()
+                            }
                         }
-                    } else {
-                        Toast
-                            .makeText(
-                                activityContext,
-                                "Cuisine already exists!",
-                                Toast.LENGTH_SHORT
-                            )
-                            .show()
-                    }
+                    )) {
+                    Text(modifier = Modifier
+                        .padding(4.dp),
+                        fontSize = 20.sp,
+                        color = Color.Black,
+                        text = list.value[index] )
                 }
-            )) {
-            Text(modifier = Modifier
-                .padding(4.dp),
-                fontSize = 20.sp,
-                color = Color.Black,
-                text = text )
+            }
         }
     }
 
