@@ -21,9 +21,12 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             println("insert is ${cuisineDao.getAllCuisines()}")
         }
 
-    suspend fun updateCuisine(index: Int, cuisine: Cuisines) {
+    suspend fun updateCuisine() {
         withContext(Dispatchers.IO) {
-//            val cuisine = cuisineDao.getCuisineByName()
+//            val cuisineName = cuisineDao.getCuisineByName(appViewModel.getSquareList[index].name)
+            cuisineDao.update("American", "Test")
+            println("insert is ${cuisineDao.getAllCuisines()}")
+
         }
     }
 

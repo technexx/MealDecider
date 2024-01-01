@@ -24,6 +24,9 @@ interface CuisineDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertCuisine(vararg cuisine: Cuisines)
 
+    @Query("UPDATE cuisine SET cuisine_name = :newName WHERE cuisine_name = :oldName")
+    fun update(oldName: String, newName: String)
+
     @Delete
     fun deleteCuisine(cuisine: Cuisines)
 }

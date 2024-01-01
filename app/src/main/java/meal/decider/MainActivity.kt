@@ -324,9 +324,9 @@ fun SelectionGridLayout(height: Double) {
         dialogComposables.AddDialogBox()
     }
 
-    if (activeEdit.value) {
-        dialogComposables.EditDialogBox()
-    }
+//    if (activeEdit.value) {
+//        dialogComposables.EditDialogBox()
+//    }
 
     if (optionsMode.value) {
         dialogComposables.OptionsDialog()

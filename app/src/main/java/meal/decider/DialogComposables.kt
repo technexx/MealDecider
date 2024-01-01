@@ -195,68 +195,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
         }
     }
 
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun EditDialogBox() {
-        var txtField by remember { mutableStateOf("") }
-        txtField = appViewModel.getSquareList[appViewModel.singleSquareIndexToEdit].name
-
-        val coroutineScope = rememberCoroutineScope()
-
-        Dialog(onDismissRequest = {
-            appViewModel.updateActiveEdit(false)
-        })
-        {
-            Surface(
-                shape = RoundedCornerShape(16.dp),
-                color = colorResource(id = R.color.grey_300)
-            ) {
-                Box(modifier = Modifier
-                    .size(height = 200.dp, width = 300.dp),
-                ) {
-                    Column(modifier = Modifier
-                        .fillMaxSize()
-                        .padding(20.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.SpaceEvenly)
-                    {
-                        Spacer(modifier = Modifier.height(10.dp))
-                        TextField(
-                            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
-                            value = txtField,
-                            onValueChange = { txtField = it },
-                            singleLine = true,
-                            textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                containerColor = colorResource(id = R.color.grey_50),
-                            ),
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Row (modifier = Modifier
-                            .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                        ) {
-                            IconButton(onClick = {
-                                appViewModel.updateActiveEdit(false)
-                            }) {
-                                DialogIcon(imageVector = Icons.Filled.Close, colorResource = android.R.color.holo_red_light)
-                            }
-                            IconButton(onClick = {
-                                appViewModel.updateSquareName(appViewModel.singleSquareIndexToEdit, txtField)
-                                appViewModel.updateActiveEdit(false)
-                                coroutineScope.launch {
-                                    roomInteractions
-                                }
-                            }) {
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     @Composable
     fun OptionsDialog() {
         Dialog(onDismissRequest = {
