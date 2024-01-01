@@ -50,8 +50,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import meal.decider.Database.RoomInteractions
 
-class DialogComposables(private val activityContext: Context, private val appViewModel: AppViewModel) {
+class DialogComposables(private val activityContext: Context, private val appViewModel: AppViewModel, private val roomInteractions: RoomInteractions){
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable

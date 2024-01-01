@@ -96,9 +96,9 @@ class MainActivity : ComponentActivity() {
         appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
 
         cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
-        roomInteractions = RoomInteractions(cuisineDatabase, appViewModel)
+        roomInteractions = RoomInteractions(cuisineDatabase)
 
-        dialogComposables = DialogComposables(activityContext, appViewModel)
+        dialogComposables = DialogComposables(activityContext, appViewModel, roomInteractions)
 
         setContent {
             MealDeciderTheme {
@@ -378,26 +378,6 @@ fun InteractionLayout(height: Double) {
 
     val coroutineScope = rememberCoroutineScope()
 
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(bottom = 12.dp),) {
-        Button(
-            onClick = {
-               insertCuisine(coroutineScope)
-            },
-        ) {
-            ButtonText(text = "Insert")
-        }
-
-        Button(
-            onClick = {
-                getCuisines(coroutineScope)
-            },
-        ) {
-            ButtonText(text = "Retrieve")
-        }
-    }
-
     Column (
         modifier = Modifier
             .height(height.dp)
@@ -490,5 +470,28 @@ fun showLog(name: String, text: String) {
 @Composable
 fun GreetingPreview() {
     MealDeciderTheme {
+    }
+}
+
+@Composable
+fun RoomTestButtons(coroutineScope: CoroutineScope) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(bottom = 12.dp),) {
+        Button(
+            onClick = {
+                insertCuisine(coroutineScope)
+            },
+        ) {
+            ButtonText(text = "Insert")
+        }
+
+        Button(
+            onClick = {
+                getCuisines(coroutineScope)
+            },
+        ) {
+            ButtonText(text = "Retrieve")
+        }
     }
 }
