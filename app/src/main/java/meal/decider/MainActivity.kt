@@ -50,7 +50,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,8 +64,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.Room
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 import meal.decider.ui.theme.MealDeciderTheme
@@ -96,9 +93,9 @@ class MainActivity : ComponentActivity() {
         appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
 
         cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
-        roomInteractions = RoomInteractions(cuisineDatabase)
+        roomInteractions = RoomInteractions(appViewModel, cuisineDatabase)
 
-        dialogComposables = DialogComposables(activityContext, appViewModel, roomInteractions)
+        dialogComposables = DialogComposables(activityContext, appViewModel, cuisineDatabase)
 
         setContent {
             MealDeciderTheme {
@@ -376,8 +373,6 @@ fun InteractionLayout(height: Double) {
     val restrictionsString = appViewModel.foodRestrictionsString(restrictionsUi.value)
     val foodUri = "geo:0,0?q=" + selectedSquare.value.name + " Food " + restrictionsString
 
-    val coroutineScope = rememberCoroutineScope()
-
     Column (
         modifier = Modifier
             .height(height.dp)
@@ -426,18 +421,6 @@ fun InteractionLayout(height: Double) {
     }
 }
 
-fun insertCuisine(scope: CoroutineScope) {
-    scope.launch {
-        roomInteractions.insertCuisine(appViewModel.getSquareList[0].name, appViewModel.getSquareList[0].color)
-    }
-}
-
-fun getCuisines(scope: CoroutineScope) {
-    scope.launch {
-        roomInteractions.getAllCuisines()
-    }
-}
-
 fun mapIntent(uri: Uri) {
     val intent = Intent(Intent.ACTION_VIEW, uri)
     intent.setPackage("com.google.android.apps.maps")
@@ -470,28 +453,5 @@ fun showLog(name: String, text: String) {
 @Composable
 fun GreetingPreview() {
     MealDeciderTheme {
-    }
-}
-
-@Composable
-fun RoomTestButtons(coroutineScope: CoroutineScope) {
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(bottom = 12.dp),) {
-        Button(
-            onClick = {
-                insertCuisine(coroutineScope)
-            },
-        ) {
-            ButtonText(text = "Insert")
-        }
-
-        Button(
-            onClick = {
-                getCuisines(coroutineScope)
-            },
-        ) {
-            ButtonText(text = "Retrieve")
-        }
     }
 }

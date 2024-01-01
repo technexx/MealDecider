@@ -34,6 +34,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,9 +51,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
+import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
-class DialogComposables(private val activityContext: Context, private val appViewModel: AppViewModel, private val roomInteractions: RoomInteractions){
+class DialogComposables(private val activityContext: Context, private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase){
+    val roomInteractions = RoomInteractions(appViewModel, appDatabase)
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -152,6 +156,8 @@ class DialogComposables(private val activityContext: Context, private val appVie
 
     @Composable
     fun CuisineListUi(list: List<String>, index: Int, text: String) {
+        val coroutineScope = rememberCoroutineScope()
+
         Column (modifier = Modifier
             .padding(4.dp)
             .selectable(
@@ -160,10 +166,12 @@ class DialogComposables(private val activityContext: Context, private val appVie
                     if (!appViewModel.doesCuisineExistsOnBoard(
                             list[index],
                             appViewModel.squareNamesList()
-                        )
-                    ) {
+                        )) {
                         appViewModel.addSquareToList(list[index])
                         appViewModel.updateAddMode(false)
+                        coroutineScope.launch {
+                            roomInteractions.insertCuisine(list[index], defaultSquareColor)
+                        }
                     } else {
                         Toast
                             .makeText(

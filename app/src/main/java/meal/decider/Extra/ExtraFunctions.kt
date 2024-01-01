@@ -1,17 +1,27 @@
 package meal.decider.Extra
 
-import android.util.Log
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.model.PlaceTypes
-import com.google.android.libraries.places.api.model.RectangularBounds
-import com.google.android.libraries.places.api.net.FetchPlaceRequest
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
-import java.util.Locale
+//@Composable
+//fun RoomTestButtons(coroutineScope: CoroutineScope) {
+//    Row(modifier = Modifier
+//        .fillMaxWidth()
+//        .padding(bottom = 12.dp),) {
+//        Button(
+//            onClick = {
+//                insertCuisine(coroutineScope)
+//            },
+//        ) {
+//            ButtonText(text = "Insert")
+//        }
+//
+//        Button(
+//            onClick = {
+//                getCuisines(coroutineScope)
+//            },
+//        ) {
+//            ButtonText(text = "Retrieve")
+//        }
+//    }
+//}
 
 //class ExtraFunctions {
 //    //TODO: Seems limited to 5 places, likely due to billing.
