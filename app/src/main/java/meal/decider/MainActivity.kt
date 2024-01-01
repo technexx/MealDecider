@@ -155,7 +155,6 @@ fun TopBar() {
                             coroutineScope.launch {
                                 roomInteractions.deleteCuisines()
                                 appViewModel.deleteSelectedCuisines()
-
                             }
 
                         }) {
@@ -181,36 +180,39 @@ fun TopBar() {
                         ) {
                             DropDownMenuItemUi(text = "Options") {
                                 appViewModel.updateOptionsMode(true)
-                                appViewModel.disableEditModeAndClearListOfSquaresToEdit()
+                                appViewModel.updateEditMode(false)
                                 expanded = false
                             }
                             DropDownMenuItemUi(text = "Add Cuisine") {
                                 appViewModel.updateAddMode(true)
-                                appViewModel.disableEditModeAndClearListOfSquaresToEdit()
+                                appViewModel.updateEditMode(false)
                                 expanded = false
                             }
                             DropDownMenuItemUi(text = "Edit Cuisines") {
+                                //Resets list of squares to edit.
+                                appViewModel.updateListOfSquaresToEdit(listOf())
+
                                 if (!appViewModel.getEditMode) {
                                     appViewModel.updateEditMode(true)
                                 } else {
-                                    appViewModel.disableEditModeAndClearListOfSquaresToEdit()
+                                    appViewModel.updateEditMode(false)
                                 }
                                 expanded = false
                             }
                             DropDownMenuItemUi(text = "Sort Alphabetically") {
                                 appViewModel.sortAndUpdateCuisineList("alphabetical")
-                                appViewModel.disableEditModeAndClearListOfSquaresToEdit()
+                                appViewModel.updateEditMode(false)
                                 expanded = false
                             }
                             DropDownMenuItemUi(text = "Sort Randomly") {
                                 appViewModel.sortAndUpdateCuisineList("random")
-                                appViewModel.disableEditModeAndClearListOfSquaresToEdit()
+                                appViewModel.updateEditMode(false)
                                 expanded = false
                             }
                             DropDownMenuItemUi(text = "Restore Default") {
                                 appViewModel.createSquareList()
                                 appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
-                                appViewModel.disableEditModeAndClearListOfSquaresToEdit()
+                                appViewModel.updateEditMode(false)
                                 appViewModel.updateRollFinished(false)
                                 expanded = false
                             }

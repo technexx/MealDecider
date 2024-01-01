@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import meal.decider.Database.RoomInteractions
 import kotlin.random.Random
 
 class AppViewModel : ViewModel() {
@@ -258,7 +257,7 @@ class AppViewModel : ViewModel() {
 
         updateSquareList(currentSquaresList)
         resetSquareColors()
-        disableEditModeAndClearListOfSquaresToEdit()
+        updateEditMode(false)
     }
 
     fun resetSquareColors() {
@@ -289,11 +288,6 @@ class AppViewModel : ViewModel() {
             if (i.name.equals(selectedSquare.name)) return true
         }
         return false
-    }
-
-    fun disableEditModeAndClearListOfSquaresToEdit() {
-        updateListOfSquaresToEdit(listOf())
-        updateEditMode(false)
     }
 
     fun filterList(list: List<String>, searchString: String) : List<String> {
