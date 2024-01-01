@@ -51,8 +51,6 @@ fun EditDialogBox(appViewModel: AppViewModel) {
     var txtField by remember { mutableStateOf("") }
     txtField = appViewModel.getSquareList[appViewModel.singleSquareIndexToEdit].name
 
-    val coroutineScope = rememberCoroutineScope()
-
     Dialog(onDismissRequest = {
         appViewModel.updateActiveEdit(false)
     })

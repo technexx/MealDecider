@@ -50,6 +50,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -134,6 +135,8 @@ fun TopBar() {
     val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
     val listOfSquaresToEdit = appViewModel.listOfSquaresToEdit.collectAsStateWithLifecycle()
 
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -150,6 +153,10 @@ fun TopBar() {
                     if (listOfSquaresToEdit.value.isNotEmpty() && editMode.value) {
                         IconButton(onClick = {
                             appViewModel.deleteSelectedCuisines()
+                            coroutineScope.launch {
+                                roomInteractions.updateCuisineName()
+                            }
+
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Delete,
@@ -181,7 +188,7 @@ fun TopBar() {
                                 appViewModel.disableEditModeAndClearListOfSquaresToEdit()
                                 expanded = false
                             }
-                            DropDownMenuItemUi(text = "Edit Cuisins") {
+                            DropDownMenuItemUi(text = "Edit Cuisines") {
                                 if (!appViewModel.getEditMode) {
                                     appViewModel.updateEditMode(true)
                                 } else {
