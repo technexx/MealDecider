@@ -85,20 +85,28 @@ class DialogComposables(private val activityContext: Context, private val appVie
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.SpaceEvenly)
                     {
+
                         Spacer(modifier = Modifier.height(10.dp))
-                        TextField(
-                            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
-                            value = txtField,
-                            onValueChange = {
-                                txtField = it
-                                searchTerms = appViewModel.filterList(fullCuisineList, txtField)
-                                appViewModel.updateDisplayedCuisineList(searchTerms)},
-                            singleLine = true,
-                            textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                containerColor = colorResource(id = R.color.grey_50),
-                            ),
-                        )
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            TextField(modifier = Modifier,
+//                                .fillMaxWidth(0.8f),
+                                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+                                value = txtField,
+                                placeholder = {Text( "e.g. Filipino") },
+                                onValueChange = {
+                                    txtField = it
+                                    searchTerms = appViewModel.filterList(fullCuisineList, txtField)
+                                    appViewModel.updateDisplayedCuisineList(searchTerms)},
+                                singleLine = true,
+                                textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    containerColor = colorResource(id = R.color.grey_50),
+                                ),
+                            )
+                        }
 
                         Spacer(modifier = Modifier.height(10.dp))
 
@@ -159,11 +167,15 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             if (!appViewModel.doesCuisineExistsOnBoard(
                                     list.value[index],
                                     appViewModel.squareNamesList()
-                                )) {
+                                )
+                            ) {
                                 appViewModel.addSquareToList(list.value[index])
                                 appViewModel.updateAddMode(false)
                                 coroutineScope.launch {
-                                    roomInteractions.insertCuisine(list.value[index], defaultSquareColor)
+                                    roomInteractions.insertCuisine(
+                                        list.value[index],
+                                        defaultSquareColor
+                                    )
                                 }
                             } else {
                                 Toast
@@ -185,6 +197,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
             }
         }
     }
+
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
