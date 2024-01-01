@@ -2,10 +2,9 @@ package meal.decider.Database
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import meal.decider.AppViewModel
 
-class RoomInteractions (private val appViewModel: AppViewModel, cuisineDatabase: CuisineDatabase.AppDatabase) {
-    private val cuisineDao = cuisineDatabase.cuisineDao()
+class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase) {
+    val cuisineDao = cuisineDatabase.cuisineDao()
 
     suspend fun insertCuisine(name: String, color: Int) =
         withContext(Dispatchers.IO) {

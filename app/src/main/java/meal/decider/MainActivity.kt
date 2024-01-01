@@ -64,6 +64,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.Room
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 import meal.decider.ui.theme.MealDeciderTheme
@@ -88,14 +92,20 @@ class MainActivity : ComponentActivity() {
         activityContext = this@MainActivity
         appContext = applicationContext
 
-        appViewModel = AppViewModel()
+        cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
+        roomInteractions = RoomInteractions(cuisineDatabase)
+
+        appViewModel = AppViewModel(roomInteractions)
         appViewModel.createSquareList()
         appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
 
-        cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
-        roomInteractions = RoomInteractions(appViewModel, cuisineDatabase)
-
         dialogComposables = DialogComposables(activityContext, appViewModel, cuisineDatabase)
+
+        val scope = CoroutineScope(Job() + Dispatchers.Main)
+
+        scope.launch {
+            initialPop()
+        }
 
         setContent {
             MealDeciderTheme {
@@ -111,6 +121,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+suspend fun initialPop() {
+    appViewModel.populateDatabaseWithInitialCuisines()
+    println("pop")
+    }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

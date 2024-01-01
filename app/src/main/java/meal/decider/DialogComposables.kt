@@ -56,7 +56,7 @@ import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
 class DialogComposables(private val activityContext: Context, private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase){
-    val roomInteractions = RoomInteractions(appViewModel, appDatabase)
+    val roomInteractions = RoomInteractions(appDatabase)
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable

@@ -9,9 +9,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import meal.decider.Database.RoomInteractions
 import kotlin.random.Random
 
-class AppViewModel () : ViewModel() {
+class AppViewModel (val roomInteractions: RoomInteractions): ViewModel() {
     var singleSquareIndexToEdit = 0
 
     private val _boardUiState = MutableStateFlow(BoardValues())
@@ -49,6 +50,14 @@ class AppViewModel () : ViewModel() {
 
     private val handler = Handler(Looper.getMainLooper())
     private var squareColorChangeRunnable = Runnable {}
+
+    //Todo: Run on Dispatcher.IO thread.
+    suspend fun populateDatabaseWithInitialCuisines() {
+        for (i in starterSquareList()) {
+            roomInteractions.insertCuisine(i.name, defaultSquareColor)
+        }
+        println("get all is ${roomInteractions.cuisineDao.getAllCuisines()}")
+    }
 
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
