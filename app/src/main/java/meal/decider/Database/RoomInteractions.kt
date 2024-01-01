@@ -21,14 +21,23 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             println("insert is ${cuisineDao.getAllCuisines()}")
         }
 
-    suspend fun updateCuisineName(oldName: String, newName: String) {
+    suspend fun deleteCuisines() {
         withContext(Dispatchers.IO) {
-            cuisineDao.update(oldName, newName)
-            for (i in cuisineDao.getAllCuisines()) {
-                println(i.name)
+            val listOfNames = appViewModel.getListOfSquaresToEdit
+            for (i in listOfNames) {
+                cuisineDao.deleteCuisineFromName(i.name)
             }
         }
     }
+
+//    suspend fun updateCuisineName(oldName: String, newName: String) {
+//        withContext(Dispatchers.IO) {
+//            cuisineDao.updateCuisineName(oldName, newName)
+//            for (i in cuisineDao.getAllCuisines()) {
+//                println(i.name)
+//            }
+//        }
+//    }
 
     suspend fun getAllCuisines() =
         withContext(Dispatchers.IO) {

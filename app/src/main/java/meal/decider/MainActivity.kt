@@ -152,9 +152,10 @@ fun TopBar() {
                 actions = {
                     if (listOfSquaresToEdit.value.isNotEmpty() && editMode.value) {
                         IconButton(onClick = {
-                            appViewModel.deleteSelectedCuisines()
                             coroutineScope.launch {
-                                roomInteractions.updateCuisineName()
+                                roomInteractions.deleteCuisines()
+                                appViewModel.deleteSelectedCuisines()
+
                             }
 
                         }) {

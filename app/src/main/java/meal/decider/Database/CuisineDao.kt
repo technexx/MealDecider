@@ -25,7 +25,10 @@ interface CuisineDao {
     fun insertCuisine(vararg cuisine: Cuisines)
 
     @Query("UPDATE cuisine SET cuisine_name = :newName WHERE cuisine_name = :oldName")
-    fun update(oldName: String, newName: String)
+    fun updateCuisineName(oldName: String, newName: String)
+
+    @Query("DELETE FROM cuisine WHERE cuisine_name = :name")
+    fun deleteCuisineFromName(name: String)
 
     @Delete
     fun deleteCuisine(cuisine: Cuisines)
