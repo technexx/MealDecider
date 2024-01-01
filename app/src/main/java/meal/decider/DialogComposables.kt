@@ -56,7 +56,7 @@ import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
 class DialogComposables(private val activityContext: Context, private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase){
-    val roomInteractions = RoomInteractions(appDatabase)
+    val roomInteractions = RoomInteractions(appDatabase, appViewModel)
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -172,10 +172,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                 appViewModel.addSquareToList(list.value[index])
                                 appViewModel.updateAddMode(false)
                                 coroutineScope.launch {
-                                    roomInteractions.insertCuisine(
-                                        list.value[index],
-                                        defaultSquareColor
-                                    )
+                                    roomInteractions.insertCuisine(list.value[index], defaultSquareColor)
                                 }
                             } else {
                                 Toast
@@ -204,6 +201,8 @@ class DialogComposables(private val activityContext: Context, private val appVie
     fun EditDialogBox() {
         var txtField by remember { mutableStateOf("") }
         txtField = appViewModel.getSquareList[appViewModel.singleSquareIndexToEdit].name
+
+        val coroutineScope = rememberCoroutineScope()
 
         Dialog(onDismissRequest = {
             appViewModel.updateActiveEdit(false)
@@ -246,6 +245,9 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             IconButton(onClick = {
                                 appViewModel.updateSquareName(appViewModel.singleSquareIndexToEdit, txtField)
                                 appViewModel.updateActiveEdit(false)
+                                coroutineScope.launch {
+                                    roomInteractions
+                                }
                             }) {
                             }
                         }

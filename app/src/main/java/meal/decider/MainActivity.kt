@@ -92,12 +92,12 @@ class MainActivity : ComponentActivity() {
         activityContext = this@MainActivity
         appContext = applicationContext
 
-        cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
-        roomInteractions = RoomInteractions(cuisineDatabase)
-
-        appViewModel = AppViewModel(roomInteractions)
+        appViewModel = AppViewModel()
         appViewModel.createSquareList()
         appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
+
+        cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
+        roomInteractions = RoomInteractions(cuisineDatabase, appViewModel)
 
         dialogComposables = DialogComposables(activityContext, appViewModel, cuisineDatabase)
 
@@ -123,7 +123,7 @@ class MainActivity : ComponentActivity() {
 }
 
 suspend fun initialDatabasePopulation() {
-    appViewModel.populateDatabaseWithInitialCuisines()
+    roomInteractions.populateDatabaseWithInitialCuisines()
     }
 
 @OptIn(ExperimentalMaterial3Api::class)
