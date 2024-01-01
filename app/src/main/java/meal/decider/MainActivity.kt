@@ -101,10 +101,10 @@ class MainActivity : ComponentActivity() {
 
         dialogComposables = DialogComposables(activityContext, appViewModel, cuisineDatabase)
 
-        val scope = CoroutineScope(Job() + Dispatchers.Main)
-
+        //Job() identifies and controls coroutine's lifecycle. Dispatcher determines the thread (main/outside main).
+        val scope = CoroutineScope(Job() + Dispatchers.IO)
         scope.launch {
-            initialPop()
+            initialDatabasePopulation()
         }
 
         setContent {
@@ -122,18 +122,17 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-suspend fun initialPop() {
+suspend fun initialDatabasePopulation() {
     appViewModel.populateDatabaseWithInitialCuisines()
-    println("pop")
     }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar() {
-    val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
-    val listOfSquaresToEdit = appViewModel.listOfSquaresToEdit.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var expanded by remember { mutableStateOf(false) }
+    val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
+    val listOfSquaresToEdit = appViewModel.listOfSquaresToEdit.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = Modifier

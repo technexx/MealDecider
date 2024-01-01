@@ -150,6 +150,8 @@ class DialogComposables(private val activityContext: Context, private val appVie
         ){
             items (listToDisplay.value.size) { index ->
                 CuisineListUi(list = listToDisplay.value, index, text = listToDisplay.value[index])
+
+
             }
         }
     }
