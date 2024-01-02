@@ -79,6 +79,10 @@ class AppViewModel : ViewModel() {
         _activeEdit.value = activeEdit
     }
 
+    fun updateRestoreDefaults(restore: Boolean) {
+        _restoreDefaults.value = restore
+    }
+
     fun updateOptionsMode(optionsMode: Boolean) {
         _optionsMode.value = optionsMode
     }

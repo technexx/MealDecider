@@ -86,6 +86,7 @@ private lateinit var roomInteractions: RoomInteractions
 //Job() identifies and controls coroutine's lifecycle. Dispatcher determines the thread (main/outside main).
 val scope = CoroutineScope(Job() + Dispatchers.IO)
 
+//TODO: Confirm in addition dialog adds blank.
 //TODO: Selection between restaurants within category.
 
 class MainActivity : ComponentActivity() {
@@ -220,9 +221,10 @@ fun TopBar() {
                                 expanded = false
                             }
                             DropDownMenuItemUi(text = "Restore Defaults") {
-                                setSquareValuesAndDatabaseToDefaultStartingValues()
-                                appViewModel.updateEditMode(false)
-                                appViewModel.updateRollFinished(false)
+                                appViewModel.updateRestoreDefaults(true)
+//                                setSquareValuesAndDatabaseToDefaultStartingValues()
+//                                appViewModel.updateEditMode(false)
+//                                appViewModel.updateRollFinished(false)
                                 expanded = false
                             }
                         }
@@ -345,7 +347,7 @@ fun SelectionGridLayout(height: Double) {
     }
 
     if (restoreDefaults.value) {
-
+        dialogComposables.ConfirmRestoreDefaultsDialog()
     }
 
 //    if (activeEdit.value) {

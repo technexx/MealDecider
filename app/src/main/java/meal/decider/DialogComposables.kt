@@ -202,7 +202,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 color = colorResource(id = R.color.grey_300)
             ) {
                 Box(modifier = Modifier
-                    .size(height = 400.dp, width = 300.dp),
+                    .size(height = 200.dp, width = 300.dp),
                 ) {
                     Column(modifier = Modifier
                         .fillMaxSize()
@@ -216,7 +216,13 @@ class DialogComposables(private val activityContext: Context, private val appVie
                         Row(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-
+                            Text(
+                                text = "This will restore cuisine list to default!",
+                                fontSize = 18.sp,
+                                color = Color.Black,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(12.dp)
+                            )
                         }
 
                         Spacer(modifier = Modifier.height(10.dp))
@@ -226,14 +232,16 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
                             IconButton(onClick = {
-                                appViewModel.updateAddMode(false)
+                                appViewModel.updateRestoreDefaults(false)
                             }) {
-                                DialogIcon(imageVector = Icons.Filled.Close, colorResource = android.R.color.holo_red_light)
+                                DialogIcon(imageVector = Icons.Default.Close, colorResource = android.R.color.holo_red_light)
                             }
                             IconButton(onClick = {
-
+                                setSquareValuesAndDatabaseToDefaultStartingValues()
+                                appViewModel.updateEditMode(false)
+                                appViewModel.updateRollFinished(false)
                             }) {
-                                DialogIcon(imageVector = Icons.Filled.Check, colorResource = android.R.color.holo_green_light)
+                                DialogIcon(imageVector = Icons.Default.Check, colorResource = android.R.color.holo_green_light)
                             }
                         }
                     }
