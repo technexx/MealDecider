@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity() {
         appContext = applicationContext
 
         appViewModel = AppViewModel()
-        appViewModel.createSquareList()
+        appViewModel.updateSquareValuesList(appViewModel.starterSquareList())
         appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
 
         cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
@@ -105,7 +105,8 @@ class MainActivity : ComponentActivity() {
         //Job() identifies and controls coroutine's lifecycle. Dispatcher determines the thread (main/outside main).
         val scope = CoroutineScope(Job() + Dispatchers.IO)
         scope.launch {
-            initialDatabasePopulation()
+            roomInteractions.populateDatabaseWithInitialCuisines()
+//            roomInteractions.populateSquareValuesWithDatabaseValues()
         }
 
         setContent {
@@ -122,10 +123,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-suspend fun initialDatabasePopulation() {
-    roomInteractions.populateDatabaseWithInitialCuisines()
-    }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -210,7 +207,7 @@ fun TopBar() {
                                 expanded = false
                             }
                             DropDownMenuItemUi(text = "Restore Default") {
-                                appViewModel.createSquareList()
+                                appViewModel.updateSquareValuesList(appViewModel.starterSquareList())
                                 appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
                                 appViewModel.updateEditMode(false)
                                 appViewModel.updateRollFinished(false)

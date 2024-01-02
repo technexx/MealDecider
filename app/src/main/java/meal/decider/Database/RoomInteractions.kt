@@ -1,8 +1,10 @@
 package meal.decider.Database
 
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import meal.decider.AppViewModel
+import meal.decider.SquareValues
 import meal.decider.defaultSquareColor
 
 class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel) {
@@ -13,6 +15,18 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             insertCuisine(i.name, defaultSquareColor)
         }
         println("get all is ${cuisineDao.getAllCuisines()}")
+    }
+
+    suspend fun populateSquareValuesWithDatabaseValues() {
+        withContext(Dispatchers.IO) {
+            val listOfDatabaseCuisines = cuisineDao.getAllCuisines()
+            val squareList = SnapshotStateList<SquareValues>()
+            for (i in listOfDatabaseCuisines) {
+                squareList.add(SquareValues(i.name!!, i.color!!))
+            }
+
+            appViewModel.updateSquareList(squareList)
+        }
     }
 
     suspend fun insertCuisine(name: String, color: Int) =
@@ -30,18 +44,8 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         }
     }
 
-//    suspend fun updateCuisineName(oldName: String, newName: String) {
-//        withContext(Dispatchers.IO) {
-//            cuisineDao.updateCuisineName(oldName, newName)
-//            for (i in cuisineDao.getAllCuisines()) {
-//                println(i.name)
-//            }
-//        }
-//    }
-
     suspend fun getAllCuisines() =
         withContext(Dispatchers.IO) {
             cuisineDao.getAllCuisines()
-            println("get all is ${cuisineDao.getAllCuisines()}")
         }
 }

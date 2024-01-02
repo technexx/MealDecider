@@ -112,9 +112,9 @@ class AppViewModel : ViewModel() {
         }
     }
 
-    fun createSquareList() {
+    fun updateSquareValuesList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
-            currentState.copy(squareList = starterSquareList())
+            currentState.copy(squareList = list)
         }
     }
 
