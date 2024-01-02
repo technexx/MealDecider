@@ -172,7 +172,10 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                 appViewModel.addSquareToList(list.value[index])
                                 appViewModel.updateAddMode(false)
                                 coroutineScope.launch {
-                                    roomInteractions.insertCuisine(list.value[index], defaultSquareColor)
+                                    roomInteractions.insertCuisine(
+                                        list.value[index],
+                                        defaultSquareColor
+                                    )
                                 }
                             } else {
                                 Toast
@@ -193,6 +196,11 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 }
             }
         }
+    }
+
+    @Composable
+    fun ConfirmResetDialog() {
+
     }
 
     @Composable

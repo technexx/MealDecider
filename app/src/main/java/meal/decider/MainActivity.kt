@@ -188,11 +188,11 @@ fun TopBar() {
                             expanded = expanded,
                             onDismissRequest = { expanded = false }
                         ) {
-                            DropDownMenuItemUi(text = "Options") {
-                                appViewModel.updateOptionsMode(true)
-                                appViewModel.updateEditMode(false)
-                                expanded = false
-                            }
+//                            DropDownMenuItemUi(text = "Options") {
+//                                appViewModel.updateOptionsMode(true)
+//                                appViewModel.updateEditMode(false)
+//                                expanded = false
+//                            }
                             DropDownMenuItemUi(text = "Add Cuisine") {
                                 appViewModel.updateAddMode(true)
                                 appViewModel.updateEditMode(false)
@@ -219,7 +219,7 @@ fun TopBar() {
                                 appViewModel.updateEditMode(false)
                                 expanded = false
                             }
-                            DropDownMenuItemUi(text = "Restore Default") {
+                            DropDownMenuItemUi(text = "Restore Defaults") {
                                 setSquareValuesAndDatabaseToDefaultStartingValues()
                                 appViewModel.updateEditMode(false)
                                 appViewModel.updateRollFinished(false)
@@ -328,6 +328,7 @@ fun SelectionGridLayout(height: Double) {
     val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
     val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
     val activeEdit = appViewModel.activeEdit.collectAsStateWithLifecycle()
+    val restoreDefaults = appViewModel.restoreDefaults.collectAsStateWithLifecycle()
     val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
 
     val borderStroke: BorderStroke
@@ -341,6 +342,10 @@ fun SelectionGridLayout(height: Double) {
 
     if (addMode.value) {
         dialogComposables.AddDialogBox()
+    }
+
+    if (restoreDefaults.value) {
+
     }
 
 //    if (activeEdit.value) {

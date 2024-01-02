@@ -32,6 +32,9 @@ class AppViewModel : ViewModel() {
     private val _activeEdit = MutableStateFlow(false)
     val activeEdit : StateFlow<Boolean> = _activeEdit.asStateFlow()
 
+    private val _restoreDefaults = MutableStateFlow(false)
+    val restoreDefaults: StateFlow<Boolean> = _restoreDefaults.asStateFlow()
+
     private val _optionsMode = MutableStateFlow(false)
     val optionsMode : StateFlow<Boolean> = _optionsMode
 
@@ -175,20 +178,6 @@ class AppViewModel : ViewModel() {
         return listToReturn
     }
 
-    val getSquareList get() = boardUiState.value.squareList
-    val getSelectedSquare get() = selectedSquare.value
-    val getListOfSquaresToEdit get() = listOfSquaresToEdit.value
-
-    val getRollEngaged get() = rollEngaged.value
-    val getRollFinished get() = rollFinished.value
-
-    val getAddMode get() = addMode.value
-    val getEditMode get() = editMode.value
-    val getOptionsMode get() = optionsMode.value
-    val getActiveEdit get() = activeEdit.value
-
-    val getRestrictionsList get() = restrictionsList.value
-
     fun sortAndUpdateCuisineList(typeOfSort: String) {
         var squareNames = squareNamesList()
         val currentSquareList = getSquareList
@@ -315,4 +304,19 @@ class AppViewModel : ViewModel() {
         }
         return stringList
     }
+
+    val getSquareList get() = boardUiState.value.squareList
+    val getSelectedSquare get() = selectedSquare.value
+    val getListOfSquaresToEdit get() = listOfSquaresToEdit.value
+
+    val getRollEngaged get() = rollEngaged.value
+    val getRollFinished get() = rollFinished.value
+
+    val getAddMode get() = addMode.value
+    val getEditMode get() = editMode.value
+    val getActiveEdit get() = activeEdit.value
+    val getOptionsMode get() = optionsMode.value
+    val getRestoreDefaults get() = restoreDefaults.value
+
+    val getRestrictionsList get() = restrictionsList.value
 }
