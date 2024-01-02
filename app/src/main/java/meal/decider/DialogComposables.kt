@@ -237,9 +237,8 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                 DialogIcon(imageVector = Icons.Default.Close, colorResource = android.R.color.holo_red_light)
                             }
                             IconButton(onClick = {
-                                setSquareValuesAndDatabaseToDefaultStartingValues()
-                                appViewModel.updateEditMode(false)
-                                appViewModel.updateRollFinished(false)
+                                roomInteractions.setSquareValuesAndDatabaseToDefaultStartingValues()
+                                appViewModel.updateRestoreDefaults(false)
                             }) {
                                 DialogIcon(imageVector = Icons.Default.Check, colorResource = android.R.color.holo_green_light)
                             }

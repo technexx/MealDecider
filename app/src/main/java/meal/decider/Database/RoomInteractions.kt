@@ -2,11 +2,13 @@ package meal.decider.Database
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import meal.decider.AppViewModel
 import meal.decider.SquareValues
 import meal.decider.chosenSquareColor
 import meal.decider.defaultSquareColor
+import meal.decider.scope
 
 class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel) {
     val cuisineDao = cuisineDatabase.cuisineDao()
@@ -50,4 +52,13 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         withContext(Dispatchers.IO) {
             cuisineDao.getAllCuisines()
         }
+
+    fun setSquareValuesAndDatabaseToDefaultStartingValues() {
+        scope.launch {
+            deleteCuisines()
+            populateDatabaseWithInitialCuisines()
+            populateSquareValuesWithDatabaseValues()
+        appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
+        }
+    }
 }

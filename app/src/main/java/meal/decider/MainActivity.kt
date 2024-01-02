@@ -104,7 +104,7 @@ class MainActivity : ComponentActivity() {
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
         scope.launch {
             if (roomInteractions.cuisineDao.getAllCuisines().isEmpty()) {
-                setSquareValuesAndDatabaseToDefaultStartingValues()
+                roomInteractions.setSquareValuesAndDatabaseToDefaultStartingValues()
             }
         }
 
@@ -126,15 +126,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-private fun setSquareValuesAndDatabaseToDefaultStartingValues() {
-    scope.launch {
-        roomInteractions.deleteCuisines()
-        roomInteractions.populateDatabaseWithInitialCuisines()
-        roomInteractions.populateSquareValuesWithDatabaseValues()
-        appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
     }
 }
 
