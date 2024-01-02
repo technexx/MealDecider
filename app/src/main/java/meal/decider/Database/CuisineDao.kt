@@ -17,8 +17,7 @@ interface CuisineDao {
     @Query("SELECT * FROM cuisine WHERE cuisine_name LIKE :name LIMIT 1")
     fun getCuisineByName(name: String): Cuisines
 
-    @Query("SELECT * FROM cuisine WHERE cuisine_name LIKE :name AND " +
-            "cuisine_color LIKE :color LIMIT 1")
+    @Query("SELECT * FROM cuisine WHERE cuisine_name LIKE :name AND " + "cuisine_color LIKE :color LIMIT 1")
     fun getCuisineByNameAndColor(name: String, color: Int): Cuisines
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

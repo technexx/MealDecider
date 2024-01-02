@@ -100,7 +100,18 @@ class MainActivity : ComponentActivity() {
         roomInteractions = RoomInteractions(cuisineDatabase, appViewModel)
         dialogComposables = DialogComposables(activityContext, appViewModel, cuisineDatabase)
 
-        setSquareValuesAndDatabaseToDefaultStartingValues()
+        //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
+        scope.launch {
+            if (roomInteractions.cuisineDao.getAllCuisines().isEmpty()) {
+                setSquareValuesAndDatabaseToDefaultStartingValues()
+            }
+        }
+
+        //Populates SquareValues with DB values and set first cuisine as default selection.
+        scope.launch {
+            roomInteractions.populateSquareValuesWithDatabaseValues()
+            appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
+        }
 
         setContent {
             MealDeciderTheme {
