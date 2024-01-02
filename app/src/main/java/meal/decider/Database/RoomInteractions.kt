@@ -5,15 +5,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import meal.decider.AppViewModel
 import meal.decider.SquareValues
+import meal.decider.chosenSquareColor
 import meal.decider.defaultSquareColor
 
 class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel) {
     val cuisineDao = cuisineDatabase.cuisineDao()
 
     suspend fun populateDatabaseWithInitialCuisines() {
-        for (i in appViewModel.starterSquareList()) {
-            insertCuisine(i.name, defaultSquareColor)
+        for (i in appViewModel.starterSquareList().indices) {
+            if (i==0) insertCuisine(appViewModel.starterSquareList()[i].name, chosenSquareColor) else
+                insertCuisine(appViewModel.starterSquareList()[i].name, defaultSquareColor)
         }
+
         println("initial db cuisines are ${cuisineDao.getAllCuisines()}")
     }
 

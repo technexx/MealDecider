@@ -83,6 +83,8 @@ private lateinit var cuisineDatabase: CuisineDatabase.AppDatabase
 @SuppressLint("StaticFieldLeak")
 private lateinit var dialogComposables : DialogComposables
 private lateinit var roomInteractions: RoomInteractions
+//Job() identifies and controls coroutine's lifecycle. Dispatcher determines the thread (main/outside main).
+val scope = CoroutineScope(Job() + Dispatchers.IO)
 
 //TODO: Selection between restaurants within category.
 
@@ -94,21 +96,11 @@ class MainActivity : ComponentActivity() {
         appContext = applicationContext
 
         appViewModel = AppViewModel()
-//        appViewModel.updateSquareValuesList(appViewModel.starterSquareList())
-//        appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
-
         cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
         roomInteractions = RoomInteractions(cuisineDatabase, appViewModel)
-
         dialogComposables = DialogComposables(activityContext, appViewModel, cuisineDatabase)
 
-        //Job() identifies and controls coroutine's lifecycle. Dispatcher determines the thread (main/outside main).
-        val scope = CoroutineScope(Job() + Dispatchers.IO)
-        scope.launch {
-            roomInteractions.populateDatabaseWithInitialCuisines()
-            roomInteractions.populateSquareValuesWithDatabaseValues()
-            appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
-        }
+        setSquareValuesAndDatabaseToDefaultStartingValues()
 
         setContent {
             MealDeciderTheme {
@@ -122,6 +114,15 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+}
+
+private fun setSquareValuesAndDatabaseToDefaultStartingValues() {
+    scope.launch {
+        roomInteractions.deleteCuisines()
+        roomInteractions.populateDatabaseWithInitialCuisines()
+        roomInteractions.populateSquareValuesWithDatabaseValues()
+        appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
     }
 }
 
@@ -208,8 +209,7 @@ fun TopBar() {
                                 expanded = false
                             }
                             DropDownMenuItemUi(text = "Restore Default") {
-                                appViewModel.updateSquareValuesList(appViewModel.starterSquareList())
-                                appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
+                                setSquareValuesAndDatabaseToDefaultStartingValues()
                                 appViewModel.updateEditMode(false)
                                 appViewModel.updateRollFinished(false)
                                 expanded = false
