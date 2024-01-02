@@ -94,8 +94,8 @@ class MainActivity : ComponentActivity() {
         appContext = applicationContext
 
         appViewModel = AppViewModel()
-        appViewModel.updateSquareValuesList(appViewModel.starterSquareList())
-        appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
+//        appViewModel.updateSquareValuesList(appViewModel.starterSquareList())
+//        appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
 
         cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
         roomInteractions = RoomInteractions(cuisineDatabase, appViewModel)
@@ -106,7 +106,8 @@ class MainActivity : ComponentActivity() {
         val scope = CoroutineScope(Job() + Dispatchers.IO)
         scope.launch {
             roomInteractions.populateDatabaseWithInitialCuisines()
-//            roomInteractions.populateSquareValuesWithDatabaseValues()
+            roomInteractions.populateSquareValuesWithDatabaseValues()
+            appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
         }
 
         setContent {

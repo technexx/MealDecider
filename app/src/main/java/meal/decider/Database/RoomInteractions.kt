@@ -14,7 +14,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         for (i in appViewModel.starterSquareList()) {
             insertCuisine(i.name, defaultSquareColor)
         }
-        println("get all is ${cuisineDao.getAllCuisines()}")
+        println("initial db cuisines are ${cuisineDao.getAllCuisines()}")
     }
 
     suspend fun populateSquareValuesWithDatabaseValues() {
@@ -32,7 +32,6 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
     suspend fun insertCuisine(name: String, color: Int) =
         withContext(Dispatchers.IO) {
             cuisineDao.insertCuisine(Cuisines(null, name, color))
-            println("insert is ${cuisineDao.getAllCuisines()}")
         }
 
     suspend fun deleteCuisines() {
