@@ -416,12 +416,12 @@ fun InteractionLayout(height: Double) {
             Text(text = context.getString(R.string.meal_decided, appViewModel.getSelectedSquare.name), color = Color.Black, fontSize = 22.sp)
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.weight(1.0f))
 
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 12.dp),
+                .padding(bottom = 24.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             Button(
