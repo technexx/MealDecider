@@ -3,6 +3,7 @@ package meal.decider
 import android.content.Context
 import android.view.Gravity
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -142,6 +143,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
     @Composable
     fun FullCuisineList(list: State<List<String>>) {
         val listToSquaresToAdd = appViewModel.listOfSquaresToAdd.collectAsStateWithLifecycle()
+        var backgroundColor: Int = 0
 
         LazyColumn (
             modifier = Modifier
@@ -153,11 +155,20 @@ class DialogComposables(private val activityContext: Context, private val appVie
             items (list.value.size) { index ->
                 val coroutineScope = rememberCoroutineScope()
 
+                //If String in CuisineList matches one in list of squares to add, highlight it.
+                if (listToSquaresToAdd.value[index].name == list.value[index]) {
+                    backgroundColor = R.color.grey_300
+                }
+
                 Column (modifier = Modifier
+                    .background(colorResource(backgroundColor))
                     .padding(4.dp)
                     .selectable(
                         selected = true,
                         onClick = {
+                            //TODO: ListOfSquaresToAdd is SquareValues, while our items list is just a String list.
+                            //TODO: addSquareToList() adds a default color from String list to make SquareValues.
+                            appViewModel.updateListOfSquaresToAdd()
 //                            if (!appViewModel.doesCuisineExistsOnBoard(
 //                                    list.value[index],
 //                                    appViewModel.squareNamesList()
@@ -186,7 +197,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                         .padding(4.dp),
                         fontSize = 20.sp,
                         color = Color.Black,
-                        text = list.value[index] )
+                        text = list.value[index])
                 }
             }
         }
