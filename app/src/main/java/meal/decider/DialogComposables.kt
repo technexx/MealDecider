@@ -119,14 +119,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             IconButton(onClick = {
                                 appViewModel.updateAddMode(false)
                             }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Close,
-                                    contentDescription = "",
-                                    tint = colorResource(android.R.color.holo_red_light),
-                                    modifier = Modifier
-                                        .width(50.dp)
-                                        .height(50.dp)
-                                )
+                                DialogIcon(imageVector = Icons.Filled.Close, colorResource = android.R.color.holo_red_light)
                             }
                             IconButton(onClick = {
                                 if (!appViewModel.doesCuisineExistsOnBoard(txtField, appViewModel.squareNamesList())) {
@@ -199,8 +192,55 @@ class DialogComposables(private val activityContext: Context, private val appVie
     }
 
     @Composable
-    fun ConfirmResetDialog() {
+    fun ConfirmRestoreDefaultsDialog() {
+        Dialog(onDismissRequest = {
+            appViewModel.updateAddMode(false)
+        })
+        {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = colorResource(id = R.color.grey_300)
+            ) {
+                Box(modifier = Modifier
+                    .size(height = 400.dp, width = 300.dp),
+                ) {
+                    Column(modifier = Modifier
+                        .fillMaxSize()
+                        .padding(20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceEvenly)
+                    {
 
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                        }
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Row (modifier = Modifier
+                            .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                        ) {
+                            IconButton(onClick = {
+                                appViewModel.updateAddMode(false)
+                            }) {
+                                DialogIcon(imageVector = Icons.Filled.Close, colorResource = android.R.color.holo_red_light)
+                            }
+                            IconButton(onClick = {
+
+                            }) {
+                                DialogIcon(imageVector = Icons.Filled.Check, colorResource = android.R.color.holo_green_light)
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
     }
 
     @Composable
@@ -230,6 +270,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
             }
         }
     }
+
 
     @Composable
     fun OptionsDialogUi() {
