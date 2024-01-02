@@ -86,7 +86,7 @@ private lateinit var roomInteractions: RoomInteractions
 //Job() identifies and controls coroutine's lifecycle. Dispatcher determines the thread (main/outside main).
 val scope = CoroutineScope(Job() + Dispatchers.IO)
 
-//TODO: Confirm in addition dialog adds blank.
+//TODO: Confirm in addition dialog adds blank. Possibly add multiple selection and/or "select all" option.
 //TODO: Selection between restaurants within category.
 
 class MainActivity : ComponentActivity() {

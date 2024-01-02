@@ -41,6 +41,9 @@ class AppViewModel : ViewModel() {
     private val _selectedSquare = MutableStateFlow(SquareValues())
     var selectedSquare: StateFlow<SquareValues> = _selectedSquare.asStateFlow()
 
+    private val _listofSquaresToAdd = MutableStateFlow(emptyList<SquareValues>())
+    val listOfSquaresToAdd: StateFlow<List<SquareValues>> = _listofSquaresToAdd
+
     private val _listOfSquaresToEdit = MutableStateFlow(emptyList<SquareValues>())
     val listOfSquaresToEdit : StateFlow<List<SquareValues>> = _listOfSquaresToEdit
 
@@ -89,6 +92,10 @@ class AppViewModel : ViewModel() {
 
     fun updateSelectedSquare(selectedSquare: SquareValues) {
         _selectedSquare.value = selectedSquare
+    }
+
+    fun updateListOfSquaresToAdd(list: List<SquareValues>) {
+        _listofSquaresToAdd.value = list
     }
 
     fun updateListOfSquaresToEdit(list: List<SquareValues>) {
@@ -312,6 +319,7 @@ class AppViewModel : ViewModel() {
     val getSquareList get() = boardUiState.value.squareList
     val getSelectedSquare get() = selectedSquare.value
     val getListOfSquaresToEdit get() = listOfSquaresToEdit.value
+    val getListOfSquaresToAdd get() = listOfSquaresToAdd.value
 
     val getRollEngaged get() = rollEngaged.value
     val getRollFinished get() = rollFinished.value

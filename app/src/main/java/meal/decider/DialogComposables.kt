@@ -51,12 +51,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
 class DialogComposables(private val activityContext: Context, private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase){
-    val roomInteractions = RoomInteractions(appDatabase, appViewModel)
+    private val roomInteractions = RoomInteractions(appDatabase, appViewModel)
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -142,6 +141,8 @@ class DialogComposables(private val activityContext: Context, private val appVie
     //List (or any object) in State<Object> is accessed w/ (Var).value.
     @Composable
     fun FullCuisineList(list: State<List<String>>) {
+        val listToSquaresToAdd = appViewModel.listOfSquaresToAdd.collectAsStateWithLifecycle()
+
         LazyColumn (
             modifier = Modifier
                 .height(200.dp)
@@ -157,28 +158,28 @@ class DialogComposables(private val activityContext: Context, private val appVie
                     .selectable(
                         selected = true,
                         onClick = {
-                            if (!appViewModel.doesCuisineExistsOnBoard(
-                                    list.value[index],
-                                    appViewModel.squareNamesList()
-                                )
-                            ) {
-                                appViewModel.addSquareToList(list.value[index])
-                                appViewModel.updateAddMode(false)
-                                coroutineScope.launch {
-                                    roomInteractions.insertCuisine(
-                                        list.value[index],
-                                        defaultSquareColor
-                                    )
-                                }
-                            } else {
-                                Toast
-                                    .makeText(
-                                        activityContext,
-                                        "Cuisine already exists!",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                    .show()
-                            }
+//                            if (!appViewModel.doesCuisineExistsOnBoard(
+//                                    list.value[index],
+//                                    appViewModel.squareNamesList()
+//                                )
+//                            ) {
+//                                appViewModel.addSquareToList(list.value[index])
+//                                appViewModel.updateAddMode(false)
+//                                coroutineScope.launch {
+//                                    roomInteractions.insertCuisine(
+//                                        list.value[index],
+//                                        defaultSquareColor
+//                                    )
+//                                }
+//                            } else {
+//                                Toast
+//                                    .makeText(
+//                                        activityContext,
+//                                        "Cuisine already exists!",
+//                                        Toast.LENGTH_SHORT
+//                                    )
+//                                    .show()
+//                            }
                         }
                     )) {
                     Text(modifier = Modifier
