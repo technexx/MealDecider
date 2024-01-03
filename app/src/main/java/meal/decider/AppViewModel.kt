@@ -213,23 +213,14 @@ class AppViewModel : ViewModel() {
         updateSquareList(newSquareList)
     }
 
-    fun toggleAddCuisineSelections(index: Int) {
-
-    }
-
-    fun addSquareToListOfSquaresToAdd(index: Int) {
-        val tempList = getListOfCuisinesToAdd.toMutableList()
-        tempList.add(fullCuisineList[index])
-        updateListOfSquaresToAdd(tempList)
-        println("added list is $tempList")
-    }
-
-    //Todo: Don't want to remove at index since lists are different.
-    fun removeSquareToListOfSquaresToAdd(cuisine: String) {
-        val tempList = getListOfCuisinesToAdd.toMutableList()
-        tempList.remove(cuisine)
-        updateListOfSquaresToAdd(tempList)
-        println("removed list is $tempList")
+    fun toggleAddCuisineSelections(cuisine: String) {
+        val listToAdd = getListOfCuisinesToAdd.toMutableList()
+        if (listToAdd.contains(cuisine)) {
+            listToAdd.remove(cuisine)
+        } else {
+            listToAdd.add(cuisine)
+        }
+        updateListOfSquaresToAdd(listToAdd)
     }
 
     fun toggleEditCuisineHighlight(index: Int) {

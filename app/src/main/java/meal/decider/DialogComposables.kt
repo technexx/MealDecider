@@ -140,10 +140,13 @@ class DialogComposables(private val activityContext: Context, private val appVie
     }
 
     //List (or any object) in State<Object> is accessed w/ (Var).value.
+    //TODO: Three recomps onClick. Should be one.
     @Composable
     fun DisplayedCuisineList(list: State<List<String>>) {
         val listOfCuisinesToAdd = appViewModel.listOfCuisinesToAdd.collectAsStateWithLifecycle()
         var backgroundColor = R.color.white
+
+        println("recomp")
 
         LazyColumn (
             modifier = Modifier
@@ -155,19 +158,13 @@ class DialogComposables(private val activityContext: Context, private val appVie
             items (list.value.size) { index ->
                 val coroutineScope = rememberCoroutineScope()
 
-                //TODO: Don't allow duplicate entries. Remove if going to duplicate instead (as a toggle).
-                //TODO: Three recomps onClick. Should be one.
 
                 if (!listOfCuisinesToAdd.value.contains(list.value[index])) {
-//                    appViewModel.addSquareToListOfSquaresToAdd(index)
                     backgroundColor = R.color.grey_300
-                    println("true")
                 } else {
-//                    appViewModel.removeSquareToListOfSquaresToAdd(list.value[index])
                     backgroundColor = R.color.grey_500
                 }
 
-                println("recomp")
 
                 Column (modifier = Modifier
                     .background(colorResource(backgroundColor))
@@ -175,6 +172,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                     .selectable(
                         selected = true,
                         onClick = {
+                            appViewModel.toggleAddCuisineSelections(list.value[index])
 
 //                            if (!appViewModel.doesCuisineExistsOnBoard(
 //                                    list.value[index],

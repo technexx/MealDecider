@@ -18,8 +18,6 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             if (i==0) insertCuisine(appViewModel.starterSquareList()[i].name, chosenSquareColor) else
                 insertCuisine(appViewModel.starterSquareList()[i].name, defaultSquareColor)
         }
-
-        println("initial db cuisines are ${cuisineDao.getAllCuisines()}")
     }
 
     suspend fun populateSquareValuesWithDatabaseValues() {
