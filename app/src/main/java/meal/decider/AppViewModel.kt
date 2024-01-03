@@ -41,8 +41,8 @@ class AppViewModel : ViewModel() {
     private val _selectedSquare = MutableStateFlow(SquareValues())
     var selectedSquare: StateFlow<SquareValues> = _selectedSquare.asStateFlow()
 
-    private val _listofSquaresToAdd = MutableStateFlow(emptyList<SquareValues>())
-    val listOfSquaresToAdd: StateFlow<List<SquareValues>> = _listofSquaresToAdd
+    private val _listofCuisinesToAdd = MutableStateFlow(emptyList<String>())
+    val listOfCuisinesToAdd: StateFlow<List<String>> = _listofCuisinesToAdd.asStateFlow()
 
     private val _listOfSquaresToEdit = MutableStateFlow(emptyList<SquareValues>())
     val listOfSquaresToEdit : StateFlow<List<SquareValues>> = _listOfSquaresToEdit
@@ -94,8 +94,8 @@ class AppViewModel : ViewModel() {
         _selectedSquare.value = selectedSquare
     }
 
-    fun updateListOfSquaresToAdd(list: List<SquareValues>) {
-        _listofSquaresToAdd.value = list
+    fun updateListOfSquaresToAdd(list: List<String>) {
+        _listofCuisinesToAdd.value = list
     }
 
     fun updateListOfSquaresToEdit(list: List<SquareValues>) {
@@ -225,11 +225,22 @@ class AppViewModel : ViewModel() {
             } else {
                 tempSquareList[index] = SquareValues(tempSquareList[index].name, defaultSquareColor)
             }
-            removeSquareFromListOfSquareIndicesToUpdate(index)
+            removeSquareFromListOfSquareIndicesToUpdate()
         }
 
         updateSquareList(tempSquareList)
 
+    }
+
+    fun addSquareToListOfSquaresToAdd(index: Int) {
+        val tempList = getListOfCuisinesToAdd.toMutableList()
+        tempList.add(fullCuisineList[index])
+        updateListOfSquaresToAdd(tempList)
+    }
+
+    fun removeSquareToListOfSquaresToAdd(index: Int) {
+        val tempList = getListOfCuisinesToAdd.toMutableList()
+        tempList.removeAt(index)
     }
 
     fun addSquareToListOfSquaresToEdit(index: Int) {
@@ -239,7 +250,7 @@ class AppViewModel : ViewModel() {
         updateListOfSquaresToEdit(tempList)
     }
 
-    fun removeSquareFromListOfSquareIndicesToUpdate(index: Int) {
+    fun removeSquareFromListOfSquareIndicesToUpdate() {
         val tempList = getListOfSquaresToEdit.toMutableList()
         tempList.removeLast()
         updateListOfSquaresToEdit(tempList)
@@ -319,7 +330,7 @@ class AppViewModel : ViewModel() {
     val getSquareList get() = boardUiState.value.squareList
     val getSelectedSquare get() = selectedSquare.value
     val getListOfSquaresToEdit get() = listOfSquaresToEdit.value
-    val getListOfSquaresToAdd get() = listOfSquaresToAdd.value
+    val getListOfCuisinesToAdd get() = listOfCuisinesToAdd.value
 
     val getRollEngaged get() = rollEngaged.value
     val getRollFinished get() = rollFinished.value

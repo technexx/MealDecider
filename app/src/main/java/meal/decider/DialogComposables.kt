@@ -110,7 +110,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
 
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        FullCuisineList(displayedList)
+                        DisplayedCuisineList(displayedList)
 
                         Row (modifier = Modifier
                             .fillMaxWidth(),
@@ -141,9 +141,9 @@ class DialogComposables(private val activityContext: Context, private val appVie
 
     //List (or any object) in State<Object> is accessed w/ (Var).value.
     @Composable
-    fun FullCuisineList(list: State<List<String>>) {
-        val listToSquaresToAdd = appViewModel.listOfSquaresToAdd.collectAsStateWithLifecycle()
-        var backgroundColor: Int = 0
+    fun DisplayedCuisineList(list: State<List<String>>) {
+        val listOfCuisinesToAdd = appViewModel.listOfCuisinesToAdd.collectAsStateWithLifecycle()
+        var backgroundColor = R.color.white
 
         LazyColumn (
             modifier = Modifier
@@ -155,8 +155,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
             items (list.value.size) { index ->
                 val coroutineScope = rememberCoroutineScope()
 
-                //If String in CuisineList matches one in list of squares to add, highlight it.
-                if (listToSquaresToAdd.value[index].name == list.value[index]) {
+                if (listOfCuisinesToAdd.value.contains(list.value[index])) {
                     backgroundColor = R.color.grey_300
                 }
 
@@ -166,9 +165,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                     .selectable(
                         selected = true,
                         onClick = {
-                            //TODO: ListOfSquaresToAdd is SquareValues, while our items list is just a String list.
-                            //TODO: addSquareToList() adds a default color from String list to make SquareValues.
-                            appViewModel.updateListOfSquaresToAdd()
+                            appViewModel.addSquareToListOfSquaresToAdd(index)
 //                            if (!appViewModel.doesCuisineExistsOnBoard(
 //                                    list.value[index],
 //                                    appViewModel.squareNamesList()
