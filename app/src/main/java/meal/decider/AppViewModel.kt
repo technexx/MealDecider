@@ -117,16 +117,18 @@ class AppViewModel : ViewModel() {
         updateSquareList(squareList)
     }
 
+    fun addMultipleSquaresToList(squares: SnapshotStateList<String>) {
+        val squareList = getSquareList
+        for (i in squares) {
+            squareList.add(SquareValues(i, defaultSquareColor))
+        }
+        updateSquareList(squareList)
+    }
+
     fun updateSquareName(index: Int, name: String) {
         val list = getSquareList
         list[index].name = name
 
-        _boardUiState.update { currentState ->
-            currentState.copy(squareList = list)
-        }
-    }
-
-    fun updateSquareValuesList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
             currentState.copy(squareList = list)
         }
@@ -222,7 +224,6 @@ class AppViewModel : ViewModel() {
                 displayedCuisineList.remove(name)
             }
         }
-        println("modified list is $displayedCuisineList")
         updateDisplayedCuisineList(displayedCuisineList)
     }
 

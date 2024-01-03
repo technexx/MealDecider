@@ -65,7 +65,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
         val displayedList = appViewModel.displayedCuisineList.collectAsStateWithLifecycle()
         var searchTerms : List<String>
 
-        //Search box will begin with full list shown.
+        //Full list of cuisines added, then existing squares on main board subtracted.
         appViewModel.updateDisplayedCuisineList(fullCuisineList)
         appViewModel.adjustDisplayedCuisineListFromDisplayedSquares()
 
@@ -141,7 +141,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
         }
     }
 
-    //TODO: Only show cuisines that aren't in squares in Add menu.
     //List (or any object) in State<Object> is accessed w/ (Var).value.
     @Composable
     fun DisplayedCuisineList(list: State<List<String>>) {
