@@ -2,6 +2,7 @@ package meal.decider
 
 import android.content.Context
 import android.view.Gravity
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -51,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
@@ -60,6 +63,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun AddDialogBox() {
+        val coroutineScope = rememberCoroutineScope()
         var txtField by remember { mutableStateOf("") }
         val displayedList = appViewModel.displayedCuisineList.collectAsStateWithLifecycle()
         var searchTerms : List<String>
@@ -125,6 +129,9 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             IconButton(onClick = {
                                 appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd)
                                 appViewModel.updateAddMode(false)
+                                coroutineScope.launch {
+                                    roomInteractions.insertMultipleCuisines(appViewModel.getListOfCuisinesToAdd)
+                                }
                             }) {
                                 DialogIcon(imageVector = Icons.Filled.Check, colorResource = android.R.color.holo_green_light)
                             }
@@ -137,9 +144,11 @@ class DialogComposables(private val activityContext: Context, private val appVie
     }
 
     //List (or any object) in State<Object> is accessed w/ (Var).value.
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun DisplayedCuisineList(list: State<List<String>>) {
         val listOfCuisinesToAdd = appViewModel.listOfCuisinesToAdd.collectAsStateWithLifecycle()
+        val state = rememberLazyListState()
         var backgroundColor: Int
 
         LazyColumn (
@@ -147,11 +156,11 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 .height(200.dp)
                 .fillMaxWidth()
                 .padding(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+//            state = state,
+//            flingBehavior = rememberSnapFlingBehavior(lazyListState = state)
         ){
             items (list.value.size) { index ->
-                val coroutineScope = rememberCoroutineScope()
-
                 if (!listOfCuisinesToAdd.value.contains(list.value[index])) {
                     backgroundColor = R.color.grey_300
                 } else {
@@ -165,33 +174,13 @@ class DialogComposables(private val activityContext: Context, private val appVie
                         selected = true,
                         onClick = {
                             appViewModel.toggleAddCuisineSelections(list.value[index])
-
-//                            if (!appViewModel.doesCuisineExistsOnBoard(
-//                                    list.value[index],
-//                                    appViewModel.squareNamesList()
-//                                )
-//                            ) {
-//                                appViewModel.addSquareToList(list.value[index])
-//                                appViewModel.updateAddMode(false)
-//                                coroutineScope.launch {
-//                                    roomInteractions.insertCuisine(
-//                                        list.value[index],
-//                                        defaultSquareColor
-//                                    )
-//                                }
-//                            } else {
-//                                Toast
-//                                    .makeText(
-//                                        activityContext,
-//                                        "Cuisine already exists!",
-//                                        Toast.LENGTH_SHORT
-//                                    )
-//                                    .show()
-//                            }
                         }
                     )) {
                     Text(modifier = Modifier
-                        .background(colorResource(backgroundColor), shape = RoundedCornerShape(5.dp))
+                        .background(
+                            colorResource(backgroundColor),
+                            shape = RoundedCornerShape(5.dp)
+                        )
                         .padding(8.dp),
                         fontSize = 20.sp,
                         color = Color.Black,

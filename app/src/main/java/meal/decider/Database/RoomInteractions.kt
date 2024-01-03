@@ -37,6 +37,14 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             cuisineDao.insertCuisine(Cuisines(null, name, color))
         }
 
+    suspend fun insertMultipleCuisines(list: List<String>) {
+        withContext(Dispatchers.IO) {
+            for (i in list) {
+                cuisineDao.insertCuisine(Cuisines(null, i, defaultSquareColor))
+            }
+        }
+    }
+
     suspend fun deleteCuisines() {
         withContext(Dispatchers.IO) {
             val listOfNames = appViewModel.getListOfSquaresToEdit
