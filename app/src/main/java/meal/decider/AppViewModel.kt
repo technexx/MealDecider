@@ -213,6 +213,25 @@ class AppViewModel : ViewModel() {
         updateSquareList(newSquareList)
     }
 
+    fun toggleAddCuisineSelections(index: Int) {
+
+    }
+
+    fun addSquareToListOfSquaresToAdd(index: Int) {
+        val tempList = getListOfCuisinesToAdd.toMutableList()
+        tempList.add(fullCuisineList[index])
+        updateListOfSquaresToAdd(tempList)
+        println("added list is $tempList")
+    }
+
+    //Todo: Don't want to remove at index since lists are different.
+    fun removeSquareToListOfSquaresToAdd(cuisine: String) {
+        val tempList = getListOfCuisinesToAdd.toMutableList()
+        tempList.remove(cuisine)
+        updateListOfSquaresToAdd(tempList)
+        println("removed list is $tempList")
+    }
+
     fun toggleEditCuisineHighlight(index: Int) {
         val tempSquareList = getSquareList
 
@@ -230,17 +249,6 @@ class AppViewModel : ViewModel() {
 
         updateSquareList(tempSquareList)
 
-    }
-
-    fun addSquareToListOfSquaresToAdd(index: Int) {
-        val tempList = getListOfCuisinesToAdd.toMutableList()
-        tempList.add(fullCuisineList[index])
-        updateListOfSquaresToAdd(tempList)
-    }
-
-    fun removeSquareToListOfSquaresToAdd(index: Int) {
-        val tempList = getListOfCuisinesToAdd.toMutableList()
-        tempList.removeAt(index)
     }
 
     fun addSquareToListOfSquaresToEdit(index: Int) {

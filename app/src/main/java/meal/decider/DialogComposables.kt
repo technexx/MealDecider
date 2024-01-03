@@ -158,10 +158,13 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 //TODO: Don't allow duplicate entries. Remove if going to duplicate instead (as a toggle).
                 //TODO: Three recomps onClick. Should be one.
 
-                //TODO: Even a single true will change all entries.
-                if (listOfCuisinesToAdd.value.contains(list.value[index])) {
+                if (!listOfCuisinesToAdd.value.contains(list.value[index])) {
+//                    appViewModel.addSquareToListOfSquaresToAdd(index)
                     backgroundColor = R.color.grey_300
                     println("true")
+                } else {
+//                    appViewModel.removeSquareToListOfSquaresToAdd(list.value[index])
+                    backgroundColor = R.color.grey_500
                 }
 
                 println("recomp")
@@ -172,7 +175,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                     .selectable(
                         selected = true,
                         onClick = {
-                            appViewModel.addSquareToListOfSquaresToAdd(index)
+
 //                            if (!appViewModel.doesCuisineExistsOnBoard(
 //                                    list.value[index],
 //                                    appViewModel.squareNamesList()
