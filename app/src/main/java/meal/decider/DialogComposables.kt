@@ -146,8 +146,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
         val listOfCuisinesToAdd = appViewModel.listOfCuisinesToAdd.collectAsStateWithLifecycle()
         var backgroundColor = R.color.white
 
-        println("recomp")
-
         LazyColumn (
             modifier = Modifier
                 .height(200.dp)
@@ -158,7 +156,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
             items (list.value.size) { index ->
                 val coroutineScope = rememberCoroutineScope()
 
-
                 if (!listOfCuisinesToAdd.value.contains(list.value[index])) {
                     backgroundColor = R.color.grey_300
                 } else {
@@ -167,7 +164,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
 
 
                 Column (modifier = Modifier
-                    .background(colorResource(backgroundColor))
+//                    .background(colorResource(backgroundColor), shape = RoundedCornerShape(5.dp))
                     .padding(4.dp)
                     .selectable(
                         selected = true,
@@ -199,7 +196,8 @@ class DialogComposables(private val activityContext: Context, private val appVie
                         }
                     )) {
                     Text(modifier = Modifier
-                        .padding(4.dp),
+                        .background(colorResource(backgroundColor), shape = RoundedCornerShape(5.dp))
+                        .padding(8.dp),
                         fontSize = 20.sp,
                         color = Color.Black,
                         text = list.value[index])
