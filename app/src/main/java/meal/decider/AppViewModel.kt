@@ -213,6 +213,19 @@ class AppViewModel : ViewModel() {
         updateSquareList(newSquareList)
     }
 
+    //Val declares first element in our data object (i.e. "name", thought it can be named anything).
+    fun adjustDisplayedCuisineListFromDisplayedSquares() {
+        val displayedCuisineList = getDisplayedCuisineList.toMutableList()
+        for (i in getSquareList) {
+            val (name) = i
+            if (displayedCuisineList.contains(name)) {
+                displayedCuisineList.remove(name)
+            }
+        }
+        println("modified list is $displayedCuisineList")
+        updateDisplayedCuisineList(displayedCuisineList)
+    }
+
     fun toggleAddCuisineSelections(cuisine: String) {
         val listToAdd = getListOfCuisinesToAdd.toMutableList()
         if (listToAdd.contains(cuisine)) {
@@ -328,6 +341,7 @@ class AppViewModel : ViewModel() {
 
     val getSquareList get() = boardUiState.value.squareList
     val getSelectedSquare get() = selectedSquare.value
+    val getDisplayedCuisineList get() = displayedCuisineList.value
     val getListOfSquaresToEdit get() = listOfSquaresToEdit.value
     val getListOfCuisinesToAdd get() = listOfCuisinesToAdd.value
 

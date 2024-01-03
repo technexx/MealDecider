@@ -67,6 +67,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
 
         //Search box will begin with full list shown.
         appViewModel.updateDisplayedCuisineList(fullCuisineList)
+        appViewModel.adjustDisplayedCuisineListFromDisplayedSquares()
 
         Dialog(onDismissRequest = {
             appViewModel.updateAddMode(false)
@@ -111,6 +112,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                         Spacer(modifier = Modifier.height(10.dp))
 
                         DisplayedCuisineList(displayedList)
+                        appViewModel.adjustDisplayedCuisineListFromDisplayedSquares()
 
                         Row (modifier = Modifier
                             .fillMaxWidth(),
@@ -139,12 +141,12 @@ class DialogComposables(private val activityContext: Context, private val appVie
         }
     }
 
+    //TODO: Only show cuisines that aren't in squares in Add menu.
     //List (or any object) in State<Object> is accessed w/ (Var).value.
-    //TODO: Three recomps onClick. Should be one.
     @Composable
     fun DisplayedCuisineList(list: State<List<String>>) {
         val listOfCuisinesToAdd = appViewModel.listOfCuisinesToAdd.collectAsStateWithLifecycle()
-        var backgroundColor = R.color.white
+        var backgroundColor: Int
 
         LazyColumn (
             modifier = Modifier
@@ -164,7 +166,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
 
 
                 Column (modifier = Modifier
-//                    .background(colorResource(backgroundColor), shape = RoundedCornerShape(5.dp))
                     .padding(4.dp)
                     .selectable(
                         selected = true,
