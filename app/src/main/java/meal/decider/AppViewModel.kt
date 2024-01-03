@@ -117,7 +117,7 @@ class AppViewModel : ViewModel() {
         updateSquareList(squareList)
     }
 
-    fun addMultipleSquaresToList(squares: SnapshotStateList<String>) {
+    fun addMultipleSquaresToList(squares: List<String>) {
         val squareList = getSquareList
         for (i in squares) {
             squareList.add(SquareValues(i, defaultSquareColor))

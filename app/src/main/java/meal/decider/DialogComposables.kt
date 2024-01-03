@@ -2,7 +2,6 @@ package meal.decider
 
 import android.content.Context
 import android.view.Gravity
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -124,12 +123,8 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                 DialogIcon(imageVector = Icons.Filled.Close, colorResource = android.R.color.holo_red_light)
                             }
                             IconButton(onClick = {
-                                if (!appViewModel.doesCuisineExistsOnBoard(txtField, appViewModel.squareNamesList())) {
-                                    appViewModel.addSquareToList(txtField)
-                                    appViewModel.updateAddMode(false)
-                                } else {
-                                    Toast.makeText(activityContext, "Cuisine already exists!", Toast.LENGTH_SHORT).show()
-                                }
+                                appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd)
+                                appViewModel.updateAddMode(false)
                             }) {
                                 DialogIcon(imageVector = Icons.Filled.Check, colorResource = android.R.color.holo_green_light)
                             }
