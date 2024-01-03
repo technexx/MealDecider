@@ -155,9 +155,16 @@ class DialogComposables(private val activityContext: Context, private val appVie
             items (list.value.size) { index ->
                 val coroutineScope = rememberCoroutineScope()
 
+                //TODO: Don't allow duplicate entries. Remove if going to duplicate instead (as a toggle).
+                //TODO: Three recomps onClick. Should be one.
+
+                //TODO: Even a single true will change all entries.
                 if (listOfCuisinesToAdd.value.contains(list.value[index])) {
                     backgroundColor = R.color.grey_300
+                    println("true")
                 }
+
+                println("recomp")
 
                 Column (modifier = Modifier
                     .background(colorResource(backgroundColor))
