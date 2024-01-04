@@ -367,6 +367,7 @@ fun SelectionGridLayout(height: Double) {
                 if (appViewModel.getRollFinished) {
                     LaunchedEffect(key1 = Unit) {
                         sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
+                        appViewModel.updateRollFinished(false)
                     }
                 }
 

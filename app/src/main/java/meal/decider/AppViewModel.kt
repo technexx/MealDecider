@@ -319,7 +319,6 @@ class AppViewModel : ViewModel() {
 
         handler.removeCallbacks(squareColorChangeRunnable)
         updateRollEngaged(true)
-        updateRollFinished(false)
 
         squareColorChangeRunnable = Runnable {
             rolledSquareIndex = Random.nextInt(0, getSquareList.size)
