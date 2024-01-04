@@ -34,4 +34,7 @@ interface CuisineDao {
 
     @Delete
     fun deleteCuisine(cuisine: Cuisines)
+
+    @Delete
+    fun deleteAllCuisines(list: List<Cuisines>)
 }

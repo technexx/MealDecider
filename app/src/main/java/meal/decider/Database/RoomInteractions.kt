@@ -45,12 +45,18 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         }
     }
 
-    suspend fun deleteCuisines() {
+    suspend fun deleteMultipleCuisines() {
         withContext(Dispatchers.IO) {
             val listOfNames = appViewModel.getListOfSquaresToEdit
             for (i in listOfNames) {
                 cuisineDao.deleteCuisineFromName(i.name)
             }
+        }
+    }
+
+    suspend fun deleteAllCuisines() {
+        withContext(Dispatchers.IO) {
+            cuisineDao.deleteAllCuisines(cuisineDao.getAllCuisines())
         }
     }
 
@@ -61,7 +67,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
 
     fun setSquareValuesAndDatabaseToDefaultStartingValues() {
         scope.launch {
-            deleteCuisines()
+            deleteAllCuisines()
             populateDatabaseWithInitialCuisines()
             populateSquareValuesWithDatabaseValues()
         appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])

@@ -245,6 +245,7 @@ class AppViewModel : ViewModel() {
         updateListOfSquaresToEdit(tempList)
     }
 
+    //With SnapShotStateLists, our contains() conditional is true, but not with regular Lists.
     fun deleteSelectedCuisines() {
         val listOfSquaresToEdit = getListOfSquaresToEdit
         val currentSquaresList = getSquareList
@@ -252,6 +253,7 @@ class AppViewModel : ViewModel() {
         for (i in listOfSquaresToEdit) {
             if (currentSquaresList.contains(i)) {
                 currentSquaresList.remove(i)
+                println("true")
             }
         }
 
