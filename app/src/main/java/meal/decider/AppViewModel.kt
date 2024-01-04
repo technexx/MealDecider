@@ -75,6 +75,8 @@ class AppViewModel : ViewModel() {
 
     fun updateAddMode(addMode: Boolean) {
         _addMode.value = addMode
+        //If disabling add mode and its dialog box, empty our list of cuisines to add.
+        if (!_addMode.value) updateListOfSquaresToAdd(emptyList())
     }
 
     fun updateEditMode(editMode: Boolean) {
