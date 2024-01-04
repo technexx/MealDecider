@@ -17,6 +17,10 @@ class AppViewModel : ViewModel() {
     var singleSquareIndexToEdit = 0
     var rolledSquareIndex = 0
 
+    private val handler = Handler(Looper.getMainLooper())
+    private var squareColorChangeRunnable = Runnable {}
+    private var pressYourLuckRunnable = Runnable {}
+
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
 
@@ -55,9 +59,6 @@ class AppViewModel : ViewModel() {
 
     private val _restrictionsList = MutableStateFlow(RestrictionsObject.RestrictionsList)
     val restrictionsList : StateFlow<SnapshotStateList<RestrictionsValues>> = _restrictionsList.asStateFlow()
-
-    private val handler = Handler(Looper.getMainLooper())
-    private var squareColorChangeRunnable = Runnable {}
 
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
@@ -322,7 +323,6 @@ class AppViewModel : ViewModel() {
 
     fun rollCuisine() {
         var delay: Long = 500
-
         handler.removeCallbacks(squareColorChangeRunnable)
         updateRollEngaged(true)
 
@@ -345,6 +345,24 @@ class AppViewModel : ViewModel() {
         }
 
         handler.post((squareColorChangeRunnable))
+    }
+
+    fun pressYourLuck() {
+        var delay: Long = 500
+        handler.removeCallbacks(pressYourLuckRunnable)
+
+        pressYourLuckRunnable = Runnable {
+            sortAndUpdateCuisineList("random")
+
+            handler.postDelayed(pressYourLuckRunnable, delay)
+            delay -= 40
+
+            if (delay < 20) {
+                handler.removeCallbacks(pressYourLuckRunnable)
+            }
+        }
+
+        handler.post(pressYourLuckRunnable)
     }
 
     val getSquareList get() = boardUiState.value.squareList
