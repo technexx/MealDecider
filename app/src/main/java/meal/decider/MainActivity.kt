@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -46,6 +48,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -315,6 +318,7 @@ fun OptionsBarLayout(height: Double) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SelectionGridLayout(height: Double) {
     val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
@@ -349,7 +353,15 @@ fun SelectionGridLayout(height: Double) {
         dialogComposables.OptionsDialog()
     }
 
-    LazyVerticalGrid(modifier = Modifier
+    val sectionGridState = rememberLazyGridState()
+
+    LaunchedEffect(key1 = Unit) {
+        sectionGridState.animateScrollToItem(index = 22)
+
+    }
+
+    LazyVerticalGrid(state = sectionGridState,
+        modifier = Modifier
         .height(height.dp),
         columns = GridCells.Adaptive(minSize = 128.dp),
         contentPadding = PaddingValues(

@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -148,7 +147,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
     @Composable
     fun DisplayedCuisineList(list: State<List<String>>) {
         val listOfCuisinesToAdd = appViewModel.listOfCuisinesToAdd.collectAsStateWithLifecycle()
-        val state = rememberLazyListState()
         var backgroundColor: Int
 
         LazyColumn (
@@ -157,8 +155,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 .fillMaxWidth()
                 .padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-//            state = state,
-//            flingBehavior = rememberSnapFlingBehavior(lazyListState = state)
         ){
             items (list.value.size) { index ->
                 if (!listOfCuisinesToAdd.value.contains(list.value[index])) {
