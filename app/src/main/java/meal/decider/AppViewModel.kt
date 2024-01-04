@@ -13,6 +13,7 @@ import kotlin.random.Random
 
 class AppViewModel : ViewModel() {
     var singleSquareIndexToEdit = 0
+    var rolledSquareIndex = 0
 
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
@@ -141,33 +142,6 @@ class AppViewModel : ViewModel() {
         }
         list[0] = SquareValues(list[0].name, chosenSquareColor)
         return list
-    }
-
-    fun updateColorOfSquareValuesList() {
-        var delay: Long = 500
-
-        handler.removeCallbacks(squareColorChangeRunnable)
-        updateRollEngaged(true)
-
-        squareColorChangeRunnable = Runnable {
-            val indexRoll = Random.nextInt(0, getSquareList.size)
-            val newSquareList = squareListWithRandomColorChanged(indexRoll)
-
-            updateSquareList(newSquareList)
-
-            handler.postDelayed(squareColorChangeRunnable, delay)
-            delay -= 20
-
-            if (delay < 20) {
-                updateSelectedSquare(getSquareList[indexRoll])
-                updateRollEngaged(false)
-                updateRollFinished(true)
-
-                handler.removeCallbacks(squareColorChangeRunnable)
-            }
-        }
-
-        handler.post((squareColorChangeRunnable))
     }
 
     private fun squareListWithRandomColorChanged(index: Int): SnapshotStateList<SquareValues> {
@@ -338,6 +312,34 @@ class AppViewModel : ViewModel() {
             }
         }
         return stringList
+    }
+
+    fun rollCuisine() {
+        var delay: Long = 500
+
+        handler.removeCallbacks(squareColorChangeRunnable)
+        updateRollEngaged(true)
+        updateRollFinished(false)
+
+        squareColorChangeRunnable = Runnable {
+            rolledSquareIndex = Random.nextInt(0, getSquareList.size)
+            val newSquareList = squareListWithRandomColorChanged(rolledSquareIndex)
+
+            updateSquareList(newSquareList)
+
+            handler.postDelayed(squareColorChangeRunnable, delay)
+            delay -= 20
+
+            if (delay < 20) {
+                updateSelectedSquare(getSquareList[rolledSquareIndex])
+                updateRollEngaged(false)
+                updateRollFinished(true)
+
+                handler.removeCallbacks(squareColorChangeRunnable)
+            }
+        }
+
+        handler.post((squareColorChangeRunnable))
     }
 
     val getSquareList get() = boardUiState.value.squareList

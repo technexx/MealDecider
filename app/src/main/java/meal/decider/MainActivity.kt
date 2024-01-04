@@ -216,9 +216,6 @@ fun TopBar() {
                             }
                             DropDownMenuItemUi(text = "Restore Defaults") {
                                 appViewModel.updateRestoreDefaults(true)
-//                                setSquareValuesAndDatabaseToDefaultStartingValues()
-//                                appViewModel.updateEditMode(false)
-//                                appViewModel.updateRollFinished(false)
                                 expanded = false
                             }
                         }
@@ -322,6 +319,7 @@ fun OptionsBarLayout(height: Double) {
 @Composable
 fun SelectionGridLayout(height: Double) {
     val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
+    val sectionGridState = rememberLazyGridState()
     val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
     val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
     val activeEdit = appViewModel.activeEdit.collectAsStateWithLifecycle()
@@ -353,13 +351,6 @@ fun SelectionGridLayout(height: Double) {
         dialogComposables.OptionsDialog()
     }
 
-    val sectionGridState = rememberLazyGridState()
-
-    LaunchedEffect(key1 = Unit) {
-        sectionGridState.animateScrollToItem(index = 22)
-
-    }
-
     LazyVerticalGrid(state = sectionGridState,
         modifier = Modifier
         .height(height.dp),
@@ -372,6 +363,13 @@ fun SelectionGridLayout(height: Double) {
         ),
         content = {
             items(boardUiState.value.squareList.size) { index ->
+
+                if (appViewModel.getRollFinished) {
+                    LaunchedEffect(key1 = Unit) {
+                        sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
+                    }
+                }
+
                 Card(
                     colors = CardDefaults.cardColors(
                         containerColor = colorResource(id = appViewModel.getSquareList[index].color),
@@ -437,7 +435,7 @@ fun InteractionLayout(height: Double) {
             Button(
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-                        appViewModel.updateColorOfSquareValuesList()
+                        appViewModel.rollCuisine()
                     }
                 },
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
