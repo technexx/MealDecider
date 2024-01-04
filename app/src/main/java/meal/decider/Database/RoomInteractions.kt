@@ -60,11 +60,6 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         }
     }
 
-    suspend fun getAllCuisines() =
-        withContext(Dispatchers.IO) {
-            cuisineDao.getAllCuisines()
-        }
-
     fun setSquareValuesAndDatabaseToDefaultStartingValues() {
         scope.launch {
             deleteAllCuisines()

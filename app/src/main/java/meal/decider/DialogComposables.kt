@@ -187,7 +187,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
     @Composable
     fun ConfirmRestoreDefaultsDialog() {
         Dialog(onDismissRequest = {
-            appViewModel.updateAddMode(false)
+            appViewModel.updateRestoreDefaults(false)
         })
         {
             Surface(
