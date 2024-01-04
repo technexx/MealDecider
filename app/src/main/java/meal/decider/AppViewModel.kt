@@ -48,7 +48,7 @@ class AppViewModel : ViewModel() {
     private val _listOfSquaresToEdit = MutableStateFlow(emptyList<SquareValues>())
     val listOfSquaresToEdit : StateFlow<List<SquareValues>> = _listOfSquaresToEdit
 
-    private val _displayedCuisineList = MutableStateFlow(emptyList<String>().toList())
+    private val _displayedCuisineList = MutableStateFlow(emptyList<String>())
     val displayedCuisineList: StateFlow<List<String>> = _displayedCuisineList.asStateFlow()
 
     private val _restrictionsList = MutableStateFlow(RestrictionsObject.RestrictionsList)

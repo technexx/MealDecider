@@ -2,7 +2,6 @@ package meal.decider
 
 import android.content.Context
 import android.view.Gravity
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -143,7 +142,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
     }
 
     //List (or any object) in State<Object> is accessed w/ (Var).value.
-    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun DisplayedCuisineList(list: State<List<String>>) {
         val listOfCuisinesToAdd = appViewModel.listOfCuisinesToAdd.collectAsStateWithLifecycle()
@@ -162,7 +160,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 } else {
                     backgroundColor = R.color.grey_500
                 }
-
 
                 Column (modifier = Modifier
                     .padding(4.dp)

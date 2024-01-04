@@ -89,7 +89,8 @@ private lateinit var roomInteractions: RoomInteractions
 //Job() identifies and controls coroutine's lifecycle. Dispatcher determines the thread (main/outside main).
 val scope = CoroutineScope(Job() + Dispatchers.IO)
 
-//TODO: Should scroll down if selection is a cuisine out of sight.
+//TODO: "Roll Again" and "Reset" options.
+//TODO: Keep statistics (how many rolls, how many re-rolls, how many maps opened, etc.)
 //TODO: Selection between restaurants within category.
 
 class MainActivity : ComponentActivity() {
@@ -380,7 +381,7 @@ fun SelectionGridLayout(height: Double) {
                         defaultElevation = 6.dp
                     ),
                     modifier = Modifier
-                        .padding(4.dp)
+                        .padding(6.dp)
                         .selectable(
                             selected = true,
                             onClick = {
@@ -419,19 +420,20 @@ fun InteractionLayout(height: Double) {
         modifier = Modifier
             .height(height.dp)
             .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        if (rollFinished.value) {
-            Text(text = context.getString(R.string.meal_decided, appViewModel.getSelectedSquare.name), color = Color.Black, fontSize = 22.sp)
-        }
+//        if (rollFinished.value) {
+//            Text(text = context.getString(R.string.meal_decided, appViewModel.getSelectedSquare.name), color = Color.Black, fontSize = 22.sp)
+//        }
 
-        Spacer(modifier = Modifier.weight(1.0f))
+//        Spacer(modifier = Modifier.weight(1.0f))
 
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.Center
+                .padding(bottom = 12.dp),
+            horizontalArrangement = Arrangement.Center,
         ) {
             Button(
                 onClick = {
