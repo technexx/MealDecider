@@ -89,10 +89,6 @@ private lateinit var dialogComposables : DialogComposables
 private lateinit var roomInteractions: RoomInteractions
 val scope = CoroutineScope(Job() + Dispatchers.IO)
 
-//TODO: Errors w/ same cuisine being added multiple times.
-//TODO: Adding and/or deleting may not update UI after rolling (will update database so shows correctly on app restart).
-
-//TODO: ListOfSquaresToAdd should be super temporary or reset immediately.
 //TODO: Randomization speed/duration options.
 //TODO: Keep statistics (how many rolls, how many re-rolls, how many maps opened, etc.)
 //TODO: Selection between restaurants within category.
