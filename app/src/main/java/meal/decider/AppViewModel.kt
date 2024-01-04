@@ -2,6 +2,7 @@ package meal.decider
 
 import android.os.Handler
 import android.os.Looper
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlin.random.Random
 
+@Stable
 class AppViewModel : ViewModel() {
     var singleSquareIndexToEdit = 0
     var rolledSquareIndex = 0

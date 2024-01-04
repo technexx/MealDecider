@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -86,7 +87,6 @@ private lateinit var cuisineDatabase: CuisineDatabase.AppDatabase
 @SuppressLint("StaticFieldLeak")
 private lateinit var dialogComposables : DialogComposables
 private lateinit var roomInteractions: RoomInteractions
-//Job() identifies and controls coroutine's lifecycle. Dispatcher determines the thread (main/outside main).
 val scope = CoroutineScope(Job() + Dispatchers.IO)
 
 //TODO: "Roll Again" and "Reset" options.
@@ -418,17 +418,11 @@ fun InteractionLayout(height: Double) {
 
     Column (
         modifier = Modifier
-            .height(height.dp)
-            .fillMaxWidth(),
+            .wrapContentHeight()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-//        if (rollFinished.value) {
-//            Text(text = context.getString(R.string.meal_decided, appViewModel.getSelectedSquare.name), color = Color.Black, fontSize = 22.sp)
-//        }
-
-//        Spacer(modifier = Modifier.weight(1.0f))
-
         Row (
             modifier = Modifier
                 .fillMaxWidth()

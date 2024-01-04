@@ -147,6 +147,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
         val listOfCuisinesToAdd = appViewModel.listOfCuisinesToAdd.collectAsStateWithLifecycle()
         var backgroundColor: Int
 
+
         LazyColumn (
             modifier = Modifier
                 .height(200.dp)
