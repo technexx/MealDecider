@@ -322,9 +322,13 @@ class AppViewModel : ViewModel() {
     }
 
     fun rollCuisine() {
-        var delay: Long = 500
-        handler.removeCallbacks(squareColorChangeRunnable)
+        var runTime: Long = 500
+        var squareChangeDelay: Long = 20
+        var boardChangeDelay: Long = 60
         updateRollEngaged(true)
+
+        handler.removeCallbacks(squareColorChangeRunnable)
+        handler.removeCallbacks(pressYourLuckRunnable)
 
         squareColorChangeRunnable = Runnable {
             rolledSquareIndex = Random.nextInt(0, getSquareList.size)
@@ -332,37 +336,26 @@ class AppViewModel : ViewModel() {
 
             updateSquareList(newSquareList)
 
-            handler.postDelayed(squareColorChangeRunnable, delay)
-            delay -= 20
+            handler.postDelayed(squareColorChangeRunnable, squareChangeDelay)
+            handler.postDelayed(pressYourLuckRunnable, boardChangeDelay)
 
-            if (delay < 20) {
+            runTime -= 20
+
+            if (runTime < 20) {
                 updateSelectedSquare(getSquareList[rolledSquareIndex])
                 updateRollEngaged(false)
                 updateRollFinished(true)
 
                 handler.removeCallbacks(squareColorChangeRunnable)
-            }
-        }
-
-        handler.post((squareColorChangeRunnable))
-    }
-
-    fun pressYourLuck() {
-        var delay: Long = 500
-        handler.removeCallbacks(pressYourLuckRunnable)
-
-        pressYourLuckRunnable = Runnable {
-            sortAndUpdateCuisineList("random")
-
-            handler.postDelayed(pressYourLuckRunnable, delay)
-            delay -= 40
-
-            if (delay < 20) {
                 handler.removeCallbacks(pressYourLuckRunnable)
             }
         }
 
-        handler.post(pressYourLuckRunnable)
+        pressYourLuckRunnable = Runnable {
+            sortAndUpdateCuisineList("random")
+        }
+
+        handler.post((squareColorChangeRunnable))
     }
 
     val getSquareList get() = boardUiState.value.squareList

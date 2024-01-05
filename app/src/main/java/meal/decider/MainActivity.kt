@@ -367,7 +367,6 @@ fun SelectionGridLayout(height: Double) {
         ),
         content = {
             items(boardUiState.value.squareList.size) { index ->
-
                 if (appViewModel.getRollFinished) {
                     LaunchedEffect(key1 = Unit) {
                         sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
@@ -436,7 +435,7 @@ fun InteractionLayout(height: Double) {
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         appViewModel.rollCuisine()
-                        appViewModel.pressYourLuck()
+//                        appViewModel.pressYourLuck()
                     }
                 },
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
