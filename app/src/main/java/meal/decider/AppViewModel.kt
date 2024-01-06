@@ -305,13 +305,6 @@ class AppViewModel : ViewModel() {
         }
     }
 
-    fun doesCuisineExistsOnBoard(cuisineToAdd: String, listOfCuisines: List<String>): Boolean {
-        for (i in listOfCuisines) {
-            if (cuisineToAdd.equals(i, true)) return true
-        }
-        return false
-    }
-
     fun foodRestrictionsString(list: SnapshotStateList<RestrictionsValues>): String {
         var stringList = ""
         for (i in list) {
@@ -324,7 +317,7 @@ class AppViewModel : ViewModel() {
 
     //Cuisine and Press Your Luck run at different intervals but both stop when rollCountDown hits 20.
     fun rollCuisine() {
-        var delay: Long = 300
+        var delay: Long = 400
         rollCountdown = 1000
 
         updateRollEngaged(true)
@@ -336,7 +329,7 @@ class AppViewModel : ViewModel() {
             updateSquareList(newSquareList)
 
             handler.postDelayed(squareColorChangeRunnable, delay)
-            if (delay > 20) delay -= 10
+            if (delay > 100) delay -= 10
             rollCountdown -= 20
 
             if (rollCountdown < 20) {
@@ -352,8 +345,7 @@ class AppViewModel : ViewModel() {
     }
 
     fun pressYourLuck() {
-        var delay: Long = 600
-        rollCountdown = 1000
+        var delay: Long = 800
 
         handler.removeCallbacks(pressYourLuckRunnable)
 
@@ -361,10 +353,10 @@ class AppViewModel : ViewModel() {
             sortAndUpdateCuisineList("random")
 
             handler.postDelayed(pressYourLuckRunnable, delay)
-            if (delay > 40) delay -= 20
+            if (delay > 200) delay -= 20
             rollCountdown -= 20
 
-            if (rollCountdown < 20) {
+            if (rollCountdown < 60) {
                 handler.removeCallbacks(pressYourLuckRunnable)
             }
         }
