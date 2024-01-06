@@ -336,7 +336,7 @@ class AppViewModel : ViewModel() {
             updateSquareList(newSquareList)
 
             handler.postDelayed(squareColorChangeRunnable, delay)
-            delay -= 10
+            if (delay > 20) delay -= 10
             rollCountdown -= 20
 
             if (rollCountdown < 20) {
@@ -361,7 +361,7 @@ class AppViewModel : ViewModel() {
             sortAndUpdateCuisineList("random")
 
             handler.postDelayed(pressYourLuckRunnable, delay)
-            delay -= 20
+            if (delay > 40) delay -= 20
             rollCountdown -= 20
 
             if (rollCountdown < 20) {
