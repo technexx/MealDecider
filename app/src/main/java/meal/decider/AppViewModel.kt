@@ -16,6 +16,7 @@ import kotlin.random.Random
 class AppViewModel : ViewModel() {
     var singleSquareIndexToEdit = 0
     var rolledSquareIndex = 0
+    var rollCountdown: Long = 1000
 
     private val handler = Handler(Looper.getMainLooper())
     private var squareColorChangeRunnable = Runnable {}
@@ -321,41 +322,54 @@ class AppViewModel : ViewModel() {
         return stringList
     }
 
+    //Cuisine and Press Your Luck run at different intervals but both stop when rollCountDown hits 20.
     fun rollCuisine() {
-        var runTime: Long = 500
-        var squareChangeDelay: Long = 20
-        var boardChangeDelay: Long = 60
-        updateRollEngaged(true)
+        var delay: Long = 300
+        rollCountdown = 1000
 
+        updateRollEngaged(true)
         handler.removeCallbacks(squareColorChangeRunnable)
-        handler.removeCallbacks(pressYourLuckRunnable)
 
         squareColorChangeRunnable = Runnable {
             rolledSquareIndex = Random.nextInt(0, getSquareList.size)
             val newSquareList = squareListWithRandomColorChanged(rolledSquareIndex)
-
             updateSquareList(newSquareList)
 
-            handler.postDelayed(squareColorChangeRunnable, squareChangeDelay)
-            handler.postDelayed(pressYourLuckRunnable, boardChangeDelay)
+            handler.postDelayed(squareColorChangeRunnable, delay)
+            delay -= 10
+            rollCountdown -= 20
 
-            runTime -= 20
-
-            if (runTime < 20) {
+            if (rollCountdown < 20) {
                 updateSelectedSquare(getSquareList[rolledSquareIndex])
                 updateRollEngaged(false)
                 updateRollFinished(true)
 
                 handler.removeCallbacks(squareColorChangeRunnable)
+            }
+        }
+
+        handler.post((squareColorChangeRunnable))
+    }
+
+    fun pressYourLuck() {
+        var delay: Long = 600
+        rollCountdown = 1000
+
+        handler.removeCallbacks(pressYourLuckRunnable)
+
+        pressYourLuckRunnable = Runnable {
+            sortAndUpdateCuisineList("random")
+
+            handler.postDelayed(pressYourLuckRunnable, delay)
+            delay -= 20
+            rollCountdown -= 20
+
+            if (rollCountdown < 20) {
                 handler.removeCallbacks(pressYourLuckRunnable)
             }
         }
 
-        pressYourLuckRunnable = Runnable {
-            sortAndUpdateCuisineList("random")
-        }
-
-        handler.post((squareColorChangeRunnable))
+        handler.post(pressYourLuckRunnable)
     }
 
     val getSquareList get() = boardUiState.value.squareList

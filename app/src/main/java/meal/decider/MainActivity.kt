@@ -435,7 +435,7 @@ fun InteractionLayout(height: Double) {
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         appViewModel.rollCuisine()
-//                        appViewModel.pressYourLuck()
+                        appViewModel.pressYourLuck()
                     }
                 },
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
