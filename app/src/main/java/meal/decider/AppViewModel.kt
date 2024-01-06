@@ -177,8 +177,12 @@ class AppViewModel : ViewModel() {
         val newSquareList: SnapshotStateList<SquareValues> = SnapshotStateList()
         val selectedSquareName = getSelectedSquare.name
 
-        if (typeOfSort == "alphabetical") squareNames = squareNames.sorted().toMutableList()
-        if (typeOfSort == "random") squareNames = squareNames.shuffled().toMutableList()
+        if (typeOfSort == "alphabetical") {
+            squareNames = squareNames.sorted().toMutableList()
+        }
+        if (typeOfSort == "random") {
+            squareNames = squareNames.shuffled().toMutableList()
+        }
 
         for (i in squareNames.indices) {
             newSquareList.add(SquareValues(squareNames[i], currentSquareList[i].color))
@@ -362,6 +366,14 @@ class AppViewModel : ViewModel() {
         }
 
         handler.post(pressYourLuckRunnable)
+    }
+
+    fun getListOfSquareNames(): List<String> {
+        val listToReturn = mutableListOf<String>()
+        for (i in getSquareList) {
+            listToReturn.add(i.name)
+        }
+        return listToReturn
     }
 
     val getSquareList get() = boardUiState.value.squareList

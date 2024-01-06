@@ -89,9 +89,6 @@ private lateinit var dialogComposables : DialogComposables
 private lateinit var roomInteractions: RoomInteractions
 val scope = CoroutineScope(Job() + Dispatchers.IO)
 
-//TODO: "Press Your Luck" style where board AND selection randomizes.
-
-//TODO: Sorting should also save in database.
 //TODO: Randomization speed/duration options.
 //TODO: Keep statistics (how many rolls, how many re-rolls, how many maps opened, etc.)
 //TODO: Selection between restaurants within category.
@@ -210,11 +207,19 @@ fun TopBar() {
                             }
                             DropDownMenuItemUi(text = "Sort Alphabetically") {
                                 appViewModel.sortAndUpdateCuisineList("alphabetical")
+                                coroutineScope.launch {
+                                    roomInteractions.deleteAllCuisines()
+                                    roomInteractions.insertMultipleCuisines(appViewModel.getListOfSquareNames())
+                                }
                                 appViewModel.updateEditMode(false)
                                 expanded = false
                             }
                             DropDownMenuItemUi(text = "Sort Randomly") {
                                 appViewModel.sortAndUpdateCuisineList("random")
+                                coroutineScope.launch {
+                                    roomInteractions.deleteAllCuisines()
+                                    roomInteractions.insertMultipleCuisines(appViewModel.getListOfSquareNames())
+                                }
                                 appViewModel.updateEditMode(false)
                                 expanded = false
                             }
@@ -435,7 +440,7 @@ fun InteractionLayout(height: Double) {
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         appViewModel.rollCuisine()
-                        appViewModel.pressYourLuck()
+//                        appViewModel.pressYourLuck()
                     }
                 },
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),

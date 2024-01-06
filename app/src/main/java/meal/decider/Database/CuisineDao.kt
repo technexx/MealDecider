@@ -26,9 +26,6 @@ interface CuisineDao {
     @Query("UPDATE cuisine SET cuisine_name = :newName WHERE cuisine_name = :oldName")
     fun updateCuisineName(oldName: String, newName: String)
 
-    @Query("UPDATE cuisine SET cuisine_color = :newColor")
-    fun updateCuisineColor(newColor: Int)
-
     @Query("DELETE FROM cuisine WHERE cuisine_name = :name")
     fun deleteCuisineFromName(name: String)
 
