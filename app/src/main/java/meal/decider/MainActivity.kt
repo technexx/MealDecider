@@ -70,17 +70,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.Room
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonParser
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 import meal.decider.ui.theme.MealDeciderTheme
 import org.json.JSONObject
+import java.io.*
 
 @SuppressLint("StaticFieldLeak")
 private lateinit var activityContext : Context
@@ -483,14 +482,17 @@ suspend fun makeApiCall(location: Location) {
     //geo:0,0?q=
 
     withContext(Dispatchers.IO) {
-            val request = Request.Builder()
-                .url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&radius=1500&type=restaurant&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI")
-                .build()
+        val request = Request.Builder()
+            .url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&radius=1500&type=restaurant&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI")
+            .build()
 
-            val response = OkHttpClient().newCall(request).execute().body().string()
-            val jsonObject = JSONObject(response) // This will make the json below as an object for you
+        val response = OkHttpClient().newCall(request).execute().body().string()
+        val jsonObject = JSONObject(response)
 
-            println(jsonObject)
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        val prettyJson = gson.toJson(JsonParser.parseString(response))
+
+        println(prettyJson)
         }
 }
 

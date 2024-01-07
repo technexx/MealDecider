@@ -48,7 +48,7 @@ package meal.decider.Extra
 //                // Call either setLocationBias() OR setLocationRestriction().
 ////            .setLocationBias(bounds)
 ////            .setLocationRestriction(bounds)
-//                .setOrigin(LatLng(-34.079190, 118.336552))
+//.setOrigin(LatLng(34.079190, -118.336552))
 //                .setTypesFilter(listOf(PlaceTypes.RESTAURANT))
 //                .setSessionToken(token)
 //                .setQuery("thai")
