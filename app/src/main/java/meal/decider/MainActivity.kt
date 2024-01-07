@@ -3,6 +3,7 @@ package meal.decider
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -69,13 +70,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.Room
+import com.squareup.okhttp.OkHttpClient
+import com.squareup.okhttp.Request
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 import meal.decider.ui.theme.MealDeciderTheme
+import org.json.JSONObject
 
 @SuppressLint("StaticFieldLeak")
 private lateinit var activityContext : Context
@@ -416,6 +421,7 @@ fun SelectionGridLayout(height: Double) {
 @Composable
 fun InteractionLayout(height: Double) {
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     val rollFinished = appViewModel.rollFinished.collectAsStateWithLifecycle()
     val selectedSquare = appViewModel.selectedSquare.collectAsStateWithLifecycle()
     val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
@@ -455,7 +461,13 @@ fun InteractionLayout(height: Double) {
             Button(
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-                        mapIntent(Uri.parse(foodUri))
+                        coroutineScope.launch {
+                            val test = Location("")
+                            test.latitude = 34.05537
+                            test.longitude = -118.33444
+                            makeApiCall(test)
+                        }
+//                        mapIntent(Uri.parse(foodUri))
                     }
                 },
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
@@ -465,6 +477,21 @@ fun InteractionLayout(height: Double) {
             }
         }
     }
+}
+
+suspend fun makeApiCall(location: Location) {
+    //geo:0,0?q=
+
+    withContext(Dispatchers.IO) {
+            val request = Request.Builder()
+                .url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&radius=1500&type=restaurant&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI")
+                .build()
+
+            val response = OkHttpClient().newCall(request).execute().body().string()
+            val jsonObject = JSONObject(response) // This will make the json below as an object for you
+
+            println(jsonObject)
+        }
 }
 
 fun mapIntent(uri: Uri) {
