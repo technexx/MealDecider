@@ -281,10 +281,10 @@ fun OptionsBarLayout(height: Double) {
     ) {
         LazyHorizontalGrid(rows = GridCells.Adaptive(minSize = 32.dp),
             contentPadding = PaddingValues(
-            start = 12.dp,
-            top = 16.dp,
-            end = 12.dp,
-            bottom = 16.dp),
+                start = 12.dp,
+                top = 16.dp,
+                end = 12.dp,
+                bottom = 16.dp),
             content = {
                 items(restrictionsUi.value.size) { index ->
                     if (appViewModel.getRestrictionsList[index].selected) {
@@ -366,7 +366,7 @@ fun SelectionGridLayout(height: Double) {
 
     LazyVerticalGrid(state = sectionGridState,
         modifier = Modifier
-        .height(height.dp),
+            .height(height.dp),
         columns = GridCells.Adaptive(minSize = 128.dp),
         contentPadding = PaddingValues(
             start = 12.dp,
@@ -451,7 +451,7 @@ fun InteractionLayout(height: Double) {
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
 
-            ) {
+                ) {
                 ButtonText(text = "Decide")
             }
 
@@ -481,6 +481,7 @@ fun InteractionLayout(height: Double) {
 suspend fun makeApiCall(location: Location) {
     //geo:0,0?q=
 
+    //TODO: Will need to get current location and/or have a place to enter a location.
     withContext(Dispatchers.IO) {
         val request = Request.Builder()
             .url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&radius=1500&type=restaurant&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI")
@@ -492,9 +493,27 @@ suspend fun makeApiCall(location: Location) {
         val gson = GsonBuilder().setPrettyPrinting().create()
         val prettyJson = gson.toJson(JsonParser.parseString(response))
 
-        println(prettyJson)
-        }
+        val blah = gson.fromJson(jsonObject.toString(), MapQuery.ListReturn::class.java)
+
+        //TODO: Returns a single "Results" header.
+//        showLog("test", prettyJson)
+        showLog("test", blah.list.toString())
+    }
 }
+
+class MapQuery() {
+    class ListReturn {
+        val list = emptyList<Results>()
+    }
+
+    data class Results(
+        val business_status: String,
+        val location: String,
+        val geometry: String,
+        val results: String
+    )
+}
+
 
 fun mapIntent(uri: Uri) {
     val intent = Intent(Intent.ACTION_VIEW, uri)
