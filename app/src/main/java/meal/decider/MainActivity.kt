@@ -72,13 +72,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.Room
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
+import com.google.gson.annotations.SerializedName
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
 import kotlinx.coroutines.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 import meal.decider.ui.theme.MealDeciderTheme
-import org.json.JSONObject
 import java.io.*
 
 @SuppressLint("StaticFieldLeak")
@@ -481,36 +483,36 @@ fun InteractionLayout(height: Double) {
 suspend fun makeApiCall(location: Location) {
     //geo:0,0?q=
 
-    //TODO: Will need to get current location and/or have a place to enter a location.
+    //TODO: Should limit the amount of info returned for billing purposes, i.e. just what we want to use.
     withContext(Dispatchers.IO) {
+        val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&radius=800&type=restaurant&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
+
         val request = Request.Builder()
-            .url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&radius=1500&type=restaurant&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI")
+            .url(uri)
             .build()
 
         val response = OkHttpClient().newCall(request).execute().body().string()
-        val jsonObject = JSONObject(response)
+//        val jsonObject = JSONObject(response)
 
         val gson = GsonBuilder().setPrettyPrinting().create()
         val prettyJson = gson.toJson(JsonParser.parseString(response))
 
-        val blah = gson.fromJson(jsonObject.toString(), MapQuery.ListReturn::class.java)
+        val jsonStuff = Json.decodeFromString<MapQuery.CuisineStuff>(prettyJson)
+//        val blah = gson.fromJson(prettyJson.toString(), MapQuery.Results::class.java)
 
-        //TODO: Returns a single "Results" header.
 //        showLog("test", prettyJson)
-        showLog("test", blah.list.toString())
+        showLog("test", "serializable is $jsonStuff")
     }
 }
 
+//TODO: Look up formatting (arrays, strings, etc.) of incoming JSON.
+//TODO: Try to only get the few returns we need (name, distance, etc.)
 class MapQuery() {
-    class ListReturn {
-        val list = emptyList<Results>()
-    }
+@Serializable
+    data class CuisineStuff (
+    val business_status: String,
+    @SerializedName("business_status"       ) var businessStatus      : String?           = null,
 
-    data class Results(
-        val business_status: String,
-        val location: String,
-        val geometry: String,
-        val results: String
     )
 }
 

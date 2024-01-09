@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+    id("kotlinx-serialization")
 }
 
 android {
@@ -85,5 +86,6 @@ dependencies {
     ksp("androidx.room:room-compiler:$room_version")
 
     implementation ("com.google.code.gson:gson:2.8.7")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 //    annotationProcessor("androidx.room:room-compiler:$room_version")
 }
