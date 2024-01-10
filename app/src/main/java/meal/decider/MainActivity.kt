@@ -2,9 +2,7 @@ package meal.decider
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.location.Location
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -70,14 +68,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.Room
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonParser
-import com.google.gson.annotations.SerializedName
-import com.squareup.okhttp.OkHttpClient
-import com.squareup.okhttp.Request
 import kotlinx.coroutines.*
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 import meal.decider.ui.theme.MealDeciderTheme
@@ -93,6 +84,7 @@ private lateinit var cuisineDatabase: CuisineDatabase.AppDatabase
 @SuppressLint("StaticFieldLeak")
 private lateinit var dialogComposables : DialogComposables
 private lateinit var roomInteractions: RoomInteractions
+private lateinit var mapInteractions: MapInteractions
 val scope = CoroutineScope(Job() + Dispatchers.IO)
 
 //TODO: Randomization speed/duration options.
@@ -110,6 +102,7 @@ class MainActivity : ComponentActivity() {
         cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
         roomInteractions = RoomInteractions(cuisineDatabase, appViewModel)
         dialogComposables = DialogComposables(activityContext, appViewModel, cuisineDatabase)
+        mapInteractions = MapInteractions(activityContext)
 
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
         scope.launch {
@@ -466,7 +459,7 @@ fun InteractionLayout(height: Double) {
                             val test = Location("")
                             test.latitude = 34.05537
                             test.longitude = -118.33444
-                            makeApiCall(test)
+                            mapInteractions.makeApiCall(test)
                         }
 //                        mapIntent(Uri.parse(foodUri))
                     }
@@ -478,62 +471,6 @@ fun InteractionLayout(height: Double) {
             }
         }
     }
-}
-
-suspend fun makeApiCall(location: Location) {
-    //geo:0,0?q=
-
-    //TODO: Should limit the amount of info returned for billing purposes, i.e. just what we want to use.
-    withContext(Dispatchers.IO) {
-        val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&radius=800&type=restaurant&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
-
-        val request = Request.Builder()
-            .url(uri)
-            .build()
-
-        val response = OkHttpClient().newCall(request).execute().body().string()
-//        val jsonObject = JSONObject(response)
-
-        val gson = GsonBuilder().setPrettyPrinting().create()
-        val prettyJson = gson.toJson(JsonParser.parseString(response))
-
-        showLog("test", prettyJson)
-
-//        val jsonStuff = Json {ignoreUnknownKeys = true}.decodeFromString<CuisineStuff>(prettyJson)
-        val json = Json { ignoreUnknownKeys = true }
-        val jsonSerialized = json.decodeFromString<CuisineStuff>(prettyJson)
-
-        showLog("test", "serializable is $jsonSerialized")
-    }
-}
-
-@Serializable
-data class CuisineStuff(
-    //We return a list of different object types in our Results data class. We were formerly just trying to pass in a List<String> rather than List<Results>.
-    @SerializedName("results") var results : List<Results>? = null,
-//    @SerializedName("html_attributions") var htmlAttributions : List<String>? = null,
-//    @SerializedName("status") var status : String? = null
-    )
-
-@Serializable
-data class Results (
-    val name: String? = null,
-    val vicinity: String? = null,
-    val price_level: Int? = null,
-)
-
-//TODO: Look up formatting (arrays, strings, etc.) of incoming JSON.
-//TODO: Try to only get the few returns we need (name, distance, etc.)
-class MapQuery() {
-
-}
-
-
-fun mapIntent(uri: Uri) {
-    val intent = Intent(Intent.ACTION_VIEW, uri)
-    intent.setPackage("com.google.android.apps.maps")
-
-    activityContext.startActivity(intent)
 }
 
 @Composable
