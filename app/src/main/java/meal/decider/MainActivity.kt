@@ -1,6 +1,7 @@
 package meal.decider
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.location.Location
 import android.os.Bundle
@@ -75,6 +76,8 @@ import meal.decider.ui.theme.MealDeciderTheme
 import java.io.*
 
 @SuppressLint("StaticFieldLeak")
+private lateinit var activity: Activity
+@SuppressLint("StaticFieldLeak")
 private lateinit var activityContext : Context
 @SuppressLint("StaticFieldLeak")
 private lateinit var appContext : Context
@@ -84,6 +87,7 @@ private lateinit var cuisineDatabase: CuisineDatabase.AppDatabase
 @SuppressLint("StaticFieldLeak")
 private lateinit var dialogComposables : DialogComposables
 private lateinit var roomInteractions: RoomInteractions
+@SuppressLint("StaticFieldLeak")
 private lateinit var mapInteractions: MapInteractions
 val scope = CoroutineScope(Job() + Dispatchers.IO)
 
@@ -95,6 +99,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        activity = this@MainActivity
         activityContext = this@MainActivity
         appContext = applicationContext
 
@@ -102,7 +107,7 @@ class MainActivity : ComponentActivity() {
         cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
         roomInteractions = RoomInteractions(cuisineDatabase, appViewModel)
         dialogComposables = DialogComposables(activityContext, appViewModel, cuisineDatabase)
-        mapInteractions = MapInteractions(activityContext)
+        mapInteractions = MapInteractions(activity, activityContext)
 
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
         scope.launch {

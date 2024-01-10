@@ -1,9 +1,14 @@
 package meal.decider
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import com.google.gson.annotations.SerializedName
@@ -14,7 +19,9 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
-class MapInteractions(val activityContext: Context) {
+private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+class MapInteractions(val activity: Activity, val activityContext: Context) {
     suspend fun makeApiCall(location: Location) {
         //geo:0,0?q=
 
@@ -33,11 +40,32 @@ class MapInteractions(val activityContext: Context) {
             val json = Json { ignoreUnknownKeys = true }
             val jsonSerialized = json.decodeFromString<CuisineStuff>(prettyJson)
 
-            showLog("test", prettyJson)
-            showLog("test", "serializable is $jsonSerialized")
-            for (i in jsonSerialized.results!!) {
+            checkForPermission()
 
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location : Location? ->
+                    println("location is $location")
+                }
+
+//            showLog("test", prettyJson)
+            println("serializable is $jsonSerialized")
+            for (i in jsonSerialized.results!!) {
+                println("name is ${i.name}")
+                println("location is ${i.vicinity}")
+                println("price level is ${i.price_level}")
             }
+        }
+    }
+
+    private fun checkForPermission() {
+        if (activityContext.checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED) {
+            return
+        } else {
+            ActivityCompat.requestPermissions(activity, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                1)
+            return
         }
     }
 
