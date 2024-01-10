@@ -44,9 +44,13 @@ class MapInteractions(val activity: Activity, val activityContext: Context) {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location : Location? ->
+                    println("location is $location")
                 }
-
-            println(fusedLocationClient.lastLocation)
+                .addOnFailureListener {
+                    println("nope!")
+                }
+            val loc = fusedLocationClient.lastLocation
+            println(loc)
 
 //            showLog("test", prettyJson)
 //            println("serializable is $jsonSerialized")
