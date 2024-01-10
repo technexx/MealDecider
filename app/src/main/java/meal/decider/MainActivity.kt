@@ -497,23 +497,40 @@ suspend fun makeApiCall(location: Location) {
         val gson = GsonBuilder().setPrettyPrinting().create()
         val prettyJson = gson.toJson(JsonParser.parseString(response))
 
-        val jsonStuff = Json.decodeFromString<MapQuery.CuisineStuff>(prettyJson)
+        showLog("test", prettyJson)
+
+        val jsonStuff = Json {ignoreUnknownKeys = true}.decodeFromString<CuisineStuff>(prettyJson)
 //        val blah = gson.fromJson(prettyJson.toString(), MapQuery.Results::class.java)
 
-//        showLog("test", prettyJson)
         showLog("test", "serializable is $jsonStuff")
     }
 }
 
+@Serializable
+data class CuisineStuff(
+    //TODO: I think we have to extract the top level, i.e. "Results" first. Then from there get the rest.
+    @SerializedName("html_attributions") var htmlAttributions : List<String>? = null,
+    @SerializedName("results") var results : List<Results>? = null,
+    @SerializedName("status") var status : String? = null
+//    val results: ArrayList<String>? = null,
+//    val business_status: String? = null,
+//    val location: String? = null,
+//    val icon_background_color: String? = null,
+//    val price_level: String? = null,
+    )
+
+@Serializable
+data class Results (
+    val business_status: String? = null,
+    val location: String? = null,
+    val icon_background_color: String? = null,
+    val price_level: Int? = null,
+)
+
 //TODO: Look up formatting (arrays, strings, etc.) of incoming JSON.
 //TODO: Try to only get the few returns we need (name, distance, etc.)
 class MapQuery() {
-@Serializable
-    data class CuisineStuff (
-    val business_status: String,
-    @SerializedName("business_status"       ) var businessStatus      : String?           = null,
 
-    )
 }
 
 
