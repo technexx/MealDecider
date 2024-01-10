@@ -499,31 +499,26 @@ suspend fun makeApiCall(location: Location) {
 
         showLog("test", prettyJson)
 
-        val jsonStuff = Json {ignoreUnknownKeys = true}.decodeFromString<CuisineStuff>(prettyJson)
-//        val blah = gson.fromJson(prettyJson.toString(), MapQuery.Results::class.java)
+//        val jsonStuff = Json {ignoreUnknownKeys = true}.decodeFromString<CuisineStuff>(prettyJson)
+        val json = Json { ignoreUnknownKeys = true }
+        val jsonSerialized = json.decodeFromString<CuisineStuff>(prettyJson)
 
-        showLog("test", "serializable is $jsonStuff")
+        showLog("test", "serializable is $jsonSerialized")
     }
 }
 
 @Serializable
 data class CuisineStuff(
-    //TODO: I think we have to extract the top level, i.e. "Results" first. Then from there get the rest.
-    @SerializedName("html_attributions") var htmlAttributions : List<String>? = null,
+    //We return a list of different object types in our Results data class. We were formerly just trying to pass in a List<String> rather than List<Results>.
     @SerializedName("results") var results : List<Results>? = null,
-    @SerializedName("status") var status : String? = null
-//    val results: ArrayList<String>? = null,
-//    val business_status: String? = null,
-//    val location: String? = null,
-//    val icon_background_color: String? = null,
-//    val price_level: String? = null,
+//    @SerializedName("html_attributions") var htmlAttributions : List<String>? = null,
+//    @SerializedName("status") var status : String? = null
     )
 
 @Serializable
 data class Results (
-    val business_status: String? = null,
-    val location: String? = null,
-    val icon_background_color: String? = null,
+    val name: String? = null,
+    val vicinity: String? = null,
     val price_level: Int? = null,
 )
 
