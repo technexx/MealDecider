@@ -41,20 +41,20 @@ class MapInteractions(val activity: Activity, val activityContext: Context) {
             val jsonSerialized = json.decodeFromString<CuisineStuff>(prettyJson)
 
             checkForPermission()
-
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location : Location? ->
-                    println("location is $location")
                 }
 
+            println(fusedLocationClient.lastLocation)
+
 //            showLog("test", prettyJson)
-            println("serializable is $jsonSerialized")
-            for (i in jsonSerialized.results!!) {
-                println("name is ${i.name}")
-                println("location is ${i.vicinity}")
-                println("price level is ${i.price_level}")
-            }
+//            println("serializable is $jsonSerialized")
+//            for (i in jsonSerialized.results!!) {
+//                println("name is ${i.name}")
+//                println("location is ${i.vicinity}")
+//                println("price level is ${i.price_level}")
+//            }
         }
     }
 
