@@ -244,6 +244,11 @@ class DialogComposables(private val activityContext: Context, private val appVie
     }
 
     @Composable
+    fun RestaurantDialog() {
+
+    }
+
+    @Composable
     fun OptionsDialog() {
         Dialog(onDismissRequest = {
             appViewModel.updateOptionsMode(false)

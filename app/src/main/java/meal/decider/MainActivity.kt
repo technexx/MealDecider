@@ -337,6 +337,7 @@ fun SelectionGridLayout(height: Double) {
     val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
     val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
     val activeEdit = appViewModel.activeEdit.collectAsStateWithLifecycle()
+    val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
     val restoreDefaults = appViewModel.restoreDefaults.collectAsStateWithLifecycle()
     val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
 
@@ -363,6 +364,10 @@ fun SelectionGridLayout(height: Double) {
 
     if (optionsMode.value) {
         dialogComposables.OptionsDialog()
+    }
+
+    if (showRestaurants.value) {
+        dialogComposables.RestaurantDialog()
     }
 
     LazyVerticalGrid(state = sectionGridState,

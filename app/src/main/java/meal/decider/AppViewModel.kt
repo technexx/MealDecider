@@ -59,7 +59,10 @@ class AppViewModel : ViewModel() {
     val displayedCuisineList: StateFlow<List<String>> = _displayedCuisineList.asStateFlow()
 
     private val _restrictionsList = MutableStateFlow(RestrictionsObject.RestrictionsList)
-    val restrictionsList : StateFlow<SnapshotStateList<RestrictionsValues>> = _restrictionsList.asStateFlow()
+    val restrictionsList: StateFlow<SnapshotStateList<RestrictionsValues>> = _restrictionsList.asStateFlow()
+
+    private val _showRestaurants = MutableStateFlow(false)
+    val showRestaurants: StateFlow<Boolean> = _showRestaurants.asStateFlow()
 
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
@@ -115,6 +118,10 @@ class AppViewModel : ViewModel() {
 
     fun updateRestrictionsList(list: SnapshotStateList<RestrictionsValues>) {
         _restrictionsList.value = list
+    }
+
+    fun updateShowRestaurants(show: Boolean) {
+        _showRestaurants.value = show
     }
 
     fun addSquareToList(name: String) {
