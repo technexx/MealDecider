@@ -107,7 +107,9 @@ class MainActivity : ComponentActivity() {
         cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
         roomInteractions = RoomInteractions(cuisineDatabase, appViewModel)
         dialogComposables = DialogComposables(activityContext, appViewModel, cuisineDatabase)
+
         mapInteractions = MapInteractions(activity, activityContext)
+        mapInteractions.fusedLocationListener()
 
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
         scope.launch {
@@ -464,7 +466,7 @@ fun InteractionLayout(height: Double) {
                             val test = Location("")
                             test.latitude = 34.05537
                             test.longitude = -118.33444
-                            mapInteractions.makeApiCall(test)
+                            mapInteractions.makeApiCall()
                         }
 //                        mapIntent(Uri.parse(foodUri))
                     }

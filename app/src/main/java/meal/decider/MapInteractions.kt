@@ -20,14 +20,16 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 private lateinit var fusedLocationClient: FusedLocationProviderClient
+private var currentLocation: Location = Location("")
 
-class MapInteractions(val activity: Activity, val activityContext: Context) {
-    suspend fun makeApiCall(location: Location) {
-        //geo:0,0?q=
-
-        //TODO: Should limit the amount of info returned for billing purposes, i.e. just what we want to use.
+//TODO: Should limit the amount of info returned for billing purposes, i.e. just what we want to use.
+class MapInteractions(private val activity: Activity, private val activityContext: Context) {
+    suspend fun makeApiCall() {
         withContext(Dispatchers.IO) {
-            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&radius=800&type=restaurant&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
+            println("lat is ${currentLocation.latitude}")
+            println("long is ${currentLocation.longitude}")
+
+            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&radius=2000&type=restaurant&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
             val request = Request.Builder()
                 .url(uri)
@@ -40,20 +42,10 @@ class MapInteractions(val activity: Activity, val activityContext: Context) {
             val json = Json { ignoreUnknownKeys = true }
             val jsonSerialized = json.decodeFromString<CuisineStuff>(prettyJson)
 
-            checkForPermission()
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location : Location? ->
-                    println("location is $location")
-                }
-                .addOnFailureListener {
-                    println("nope!")
-                }
-            val loc = fusedLocationClient.lastLocation
-            println(loc)
+            println("json is $prettyJson")
+            println("serializable is $jsonSerialized")
 
 //            showLog("test", prettyJson)
-//            println("serializable is $jsonSerialized")
 //            for (i in jsonSerialized.results!!) {
 //                println("name is ${i.name}")
 //                println("location is ${i.vicinity}")
@@ -62,7 +54,21 @@ class MapInteractions(val activity: Activity, val activityContext: Context) {
         }
     }
 
-    private fun checkForPermission() {
+    fun fusedLocationListener() {
+        checkForLocationPermission()
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location : Location? ->
+                currentLocation = location!!
+                println("location is $location")
+            }
+            .addOnFailureListener {
+                println("nope!")
+            }
+    }
+
+    private fun checkForLocationPermission() {
         if (activityContext.checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
             PackageManager.PERMISSION_GRANTED) {
             return
