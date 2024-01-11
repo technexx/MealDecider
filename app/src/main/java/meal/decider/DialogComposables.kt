@@ -245,7 +245,29 @@ class DialogComposables(private val activityContext: Context, private val appVie
 
     @Composable
     fun RestaurantDialog() {
+        Dialog(onDismissRequest = {
+            appViewModel.updateAddMode(false)
+        })
+        {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = colorResource(id = R.color.grey_300)
+            ) {
+                Box(modifier = Modifier
+                    .size(height = 400.dp, width = 300.dp),
+                ) {
+                    Column(modifier = Modifier
+                        .fillMaxSize()
+                        .padding(20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceEvenly)
+                    {
 
+                    }
+                }
+            }
+
+        }
     }
 
     @Composable
