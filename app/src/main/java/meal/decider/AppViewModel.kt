@@ -313,7 +313,7 @@ class AppViewModel : ViewModel() {
         var stringList = ""
         for (i in list) {
             if (i.selected) {
-                stringList = stringList+ " " + (i.name)
+                stringList = stringList+ "+" + (i.name)
             }
         }
         return stringList

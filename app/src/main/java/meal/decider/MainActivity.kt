@@ -3,7 +3,6 @@ package meal.decider
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -428,7 +427,8 @@ fun InteractionLayout(height: Double) {
     val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
 
     val restrictionsString = appViewModel.foodRestrictionsString(restrictionsUi.value)
-    val foodUri = "geo:0,0?q=" + selectedSquare.value.name + " Food " + restrictionsString
+    val foodUri = selectedSquare.value.name + "+" + "Food" + "+" + restrictionsString
+//    val foodUri = "geo:0,0?q=" + selectedSquare.value.name + " Food " + restrictionsString
 
     Column (
         modifier = Modifier
@@ -463,12 +463,9 @@ fun InteractionLayout(height: Double) {
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         coroutineScope.launch {
-                            val test = Location("")
-                            test.latitude = 34.05537
-                            test.longitude = -118.33444
+                            mapInteractions.cuisineType = foodUri
                             mapInteractions.makeApiCall()
                         }
-//                        mapIntent(Uri.parse(foodUri))
                     }
                 },
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),

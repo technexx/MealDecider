@@ -24,12 +24,18 @@ private var currentLocation: Location = Location("")
 
 //TODO: Should limit the amount of info returned for billing purposes, i.e. just what we want to use.
 class MapInteractions(private val activity: Activity, private val activityContext: Context) {
+
+    var cuisineType = ""
+
     suspend fun makeApiCall() {
         withContext(Dispatchers.IO) {
-            println("lat is ${currentLocation.latitude}")
-            println("long is ${currentLocation.longitude}")
+//            println("lat is ${currentLocation.latitude}")
+//            println("long is ${currentLocation.longitude}")
+//            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&radius=2000&type=restaurant&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
-            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&radius=2000&type=restaurant&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
+            println("cuisine is $cuisineType")
+
+            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&radius=2000&name=$cuisineType&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
             val request = Request.Builder()
                 .url(uri)
@@ -42,15 +48,16 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val json = Json { ignoreUnknownKeys = true }
             val jsonSerialized = json.decodeFromString<CuisineStuff>(prettyJson)
 
-            println("json is $prettyJson")
-            println("serializable is $jsonSerialized")
+//            println("json is $prettyJson")
+//            println("serializable is $jsonSerialized")
+            println("return size is ${jsonSerialized.results?.size}")
 
-//            showLog("test", prettyJson)
-//            for (i in jsonSerialized.results!!) {
-//                println("name is ${i.name}")
-//                println("location is ${i.vicinity}")
+            showLog("test", prettyJson)
+            for (i in jsonSerialized.results!!) {
+                println("name is ${i.name}")
+                println("location is ${i.vicinity}")
 //                println("price level is ${i.price_level}")
-//            }
+            }
         }
     }
 
