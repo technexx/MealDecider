@@ -242,12 +242,13 @@ class DialogComposables(private val activityContext: Context, private val appVie
         }
     }
 
+    //TODO: Set some onClick to toggle this dialog to test.
     @Composable
     fun RestaurantDialog() {
-        var restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
+        val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
 
         Dialog(onDismissRequest = {
-            appViewModel.updateAddMode(false)
+            appViewModel.updateShowRestaurants(false)
         })
         {
             Surface(
@@ -270,26 +271,36 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                 .selectable(
                                     selected = true,
                                     onClick = {
-
                                     }
                                 )) {
-                                Text(
-                                    modifier = Modifier
-                                        .background(
-                                            colorResource(R.color.white),
-                                            shape = RoundedCornerShape(5.dp)
-                                        )
-                                        .padding(8.dp),
-                                    fontSize = 20.sp,
-                                    color = Color.Black,
-                                    text = restaurantList.value[index].name
-                                )
+                                Column {
+                                    //TODO: Populate restaurantList w/ values from json fetch.
+                                    RestaurantListTextUi(text = restaurantList.value[index].name)
+                                    RestaurantListTextUi(text = restaurantList.value[index].address)
+                                    RestaurantListTextUi(text = restaurantList.value[index].distance)
+                                    RestaurantListTextUi(text = restaurantList.value[index].price.toString())
+                                }
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    @Composable
+    fun RestaurantListTextUi(text: String) {
+        Text(
+            modifier = Modifier
+                .background(
+                    colorResource(R.color.white),
+                    shape = RoundedCornerShape(5.dp)
+                )
+                .padding(8.dp),
+            fontSize = 20.sp,
+            color = Color.Black,
+            text = text
+        )
     }
 
     @Composable

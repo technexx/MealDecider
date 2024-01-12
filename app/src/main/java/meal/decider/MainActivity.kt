@@ -92,7 +92,7 @@ val scope = CoroutineScope(Job() + Dispatchers.IO)
 
 //TODO: Randomization speed/duration options.
 //TODO: Keep statistics (how many rolls, how many re-rolls, how many maps opened, etc.)
-//TODO: Selection between restaurants within category.
+//TODO: Option to select category and just roll for restaurant.
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,7 +107,7 @@ class MainActivity : ComponentActivity() {
         roomInteractions = RoomInteractions(cuisineDatabase, appViewModel)
         dialogComposables = DialogComposables(activityContext, appViewModel, cuisineDatabase)
 
-        mapInteractions = MapInteractions(activity, activityContext)
+        mapInteractions = MapInteractions(activity, activityContext, appViewModel)
         mapInteractions.fusedLocationListener()
 
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
@@ -442,12 +442,27 @@ fun InteractionLayout(height: Double) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        if (rollFinished.value) {
+
+        }
+        Button(
+            onClick = {
+                appViewModel.updateShowRestaurants(true)
+            },
+            elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
+
+            ) {
+            ButtonText(text = "Choose Place")
+        }
+
         Row (
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 12.dp),
             horizontalArrangement = Arrangement.Center,
         ) {
+
             Button(
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {

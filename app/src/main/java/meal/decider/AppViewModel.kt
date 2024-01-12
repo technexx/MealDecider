@@ -49,8 +49,8 @@ class AppViewModel : ViewModel() {
     private val _selectedSquare = MutableStateFlow(SquareValues())
     var selectedSquare: StateFlow<SquareValues> = _selectedSquare.asStateFlow()
 
-    private val _listofCuisinesToAdd = MutableStateFlow(emptyList<String>())
-    val listOfCuisinesToAdd: StateFlow<List<String>> = _listofCuisinesToAdd.asStateFlow()
+    private val _listOfCuisinesToAdd = MutableStateFlow(emptyList<String>())
+    val listOfCuisinesToAdd: StateFlow<List<String>> = _listOfCuisinesToAdd.asStateFlow()
 
     private val _listOfSquaresToEdit = MutableStateFlow(emptyList<SquareValues>())
     val listOfSquaresToEdit : StateFlow<List<SquareValues>> = _listOfSquaresToEdit
@@ -108,7 +108,7 @@ class AppViewModel : ViewModel() {
     }
 
     fun updateListOfSquaresToAdd(list: List<String>) {
-        _listofCuisinesToAdd.value = list
+        _listOfCuisinesToAdd.value = list
     }
 
     fun updateListOfSquaresToEdit(list: List<SquareValues>) {

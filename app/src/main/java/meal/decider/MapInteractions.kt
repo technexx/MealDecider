@@ -11,29 +11,23 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
-import com.google.gson.annotations.SerializedName
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 private lateinit var fusedLocationClient: FusedLocationProviderClient
 private var currentLocation: Location = Location("")
 
 //TODO: Should limit the amount of info returned for billing purposes, i.e. just what we want to use.
-class MapInteractions(private val activity: Activity, private val activityContext: Context) {
+class MapInteractions(private val activity: Activity, private val activityContext: Context, val viewModel: AppViewModel) {
 
     var cuisineType = ""
 
     suspend fun makeApiCall() {
         withContext(Dispatchers.IO) {
-//            println("lat is ${currentLocation.latitude}")
-//            println("long is ${currentLocation.longitude}")
 //            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&radius=2000&type=restaurant&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
-
-            println("cuisine is $cuisineType")
 
             val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&radius=2000&name=$cuisineType&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
@@ -48,16 +42,23 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val json = Json { ignoreUnknownKeys = true }
             val jsonSerialized = json.decodeFromString<CuisineStuff>(prettyJson)
 
-//            println("json is $prettyJson")
-//            println("serializable is $jsonSerialized")
-            println("return size is ${jsonSerialized.results?.size}")
+            println("json is $prettyJson")
+            println("serializable is $jsonSerialized")
+//            println("return size is ${jsonSerialized.results?.size}")
 
-            showLog("test", prettyJson)
             for (i in jsonSerialized.results!!) {
-                println("name is ${i.name}")
-                println("location is ${i.vicinity}")
+//                println("name is ${i.name}")
+//                println("location is ${i.vicinity}")
 //                println("price level is ${i.price_level}")
             }
+        }
+    }
+
+    //TODO: Get distance based on long/lat return from json.
+    fun sendSerializedJsonToRestaurantList(serializedResults: List<CuisineResults>) {
+        val listToSend = mutableListOf<RestaurantValues>()
+        for (i in serializedResults) {
+//            listToSend.add(serializedResults)
         }
     }
 
@@ -85,19 +86,6 @@ class MapInteractions(private val activity: Activity, private val activityContex
             return
         }
     }
-
-    @Serializable
-    data class CuisineStuff(
-        //We return a list of different object types in our Results data class. We were formerly just trying to pass in a List<String> rather than List<Results>.
-        @SerializedName("results") var results : List<Results>? = null,
-    )
-
-    @Serializable
-    data class Results (
-        val name: String? = null,
-        val vicinity: String? = null,
-        val price_level: Int? = null,
-    )
 
     fun mapIntent(uri: Uri) {
         val intent = Intent(Intent.ACTION_VIEW, uri)
