@@ -26,3 +26,13 @@ object RestrictionsObject {
         RestrictionsValues ("Halal", false),
     )
 }
+
+data class RestaurantValues(
+    var name: String,
+    var distance: String,
+    var price: Int
+)
+
+object RestaurantsObject {
+    var RestaurantList: SnapshotStateList<RestaurantValues> = mutableStateListOf()
+}

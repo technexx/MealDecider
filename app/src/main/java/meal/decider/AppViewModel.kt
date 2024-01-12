@@ -64,6 +64,9 @@ class AppViewModel : ViewModel() {
     private val _showRestaurants = MutableStateFlow(false)
     val showRestaurants: StateFlow<Boolean> = _showRestaurants.asStateFlow()
 
+    private val _restaurauntList = MutableStateFlow(RestaurantsObject.RestaurantList)
+    val restaurantList: StateFlow<SnapshotStateList<RestaurantValues>> = _restaurauntList.asStateFlow()
+
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
             currentState.copy(squareList = list)
@@ -122,13 +125,6 @@ class AppViewModel : ViewModel() {
 
     fun updateShowRestaurants(show: Boolean) {
         _showRestaurants.value = show
-    }
-
-    fun addSquareToList(name: String) {
-        val squareList = getSquareList
-        squareList.add(SquareValues(name, defaultSquareColor))
-
-        updateSquareList(squareList)
     }
 
     fun addMultipleSquaresToList(squares: List<String>) {

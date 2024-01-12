@@ -266,7 +266,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
                     }
                 }
             }
-
         }
     }
 
