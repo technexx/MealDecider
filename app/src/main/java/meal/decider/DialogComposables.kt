@@ -147,7 +147,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
         val listOfCuisinesToAdd = appViewModel.listOfCuisinesToAdd.collectAsStateWithLifecycle()
         var backgroundColor: Int
 
-
         LazyColumn (
             modifier = Modifier
                 .height(200.dp)
@@ -245,6 +244,8 @@ class DialogComposables(private val activityContext: Context, private val appVie
 
     @Composable
     fun RestaurantDialog() {
+        var restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
+
         Dialog(onDismissRequest = {
             appViewModel.updateAddMode(false)
         })
@@ -256,13 +257,35 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 Box(modifier = Modifier
                     .size(height = 400.dp, width = 300.dp),
                 ) {
-                    Column(modifier = Modifier
-                        .fillMaxSize()
-                        .padding(20.dp),
+                    LazyColumn(
+                        modifier = Modifier
+                            .height(200.dp)
+                            .fillMaxWidth()
+                            .padding(12.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.SpaceEvenly)
-                    {
+                    ) {
+                        items(restaurantList.value.size) { index ->
+                            Column(modifier = Modifier
+                                .padding(4.dp)
+                                .selectable(
+                                    selected = true,
+                                    onClick = {
 
+                                    }
+                                )) {
+                                Text(
+                                    modifier = Modifier
+                                        .background(
+                                            colorResource(R.color.white),
+                                            shape = RoundedCornerShape(5.dp)
+                                        )
+                                        .padding(8.dp),
+                                    fontSize = 20.sp,
+                                    color = Color.Black,
+                                    text = restaurantList.value[index].name
+                                )
+                            }
+                        }
                     }
                 }
             }
