@@ -45,6 +45,9 @@ class MapInteractions(private val activity: Activity, private val activityContex
             showLog("test", "json is $prettyJson")
             showLog("test", "serializable is $jsonSerialized")
 
+            val restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
+            showLog("test", restaurantList.toString())
+
 //            println("return size is ${jsonSerialized.results?.size}")
 
             for (i in jsonSerialized.results!!) {
@@ -62,15 +65,16 @@ class MapInteractions(private val activity: Activity, private val activityContex
     }
 
     //TODO: Get distance based on long/lat return from json.
-    fun sendSerializedJsonToRestaurantList(result: List<Result>) {
-        val listToSend = mutableListOf<RestaurantValues>()
-        for (i in result.indices) {
+    fun restaurantResultListFromSerializedJson(result: Root): List<RestaurantValues>{
+        val restaurantList = mutableListOf<RestaurantValues>()
+        for (i in result.results!!.indices) {
             val distance = distanceOfRestaurantFromCurrentLocations(currentLocation.latitude, currentLocation.longitude,
-                result[i].geometry!!.location!!.lat!!, result[i].geometry!!.location!!.lng!!)
-            listToSend.add(RestaurantValues(result[i].name!!, result[i].vicinity!!, distance,
-                result[i].price_level!!, result[i].rating!!
-            ))
+                result.results[i].geometry!!.location!!.lat!!, result.results[i].geometry!!.location!!.lng!!)
+            restaurantList.add(RestaurantValues(result.results[i].name!!, result.results[i].vicinity!!, distance,
+                result.results[i].price_level!!, result.results[i].rating!!)
+            )
         }
+        return restaurantList
     }
 
     fun fusedLocationListener() {
