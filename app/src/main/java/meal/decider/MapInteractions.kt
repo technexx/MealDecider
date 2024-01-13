@@ -40,10 +40,10 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val prettyJson = gson.toJson(JsonParser.parseString(response))
 
             val json = Json { ignoreUnknownKeys = true }
-            val jsonSerialized = json.decodeFromString<CuisineStuff>(prettyJson)
+            val jsonSerialized = json.decodeFromString<Root>(prettyJson)
 
-            println("json is $prettyJson")
-            println("serializable is $jsonSerialized")
+            showLog("test", "json is $prettyJson")
+            showLog("test", "serializable is $jsonSerialized")
 //            println("return size is ${jsonSerialized.results?.size}")
 
             for (i in jsonSerialized.results!!) {
@@ -55,7 +55,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
     }
 
     //TODO: Get distance based on long/lat return from json.
-    fun sendSerializedJsonToRestaurantList(serializedResults: List<CuisineResults>) {
+    fun sendSerializedJsonToRestaurantList(serializedResults: List<Any>) {
         val listToSend = mutableListOf<RestaurantValues>()
         for (i in serializedResults) {
 //            listToSend.add(serializedResults)
