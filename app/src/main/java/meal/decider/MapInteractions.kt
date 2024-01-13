@@ -55,16 +55,20 @@ class MapInteractions(private val activity: Activity, private val activityContex
         }
     }
 
-    fun distanceOfRestaurantFromCurrentLocations(oldLat: Double, oldLong: Double, newLat: Double, newLong: Double) {
+    fun distanceOfRestaurantFromCurrentLocations(oldLat: Double, oldLong: Double, newLat: Double, newLong: Double): FloatArray {
         val results: FloatArray = floatArrayOf(1f)
         Location.distanceBetween(oldLat, oldLong, newLat, newLong, results)
+        return results
     }
 
     //TODO: Get distance based on long/lat return from json.
-    fun sendSerializedJsonToRestaurantList(serializedResults: List<Any>) {
+    fun sendSerializedJsonToRestaurantList(result: List<Result>) {
         val listToSend = mutableListOf<RestaurantValues>()
-        for (i in serializedResults) {
-//            listToSend.add(serializedResults)
+        for (i in result.indices) {
+            val distance = distanceOfRestaurantFromCurrentLocations()
+            listToSend.add(RestaurantValues(result[i].name!!, result[i].vicinity!!, distance,
+                result[i].price_level!!, result[i].rating!!
+            ))
         }
     }
 
