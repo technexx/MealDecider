@@ -39,8 +39,7 @@ object RestaurantsObject {
     var RestaurantList: SnapshotStateList<RestaurantValues> = mutableStateListOf()
 }
 
-//We return a list of different object types in our Results data class. We were formerly just trying to pass in a List<String> rather than List<Results>.
-
+//Note how after the initial List<Result> we pass in the classes, not a list of classes.
 @Serializable
 data class Root(
     val results: List<Result>? = null,
@@ -49,6 +48,10 @@ data class Root(
 @Serializable
 data class Result(
     val geometry: Geometry? = null,
+//    val name: String? = null,
+//    val vicinity: String? = null,
+//    val price_level: String? = null,
+//    val rating: Double? = null,
 )
 
 @Serializable

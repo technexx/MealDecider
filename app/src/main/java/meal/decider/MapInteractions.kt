@@ -44,6 +44,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
 
             showLog("test", "json is $prettyJson")
             showLog("test", "serializable is $jsonSerialized")
+
 //            println("return size is ${jsonSerialized.results?.size}")
 
             for (i in jsonSerialized.results!!) {
@@ -52,6 +53,11 @@ class MapInteractions(private val activity: Activity, private val activityContex
 //                println("price level is ${i.price_level}")
             }
         }
+    }
+
+    fun distanceOfRestaurantFromCurrentLocations(oldLat: Double, oldLong: Double, newLat: Double, newLong: Double) {
+        val results: FloatArray = floatArrayOf(1f)
+        Location.distanceBetween(oldLat, oldLong, newLat, newLong, results)
     }
 
     //TODO: Get distance based on long/lat return from json.
