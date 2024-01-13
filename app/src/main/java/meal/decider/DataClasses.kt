@@ -48,10 +48,10 @@ data class Root(
 @Serializable
 data class Result(
     val geometry: Geometry? = null,
-//    val name: String? = null,
-//    val vicinity: String? = null,
-//    val price_level: String? = null,
-//    val rating: Double? = null,
+    val name: String? = null,
+    val vicinity: String? = null,
+    val price_level: Int? = null,
+    val rating: Double? = null,
 )
 
 @Serializable
