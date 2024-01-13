@@ -65,7 +65,8 @@ class MapInteractions(private val activity: Activity, private val activityContex
     fun sendSerializedJsonToRestaurantList(result: List<Result>) {
         val listToSend = mutableListOf<RestaurantValues>()
         for (i in result.indices) {
-            val distance = distanceOfRestaurantFromCurrentLocations()
+            val distance = distanceOfRestaurantFromCurrentLocations(currentLocation.latitude, currentLocation.longitude,
+                result[i].geometry!!.location!!.lat!!, result[i].geometry!!.location!!.lng!!)
             listToSend.add(RestaurantValues(result[i].name!!, result[i].vicinity!!, distance,
                 result[i].price_level!!, result[i].rating!!
             ))
