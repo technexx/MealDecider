@@ -42,13 +42,11 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val json = Json { ignoreUnknownKeys = true }
             val jsonSerialized = json.decodeFromString<Root>(prettyJson)
 
-            showLog("test", "json is $prettyJson")
+//            showLog("test", "json is $prettyJson")
             showLog("test", "serializable is $jsonSerialized")
 
             val restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
-            showLog("test", restaurantList.toString())
-
-//            println("return size is ${jsonSerialized.results?.size}")
+            showLog("test", "restaurant list is $restaurantList")
 
             for (i in jsonSerialized.results!!) {
 //                println("name is ${i.name}")
@@ -58,20 +56,22 @@ class MapInteractions(private val activity: Activity, private val activityContex
         }
     }
 
-    fun distanceOfRestaurantFromCurrentLocations(oldLat: Double, oldLong: Double, newLat: Double, newLong: Double): FloatArray {
+    private fun distanceOfRestaurantFromCurrentLocation(oldLat: Double?, oldLong: Double?, newLat: Double?, newLong: Double?): FloatArray {
         val results: FloatArray = floatArrayOf(1f)
-        Location.distanceBetween(oldLat, oldLong, newLat, newLong, results)
+        if (oldLat != null && oldLong != null && newLat != null && newLong != null)  {
+            Location.distanceBetween(oldLat, oldLong, newLat, newLong, results)
+        }
+
         return results
     }
 
-    //TODO: Get distance based on long/lat return from json.
-    fun restaurantResultListFromSerializedJson(result: Root): List<RestaurantValues>{
+    private fun restaurantResultListFromSerializedJson(result: Root): List<RestaurantValues>{
         val restaurantList = mutableListOf<RestaurantValues>()
         for (i in result.results!!.indices) {
-            val distance = distanceOfRestaurantFromCurrentLocations(currentLocation.latitude, currentLocation.longitude,
-                result.results[i].geometry!!.location!!.lat!!, result.results[i].geometry!!.location!!.lng!!)
-            restaurantList.add(RestaurantValues(result.results[i].name!!, result.results[i].vicinity!!, distance,
-                result.results[i].price_level!!, result.results[i].rating!!)
+            val distance = distanceOfRestaurantFromCurrentLocation(currentLocation.latitude, currentLocation.longitude,
+                result.results[i].geometry?.location?.lat, result.results[i].geometry?.location?.lng)
+            restaurantList.add(RestaurantValues(result.results[i].name, result.results[i].vicinity, distance,
+                result.results[i].price_level, result.results[i].rating)
             )
         }
         return restaurantList

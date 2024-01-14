@@ -275,10 +275,10 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                 )) {
                                 Column {
                                     //TODO: Populate restaurantList w/ values from json fetch.
-                                    RestaurantListTextUi(text = restaurantList.value[index].name)
-                                    RestaurantListTextUi(text = restaurantList.value[index].address)
-                                    RestaurantListTextUi(text = restaurantList.value[index].distance)
-                                    RestaurantListTextUi(text = restaurantList.value[index].price.toString())
+                                    RestaurantListTextUi(text = restaurantList.value[index].name.toString())
+                                    RestaurantListTextUi(text = restaurantList.value[index].address.toString())
+                                    RestaurantListTextUi(text = restaurantList.value[index].distance.toString())
+                                    RestaurantListTextUi(text = restaurantList.value[index].priceLevel.toString())
                                 }
                             }
                         }
