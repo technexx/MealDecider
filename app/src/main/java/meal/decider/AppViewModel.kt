@@ -123,6 +123,10 @@ class AppViewModel : ViewModel() {
         _restrictionsList.value = list
     }
 
+    fun updateRestaurantsList(list: SnapshotStateList<RestaurantValues>) {
+        _restaurantList.value = list
+    }
+
     fun updateShowRestaurants(show: Boolean) {
         _showRestaurants.value = show
     }

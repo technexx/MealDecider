@@ -256,11 +256,10 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 color = colorResource(id = R.color.grey_300)
             ) {
                 Box(modifier = Modifier
-                    .size(height = 400.dp, width = 300.dp),
+                    .size(height = 500.dp, width = 300.dp),
                 ) {
                     LazyColumn(
                         modifier = Modifier
-                            .height(200.dp)
                             .fillMaxWidth()
                             .padding(12.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,

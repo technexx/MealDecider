@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -23,7 +25,7 @@ private lateinit var fusedLocationClient: FusedLocationProviderClient
 private var currentLocation: Location = Location("")
 
 //TODO: Should limit the amount of info returned for billing purposes, i.e. just what we want to use.
-class MapInteractions(private val activity: Activity, private val activityContext: Context, val viewModel: AppViewModel) {
+class MapInteractions(private val activity: Activity, private val activityContext: Context, val appViewModel: AppViewModel) {
 
     var cuisineType = ""
 
@@ -44,17 +46,11 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val json = Json { ignoreUnknownKeys = true }
             val jsonSerialized = json.decodeFromString<Root>(prettyJson)
 
-//            showLog("test", "json is $prettyJson")
-            showLog("test", "serializable is $jsonSerialized")
-
             val restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
-            showLog("test", "restaurant list is $restaurantList")
+            appViewModel.updateRestaurantsList(restaurantList)
 
-            for (i in jsonSerialized.results!!) {
-//                println("name is ${i.name}")
-//                println("location is ${i.vicinity}")
-//                println("price level is ${i.price_level}")
-            }
+            showLog("test", "serializable is $jsonSerialized")
+            showLog("test", "restaurant list is $restaurantList")
         }
     }
 
@@ -67,8 +63,8 @@ class MapInteractions(private val activity: Activity, private val activityContex
         return results
     }
 
-    private fun restaurantResultListFromSerializedJson(result: Root): List<RestaurantValues>{
-        val restaurantList = mutableListOf<RestaurantValues>()
+    private fun restaurantResultListFromSerializedJson(result: Root): SnapshotStateList<RestaurantValues>{
+        val restaurantList = mutableStateListOf<RestaurantValues>()
         for (i in result.results!!.indices) {
             val distance = metersToMiles(distanceOfRestaurantFromCurrentLocation(currentLocation.latitude, currentLocation.longitude,
                 result.results[i].geometry?.location?.lat, result.results[i].geometry?.location?.lng))
