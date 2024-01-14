@@ -31,7 +31,7 @@ object RestrictionsObject {
 data class RestaurantValues(
     var name: String?,
     var address: String?,
-    var distance: FloatArray?,
+    var distance: Double?,
     var priceLevel: Int?,
     var rating: Double?,
 )

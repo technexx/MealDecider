@@ -16,6 +16,8 @@ import com.squareup.okhttp.Request
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 private lateinit var fusedLocationClient: FusedLocationProviderClient
 private var currentLocation: Location = Location("")
@@ -68,13 +70,19 @@ class MapInteractions(private val activity: Activity, private val activityContex
     private fun restaurantResultListFromSerializedJson(result: Root): List<RestaurantValues>{
         val restaurantList = mutableListOf<RestaurantValues>()
         for (i in result.results!!.indices) {
-            val distance = distanceOfRestaurantFromCurrentLocation(currentLocation.latitude, currentLocation.longitude,
-                result.results[i].geometry?.location?.lat, result.results[i].geometry?.location?.lng)
+            val distance = metersToMiles(distanceOfRestaurantFromCurrentLocation(currentLocation.latitude, currentLocation.longitude,
+                result.results[i].geometry?.location?.lat, result.results[i].geometry?.location?.lng))
             restaurantList.add(RestaurantValues(result.results[i].name, result.results[i].vicinity, distance,
                 result.results[i].price_level, result.results[i].rating)
             )
         }
         return restaurantList
+    }
+
+    private fun metersToMiles(meters: FloatArray): Double {
+        val miles = (meters[0] * .00062137)
+        val roundedMiles = BigDecimal(miles).setScale(1, RoundingMode.DOWN)
+        return roundedMiles.toDouble()
     }
 
     fun fusedLocationListener() {
