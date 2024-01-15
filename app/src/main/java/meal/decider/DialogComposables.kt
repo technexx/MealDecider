@@ -22,6 +22,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -278,6 +279,9 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                     RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
                                     RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
                                     RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Divider(color = Color.Black, thickness = 1.dp)
+                                    Spacer(modifier = Modifier.height(4.dp))
                                 }
                             }
                         }
@@ -295,7 +299,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
         if (text != null) {
             Text(
                 modifier = Modifier
-                    .padding(8.dp),
+                    .padding(4.dp),
                 fontSize = 20.sp,
                 color = Color.Black,
                 text = text,
@@ -304,9 +308,9 @@ class DialogComposables(private val activityContext: Context, private val appVie
         }
     }
 
-    fun priceToDollarSigns(price: Int?): String {
+    private fun priceToDollarSigns(price: Int?): String {
         var stringToReturn = ""
-        if (price != null) {
+         if (price != null) {
             for (i in 1..price) {
                 stringToReturn += "$"
             }
