@@ -243,7 +243,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
         }
     }
 
-    //TODO: Set some onClick to toggle this dialog to test.
     @Composable
     fun RestaurantDialog() {
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
@@ -274,7 +273,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                     }
                                 )) {
                                 Column {
-                                    //TODO: Populate restaurantList w/ values from json fetch.
                                     RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
                                     RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
                                     RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)

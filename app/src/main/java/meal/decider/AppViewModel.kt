@@ -329,7 +329,7 @@ class AppViewModel : ViewModel() {
     //Cuisine and Press Your Luck run at different intervals but both stop when rollCountDown hits 20.
     fun rollCuisine() {
         var delay: Long = 400
-        rollCountdown = 1000
+        rollCountdown = 200
 
         updateRollEngaged(true)
         handler.removeCallbacks(squareColorChangeRunnable)
@@ -388,6 +388,7 @@ class AppViewModel : ViewModel() {
     val getDisplayedCuisineList get() = displayedCuisineList.value
     val getListOfSquaresToEdit get() = listOfSquaresToEdit.value
     val getListOfCuisinesToAdd get() = listOfCuisinesToAdd.value
+    val getShowRestaurants get() = _showRestaurants.value
 
     val getRollEngaged get() = rollEngaged.value
     val getRollFinished get() = rollFinished.value

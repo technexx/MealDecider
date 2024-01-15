@@ -8,7 +8,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -90,6 +89,7 @@ private lateinit var roomInteractions: RoomInteractions
 private lateinit var mapInteractions: MapInteractions
 val scope = CoroutineScope(Job() + Dispatchers.IO)
 
+//TODO: Radius selection for restaurants.
 //TODO: Randomization speed/duration options.
 //TODO: Keep statistics (how many rolls, how many re-rolls, how many maps opened, etc.)
 //TODO: Option to select category and just roll for restaurant.
@@ -329,7 +329,6 @@ fun OptionsBarLayout(height: Double) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SelectionGridLayout(height: Double) {
     val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
@@ -357,10 +356,6 @@ fun SelectionGridLayout(height: Double) {
     if (restoreDefaults.value) {
         dialogComposables.ConfirmRestoreDefaultsDialog()
     }
-
-//    if (activeEdit.value) {
-//        dialogComposables.EditDialogBox()
-//    }
 
     if (optionsMode.value) {
         dialogComposables.OptionsDialog()
@@ -443,17 +438,14 @@ fun InteractionLayout(height: Double) {
         verticalArrangement = Arrangement.Center
     ) {
         if (rollFinished.value) {
-
-        }
-        Button(
-            onClick = {
-                appViewModel.updateShowRestaurants(true)
-            },
-            elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
-
-            ) {
-            ButtonText(text = "Choose Place")
+            //TODO: Animation on selected cuisine as a buffer for api to finish loading.
+            LaunchedEffect(Unit) {
+                coroutineScope.launch {
+                    mapInteractions.cuisineType = foodUri
+                    mapInteractions.mapsApiCall()
+                    appViewModel.updateShowRestaurants(true)
+                }
+            }
         }
 
         Row (
@@ -483,8 +475,7 @@ fun InteractionLayout(height: Double) {
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         coroutineScope.launch {
-                            mapInteractions.cuisineType = foodUri
-                            mapInteractions.makeApiCall()
+                            //TODO: Open maps goes back here.
                         }
                     }
                 },
