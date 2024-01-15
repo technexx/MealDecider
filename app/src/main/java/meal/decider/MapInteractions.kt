@@ -27,11 +27,12 @@ private var currentLocation: Location = Location("")
 //TODO: Should limit the amount of info returned for billing purposes, i.e. just what we want to use.
 class MapInteractions(private val activity: Activity, private val activityContext: Context, private val appViewModel: AppViewModel) {
 
+    var radius = 0
     var cuisineType = ""
 
     suspend fun mapsApiCall() {
         withContext(Dispatchers.IO) {
-            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&radius=2000&name=$cuisineType&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
+            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&radius=2000&name=$cuisineType&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
             val request = Request.Builder()
                 .url(uri)
@@ -48,7 +49,8 @@ class MapInteractions(private val activity: Activity, private val activityContex
             appViewModel.updateRestaurantsList(restaurantList)
 
             showLog("test", "serializable is $jsonSerialized")
-            showLog("test", "restaurant list is $restaurantList")
+//            showLog("test", "restaurant list is $restaurantList")
+            showLog("test","number of returns are ${restaurantList.size}")
         }
     }
 
