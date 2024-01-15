@@ -274,12 +274,13 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                     onClick = {
                                     }
                                 )) {
+                                //TODO: Add "Open Maps" to dialog instead of main screen.
                                 Column {
                                     RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
                                     RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
                                     RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
                                     RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
-                                    RatingStars(restaurantList.value[index].rating?.toInt())
+                                    RatingStars(restaurantList.value[index].rating)
                                     Spacer(modifier = Modifier.height(4.dp))
                                     Divider(color = Color.Black, thickness = 1.dp)
                                     Spacer(modifier = Modifier.height(4.dp))
@@ -320,10 +321,18 @@ class DialogComposables(private val activityContext: Context, private val appVie
     }
 
     @Composable
-    fun RatingStars(rating: Int?) {
+    fun RatingStars(rating: Double?) {
         if (rating != null) {
-            Row() {
-                for (i in 1..rating) {
+            val roundedDown = rating.toInt()
+            val remainder = rating - roundedDown
+            Row () {
+                for (i in 1..roundedDown) {
+                    Image(painterResource(R.drawable.full_star_black,), "full star")
+                }
+                if (remainder >.2 && remainder <.8) {
+                    Image(painterResource(R.drawable.half_star_black,), "half star")
+                }
+                if (remainder >= .8) {
                     Image(painterResource(R.drawable.full_star_black,), "full star")
                 }
             }

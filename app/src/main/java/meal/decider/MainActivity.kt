@@ -90,6 +90,7 @@ private lateinit var mapInteractions: MapInteractions
 val scope = CoroutineScope(Job() + Dispatchers.IO)
 
 //TODO: Radius selection for restaurants.
+//TODO: Less than 2 restaurants = prompt to expand radius.
 //TODO: Randomization speed/duration options.
 //TODO: Keep statistics (how many rolls, how many re-rolls, how many maps opened, etc.)
 //TODO: Option to select category and just roll for restaurant.
