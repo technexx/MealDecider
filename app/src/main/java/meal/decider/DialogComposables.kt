@@ -274,10 +274,10 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                 )) {
                                 Column {
                                     //TODO: Populate restaurantList w/ values from json fetch.
-                                    RestaurantListTextUi(text = restaurantList.value[index].name.toString(), true)
-                                    RestaurantListTextUi(text = restaurantList.value[index].address.toString(), false)
-                                    RestaurantListTextUi(text = restaurantList.value[index].distance.toString() + " miles", false)
-                                    RestaurantListTextUi(text = priceToDollarSigns(restaurantList.value[index].priceLevel), false)
+                                    RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
+                                    RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
+                                    RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
+                                    RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
                                 }
                             }
                         }
@@ -287,24 +287,29 @@ class DialogComposables(private val activityContext: Context, private val appVie
         }
     }
 
+    //If we don't use ? in front of variable, Kotlin won't let it be null (? == nullable)
     @Composable
-    fun RestaurantListTextUi(text: String, bold: Boolean) {
+    fun RestaurantListTextUi(text: String?, bold: Boolean) {
         var fontWeight: FontWeight = FontWeight.Normal
         if (bold) fontWeight = FontWeight.Bold
-        Text(
-            modifier = Modifier
-                .padding(8.dp),
-            fontSize = 20.sp,
-            color = Color.Black,
-            text = text,
-            fontWeight = fontWeight
-        )
+        if (text != null) {
+            Text(
+                modifier = Modifier
+                    .padding(8.dp),
+                fontSize = 20.sp,
+                color = Color.Black,
+                text = text,
+                fontWeight = fontWeight
+            )
+        }
     }
 
-    fun priceToDollarSigns(price: Int): String {
+    fun priceToDollarSigns(price: Int?): String {
         var stringToReturn = ""
-        for (i in 1..price) {
-            stringToReturn += "$"
+        if (price != null) {
+            for (i in 1..price) {
+                stringToReturn += "$"
+            }
         }
         return stringToReturn
     }
