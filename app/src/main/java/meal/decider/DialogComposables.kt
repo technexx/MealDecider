@@ -330,7 +330,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                     Image(painterResource(R.drawable.full_star_black,), "full star")
                 }
                 if (remainder >.2 && remainder <.8) {
-                    Image(painterResource(R.drawable.half_star_black,), "half star")
+                    Image(painterResource(R.drawable.half_empty_star_black,), "half star")
                 }
                 if (remainder >= .8) {
                     Image(painterResource(R.drawable.full_star_black,), "full star")
