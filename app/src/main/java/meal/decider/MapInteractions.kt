@@ -48,8 +48,9 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
             appViewModel.updateRestaurantsList(restaurantList)
 
-            showLog("test", "serializable is $jsonSerialized")
+//            showLog("test", "serializable is $jsonSerialized")
 //            showLog("test", "restaurant list is $restaurantList")
+            showLog("test", "pretty json is $prettyJson")
             showLog("test","number of returns are ${restaurantList.size}")
         }
     }

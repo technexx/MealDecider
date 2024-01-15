@@ -2,6 +2,7 @@ package meal.decider
 
 import android.content.Context
 import android.view.Gravity
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -277,6 +279,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                     RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
                                     RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
                                     RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
+                                    RatingStars(restaurantList.value[index].rating?.toInt())
                                     Spacer(modifier = Modifier.height(4.dp))
                                     Divider(color = Color.Black, thickness = 1.dp)
                                     Spacer(modifier = Modifier.height(4.dp))
@@ -314,6 +317,17 @@ class DialogComposables(private val activityContext: Context, private val appVie
             }
         }
         return stringToReturn
+    }
+
+    @Composable
+    fun RatingStars(rating: Int?) {
+        if (rating != null) {
+            Row() {
+                for (i in 1..rating) {
+                    Image(painterResource(R.drawable.full_star_black,), "full star")
+                }
+            }
+        }
     }
 
     @Composable
