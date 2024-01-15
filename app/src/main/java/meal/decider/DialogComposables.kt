@@ -274,6 +274,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                     onClick = {
                                     }
                                 )) {
+                                //TODO: Use grid/board layout for entire screen to populate restaurants.
                                 //TODO: Add "Open Maps" to dialog instead of main screen.
                                 Column {
                                     RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
