@@ -24,11 +24,9 @@ package meal.decider.Extra
 //}
 
 //class ExtraFunctions {
-//    //TODO: Seems limited to 5 places, likely due to billing.
 //    fun mapPlaces() {
 //        Places.initialize(appContext, "AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI", Locale.US)
 //
-//        //TODO: Get Place IDs of autocompleted searches.
 //
 //        val placeId = ""
 //        val placeFields = listOf(Place.Field.ID, Place.Field.NAME)

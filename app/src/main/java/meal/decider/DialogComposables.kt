@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -17,6 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -258,13 +261,20 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 color = colorResource(id = R.color.grey_300)
             ) {
                 Box(modifier = Modifier
-                    .size(height = 500.dp, width = 300.dp),
+                    .fillMaxSize()
+//                    .size(height = 500.dp, width = 300.dp),
                 ) {
-                    LazyColumn(
+                    LazyVerticalStaggeredGrid(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(12.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                        columns = StaggeredGridCells.Adaptive(128.dp),
+                        contentPadding = PaddingValues(
+                            start = 12.dp,
+                            top = 16.dp,
+                            end = 12.dp,
+                            bottom = 16.dp
+                        ),
                     ) {
                         items(restaurantList.value.size) { index ->
                             Column(modifier = Modifier
@@ -274,17 +284,15 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                     onClick = {
                                     }
                                 )) {
-                                //TODO: Use grid/board layout for entire screen to populate restaurants.
-                                //TODO: Add "Open Maps" to dialog instead of main screen.
                                 Column {
                                     RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
-                                    RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
+//                                    RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
                                     RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
-                                    RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
+//                                    RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
                                     RatingStars(restaurantList.value[index].rating)
-                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Spacer(modifier = Modifier.height(2.dp))
                                     Divider(color = Color.Black, thickness = 1.dp)
-                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Spacer(modifier = Modifier.height(2.dp))
                                 }
                             }
                         }
@@ -303,7 +311,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
             Text(
                 modifier = Modifier
                     .padding(4.dp),
-                fontSize = 20.sp,
+                fontSize = 14.sp,
                 color = Color.Black,
                 text = text,
                 fontWeight = fontWeight

@@ -89,6 +89,8 @@ private lateinit var roomInteractions: RoomInteractions
 private lateinit var mapInteractions: MapInteractions
 val scope = CoroutineScope(Job() + Dispatchers.IO)
 
+//TODO: Sort options in restaurant list.
+//TODO: Maximum of 20 results seems to return - check if it can be expanded.
 //TODO: Radius selection for restaurants.
 //TODO: Less than 2 restaurants = prompt to expand radius.
 //TODO: Randomization speed/duration options.
@@ -336,7 +338,6 @@ fun SelectionGridLayout(height: Double) {
     val sectionGridState = rememberLazyGridState()
     val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
     val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
-    val activeEdit = appViewModel.activeEdit.collectAsStateWithLifecycle()
     val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
     val restoreDefaults = appViewModel.restoreDefaults.collectAsStateWithLifecycle()
     val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
