@@ -274,10 +274,10 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                 )) {
                                 Column {
                                     //TODO: Populate restaurantList w/ values from json fetch.
-                                    RestaurantListTextUi(text = restaurantList.value[index].name.toString())
-                                    RestaurantListTextUi(text = restaurantList.value[index].address.toString())
-                                    RestaurantListTextUi(text = restaurantList.value[index].distance.toString())
-                                    RestaurantListTextUi(text = restaurantList.value[index].priceLevel.toString())
+                                    RestaurantListTextUi(text = restaurantList.value[index].name.toString(), true)
+                                    RestaurantListTextUi(text = restaurantList.value[index].address.toString(), false)
+                                    RestaurantListTextUi(text = restaurantList.value[index].distance.toString() + " miles", false)
+                                    RestaurantListTextUi(text = priceToDollarSigns(restaurantList.value[index].priceLevel), false)
                                 }
                             }
                         }
@@ -288,18 +288,25 @@ class DialogComposables(private val activityContext: Context, private val appVie
     }
 
     @Composable
-    fun RestaurantListTextUi(text: String) {
+    fun RestaurantListTextUi(text: String, bold: Boolean) {
+        var fontWeight: FontWeight = FontWeight.Normal
+        if (bold) fontWeight = FontWeight.Bold
         Text(
             modifier = Modifier
-                .background(
-                    colorResource(R.color.white),
-                    shape = RoundedCornerShape(5.dp)
-                )
                 .padding(8.dp),
             fontSize = 20.sp,
             color = Color.Black,
-            text = text
+            text = text,
+            fontWeight = fontWeight
         )
+    }
+
+    fun priceToDollarSigns(price: Int): String {
+        var stringToReturn = ""
+        for (i in 1..price) {
+            stringToReturn += "$"
+        }
+        return stringToReturn
     }
 
     @Composable
