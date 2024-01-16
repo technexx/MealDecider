@@ -34,6 +34,7 @@ data class RestaurantValues(
     var distance: Double? = 0.0,
     var priceLevel: Int? = 0,
     var rating: Double? = 0.0,
+    var color: Int? = 0
 )
 
 object RestaurantsObject {

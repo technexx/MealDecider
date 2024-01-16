@@ -162,27 +162,6 @@ class AppViewModel : ViewModel() {
         return list
     }
 
-    private fun squareListWithRandomColorChanged(index: Int): SnapshotStateList<SquareValues> {
-        val currentList = getSquareList
-        val newList = SnapshotStateList<SquareValues>()
-
-        for (i in currentList) {
-            newList.add(SquareValues(i.name, defaultSquareColor))
-        }
-
-        newList[index].color = chosenSquareColor
-
-        return newList
-    }
-
-    fun squareNamesList(): List<String> {
-        val listToReturn = mutableListOf<String>()
-        for (i in getSquareList) {
-            listToReturn.add(i.name)
-        }
-        return listToReturn
-    }
-
     fun sortAndUpdateCuisineList(typeOfSort: String) {
         var squareNames = squareNamesList()
         val currentSquareList = getSquareList
@@ -209,6 +188,15 @@ class AppViewModel : ViewModel() {
         }
 
         updateSquareList(newSquareList)
+    }
+
+
+    fun squareNamesList(): List<String> {
+        val listToReturn = mutableListOf<String>()
+        for (i in getSquareList) {
+            listToReturn.add(i.name)
+        }
+        return listToReturn
     }
 
     //Val declares first element in our data object (i.e. "name", thought it can be named anything).
@@ -294,7 +282,7 @@ class AppViewModel : ViewModel() {
         }
 
         //Set first square index to selected if previous one no longer exists.
-        if (!doesselectedCuisineSquareExist()) {
+        if (!doesSelectedCuisineSquareExist()) {
             squareList[0].color = chosenSquareColor
             updateselectedCuisineSquare(squareList[0])
         }
@@ -302,7 +290,7 @@ class AppViewModel : ViewModel() {
         updateSquareList(squareList)
     }
 
-    private fun doesselectedCuisineSquareExist() : Boolean {
+    private fun doesSelectedCuisineSquareExist() : Boolean {
         val squareList = getSquareList
         val selectedCuisineSquare = getselectedCuisineSquare
 
@@ -360,16 +348,45 @@ class AppViewModel : ViewModel() {
         handler.post((cuisineRollRunnable))
     }
 
+    private fun squareListWithRandomColorChanged(index: Int): SnapshotStateList<SquareValues> {
+        val currentList = getSquareList
+        val newList = SnapshotStateList<SquareValues>()
+
+        for (i in currentList) {
+            newList.add(SquareValues(i.name, defaultSquareColor))
+        }
+        newList[index].color = chosenSquareColor
+
+        return newList
+    }
+
     fun rollRestaurant() {
         var delay: Long = 100
-        rollCountdown = 200
+        rollCountdown = 1000
 
         handler.removeCallbacks(restaurantRollRunnable)
 
         restaurantRollRunnable = Runnable {
             rolledRestaurantIndex = Random.nextInt(0, getRestaurantList.size)
+            val newRestaurantList = restaurantListWithRandomColorChanged(rolledRestaurantIndex)
+            updateRestaurantsList(newRestaurantList)
 
+            if (rollCountdown < 20) {
+                handler.removeCallbacks(restaurantRollRunnable)
+            }
         }
+    }
+
+    private fun restaurantListWithRandomColorChanged(index: Int): SnapshotStateList<RestaurantValues> {
+        val currentList = getRestaurantList
+        val newList = SnapshotStateList<RestaurantValues>()
+
+        for (i in currentList) {
+            newList.add(RestaurantValues(i.name, i.address, i.distance, i.priceLevel, i.rating, defaultSquareColor))
+        }
+
+        newList[index].color = chosenSquareColor
+        return newList
     }
 
     fun pressYourLuck() {

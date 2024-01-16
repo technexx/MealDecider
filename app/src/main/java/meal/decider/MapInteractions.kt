@@ -70,7 +70,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val distance = metersToMiles(distanceOfRestaurantFromCurrentLocation(currentLocation.latitude, currentLocation.longitude,
                 result.results[i].geometry?.location?.lat, result.results[i].geometry?.location?.lng))
             restaurantList.add(RestaurantValues(result.results[i].name, result.results[i].vicinity, distance,
-                result.results[i].price_level, result.results[i].rating)
+                result.results[i].price_level, result.results[i].rating, R.color.grey_300)
             )
         }
         return restaurantList

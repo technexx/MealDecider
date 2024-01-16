@@ -446,6 +446,7 @@ fun InteractionLayout(height: Double) {
                     mapInteractions.cuisineType = foodUri
 //                    mapInteractions.mapsApiCall()
                     appViewModel.updateShowRestaurants(true)
+                    appViewModel.rollRestaurant()
                 }
             }
         }
