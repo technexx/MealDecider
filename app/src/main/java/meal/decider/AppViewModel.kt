@@ -16,10 +16,12 @@ import kotlin.random.Random
 class AppViewModel : ViewModel() {
     var singleSquareIndexToEdit = 0
     var rolledSquareIndex = 0
+    var rolledRestaurantIndex = 0
     var rollCountdown: Long = 1000
 
     private val handler = Handler(Looper.getMainLooper())
-    private var squareColorChangeRunnable = Runnable {}
+    private var cuisineRollRunnable = Runnable {}
+    private var restaurantRollRunnable = Runnable {}
     private var pressYourLuckRunnable = Runnable {}
 
     private val _boardUiState = MutableStateFlow(BoardValues())
@@ -332,14 +334,14 @@ class AppViewModel : ViewModel() {
         rollCountdown = 200
 
         updateRollEngaged(true)
-        handler.removeCallbacks(squareColorChangeRunnable)
+        handler.removeCallbacks(cuisineRollRunnable)
 
-        squareColorChangeRunnable = Runnable {
+        cuisineRollRunnable = Runnable {
             rolledSquareIndex = Random.nextInt(0, getSquareList.size)
             val newSquareList = squareListWithRandomColorChanged(rolledSquareIndex)
             updateSquareList(newSquareList)
 
-            handler.postDelayed(squareColorChangeRunnable, delay)
+            handler.postDelayed(cuisineRollRunnable, delay)
             if (delay > 100) delay -= 10
             rollCountdown -= 20
 
@@ -348,11 +350,23 @@ class AppViewModel : ViewModel() {
                 updateRollEngaged(false)
                 updateRollFinished(true)
 
-                handler.removeCallbacks(squareColorChangeRunnable)
+                handler.removeCallbacks(cuisineRollRunnable)
             }
         }
 
-        handler.post((squareColorChangeRunnable))
+        handler.post((cuisineRollRunnable))
+    }
+
+    fun rollRestaurant() {
+        var delay: Long = 100
+        rollCountdown = 200
+
+        handler.removeCallbacks(restaurantRollRunnable)
+
+        restaurantRollRunnable = Runnable {
+            rolledRestaurantIndex = Random.nextInt(0, getRestaurantList.size)
+
+        }
     }
 
     fun pressYourLuck() {
@@ -396,6 +410,7 @@ class AppViewModel : ViewModel() {
     val getDisplayedCuisineList get() = displayedCuisineList.value
     val getListOfSquaresToEdit get() = listOfSquaresToEdit.value
     val getListOfCuisinesToAdd get() = listOfCuisinesToAdd.value
+    val getRestaurantList get() = _restaurantList.value
     val getShowRestaurants get() = _showRestaurants.value
 
     val getRollEngaged get() = rollEngaged.value
