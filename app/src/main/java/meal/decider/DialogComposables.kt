@@ -29,7 +29,6 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -273,10 +272,10 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             .padding(12.dp),
                         columns = StaggeredGridCells.Adaptive(128.dp),
                         contentPadding = PaddingValues(
-                            start = 12.dp,
-                            top = 16.dp,
-                            end = 12.dp,
-                            bottom = 16.dp
+//                            start = 12.dp,
+//                            top = 16.dp,
+//                            end = 12.dp,
+//                            bottom = 16.dp
                         ),
                     ) {
 //                        items(restaurantList.value.size) { index ->
@@ -291,7 +290,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                     defaultElevation = 6.dp
                                 ),
                                 modifier = Modifier
-                                    .padding(12.dp)
+                                    .padding(8.dp)
                                     .selectable(
                                         selected = true,
                                         onClick = {
@@ -307,9 +306,10 @@ class DialogComposables(private val activityContext: Context, private val appVie
 //                                RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
 //                                    RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
 //                                RatingStars(restaurantList.value[index].rating)
-                                Spacer(modifier = Modifier.height(2.dp))
-                                Divider(color = Color.Black, thickness = 1.dp)
-                                Spacer(modifier = Modifier.height(2.dp))
+
+//                                Spacer(modifier = Modifier.height(2.dp))
+//                                Divider(color = Color.Black, thickness = 1.dp)
+//                                Spacer(modifier = Modifier.height(2.dp))
                                 Column {
 
                             }
@@ -333,7 +333,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
         if (text != null) {
             Text(
                 modifier = Modifier
-                    .padding(4.dp),
+                    .padding(8.dp),
                 fontSize = 14.sp,
                 color = Color.Black,
                 text = text,
@@ -357,7 +357,8 @@ class DialogComposables(private val activityContext: Context, private val appVie
         if (rating != null) {
             val roundedDown = rating.toInt()
             val remainder = rating - roundedDown
-            Row () {
+            Row (modifier = Modifier
+                .padding(8.dp)) {
                 for (i in 1..roundedDown) {
                     Image(painterResource(R.drawable.full_star_black,), "full star")
                 }
