@@ -47,7 +47,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
 
     suspend fun deleteMultipleCuisines() {
         withContext(Dispatchers.IO) {
-            val listOfNames = appViewModel.getListOfSquaresToEdit
+            val listOfNames = appViewModel.getlistOfCuisineSquaresToEdit
             for (i in listOfNames) {
                 cuisineDao.deleteCuisineFromName(i.name)
             }
@@ -65,7 +65,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             deleteAllCuisines()
             populateDatabaseWithInitialCuisines()
             populateSquareValuesWithDatabaseValues()
-        appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
+        appViewModel.updateselectedCuisineSquare(appViewModel.getSquareList[0])
         }
     }
 }

@@ -48,20 +48,23 @@ class AppViewModel : ViewModel() {
     private val _optionsMode = MutableStateFlow(false)
     val optionsMode : StateFlow<Boolean> = _optionsMode
 
-    private val _selectedSquare = MutableStateFlow(SquareValues())
-    var selectedSquare: StateFlow<SquareValues> = _selectedSquare.asStateFlow()
+    private val _selectedCuisineSquare = MutableStateFlow(SquareValues())
+    val selectedCuisineSquare: StateFlow<SquareValues> = _selectedCuisineSquare.asStateFlow()
 
     private val _listOfCuisinesToAdd = MutableStateFlow(emptyList<String>())
     val listOfCuisinesToAdd: StateFlow<List<String>> = _listOfCuisinesToAdd.asStateFlow()
 
-    private val _listOfSquaresToEdit = MutableStateFlow(emptyList<SquareValues>())
-    val listOfSquaresToEdit : StateFlow<List<SquareValues>> = _listOfSquaresToEdit
+    private val _listOfCuisineSquaresToEdit = MutableStateFlow(emptyList<SquareValues>())
+    val listOfCuisineSquaresToEdit : StateFlow<List<SquareValues>> = _listOfCuisineSquaresToEdit
 
     private val _displayedCuisineList = MutableStateFlow(emptyList<String>())
     val displayedCuisineList: StateFlow<List<String>> = _displayedCuisineList.asStateFlow()
 
     private val _restrictionsList = MutableStateFlow(RestrictionsObject.RestrictionsList)
     val restrictionsList: StateFlow<SnapshotStateList<RestrictionsValues>> = _restrictionsList.asStateFlow()
+
+    private val _selectedRestaurantSquare = MutableStateFlow(RestaurantValues())
+    val selectedRestaurantSquare: StateFlow<RestaurantValues> = _selectedRestaurantSquare.asStateFlow()
 
     private val _showRestaurants = MutableStateFlow(false)
     val showRestaurants: StateFlow<Boolean> = _showRestaurants.asStateFlow()
@@ -105,16 +108,16 @@ class AppViewModel : ViewModel() {
         _optionsMode.value = optionsMode
     }
 
-    fun updateSelectedSquare(selectedSquare: SquareValues) {
-        _selectedSquare.value = selectedSquare
+    fun updateselectedCuisineSquare(selectedCuisineSquare: SquareValues) {
+        _selectedCuisineSquare.value = selectedCuisineSquare
     }
 
     fun updateListOfSquaresToAdd(list: List<String>) {
         _listOfCuisinesToAdd.value = list
     }
 
-    fun updateListOfSquaresToEdit(list: List<SquareValues>) {
-        _listOfSquaresToEdit.value = list
+    fun updatelistOfCuisineSquaresToEdit(list: List<SquareValues>) {
+        _listOfCuisineSquaresToEdit.value = list
     }
 
     fun updateDisplayedCuisineList(list: List<String>) {
@@ -184,7 +187,7 @@ class AppViewModel : ViewModel() {
         var squareNames = squareNamesList()
         val currentSquareList = getSquareList
         val newSquareList: SnapshotStateList<SquareValues> = SnapshotStateList()
-        val selectedSquareName = getSelectedSquare.name
+        val selectedCuisineSquareName = getselectedCuisineSquare.name
 
         if (typeOfSort == "alphabetical") {
             squareNames = squareNames.sorted().toMutableList()
@@ -198,7 +201,7 @@ class AppViewModel : ViewModel() {
         }
 
         for (i in 0 until newSquareList.size) {
-            if (!newSquareList[i].name.equals(selectedSquareName, true)) {
+            if (!newSquareList[i].name.equals(selectedCuisineSquareName, true)) {
                 newSquareList[i] = SquareValues(newSquareList[i].name, defaultSquareColor)
             } else {
                 newSquareList[i] = SquareValues(newSquareList[i].name, chosenSquareColor)
@@ -235,9 +238,9 @@ class AppViewModel : ViewModel() {
 
         if (tempSquareList[index].color == chosenSquareColor || tempSquareList[index].color == defaultSquareColor) {
             tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
-            addSquareToListOfSquaresToEdit(index)
+            addSquareTolistOfCuisineSquaresToEdit(index)
         } else {
-            if (tempSquareList[index].name == selectedSquare.value.name) {
+            if (tempSquareList[index].name == selectedCuisineSquare.value.name) {
                 tempSquareList[index] = SquareValues(tempSquareList[index].name, chosenSquareColor)
             } else {
                 tempSquareList[index] = SquareValues(tempSquareList[index].name, defaultSquareColor)
@@ -249,25 +252,25 @@ class AppViewModel : ViewModel() {
 
     }
 
-    fun addSquareToListOfSquaresToEdit(index: Int) {
-        val tempList = getListOfSquaresToEdit.toMutableList()
+    fun addSquareTolistOfCuisineSquaresToEdit(index: Int) {
+        val tempList = getlistOfCuisineSquaresToEdit.toMutableList()
         val currentList = getSquareList
         tempList.add(currentList[index])
-        updateListOfSquaresToEdit(tempList)
+        updatelistOfCuisineSquaresToEdit(tempList)
     }
 
     fun removeSquareFromListOfSquareIndicesToUpdate() {
-        val tempList = getListOfSquaresToEdit.toMutableList()
+        val tempList = getlistOfCuisineSquaresToEdit.toMutableList()
         tempList.removeLast()
-        updateListOfSquaresToEdit(tempList)
+        updatelistOfCuisineSquaresToEdit(tempList)
     }
 
     //With SnapShotStateLists, our contains() conditional is true, but not with regular Lists.
     fun deleteSelectedCuisines() {
-        val listOfSquaresToEdit = getListOfSquaresToEdit
+        val listOfCuisineSquaresToEdit = getlistOfCuisineSquaresToEdit
         val currentSquaresList = getSquareList
 
-        for (i in listOfSquaresToEdit) {
+        for (i in listOfCuisineSquaresToEdit) {
             if (currentSquaresList.contains(i)) {
                 currentSquaresList.remove(i)
                 println("true")
@@ -281,30 +284,30 @@ class AppViewModel : ViewModel() {
 
     fun resetSquareColors() {
         val squareList = getSquareList
-        val selectedSquare = getSelectedSquare
+        val selectedCuisineSquare = getselectedCuisineSquare
 
         for (i in squareList) {
             i.color = defaultSquareColor
-            if (i.name.equals(selectedSquare.name, true)) {
+            if (i.name.equals(selectedCuisineSquare.name, true)) {
                 i.color = chosenSquareColor
             }
         }
 
         //Set first square index to selected if previous one no longer exists.
-        if (!doesSelectedSquareExist()) {
+        if (!doesselectedCuisineSquareExist()) {
             squareList[0].color = chosenSquareColor
-            updateSelectedSquare(squareList[0])
+            updateselectedCuisineSquare(squareList[0])
         }
 
         updateSquareList(squareList)
     }
 
-    private fun doesSelectedSquareExist() : Boolean {
+    private fun doesselectedCuisineSquareExist() : Boolean {
         val squareList = getSquareList
-        val selectedSquare = getSelectedSquare
+        val selectedCuisineSquare = getselectedCuisineSquare
 
         for (i in squareList) {
-            if (i.name.equals(selectedSquare.name)) return true
+            if (i.name.equals(selectedCuisineSquare.name)) return true
         }
         return false
     }
@@ -346,7 +349,7 @@ class AppViewModel : ViewModel() {
             rollCountdown -= 20
 
             if (rollCountdown < 20) {
-                updateSelectedSquare(getSquareList[rolledSquareIndex])
+                updateselectedCuisineSquare(getSquareList[rolledSquareIndex])
                 updateRollEngaged(false)
                 updateRollFinished(true)
 
@@ -406,9 +409,9 @@ class AppViewModel : ViewModel() {
     }
 
     val getSquareList get() = boardUiState.value.squareList
-    val getSelectedSquare get() = selectedSquare.value
+    val getselectedCuisineSquare get() = selectedCuisineSquare.value
     val getDisplayedCuisineList get() = displayedCuisineList.value
-    val getListOfSquaresToEdit get() = listOfSquaresToEdit.value
+    val getlistOfCuisineSquaresToEdit get() = listOfCuisineSquaresToEdit.value
     val getListOfCuisinesToAdd get() = listOfCuisinesToAdd.value
     val getRestaurantList get() = _restaurantList.value
     val getShowRestaurants get() = _showRestaurants.value

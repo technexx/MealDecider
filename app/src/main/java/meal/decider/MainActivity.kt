@@ -123,7 +123,7 @@ class MainActivity : ComponentActivity() {
         //Populates SquareValues with DB values and set first cuisine as default selection.
         scope.launch {
             roomInteractions.populateSquareValuesWithDatabaseValues()
-            appViewModel.updateSelectedSquare(appViewModel.getSquareList[0])
+            appViewModel.updateselectedCuisineSquare(appViewModel.getSquareList[0])
         }
 
         setContent {
@@ -147,7 +147,7 @@ fun TopBar() {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var expanded by remember { mutableStateOf(false) }
     val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
-    val listOfSquaresToEdit = appViewModel.listOfSquaresToEdit.collectAsStateWithLifecycle()
+    val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -164,7 +164,7 @@ fun TopBar() {
                     Text("Meal Decider")
                 },
                 actions = {
-                    if (listOfSquaresToEdit.value.isNotEmpty() && editMode.value) {
+                    if (listOfCuisineSquaresToEdit.value.isNotEmpty() && editMode.value) {
                         IconButton(onClick = {
                             coroutineScope.launch {
                                 roomInteractions.deleteMultipleCuisines()
@@ -204,7 +204,7 @@ fun TopBar() {
                             }
                             DropDownMenuItemUi(text = "Edit Cuisines") {
                                 //Resets list of squares to edit.
-                                appViewModel.updateListOfSquaresToEdit(listOf())
+                                appViewModel.updatelistOfCuisineSquaresToEdit(listOf())
 
                                 if (!appViewModel.getEditMode) {
                                     appViewModel.updateEditMode(true)
@@ -425,12 +425,12 @@ fun InteractionLayout(height: Double) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val rollFinished = appViewModel.rollFinished.collectAsStateWithLifecycle()
-    val selectedSquare = appViewModel.selectedSquare.collectAsStateWithLifecycle()
+    val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()
     val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
 
     val restrictionsString = appViewModel.foodRestrictionsString(restrictionsUi.value)
-    val foodUri = selectedSquare.value.name + "+" + "Food" + "+" + restrictionsString
-//    val foodUri = "geo:0,0?q=" + selectedSquare.value.name + " Food " + restrictionsString
+    val foodUri = selectedCuisineSquare.value.name + "+" + "Food" + "+" + restrictionsString
+//    val foodUri = "geo:0,0?q=" + selectedCuisineSquare.value.name + " Food " + restrictionsString
 
     Column (
         modifier = Modifier

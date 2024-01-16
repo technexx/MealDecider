@@ -29,11 +29,11 @@ object RestrictionsObject {
 }
 
 data class RestaurantValues(
-    var name: String?,
-    var address: String?,
-    var distance: Double?,
-    var priceLevel: Int?,
-    var rating: Double?,
+    var name: String? = "",
+    var address: String? = "",
+    var distance: Double? = 0.0,
+    var priceLevel: Int? = 0,
+    var rating: Double? = 0.0,
 )
 
 object RestaurantsObject {
