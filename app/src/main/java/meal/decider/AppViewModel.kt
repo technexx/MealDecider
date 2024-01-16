@@ -328,7 +328,7 @@ class AppViewModel : ViewModel() {
 
     //Cuisine and Press Your Luck run at different intervals but both stop when rollCountDown hits 20.
     fun rollCuisine() {
-        var delay: Long = 400
+        var delay: Long = 100
         rollCountdown = 200
 
         updateRollEngaged(true)
@@ -379,6 +379,14 @@ class AppViewModel : ViewModel() {
         val listToReturn = mutableListOf<String>()
         for (i in getSquareList) {
             listToReturn.add(i.name)
+        }
+        return listToReturn
+    }
+
+    fun dummyRestaurantList(): SnapshotStateList<RestaurantValues> {
+        val listToReturn = mutableStateListOf<RestaurantValues>()
+        for (i in 1..20) {
+            listToReturn.add(RestaurantValues("So Good Restaurant", "123 Bird Brain Lane", 2000.0, 2, 4.0))
         }
         return listToReturn
     }

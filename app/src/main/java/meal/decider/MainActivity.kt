@@ -90,8 +90,8 @@ private lateinit var mapInteractions: MapInteractions
 val scope = CoroutineScope(Job() + Dispatchers.IO)
 
 //TODO: Sort options in restaurant list.
+//TODO: Filter for restaurants (distance, rating).
 //TODO: Maximum of 20 results seems to return - check if it can be expanded.
-//TODO: Radius selection for restaurants.
 //TODO: Less than 2 restaurants = prompt to expand radius.
 //TODO: Randomization speed/duration options.
 //TODO: Keep statistics (how many rolls, how many re-rolls, how many maps opened, etc.)
@@ -444,7 +444,7 @@ fun InteractionLayout(height: Double) {
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
                     mapInteractions.cuisineType = foodUri
-                    mapInteractions.mapsApiCall()
+//                    mapInteractions.mapsApiCall()
                     appViewModel.updateShowRestaurants(true)
                 }
             }

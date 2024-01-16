@@ -2,6 +2,7 @@ package meal.decider
 
 import android.content.Context
 import android.view.Gravity
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -276,23 +279,43 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             bottom = 16.dp
                         ),
                     ) {
-                        items(restaurantList.value.size) { index ->
-                            Column(modifier = Modifier
-                                .padding(4.dp)
-                                .selectable(
-                                    selected = true,
-                                    onClick = {
-                                    }
-                                )) {
-                                Column {
-                                    RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
+//                        items(restaurantList.value.size) { index ->
+                        val testList = appViewModel.dummyRestaurantList()
+                        items(testList.size) { index ->
+                        Card(
+                                colors = CardDefaults.cardColors(
+                                    containerColor = colorResource(R.color.grey_300),
+                                ),
+                                border = BorderStroke(1.dp,Color.Black),
+                                elevation = CardDefaults.cardElevation(
+                                    defaultElevation = 6.dp
+                                ),
+                                modifier = Modifier
+                                    .padding(12.dp)
+                                    .selectable(
+                                        selected = true,
+                                        onClick = {
+                                        }
+                                    ),
+                            ) {
+                            RestaurantListTextUi(testList[index].name.toString(), true)
+                            RestaurantListTextUi(testList[index].distance.toString(), false)
+                            RatingStars(testList[index].rating)
+
+//                            RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
 //                                    RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
-                                    RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
+//                                RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
 //                                    RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
-                                    RatingStars(restaurantList.value[index].rating)
-                                    Spacer(modifier = Modifier.height(2.dp))
-                                    Divider(color = Color.Black, thickness = 1.dp)
-                                    Spacer(modifier = Modifier.height(2.dp))
+//                                RatingStars(restaurantList.value[index].rating)
+                                Spacer(modifier = Modifier.height(2.dp))
+                                Divider(color = Color.Black, thickness = 1.dp)
+                                Spacer(modifier = Modifier.height(2.dp))
+                                Column {
+
+                            }
+                                //TODO: Roll button.
+                                Column(){
+
                                 }
                             }
                         }
