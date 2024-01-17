@@ -444,7 +444,7 @@ fun InteractionLayout(height: Double) {
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
                     mapInteractions.cuisineType = foodUri
-//                    mapInteractions.mapsApiCall()
+                    mapInteractions.mapsApiCall()
                     appViewModel.updateShowRestaurants(true)
                     appViewModel.rollRestaurant()
                 }

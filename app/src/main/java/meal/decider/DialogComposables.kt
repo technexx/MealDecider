@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -271,19 +270,11 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             .fillMaxWidth()
                             .padding(12.dp),
                         columns = StaggeredGridCells.Adaptive(128.dp),
-                        contentPadding = PaddingValues(
-//                            start = 12.dp,
-//                            top = 16.dp,
-//                            end = 12.dp,
-//                            bottom = 16.dp
-                        ),
                     ) {
-//                        items(restaurantList.value.size) { index ->
-                        val testList = appViewModel.dummyRestaurantList()
-                        items(testList.size) { index ->
+                        items(restaurantList.value.size) { index ->
                         Card(
                                 colors = CardDefaults.cardColors(
-                                    containerColor = colorResource(R.color.grey_300),
+                                    containerColor = colorResource(restaurantList.value[index].color!!),
                                 ),
                                 border = BorderStroke(1.dp,Color.Black),
                                 elevation = CardDefaults.cardElevation(
@@ -297,22 +288,16 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                         }
                                     ),
                             ) {
-                            RestaurantListTextUi(testList[index].name.toString(), true)
-                            RestaurantListTextUi(testList[index].distance.toString(), false)
-                            RatingStars(testList[index].rating)
+//                            RestaurantListTextUi(testList[index].name.toString(), true)
+//                            RestaurantListTextUi(testList[index].distance.toString(), false)
+//                            RatingStars(testList[index].rating)
 
-//                            RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
-//                                    RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
-//                                RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
-//                                    RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
-//                                RatingStars(restaurantList.value[index].rating)
+                            RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
+//                            RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
+                            RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
+//                            RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
+                            RatingStars(restaurantList.value[index].rating)
 
-//                                Spacer(modifier = Modifier.height(2.dp))
-//                                Divider(color = Color.Black, thickness = 1.dp)
-//                                Spacer(modifier = Modifier.height(2.dp))
-                                Column {
-
-                            }
                                 //TODO: Roll button.
                                 Column(){
 

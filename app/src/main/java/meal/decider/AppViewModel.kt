@@ -371,10 +371,16 @@ class AppViewModel : ViewModel() {
             val newRestaurantList = restaurantListWithRandomColorChanged(rolledRestaurantIndex)
             updateRestaurantsList(newRestaurantList)
 
+            handler.postDelayed(restaurantRollRunnable, delay)
+            if (delay > 100) delay -= 10
+            rollCountdown -= 20
+
             if (rollCountdown < 20) {
                 handler.removeCallbacks(restaurantRollRunnable)
             }
         }
+
+        handler.post(restaurantRollRunnable)
     }
 
     private fun restaurantListWithRandomColorChanged(index: Int): SnapshotStateList<RestaurantValues> {
@@ -386,6 +392,8 @@ class AppViewModel : ViewModel() {
         }
 
         newList[index].color = chosenSquareColor
+
+        showLog("test", "new list is $newList")
         return newList
     }
 
@@ -420,7 +428,7 @@ class AppViewModel : ViewModel() {
     fun dummyRestaurantList(): SnapshotStateList<RestaurantValues> {
         val listToReturn = mutableStateListOf<RestaurantValues>()
         for (i in 1..20) {
-            listToReturn.add(RestaurantValues("So Good Restaurant With Way More Text Here It Is", "123 Bird Brain Lane", 2000.0, 2, 4.0))
+            listToReturn.add(RestaurantValues("So Good Restaurant With Way More Text Here It Is", "123 Bird Brain Lane", 2000.0, 2, 4.0, defaultSquareColor))
         }
         return listToReturn
     }
