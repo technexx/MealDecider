@@ -50,8 +50,8 @@ class MapInteractions(private val activity: Activity, private val activityContex
 
 //            showLog("test", "serializable is $jsonSerialized")
 //            showLog("test", "restaurant list is $restaurantList")
-            showLog("test", "pretty json is $prettyJson")
-            showLog("test","number of returns are ${restaurantList.size}")
+//            showLog("test", "pretty json is $prettyJson")
+//            showLog("test","number of returns are ${restaurantList.size}")
         }
     }
 

@@ -339,6 +339,7 @@ fun SelectionGridLayout(height: Double) {
     val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
     val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
     val rollFinished = appViewModel.rollFinished.collectAsStateWithLifecycle()
+    val selectionBorderStroke = appViewModel.selectionBorderStroke.collectAsStateWithLifecycle()
     val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
     val restoreDefaults = appViewModel.restoreDefaults.collectAsStateWithLifecycle()
     val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
@@ -350,7 +351,7 @@ fun SelectionGridLayout(height: Double) {
 //    val foodUri = "geo:0,0?q=" + selectedCuisineSquare.value.name + " Food " + restrictionsString
     val foodUri = selectedCuisineSquare.value.name + "+" + "Food" + "+" + restrictionsString
 
-    val borderStroke: BorderStroke
+    var borderStroke: BorderStroke
 
     if (editMode.value) {
         borderStroke = BorderStroke(3.dp,Color.Black)
@@ -376,11 +377,13 @@ fun SelectionGridLayout(height: Double) {
     }
 
     if (rollFinished.value) {
-        //TODO: Animation on selected cuisine as a buffer for api to finish loading (set delay).
         LaunchedEffect(Unit) {
             coroutineScope.launch {
+                appViewModel.borderStrokeToggle(2000, BorderStroke(1.dp, Color.Red), BorderStroke(3.dp, Color.Red))
+
                 mapInteractions.cuisineType = foodUri
                 mapInteractions.mapsApiCall()
+
                 appViewModel.updateShowRestaurants(true)
                 appViewModel.rollRestaurant()
             }
@@ -405,6 +408,14 @@ fun SelectionGridLayout(height: Double) {
                         appViewModel.updateRollFinished(false)
                     }
                 }
+
+                if (index == appViewModel.rolledSquareIndex) {
+                    borderStroke = selectionBorderStroke.value
+                } else {
+                    borderStroke = BorderStroke(1.dp,Color.Black)
+                }
+
+                showLog("test","recomposing board!")
 
                 Card(
                     colors = CardDefaults.cardColors(

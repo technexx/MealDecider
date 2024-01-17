@@ -2,9 +2,12 @@ package meal.decider
 
 import android.os.Handler
 import android.os.Looper
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,6 +26,7 @@ class AppViewModel : ViewModel() {
     private var cuisineRollRunnable = Runnable {}
     private var restaurantRollRunnable = Runnable {}
     private var pressYourLuckRunnable = Runnable {}
+    private var borderStrokeToggleRunnable = Runnable {}
 
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
@@ -71,6 +75,9 @@ class AppViewModel : ViewModel() {
 
     private val _restaurantList = MutableStateFlow(RestaurantsObject.RestaurantList)
     val restaurantList: StateFlow<SnapshotStateList<RestaurantValues>> = _restaurantList.asStateFlow()
+
+    private val _selectionBorderStroke = MutableStateFlow(BorderStroke(1.dp, Color.Black))
+    val selectionBorderStroke: StateFlow<BorderStroke> = _selectionBorderStroke.asStateFlow()
 
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
@@ -136,6 +143,10 @@ class AppViewModel : ViewModel() {
         _showRestaurants.value = show
     }
 
+    fun updateSelectionBorderStroke(borderStroke: BorderStroke) {
+        _selectionBorderStroke.value = borderStroke
+    }
+
     fun addMultipleSquaresToList(squares: List<String>) {
         val squareList = getSquareList
         for (i in squares) {
@@ -190,8 +201,15 @@ class AppViewModel : ViewModel() {
         updateSquareList(newSquareList)
     }
 
-
     fun squareNamesList(): List<String> {
+        val listToReturn = mutableListOf<String>()
+        for (i in getSquareList) {
+            listToReturn.add(i.name)
+        }
+        return listToReturn
+    }
+
+    fun getListOfSquareNames(): List<String> {
         val listToReturn = mutableListOf<String>()
         for (i in getSquareList) {
             listToReturn.add(i.name)
@@ -261,7 +279,6 @@ class AppViewModel : ViewModel() {
         for (i in listOfCuisineSquaresToEdit) {
             if (currentSquaresList.contains(i)) {
                 currentSquaresList.remove(i)
-                println("true")
             }
         }
 
@@ -363,7 +380,6 @@ class AppViewModel : ViewModel() {
     fun rollRestaurant() {
         var delay: Long = 100
         rollCountdown = 1000
-
         handler.removeCallbacks(restaurantRollRunnable)
 
         restaurantRollRunnable = Runnable {
@@ -390,16 +406,13 @@ class AppViewModel : ViewModel() {
         for (i in currentList) {
             newList.add(RestaurantValues(i.name, i.address, i.distance, i.priceLevel, i.rating, defaultSquareColor))
         }
-
         newList[index].color = chosenSquareColor
 
-        showLog("test", "new list is $newList")
         return newList
     }
 
     fun pressYourLuck() {
         var delay: Long = 800
-
         handler.removeCallbacks(pressYourLuckRunnable)
 
         pressYourLuckRunnable = Runnable {
@@ -417,12 +430,25 @@ class AppViewModel : ViewModel() {
         handler.post(pressYourLuckRunnable)
     }
 
-    fun getListOfSquareNames(): List<String> {
-        val listToReturn = mutableListOf<String>()
-        for (i in getSquareList) {
-            listToReturn.add(i.name)
+    fun borderStrokeToggle(duration: Int, defaultBorderStroke: BorderStroke, animatedBorderStroke: BorderStroke) {
+        var countDown = duration
+        handler.removeCallbacks(borderStrokeToggleRunnable)
+        updateSelectionBorderStroke(defaultBorderStroke)
+
+        borderStrokeToggleRunnable = Runnable {
+            if (getSelectionBorderStroke == defaultBorderStroke) updateSelectionBorderStroke(animatedBorderStroke) else updateSelectionBorderStroke(defaultBorderStroke)
+
+            handler.postDelayed(borderStrokeToggleRunnable, 200)
+            countDown -= 200
+
+            if (countDown < 200) {
+                handler.removeCallbacks(borderStrokeToggleRunnable)
+            }
+
+            showLog("test", "running!")
         }
-        return listToReturn
+
+        handler.post(borderStrokeToggleRunnable)
     }
 
     fun dummyRestaurantList(): SnapshotStateList<RestaurantValues> {
@@ -440,6 +466,7 @@ class AppViewModel : ViewModel() {
     val getListOfCuisinesToAdd get() = listOfCuisinesToAdd.value
     val getRestaurantList get() = _restaurantList.value
     val getShowRestaurants get() = _showRestaurants.value
+    val getSelectionBorderStroke get() = _selectionBorderStroke.value
 
     val getRollEngaged get() = rollEngaged.value
     val getRollFinished get() = rollFinished.value
