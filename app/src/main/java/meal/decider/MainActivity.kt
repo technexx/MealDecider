@@ -58,7 +58,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -334,13 +333,22 @@ fun OptionsBarLayout(height: Double) {
 
 @Composable
 fun SelectionGridLayout(height: Double) {
+    val coroutineScope = rememberCoroutineScope()
     val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
     val sectionGridState = rememberLazyGridState()
     val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
     val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
+    val rollFinished = appViewModel.rollFinished.collectAsStateWithLifecycle()
     val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
     val restoreDefaults = appViewModel.restoreDefaults.collectAsStateWithLifecycle()
     val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
+
+    val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
+    val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()
+    val restrictionsString = appViewModel.foodRestrictionsString(restrictionsUi.value)
+
+//    val foodUri = "geo:0,0?q=" + selectedCuisineSquare.value.name + " Food " + restrictionsString
+    val foodUri = selectedCuisineSquare.value.name + "+" + "Food" + "+" + restrictionsString
 
     val borderStroke: BorderStroke
 
@@ -365,6 +373,18 @@ fun SelectionGridLayout(height: Double) {
 
     if (showRestaurants.value) {
         dialogComposables.RestaurantDialog()
+    }
+
+    if (rollFinished.value) {
+        //TODO: Animation on selected cuisine as a buffer for api to finish loading (set delay).
+        LaunchedEffect(Unit) {
+            coroutineScope.launch {
+                mapInteractions.cuisineType = foodUri
+                mapInteractions.mapsApiCall()
+                appViewModel.updateShowRestaurants(true)
+                appViewModel.rollRestaurant()
+            }
+        }
     }
 
     LazyVerticalGrid(state = sectionGridState,
@@ -422,15 +442,7 @@ fun SelectionGridLayout(height: Double) {
 @SuppressLint("MissingPermission")
 @Composable
 fun InteractionLayout(height: Double) {
-    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val rollFinished = appViewModel.rollFinished.collectAsStateWithLifecycle()
-    val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()
-    val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
-
-    val restrictionsString = appViewModel.foodRestrictionsString(restrictionsUi.value)
-    val foodUri = selectedCuisineSquare.value.name + "+" + "Food" + "+" + restrictionsString
-//    val foodUri = "geo:0,0?q=" + selectedCuisineSquare.value.name + " Food " + restrictionsString
 
     Column (
         modifier = Modifier
@@ -439,18 +451,6 @@ fun InteractionLayout(height: Double) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        if (rollFinished.value) {
-            //TODO: Animation on selected cuisine as a buffer for api to finish loading.
-            LaunchedEffect(Unit) {
-                coroutineScope.launch {
-                    mapInteractions.cuisineType = foodUri
-                    mapInteractions.mapsApiCall()
-                    appViewModel.updateShowRestaurants(true)
-                    appViewModel.rollRestaurant()
-                }
-            }
-        }
-
         Row (
             modifier = Modifier
                 .fillMaxWidth()
