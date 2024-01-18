@@ -86,7 +86,9 @@ private lateinit var dialogComposables : DialogComposables
 private lateinit var roomInteractions: RoomInteractions
 @SuppressLint("StaticFieldLeak")
 private lateinit var mapInteractions: MapInteractions
-val scope = CoroutineScope(Job() + Dispatchers.IO)
+
+val ioScope = CoroutineScope(Job() + Dispatchers.IO)
+val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
 //TODO: Sort options in restaurant list.
 //TODO: Filter for restaurants (distance, rating).
@@ -113,14 +115,14 @@ class MainActivity : ComponentActivity() {
         mapInteractions.fusedLocationListener()
 
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
-        scope.launch {
+        ioScope.launch {
             if (roomInteractions.cuisineDao.getAllCuisines().isEmpty()) {
                 roomInteractions.setSquareValuesAndDatabaseToDefaultStartingValues()
             }
         }
 
         //Populates SquareValues with DB values and set first cuisine as default selection.
-        scope.launch {
+        ioScope.launch {
             roomInteractions.populateSquareValuesWithDatabaseValues()
             appViewModel.updateselectedCuisineSquare(appViewModel.getSquareList[0])
         }
@@ -376,8 +378,13 @@ fun SelectionGridLayout(height: Double) {
         dialogComposables.RestaurantDialog()
     }
 
+    //TODO: Switch threads to Main for everything but API call.
     if (rollFinished.value) {
         LaunchedEffect(Unit) {
+//            ioScope.launch {
+//
+//            }
+
             coroutineScope.launch {
                 appViewModel.borderStrokeToggle(2000, BorderStroke(1.dp, Color.Red), BorderStroke(3.dp, Color.Red))
 
