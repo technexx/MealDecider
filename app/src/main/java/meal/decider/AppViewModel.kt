@@ -451,6 +451,11 @@ class AppViewModel : ViewModel() {
         handler.post(borderStrokeToggleRunnable)
     }
 
+    fun cancelBorderStrokeToggle() {
+        handler.removeCallbacks(borderStrokeToggleRunnable)
+    }
+
+
     fun dummyRestaurantList(): SnapshotStateList<RestaurantValues> {
         val listToReturn = mutableStateListOf<RestaurantValues>()
         for (i in 1..20) {

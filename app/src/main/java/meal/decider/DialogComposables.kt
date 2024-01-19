@@ -252,7 +252,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
     @Composable
     fun RestaurantDialog() {
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
-        var testList = appViewModel.dummyRestaurantList()
 
         Dialog(onDismissRequest = {
             appViewModel.updateShowRestaurants(false)
@@ -272,7 +271,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             .padding(12.dp),
                         columns = StaggeredGridCells.Adaptive(128.dp),
                     ) {
-                        items(testList.size) { index ->
+                        items(restaurantList.value.size) { index ->
 //                        items(restaurantList.value.size) { index ->
                         Card(
                                 colors = CardDefaults.cardColors(
@@ -290,15 +289,15 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                         }
                                     ),
                             ) {
-                            RestaurantListTextUi(testList[index].name.toString(), true)
-                            RestaurantListTextUi(testList[index].distance.toString(), false)
-                            RatingStars(testList[index].rating)
+//                            RestaurantListTextUi(testList[index].name.toString(), true)
+//                            RestaurantListTextUi(testList[index].distance.toString(), false)
+//                            RatingStars(testList[index].rating)
 
-//                            RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
-////                            RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
-//                            RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
-////                            RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
-//                            RatingStars(restaurantList.value[index].rating)
+                            RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
+//                            RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
+                            RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
+//                            RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
+                            RatingStars(restaurantList.value[index].rating)
 
                                 //TODO: Roll button.
                                 Column(){

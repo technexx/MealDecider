@@ -381,10 +381,6 @@ fun SelectionGridLayout(height: Double) {
     //TODO: Switch threads to Main for everything but API call.
     if (rollFinished.value) {
         LaunchedEffect(Unit) {
-//            ioScope.launch {
-//
-//            }
-
             coroutineScope.launch {
                 appViewModel.borderStrokeToggle(2000, BorderStroke(1.dp, Color.Red), BorderStroke(3.dp, Color.Red))
 
