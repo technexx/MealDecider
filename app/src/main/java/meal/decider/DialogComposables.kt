@@ -252,6 +252,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
     @Composable
     fun RestaurantDialog() {
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
+        val dummyList = appViewModel.dummyRestaurantList()
 
         Dialog(onDismissRequest = {
             appViewModel.updateShowRestaurants(false)
@@ -271,11 +272,12 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             .padding(12.dp),
                         columns = StaggeredGridCells.Adaptive(128.dp),
                     ) {
-                        items(restaurantList.value.size) { index ->
 //                        items(restaurantList.value.size) { index ->
+                        items(dummyList.size) { index ->
                         Card(
                                 colors = CardDefaults.cardColors(
-                                    containerColor = colorResource(restaurantList.value[index].color!!),
+                                    containerColor = colorResource(dummyList[index].color!!),
+//                                    containerColor = colorResource(restaurantList.value[index].color!!),
                                 ),
                                 border = BorderStroke(1.dp,Color.Black),
                                 elevation = CardDefaults.cardElevation(
@@ -289,15 +291,15 @@ class DialogComposables(private val activityContext: Context, private val appVie
                                         }
                                     ),
                             ) {
-//                            RestaurantListTextUi(testList[index].name.toString(), true)
-//                            RestaurantListTextUi(testList[index].distance.toString(), false)
-//                            RatingStars(testList[index].rating)
+                            RestaurantListTextUi(dummyList[index].name.toString(), true)
+                            RestaurantListTextUi(dummyList[index].distance.toString(), false)
+                            RatingStars(dummyList[index].rating)
 
-                            RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
-//                            RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
-                            RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
-//                            RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
-                            RatingStars(restaurantList.value[index].rating)
+//                            RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
+////                            RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
+//                            RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
+////                            RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
+//                            RatingStars(restaurantList.value[index].rating)
 
                                 //TODO: Roll button.
                                 Column(){
@@ -319,7 +321,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
         if (text != null) {
             Text(
                 modifier = Modifier
-                    .padding(8.dp),
+                    .padding(8.dp, 4.dp),
                 fontSize = 14.sp,
                 color = Color.Black,
                 text = text,
@@ -328,23 +330,13 @@ class DialogComposables(private val activityContext: Context, private val appVie
         }
     }
 
-    private fun priceToDollarSigns(price: Int?): String {
-        var stringToReturn = ""
-         if (price != null) {
-            for (i in 1..price) {
-                stringToReturn += "$"
-            }
-        }
-        return stringToReturn
-    }
-
     @Composable
     fun RatingStars(rating: Double?) {
         if (rating != null) {
             val roundedDown = rating.toInt()
             val remainder = rating - roundedDown
             Row (modifier = Modifier
-                .padding(8.dp)) {
+                .padding(8.dp, 4.dp)) {
                 for (i in 1..roundedDown) {
                     Image(painterResource(R.drawable.full_star_black,), "full star")
                 }
@@ -356,6 +348,16 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 }
             }
         }
+    }
+
+    private fun priceToDollarSigns(price: Int?): String {
+        var stringToReturn = ""
+        if (price != null) {
+            for (i in 1..price) {
+                stringToReturn += "$"
+            }
+        }
+        return stringToReturn
     }
 
     @Composable

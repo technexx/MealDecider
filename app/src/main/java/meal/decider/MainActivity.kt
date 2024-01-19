@@ -391,7 +391,6 @@ fun SelectionGridLayout(height: Double) {
 
                 appViewModel.cancelCuisineBorderStrokeToggle()
                 appViewModel.updateShowRestaurants(true)
-                appViewModel.resetCuisineSelectionBorderStroke()
 
                 appViewModel.rollRestaurant()
             }
