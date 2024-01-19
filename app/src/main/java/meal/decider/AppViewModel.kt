@@ -439,13 +439,6 @@ class AppViewModel : ViewModel() {
             if (getSelectionBorderStroke == defaultBorderStroke) updateSelectionBorderStroke(animatedBorderStroke) else updateSelectionBorderStroke(defaultBorderStroke)
 
             handler.postDelayed(borderStrokeToggleRunnable, 200)
-            countDown -= 200
-
-            if (countDown < 200) {
-                handler.removeCallbacks(borderStrokeToggleRunnable)
-            }
-
-            showLog("test", "running!")
         }
 
         handler.post(borderStrokeToggleRunnable)

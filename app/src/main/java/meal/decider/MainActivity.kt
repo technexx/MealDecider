@@ -387,6 +387,10 @@ fun SelectionGridLayout(height: Double) {
                 mapInteractions.cuisineType = foodUri
                 mapInteractions.mapsApiCall()
 
+                delay(2000)
+
+                appViewModel.cancelBorderStrokeToggle()
+
                 appViewModel.updateShowRestaurants(true)
                 appViewModel.rollRestaurant()
             }
