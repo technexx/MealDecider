@@ -26,7 +26,7 @@ class AppViewModel : ViewModel() {
     private var cuisineRollRunnable = Runnable {}
     private var restaurantRollRunnable = Runnable {}
     private var pressYourLuckRunnable = Runnable {}
-    private var borderStrokeToggleRunnable = Runnable {}
+    private var cuisineBorderStrokeToggleRunnable = Runnable {}
 
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
@@ -76,8 +76,8 @@ class AppViewModel : ViewModel() {
     private val _restaurantList = MutableStateFlow(RestaurantsObject.RestaurantList)
     val restaurantList: StateFlow<SnapshotStateList<RestaurantValues>> = _restaurantList.asStateFlow()
 
-    private val _selectionBorderStroke = MutableStateFlow(BorderStroke(1.dp, Color.Black))
-    val selectionBorderStroke: StateFlow<BorderStroke> = _selectionBorderStroke.asStateFlow()
+    private val _cuisinerSelectionBorderStroke = MutableStateFlow(BorderStroke(1.dp, Color.Black))
+    val cuisinerSelectionBorderStroke: StateFlow<BorderStroke> = _cuisinerSelectionBorderStroke.asStateFlow()
 
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
@@ -143,8 +143,8 @@ class AppViewModel : ViewModel() {
         _showRestaurants.value = show
     }
 
-    fun updateSelectionBorderStroke(borderStroke: BorderStroke) {
-        _selectionBorderStroke.value = borderStroke
+    fun updateCuisineSelectionBorderStroke(borderStroke: BorderStroke) {
+        _cuisinerSelectionBorderStroke.value = borderStroke
     }
 
     fun addMultipleSquaresToList(squares: List<String>) {
@@ -430,24 +430,25 @@ class AppViewModel : ViewModel() {
         handler.post(pressYourLuckRunnable)
     }
 
-    fun borderStrokeToggle(duration: Int, defaultBorderStroke: BorderStroke, animatedBorderStroke: BorderStroke) {
-        var countDown = duration
-        handler.removeCallbacks(borderStrokeToggleRunnable)
-        updateSelectionBorderStroke(defaultBorderStroke)
+    fun cuisineBorderStrokeToggle() {
+        handler.removeCallbacks(cuisineBorderStrokeToggleRunnable)
+        updateCuisineSelectionBorderStroke(defaultCuisineSelectionBorderStroke)
 
-        borderStrokeToggleRunnable = Runnable {
-            if (getSelectionBorderStroke == defaultBorderStroke) updateSelectionBorderStroke(animatedBorderStroke) else updateSelectionBorderStroke(defaultBorderStroke)
+        cuisineBorderStrokeToggleRunnable = Runnable {
+            if (getcuisinerSelectionBorderStroke == defaultCuisineSelectionBorderStroke) updateCuisineSelectionBorderStroke(
+                animatedCuisineSelectionBorderStroke) else updateCuisineSelectionBorderStroke(
+                defaultCuisineSelectionBorderStroke)
 
-            handler.postDelayed(borderStrokeToggleRunnable, 200)
+            handler.postDelayed(cuisineBorderStrokeToggleRunnable, 200)
         }
 
-        handler.post(borderStrokeToggleRunnable)
+        handler.post(cuisineBorderStrokeToggleRunnable)
     }
 
-    fun cancelBorderStrokeToggle() {
-        handler.removeCallbacks(borderStrokeToggleRunnable)
-    }
-
+    fun cancelCuisineBorderStrokeToggle() { handler.removeCallbacks(cuisineBorderStrokeToggleRunnable) }
+    
+    fun resetCuisineSelectionBorderStroke() { updateCuisineSelectionBorderStroke(
+        defaultCuisineSelectionBorderStroke) }
 
     fun dummyRestaurantList(): SnapshotStateList<RestaurantValues> {
         val listToReturn = mutableStateListOf<RestaurantValues>()
@@ -464,7 +465,7 @@ class AppViewModel : ViewModel() {
     val getListOfCuisinesToAdd get() = listOfCuisinesToAdd.value
     val getRestaurantList get() = _restaurantList.value
     val getShowRestaurants get() = _showRestaurants.value
-    val getSelectionBorderStroke get() = _selectionBorderStroke.value
+    val getcuisinerSelectionBorderStroke get() = _cuisinerSelectionBorderStroke.value
 
     val getRollEngaged get() = rollEngaged.value
     val getRollFinished get() = rollFinished.value

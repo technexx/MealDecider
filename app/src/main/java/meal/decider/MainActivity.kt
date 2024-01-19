@@ -341,7 +341,7 @@ fun SelectionGridLayout(height: Double) {
     val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
     val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
     val rollFinished = appViewModel.rollFinished.collectAsStateWithLifecycle()
-    val selectionBorderStroke = appViewModel.selectionBorderStroke.collectAsStateWithLifecycle()
+    val cuisinerSelectionBorderStroke = appViewModel.cuisinerSelectionBorderStroke.collectAsStateWithLifecycle()
     val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
     val restoreDefaults = appViewModel.restoreDefaults.collectAsStateWithLifecycle()
     val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
@@ -382,16 +382,17 @@ fun SelectionGridLayout(height: Double) {
     if (rollFinished.value) {
         LaunchedEffect(Unit) {
             coroutineScope.launch {
-                appViewModel.borderStrokeToggle(2000, BorderStroke(1.dp, Color.Red), BorderStroke(3.dp, Color.Red))
+                appViewModel.cuisineBorderStrokeToggle()
 
                 mapInteractions.cuisineType = foodUri
                 mapInteractions.mapsApiCall()
 
                 delay(2000)
 
-                appViewModel.cancelBorderStrokeToggle()
-
+                appViewModel.cancelCuisineBorderStrokeToggle()
                 appViewModel.updateShowRestaurants(true)
+                appViewModel.resetCuisineSelectionBorderStroke()
+
                 appViewModel.rollRestaurant()
             }
         }
@@ -417,7 +418,7 @@ fun SelectionGridLayout(height: Double) {
                 }
 
                 if (index == appViewModel.rolledSquareIndex) {
-                    borderStroke = selectionBorderStroke.value
+                    borderStroke = cuisinerSelectionBorderStroke.value
                 } else {
                     borderStroke = BorderStroke(1.dp,Color.Black)
                 }
