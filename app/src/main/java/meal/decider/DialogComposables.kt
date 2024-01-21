@@ -26,6 +26,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -260,11 +262,10 @@ class DialogComposables(private val activityContext: Context, private val appVie
         {
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = colorResource(id = R.color.grey_300)
+                color = colorResource(id = R.color.grey_300),
             ) {
                 Box(modifier = Modifier
-                    .fillMaxSize()
-//                    .size(height = 500.dp, width = 300.dp),
+                    .fillMaxSize(),
                 ) {
                     LazyVerticalStaggeredGrid(
                         modifier = Modifier
@@ -300,17 +301,55 @@ class DialogComposables(private val activityContext: Context, private val appVie
 //                            RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
 ////                            RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
 //                            RatingStars(restaurantList.value[index].rating)
-
-                                //TODO: Roll button.
-                                Column(){
-
-                                }
                             }
                         }
                     }
+                    RestaurantDialogButtons()
                 }
             }
         }
+    }
+
+    //Full sized column with buttons aligned on bottom.
+    @Composable
+    fun RestaurantDialogButtons() {
+        Column (
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Bottom
+
+        ) {
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp),
+                horizontalArrangement = Arrangement.Center,
+            ) {
+
+                Button(
+                    onClick = {
+                    },
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
+
+                    ) {
+                    ButtonText(text = "Decide")
+                }
+
+                Spacer(modifier = Modifier.width(24.dp))
+
+                Button(
+                    onClick = {
+                    },
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
+                ) {
+                    ButtonText(text = "Open Maps")
+                }
+            }
+        }
+
     }
 
     //If we don't use ? in front of variable, Kotlin won't let it be null (? == nullable)

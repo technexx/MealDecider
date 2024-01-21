@@ -385,14 +385,14 @@ fun SelectionGridLayout(height: Double) {
                 appViewModel.cuisineBorderStrokeToggle()
 
                 mapInteractions.cuisineType = foodUri
-                mapInteractions.mapsApiCall()
+//                mapInteractions.mapsApiCall()
 
                 delay(2000)
 
                 appViewModel.cancelCuisineBorderStrokeToggle()
                 appViewModel.updateShowRestaurants(true)
 
-                appViewModel.rollRestaurant()
+//                appViewModel.rollRestaurant()
             }
         }
     }
