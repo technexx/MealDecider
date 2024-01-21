@@ -24,7 +24,6 @@ import java.math.RoundingMode
 private lateinit var fusedLocationClient: FusedLocationProviderClient
 private var currentLocation: Location = Location("")
 
-//TODO: Should limit the amount of info returned for billing purposes, i.e. just what we want to use.
 class MapInteractions(private val activity: Activity, private val activityContext: Context, private val appViewModel: AppViewModel) {
 
     var radius = 0

@@ -265,23 +265,42 @@ fun DropDownMenuItemUi(text: String, function: () -> Unit) {
 fun Board() {
     Column (modifier = Modifier
         .fillMaxWidth()
+        .height(screenHeightPct(0.1).dp)
         .background(colorResource(id = R.color.grey_50))
     ) {
-        OptionsBarLayout(screenHeightPct(0.1))
-        CuisineSelectionGrid()
-        InteractionButtons()
+        OptionsBarLayout()
         DialogCompositions()
+    }
+    Surface(
+        color = colorResource(id = R.color.grey_300),
+    ) {
+        Box(modifier = Modifier
+            .fillMaxSize(),
+        ) {
+            Column {
+                CuisineSelectionGrid()
+            }
+        }
+        Box(modifier = Modifier
+            .fillMaxSize()
+        )
+        {
+            Column (modifier = Modifier
+                .fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom) {
+                InteractionButtons()
+            }
+        }
     }
 }
 
 @Composable
-fun OptionsBarLayout(height: Double) {
+fun OptionsBarLayout() {
     val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
     var cardColor: Color
 
     Column (modifier = Modifier
         .fillMaxWidth()
-        .height(height.dp)
         .background(colorResource(id = R.color.grey_50))
     ) {
         LazyHorizontalGrid(rows = GridCells.Adaptive(minSize = 32.dp),
