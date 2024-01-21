@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -27,8 +26,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -276,7 +273,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                     Column (modifier = Modifier
                         .fillMaxSize(),
                         verticalArrangement = Arrangement.Bottom) {
-                        RestaurantDialogButtons()
+                        InteractionButtons()
                     }
                 }
 
@@ -300,7 +297,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 Card(
                     colors = CardDefaults.cardColors(
                         containerColor = colorResource(dummyList[index].color!!),
-//                                    containerColor = colorResource(restaurantList.value[index].color!!),
+//                      containerColor = colorResource(restaurantList.value[index].color!!),
                     ),
                     border = BorderStroke(1.dp,Color.Black),
                     elevation = CardDefaults.cardElevation(
@@ -326,47 +323,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 }
             }
         }
-    }
-
-    @Composable
-    fun RestaurantDialogButtons() {
-        Column (
-            modifier = Modifier
-                .wrapContentSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Bottom
-
-        ) {
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp),
-                horizontalArrangement = Arrangement.Center,
-            ) {
-
-                Button(
-                    onClick = {
-                    },
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
-
-                    ) {
-                    ButtonText(text = "Decide")
-                }
-
-                Spacer(modifier = Modifier.width(24.dp))
-
-                Button(
-                    onClick = {
-                    },
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
-                ) {
-                    ButtonText(text = "Open Maps")
-                }
-            }
-        }
-
     }
 
     //If we don't use ? in front of variable, Kotlin won't let it be null (? == nullable)

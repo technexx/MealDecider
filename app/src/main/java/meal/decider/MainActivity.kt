@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -269,8 +268,9 @@ fun Board() {
         .background(colorResource(id = R.color.grey_50))
     ) {
         OptionsBarLayout(screenHeightPct(0.1))
-        SelectionGridLayout(screenHeightPct(0.65))
-        InteractionLayout(screenHeightPct(0.15))
+        CuisineSelectionGrid()
+        InteractionButtons()
+        DialogCompositions()
     }
 }
 
@@ -334,33 +334,11 @@ fun OptionsBarLayout(height: Double) {
 }
 
 @Composable
-fun SelectionGridLayout(height: Double) {
-    val coroutineScope = rememberCoroutineScope()
-    val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
-    val sectionGridState = rememberLazyGridState()
+fun DialogCompositions() {
     val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
-    val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
-    val rollFinished = appViewModel.rollFinished.collectAsStateWithLifecycle()
-    val cuisinerSelectionBorderStroke = appViewModel.cuisinerSelectionBorderStroke.collectAsStateWithLifecycle()
     val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
     val restoreDefaults = appViewModel.restoreDefaults.collectAsStateWithLifecycle()
     val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
-
-    val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
-    val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()
-    val restrictionsString = appViewModel.foodRestrictionsString(restrictionsUi.value)
-
-//    val foodUri = "geo:0,0?q=" + selectedCuisineSquare.value.name + " Food " + restrictionsString
-    val foodUri = selectedCuisineSquare.value.name + "+" + "Food" + "+" + restrictionsString
-
-    var borderStroke: BorderStroke
-
-    if (editMode.value) {
-        borderStroke = BorderStroke(3.dp,Color.Black)
-    } else {
-        borderStroke = BorderStroke(1.dp,Color.Black)
-        appViewModel.resetSquareColors()
-    }
 
     if (addMode.value) {
         dialogComposables.AddDialogBox()
@@ -377,8 +355,33 @@ fun SelectionGridLayout(height: Double) {
     if (showRestaurants.value) {
         dialogComposables.RestaurantDialog()
     }
+}
 
-    //TODO: Switch threads to Main for everything but API call.
+@Composable
+fun CuisineSelectionGrid() {
+    val coroutineScope = rememberCoroutineScope()
+    val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
+    val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
+    val rollFinished = appViewModel.rollFinished.collectAsStateWithLifecycle()
+    val cuisinerSelectionBorderStroke = appViewModel.cuisinerSelectionBorderStroke.collectAsStateWithLifecycle()
+    val sectionGridState = rememberLazyGridState()
+
+    val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
+    val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()
+    val restrictionsString = appViewModel.foodRestrictionsString(restrictionsUi.value)
+
+    //    val foodUri = "geo:0,0?q=" + selectedCuisineSquare.value.name + " Food " + restrictionsString
+    val foodUri = selectedCuisineSquare.value.name + "+" + "Food" + "+" + restrictionsString
+
+    var borderStroke: BorderStroke
+
+    if (editMode.value) {
+        borderStroke = BorderStroke(3.dp,Color.Black)
+    } else {
+        borderStroke = BorderStroke(1.dp,Color.Black)
+        appViewModel.resetSquareColors()
+    }
+
     if (rollFinished.value) {
         LaunchedEffect(Unit) {
             coroutineScope.launch {
@@ -399,7 +402,7 @@ fun SelectionGridLayout(height: Double) {
 
     LazyVerticalGrid(state = sectionGridState,
         modifier = Modifier
-            .height(height.dp),
+            .fillMaxSize(),
         columns = GridCells.Adaptive(minSize = 128.dp),
         contentPadding = PaddingValues(
             start = 12.dp,
@@ -459,15 +462,15 @@ fun SelectionGridLayout(height: Double) {
 
 @SuppressLint("MissingPermission")
 @Composable
-fun InteractionLayout(height: Double) {
+fun InteractionButtons() {
     val coroutineScope = rememberCoroutineScope()
 
     Column (
         modifier = Modifier
-            .wrapContentHeight()
+            .wrapContentSize()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Bottom
+
     ) {
         Row (
             modifier = Modifier
