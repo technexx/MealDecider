@@ -268,7 +268,7 @@ fun Board() {
         .background(colorResource(id = R.color.grey_50))
     ) {
         OptionsBarLayout(screenHeightPct(0.1))
-        CuisineSelectionGrid()
+        CuisineSelectionGrid(screenHeightPct(0.65))
         InteractionButtons()
         DialogCompositions()
     }
@@ -358,7 +358,7 @@ fun DialogCompositions() {
 }
 
 @Composable
-fun CuisineSelectionGrid() {
+fun CuisineSelectionGrid(height: Double) {
     val coroutineScope = rememberCoroutineScope()
     val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
     val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
@@ -402,7 +402,7 @@ fun CuisineSelectionGrid() {
 
     LazyVerticalGrid(state = sectionGridState,
         modifier = Modifier
-            .fillMaxSize(),
+            .height(height.dp),
         columns = GridCells.Adaptive(minSize = 128.dp),
         contentPadding = PaddingValues(
             start = 12.dp,
