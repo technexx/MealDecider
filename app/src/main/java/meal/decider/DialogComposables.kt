@@ -267,11 +267,19 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 ) {
                     Column {
                         RestaurantLazyGrid()
-                        Spacer(modifier = Modifier.weight(1f))
+                    }
+                }
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                )
+                {
+                    Column (modifier = Modifier
+                        .fillMaxSize(),
+                        verticalArrangement = Arrangement.Bottom) {
                         RestaurantDialogButtons()
                     }
-
                 }
+
             }
         }
     }
@@ -283,8 +291,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
 
         LazyVerticalStaggeredGrid(
             modifier = Modifier
-                .height(screenHeightPct(0.65).dp)
-//                .height(600.dp)
                 .fillMaxWidth()
                 .padding(12.dp),
             columns = StaggeredGridCells.Adaptive(128.dp),
@@ -326,7 +332,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
     fun RestaurantDialogButtons() {
         Column (
             modifier = Modifier
-                .background(Color.Blue)
                 .wrapContentSize()
                 .padding(16.dp),
             verticalArrangement = Arrangement.Bottom
