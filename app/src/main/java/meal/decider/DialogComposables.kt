@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -253,9 +254,6 @@ class DialogComposables(private val activityContext: Context, private val appVie
 
     @Composable
     fun RestaurantDialog() {
-        val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
-        val dummyList = appViewModel.dummyRestaurantList()
-
         Dialog(onDismissRequest = {
             appViewModel.updateShowRestaurants(false)
         })
@@ -267,55 +265,69 @@ class DialogComposables(private val activityContext: Context, private val appVie
                 Box(modifier = Modifier
                     .fillMaxSize(),
                 ) {
-                    LazyVerticalStaggeredGrid(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp),
-                        columns = StaggeredGridCells.Adaptive(128.dp),
-                    ) {
+                    Column {
+                        RestaurantLazyGrid()
+                        Spacer(modifier = Modifier.weight(1f))
+                        RestaurantDialogButtons()
+                    }
+
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun RestaurantLazyGrid() {
+        val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
+        val dummyList = appViewModel.dummyRestaurantList()
+
+        LazyVerticalStaggeredGrid(
+            modifier = Modifier
+                .height(screenHeightPct(0.65).dp)
+//                .height(600.dp)
+                .fillMaxWidth()
+                .padding(12.dp),
+            columns = StaggeredGridCells.Adaptive(128.dp),
+        ) {
 //                        items(restaurantList.value.size) { index ->
-                        items(dummyList.size) { index ->
-                        Card(
-                                colors = CardDefaults.cardColors(
-                                    containerColor = colorResource(dummyList[index].color!!),
+            items(dummyList.size) { index ->
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = colorResource(dummyList[index].color!!),
 //                                    containerColor = colorResource(restaurantList.value[index].color!!),
-                                ),
-                                border = BorderStroke(1.dp,Color.Black),
-                                elevation = CardDefaults.cardElevation(
-                                    defaultElevation = 6.dp
-                                ),
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .selectable(
-                                        selected = true,
-                                        onClick = {
-                                        }
-                                    ),
-                            ) {
-                            RestaurantListTextUi(dummyList[index].name.toString(), true)
-                            RestaurantListTextUi(dummyList[index].distance.toString(), false)
-                            RatingStars(dummyList[index].rating)
+                    ),
+                    border = BorderStroke(1.dp,Color.Black),
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 6.dp
+                    ),
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .selectable(
+                            selected = true,
+                            onClick = {
+                            }
+                        ),
+                ) {
+                    RestaurantListTextUi(dummyList[index].name.toString(), true)
+                    RestaurantListTextUi(dummyList[index].distance.toString(), false)
+                    RatingStars(dummyList[index].rating)
 
 //                            RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
 ////                            RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
 //                            RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
 ////                            RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
 //                            RatingStars(restaurantList.value[index].rating)
-                            }
-                        }
-                    }
-                    RestaurantDialogButtons()
                 }
             }
         }
     }
 
-    //Full sized column with buttons aligned on bottom.
     @Composable
     fun RestaurantDialogButtons() {
         Column (
             modifier = Modifier
-                .fillMaxSize()
+                .background(Color.Blue)
+                .wrapContentSize()
                 .padding(16.dp),
             verticalArrangement = Arrangement.Bottom
 

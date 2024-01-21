@@ -268,9 +268,9 @@ fun Board() {
         .fillMaxWidth()
         .background(colorResource(id = R.color.grey_50))
     ) {
-        OptionsBarLayout((screenHeight() * 0.1))
-        SelectionGridLayout(screenHeight() * 0.65)
-        InteractionLayout(screenHeight() * 0.15)
+        OptionsBarLayout(screenHeightPct(0.1))
+        SelectionGridLayout(screenHeightPct(0.65))
+        InteractionLayout(screenHeightPct(0.15))
     }
 }
 
@@ -515,15 +515,9 @@ fun ButtonText(text: String) {
 }
 
 @Composable
-private fun screenWidth() : Double {
+fun screenHeightPct(pct: Double) : Double {
     val configuration = LocalConfiguration.current
-    return configuration.screenWidthDp.toDouble()
-}
-
-@Composable
-private fun screenHeight() : Double {
-    val configuration = LocalConfiguration.current
-    return configuration.screenHeightDp.toDouble()
+    return configuration.screenHeightDp.toDouble() * pct
 }
 
 fun showLog(name: String, text: String) {

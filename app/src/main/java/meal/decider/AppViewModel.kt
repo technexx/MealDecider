@@ -339,7 +339,7 @@ class AppViewModel : ViewModel() {
     //Cuisine and Press Your Luck run at different intervals but both stop when rollCountDown hits 20.
     fun rollCuisine() {
         var delay: Long = 100
-        rollCountdown = 200
+        rollCountdown = 100
 
         updateRollEngaged(true)
         handler.removeCallbacks(cuisineRollRunnable)
