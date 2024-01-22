@@ -125,7 +125,8 @@ class MainActivity : ComponentActivity() {
         ioScope.launch {
             roomInteractions.populateSquareValuesWithDatabaseValues()
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
-            appViewModel.restaurantSearchCuisineType = "geo:0,0?q=" + appViewModel.getselectedCuisineSquare.name + " Food "
+            appViewModel.cuisineStringUri = "geo:0,0?q=" + appViewModel.getselectedCuisineSquare.name + " Food "
+            appViewModel.restaurantSearchCuisineType = "geo:0,0?q="
         }
 
         setContent {
