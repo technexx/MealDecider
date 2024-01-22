@@ -1,6 +1,5 @@
 package meal.decider
 
-import android.content.Context
 import android.view.Gravity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -62,7 +61,7 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
-class DialogComposables(private val activityContext: Context, private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase){
+class DialogComposables(private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase, private val mapInteractions: MapInteractions){
     private val roomInteractions = RoomInteractions(appDatabase, appViewModel)
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -288,6 +287,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
     fun RestaurantLazyGrid() {
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
         val dummyList = appViewModel.dummyRestaurantList()
+        val restaurantUri = "geo:0,0?q=" + dummyList[appViewModel.rolledRestaurantIndex].name.toString()
 
         LazyVerticalStaggeredGrid(
             modifier = Modifier

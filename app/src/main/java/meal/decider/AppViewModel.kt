@@ -22,6 +22,10 @@ class AppViewModel : ViewModel() {
     var rolledRestaurantIndex = 0
     var rollCountdown: Long = 1000
 
+    var restaurantSearchCuisineType = ""
+    var cuisineStringUri = ""
+    var restaurantStringUri = ""
+
     private val handler = Handler(Looper.getMainLooper())
     private var cuisineRollRunnable = Runnable {}
     private var restaurantRollRunnable = Runnable {}
@@ -34,8 +38,8 @@ class AppViewModel : ViewModel() {
     private val _rollEngaged = MutableStateFlow(false)
     val rollEngaged : StateFlow<Boolean> = _rollEngaged.asStateFlow()
 
-    private val _rollFinished = MutableStateFlow(false)
-    val rollFinished : StateFlow<Boolean> = _rollFinished.asStateFlow()
+    private val _cuisineRollFinished = MutableStateFlow(false)
+    val cuisineRollFinished : StateFlow<Boolean> = _cuisineRollFinished.asStateFlow()
 
     private val _addMode = MutableStateFlow(false)
     val addMode : StateFlow<Boolean> = _addMode.asStateFlow()
@@ -67,6 +71,9 @@ class AppViewModel : ViewModel() {
     private val _restrictionsList = MutableStateFlow(RestrictionsObject.RestrictionsList)
     val restrictionsList: StateFlow<SnapshotStateList<RestrictionsValues>> = _restrictionsList.asStateFlow()
 
+    private val _restaurantRollFinished = MutableStateFlow(false)
+    val restaurantRollFinished: StateFlow<Boolean> = _restaurantRollFinished.asStateFlow()
+
     private val _selectedRestaurantSquare = MutableStateFlow(RestaurantValues())
     val selectedRestaurantSquare: StateFlow<RestaurantValues> = _selectedRestaurantSquare.asStateFlow()
 
@@ -89,8 +96,8 @@ class AppViewModel : ViewModel() {
         _rollEngaged.value = engaged
     }
 
-    fun updateRollFinished(finished: Boolean) {
-        _rollFinished.value = finished
+    fun updateCuisineRollFinished(finished: Boolean) {
+        _cuisineRollFinished.value = finished
     }
 
     fun updateAddMode(addMode: Boolean) {
@@ -113,7 +120,7 @@ class AppViewModel : ViewModel() {
         _optionsMode.value = optionsMode
     }
 
-    fun updateselectedCuisineSquare(selectedCuisineSquare: SquareValues) {
+    fun updateSelectedCuisineSquare(selectedCuisineSquare: SquareValues) {
         _selectedCuisineSquare.value = selectedCuisineSquare
     }
 
@@ -131,6 +138,10 @@ class AppViewModel : ViewModel() {
 
     fun updateRestrictionsList(list: SnapshotStateList<RestrictionsValues>) {
         _restrictionsList.value = list
+    }
+
+    fun updateRestaurantRollFinished(finished: Boolean) {
+        _restaurantRollFinished.value = finished
     }
 
     fun updateRestaurantsList(list: SnapshotStateList<RestaurantValues>) {
@@ -305,7 +316,7 @@ class AppViewModel : ViewModel() {
         //Set first square index to selected if previous one no longer exists.
         if (!doesSelectedCuisineSquareExist()) {
             squareList[0].color = chosenSquareColor
-            updateselectedCuisineSquare(squareList[0])
+            updateSelectedCuisineSquare(squareList[0])
         }
 
         updateSquareList(squareList)
@@ -358,9 +369,9 @@ class AppViewModel : ViewModel() {
             rollCountdown -= 20
 
             if (rollCountdown < 20) {
-                updateselectedCuisineSquare(getSquareList[rolledSquareIndex])
+                updateSelectedCuisineSquare(getSquareList[rolledSquareIndex])
                 updateRollEngaged(false)
-                updateRollFinished(true)
+                updateCuisineRollFinished(true)
 
                 handler.removeCallbacks(cuisineRollRunnable)
             }
@@ -474,7 +485,8 @@ class AppViewModel : ViewModel() {
     val getcuisinerSelectionBorderStroke get() = _cuisinerSelectionBorderStroke.value
 
     val getRollEngaged get() = rollEngaged.value
-    val getRollFinished get() = rollFinished.value
+    val getCuisineRollFinished get() = _cuisineRollFinished.value
+    val getRestaurantRollFinished get() = _restaurantRollFinished.value
 
     val getAddMode get() = addMode.value
     val getEditMode get() = editMode.value

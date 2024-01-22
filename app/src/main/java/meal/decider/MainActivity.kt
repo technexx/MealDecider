@@ -108,10 +108,11 @@ class MainActivity : ComponentActivity() {
         appViewModel = AppViewModel()
         cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
         roomInteractions = RoomInteractions(cuisineDatabase, appViewModel)
-        dialogComposables = DialogComposables(activityContext, appViewModel, cuisineDatabase)
 
         mapInteractions = MapInteractions(activity, activityContext, appViewModel)
         mapInteractions.fusedLocationListener()
+
+        dialogComposables = DialogComposables(appViewModel, cuisineDatabase, mapInteractions)
 
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
         ioScope.launch {
@@ -123,8 +124,8 @@ class MainActivity : ComponentActivity() {
         //Populates SquareValues with DB values and set first cuisine as default selection.
         ioScope.launch {
             roomInteractions.populateSquareValuesWithDatabaseValues()
-            appViewModel.updateselectedCuisineSquare(appViewModel.getSquareList[0])
-            mapInteractions.cuisineType = "geo:0,0?q=" + appViewModel.getselectedCuisineSquare.name + " Food "
+            appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
+            appViewModel.restaurantSearchCuisineType = "geo:0,0?q=" + appViewModel.getselectedCuisineSquare.name + " Food "
         }
 
         setContent {
@@ -383,7 +384,7 @@ fun CuisineSelectionGrid() {
     val coroutineScope = rememberCoroutineScope()
     val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
     val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
-    val rollFinished = appViewModel.rollFinished.collectAsStateWithLifecycle()
+    val cuisineRollFinished = appViewModel.cuisineRollFinished.collectAsStateWithLifecycle()
     val cuisinerSelectionBorderStroke = appViewModel.cuisinerSelectionBorderStroke.collectAsStateWithLifecycle()
     val sectionGridState = rememberLazyGridState()
 
@@ -392,7 +393,6 @@ fun CuisineSelectionGrid() {
     val restrictionsString = appViewModel.foodRestrictionsString(restrictionsUi.value)
 
     val cuisineUri = "geo:0,0?q=" + selectedCuisineSquare.value.name + " Food " + restrictionsString
-//    val cuisineUri = selectedCuisineSquare.value.name + "+" + "Food" + "+" + restrictionsString
 
     var borderStroke: BorderStroke
 
@@ -403,12 +403,11 @@ fun CuisineSelectionGrid() {
         appViewModel.resetSquareColors()
     }
 
-    if (rollFinished.value) {
+    if (cuisineRollFinished.value) {
         LaunchedEffect(Unit) {
             coroutineScope.launch {
                 appViewModel.cuisineBorderStrokeToggle()
-
-                mapInteractions.cuisineType = cuisineUri
+                appViewModel.restaurantSearchCuisineType = cuisineUri
 //                mapInteractions.mapsApiCall()
 
                 delay(2000)
@@ -433,10 +432,10 @@ fun CuisineSelectionGrid() {
         ),
         content = {
             items(boardUiState.value.squareList.size) { index ->
-                if (appViewModel.getRollFinished) {
+                if (appViewModel.getCuisineRollFinished) {
                     LaunchedEffect(key1 = Unit) {
                         sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
-                        appViewModel.updateRollFinished(false)
+                        appViewModel.updateCuisineRollFinished(false)
                     }
                 }
 
@@ -501,7 +500,11 @@ fun InteractionButtons() {
             Button(
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-                        if (!appViewModel.getShowRestaurants) appViewModel.rollCuisine() else appViewModel.rollRestaurant()
+                        if (!appViewModel.getShowRestaurants) {
+                            appViewModel.rollCuisine()
+                        } else {
+                            appViewModel.rollRestaurant()
+                        }
 //                        appViewModel.rollCuisine()
 //                        appViewModel.pressYourLuck()
                     }
@@ -519,7 +522,11 @@ fun InteractionButtons() {
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         coroutineScope.launch {
-                            mapInteractions.mapIntent(mapInteractions.cuisineType)
+                            if (!appViewModel.getShowRestaurants) {
+                                mapInteractions.mapIntent(appViewModel.cuisineStringUri)
+                            } else {
+                                mapInteractions.mapIntent(appViewModel.restaurantStringUri)
+                            }
                         }
                     }
                 },

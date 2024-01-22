@@ -25,13 +25,9 @@ private lateinit var fusedLocationClient: FusedLocationProviderClient
 private var currentLocation: Location = Location("")
 
 class MapInteractions(private val activity: Activity, private val activityContext: Context, private val appViewModel: AppViewModel) {
-
-    var radius = 0
-    var cuisineType = ""
-
     suspend fun mapsApiCall() {
         withContext(Dispatchers.IO) {
-            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&radius=2000&name=$cuisineType&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
+            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&radius=2000&name=${appViewModel.restaurantSearchCuisineType}&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
             val request = Request.Builder()
                 .url(uri)
