@@ -444,8 +444,6 @@ fun CuisineSelectionGrid() {
                     borderStroke = BorderStroke(1.dp,Color.Black)
                 }
 
-                showLog("test","recomposing board!")
-
                 Card(
                     colors = CardDefaults.cardColors(
                         containerColor = colorResource(id = appViewModel.getSquareList[index].color),

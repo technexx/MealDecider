@@ -79,6 +79,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
 
         Dialog(onDismissRequest = {
             appViewModel.updateAddMode(false)
+            appViewModel.updateListOfCuisinesToAdd(emptyList())
         })
         {
             Surface(
@@ -128,15 +129,17 @@ class DialogComposables(private val activityContext: Context, private val appVie
                         ) {
                             IconButton(onClick = {
                                 appViewModel.updateAddMode(false)
+                                appViewModel.updateListOfCuisinesToAdd(emptyList())
                             }) {
                                 DialogIcon(imageVector = Icons.Filled.Close, colorResource = android.R.color.holo_red_light)
                             }
                             IconButton(onClick = {
                                 appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd)
-                                appViewModel.updateAddMode(false)
                                 coroutineScope.launch {
                                     roomInteractions.insertMultipleCuisines(appViewModel.getListOfCuisinesToAdd)
+                                    appViewModel.updateListOfCuisinesToAdd(emptyList())
                                 }
+                                appViewModel.updateAddMode(false)
                             }) {
                                 DialogIcon(imageVector = Icons.Filled.Check, colorResource = android.R.color.holo_green_light)
                             }

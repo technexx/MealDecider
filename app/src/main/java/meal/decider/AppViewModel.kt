@@ -95,8 +95,6 @@ class AppViewModel : ViewModel() {
 
     fun updateAddMode(addMode: Boolean) {
         _addMode.value = addMode
-        //If disabling add mode and its dialog box, empty our list of cuisines to add.
-        if (!_addMode.value) updateListOfSquaresToAdd(emptyList())
     }
 
     fun updateEditMode(editMode: Boolean) {
@@ -119,7 +117,7 @@ class AppViewModel : ViewModel() {
         _selectedCuisineSquare.value = selectedCuisineSquare
     }
 
-    fun updateListOfSquaresToAdd(list: List<String>) {
+    fun updateListOfCuisinesToAdd(list: List<String>) {
         _listOfCuisinesToAdd.value = list
     }
 
@@ -230,13 +228,19 @@ class AppViewModel : ViewModel() {
     }
 
     fun toggleAddCuisineSelections(cuisine: String) {
+        //TODO: Likely because we're drawing from the same list we're updating.
         val listToAdd = getListOfCuisinesToAdd.toMutableList()
+
         if (listToAdd.contains(cuisine)) {
             listToAdd.remove(cuisine)
         } else {
             listToAdd.add(cuisine)
         }
-        updateListOfSquaresToAdd(listToAdd)
+        updateListOfCuisinesToAdd(listToAdd)
+
+
+        showLog("test", "list to add is $listToAdd")
+        showLog("test", "fetched list is $getListOfCuisinesToAdd")
     }
 
     fun toggleEditCuisineHighlight(index: Int) {
