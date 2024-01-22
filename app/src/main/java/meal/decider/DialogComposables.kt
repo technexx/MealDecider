@@ -285,9 +285,16 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestaurantLazyGrid() {
+        val rolledRestaurantIndex = appViewModel.rolledRestaurantIndex
+        val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
         val dummyList = appViewModel.dummyRestaurantList()
+
         val restaurantUri = "geo:0,0?q=" + dummyList[appViewModel.rolledRestaurantIndex].name.toString()
+
+        if (restaurantRollFinished.value) {
+//            appViewModel.restaurantStringUri =
+        }
 
         LazyVerticalStaggeredGrid(
             modifier = Modifier

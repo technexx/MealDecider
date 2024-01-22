@@ -152,6 +152,10 @@ class AppViewModel : ViewModel() {
         _showRestaurants.value = show
     }
 
+    fun updateSelectedRestaurantSquare(selectedSquare: RestaurantValues) {
+        _selectedRestaurantSquare.value = selectedSquare
+    }
+
     fun updateCuisineSelectionBorderStroke(borderStroke: BorderStroke) {
         _cuisinerSelectionBorderStroke.value = borderStroke
     }
@@ -408,8 +412,9 @@ class AppViewModel : ViewModel() {
             rollCountdown -= 20
 
             if (rollCountdown < 20) {
-                handler.removeCallbacks(restaurantRollRunnable)
+                updateSelectedRestaurantSquare(getRestaurantList[rolledSquareIndex])
                 updateRollEngaged(false)
+                handler.removeCallbacks(restaurantRollRunnable)
             }
         }
 
