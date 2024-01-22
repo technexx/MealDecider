@@ -23,6 +23,7 @@ class AppViewModel : ViewModel() {
     var rollCountdown: Long = 1000
 
     var restaurantSearchCuisineType = ""
+
     var cuisineStringUri = ""
     var restaurantStringUri = ""
 
