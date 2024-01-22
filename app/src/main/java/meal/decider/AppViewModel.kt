@@ -385,6 +385,7 @@ class AppViewModel : ViewModel() {
         var delay: Long = 100
         rollCountdown = 1000
         handler.removeCallbacks(restaurantRollRunnable)
+        updateRollEngaged(true)
 
         restaurantRollRunnable = Runnable {
             rolledRestaurantIndex = Random.nextInt(0, getRestaurantList.size)
@@ -397,6 +398,7 @@ class AppViewModel : ViewModel() {
 
             if (rollCountdown < 20) {
                 handler.removeCallbacks(restaurantRollRunnable)
+                updateRollEngaged(false)
             }
         }
 

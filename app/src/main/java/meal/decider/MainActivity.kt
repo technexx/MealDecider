@@ -501,7 +501,8 @@ fun InteractionButtons() {
             Button(
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-                        appViewModel.rollCuisine()
+                        if (!appViewModel.getShowRestaurants) appViewModel.rollCuisine() else appViewModel.rollRestaurant()
+//                        appViewModel.rollCuisine()
 //                        appViewModel.pressYourLuck()
                     }
                 },
