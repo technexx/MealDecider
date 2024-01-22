@@ -126,7 +126,9 @@ class MainActivity : ComponentActivity() {
             roomInteractions.populateSquareValuesWithDatabaseValues()
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
             appViewModel.cuisineStringUri = "geo:0,0?q=" + appViewModel.getselectedCuisineSquare.name + " Food "
-            appViewModel.restaurantSearchCuisineType = "geo:0,0?q="
+            //TODO: Blank list until we roll restaurants. Can use conditional to only launch maps intent if uri is valid.
+            appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[0])
+            appViewModel.restaurantSearchCuisineType = "geo:0,0?q=" + appViewModel.getselectedRestaurantSquare.name
         }
 
         setContent {

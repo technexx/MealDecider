@@ -487,6 +487,7 @@ class AppViewModel : ViewModel() {
     val getListOfCuisinesToAdd get() = listOfCuisinesToAdd.value
     val getRestaurantList get() = _restaurantList.value
     val getShowRestaurants get() = _showRestaurants.value
+    val getselectedRestaurantSquare get() = selectedRestaurantSquare.value
     val getcuisinerSelectionBorderStroke get() = _cuisinerSelectionBorderStroke.value
 
     val getRollEngaged get() = rollEngaged.value
