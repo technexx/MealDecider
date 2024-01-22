@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -35,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -285,16 +287,16 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestaurantLazyGrid() {
+        val sectionGridState = rememberLazyStaggeredGridState()
         val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
         val dummyList = appViewModel.dummyRestaurantList()
-
-        val restaurantUri = "geo:0,0?q=" + dummyList[appViewModel.rolledRestaurantIndex].name.toString()
+        val restaurantUri = dummyList[appViewModel.rolledRestaurantIndex].name.toString()
 
         if (restaurantRollFinished.value) {
             appViewModel.restaurantStringUri = restaurantUri
         }
 
-        LazyVerticalStaggeredGrid(
+        LazyVerticalStaggeredGrid(state = sectionGridState,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
@@ -302,6 +304,13 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         ) {
 //                        items(restaurantList.value.size) { index ->
             items(dummyList.size) { index ->
+                if (appViewModel.getRestaurantRollFinished) {
+                    LaunchedEffect(key1 = Unit) {
+                        sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
+                        appViewModel.updateRestaurantRollFinished(false)
+                    }
+                }
+
                 Card(
                     colors = CardDefaults.cardColors(
                         containerColor = colorResource(dummyList[index].color!!),

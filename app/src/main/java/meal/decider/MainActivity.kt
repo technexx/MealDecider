@@ -125,10 +125,10 @@ class MainActivity : ComponentActivity() {
         ioScope.launch {
             roomInteractions.populateSquareValuesWithDatabaseValues()
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
-            appViewModel.cuisineStringUri = "geo:0,0?q=" + appViewModel.getselectedCuisineSquare.name + " Food "
+            appViewModel.cuisineStringUri = appViewModel.getselectedCuisineSquare.name + " Food "
             //TODO: Blank list until we roll restaurants. Can use conditional to only launch maps intent if uri is valid.
-            appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[0])
-            appViewModel.restaurantSearchCuisineType = "geo:0,0?q=" + appViewModel.getselectedRestaurantSquare.name
+//            appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[0])
+//            appViewModel.restaurantSearchCuisineType = "geo:0,0?q=" + appViewModel.getselectedRestaurantSquare.name
         }
 
         setContent {
@@ -395,7 +395,7 @@ fun CuisineSelectionGrid() {
     val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()
     val restrictionsString = appViewModel.foodRestrictionsString(restrictionsUi.value)
 
-    val cuisineUri = "geo:0,0?q=" + selectedCuisineSquare.value.name + " Food " + restrictionsString
+    val rolledCuisineString = selectedCuisineSquare.value.name + " Food " + restrictionsString
 
     var borderStroke: BorderStroke
 
@@ -410,7 +410,8 @@ fun CuisineSelectionGrid() {
         LaunchedEffect(Unit) {
             coroutineScope.launch {
                 appViewModel.cuisineBorderStrokeToggle()
-                appViewModel.restaurantSearchCuisineType = cuisineUri
+                //For our query to return a list of restaurants matching the rolled cuisine.
+                appViewModel.restaurantSearchCuisineType = rolledCuisineString
 //                mapInteractions.mapsApiCall()
 
                 delay(2000)
@@ -508,7 +509,6 @@ fun InteractionButtons() {
                         } else {
                             appViewModel.rollRestaurant()
                         }
-//                        appViewModel.rollCuisine()
 //                        appViewModel.pressYourLuck()
                     }
                 },
@@ -528,7 +528,9 @@ fun InteractionButtons() {
                             if (!appViewModel.getShowRestaurants) {
                                 mapInteractions.mapIntent(appViewModel.cuisineStringUri)
                             } else {
-                                mapInteractions.mapIntent(appViewModel.restaurantStringUri)
+//                                mapInteractions.mapIntent(appViewModel.restaurantStringUri)
+                                val testString = appViewModel.dummyRestaurantList()[0].name.toString()
+                                mapInteractions.mapIntent(appViewModel.dummyRestaurantList()[0].name.toString())
                             }
                         }
                     }

@@ -103,7 +103,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
     }
 
     fun mapIntent(string: String) {
-        val uri = Uri.parse(string)
+        val uri = Uri.parse("geo:0,0?q=$string")
         val intent = Intent(Intent.ACTION_VIEW, uri)
         intent.setPackage("com.google.android.apps.maps")
 

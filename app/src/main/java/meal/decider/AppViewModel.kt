@@ -253,10 +253,6 @@ class AppViewModel : ViewModel() {
             listToAdd.add(cuisine)
         }
         updateListOfCuisinesToAdd(listToAdd)
-
-
-        showLog("test", "list to add is $listToAdd")
-        showLog("test", "fetched list is $getListOfCuisinesToAdd")
     }
 
     fun toggleEditCuisineHighlight(index: Int) {
@@ -415,11 +411,16 @@ class AppViewModel : ViewModel() {
             if (rollCountdown < 20) {
                 updateSelectedRestaurantSquare(getRestaurantList[rolledSquareIndex])
                 updateRollEngaged(false)
+                updateRestaurantRollFinished(true)
                 handler.removeCallbacks(restaurantRollRunnable)
             }
         }
 
         handler.post(restaurantRollRunnable)
+    }
+
+    fun testRestaurantRoll() {
+
     }
 
     private fun restaurantListWithRandomColorChanged(index: Int): SnapshotStateList<RestaurantValues> {
