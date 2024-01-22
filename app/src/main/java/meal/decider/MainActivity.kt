@@ -124,6 +124,7 @@ class MainActivity : ComponentActivity() {
         ioScope.launch {
             roomInteractions.populateSquareValuesWithDatabaseValues()
             appViewModel.updateselectedCuisineSquare(appViewModel.getSquareList[0])
+            mapInteractions.cuisineType = "geo:0,0?q=" + appViewModel.getselectedCuisineSquare.name + " Food "
         }
 
         setContent {
@@ -376,6 +377,7 @@ fun DialogCompositions() {
     }
 }
 
+//TODO: Global foodUri var so can be set by cuisine and restaurants
 @Composable
 fun CuisineSelectionGrid() {
     val coroutineScope = rememberCoroutineScope()
@@ -389,8 +391,8 @@ fun CuisineSelectionGrid() {
     val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()
     val restrictionsString = appViewModel.foodRestrictionsString(restrictionsUi.value)
 
-    //    val foodUri = "geo:0,0?q=" + selectedCuisineSquare.value.name + " Food " + restrictionsString
-    val foodUri = selectedCuisineSquare.value.name + "+" + "Food" + "+" + restrictionsString
+    val cuisineUri = "geo:0,0?q=" + selectedCuisineSquare.value.name + " Food " + restrictionsString
+//    val cuisineUri = selectedCuisineSquare.value.name + "+" + "Food" + "+" + restrictionsString
 
     var borderStroke: BorderStroke
 
@@ -406,7 +408,7 @@ fun CuisineSelectionGrid() {
             coroutineScope.launch {
                 appViewModel.cuisineBorderStrokeToggle()
 
-                mapInteractions.cuisineType = foodUri
+                mapInteractions.cuisineType = cuisineUri
 //                mapInteractions.mapsApiCall()
 
                 delay(2000)
@@ -516,7 +518,7 @@ fun InteractionButtons() {
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         coroutineScope.launch {
-                            //TODO: Open maps goes back here.
+                            mapInteractions.mapIntent(mapInteractions.cuisineType)
                         }
                     }
                 },

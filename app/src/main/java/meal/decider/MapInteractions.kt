@@ -106,7 +106,8 @@ class MapInteractions(private val activity: Activity, private val activityContex
         }
     }
 
-    fun mapIntent(uri: Uri) {
+    fun mapIntent(string: String) {
+        val uri = Uri.parse(string)
         val intent = Intent(Intent.ACTION_VIEW, uri)
         intent.setPackage("com.google.android.apps.maps")
 
