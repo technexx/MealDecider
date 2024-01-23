@@ -386,9 +386,8 @@ fun DialogCompositions() {
 fun CuisineSelectionGrid() {
     val coroutineScope = rememberCoroutineScope()
     val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
-    val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
     val cuisineRollFinished = appViewModel.cuisineRollFinished.collectAsStateWithLifecycle()
-    val cuisinerSelectionBorderStroke = appViewModel.cuisinerSelectionBorderStroke.collectAsStateWithLifecycle()
+    val cuisineSelectionBorderStroke = appViewModel.cuisineSelectionBorderStroke.collectAsStateWithLifecycle()
     val sectionGridState = rememberLazyGridState()
 
     val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
@@ -399,17 +398,10 @@ fun CuisineSelectionGrid() {
 
     var borderStroke: BorderStroke
 
-    if (editMode.value) {
-        borderStroke = BorderStroke(3.dp,Color.Black)
-    } else {
-        borderStroke = BorderStroke(1.dp,Color.Black)
-        appViewModel.resetSquareColors()
-    }
-
     if (cuisineRollFinished.value) {
         LaunchedEffect(Unit) {
             coroutineScope.launch {
-                appViewModel.cuisineBorderStrokeToggle()
+                appViewModel.cuisineBorderStrokeToggleAnimation()
                 //For our query to return a list of restaurants matching the rolled cuisine.
                 appViewModel.restaurantSearchCuisineType = rolledCuisineString
 //                mapInteractions.mapsApiCall()
@@ -418,8 +410,6 @@ fun CuisineSelectionGrid() {
 
                 appViewModel.cancelCuisineBorderStrokeToggle()
                 appViewModel.updateShowRestaurants(true)
-
-//                appViewModel.rollRestaurant()
             }
         }
     }
@@ -444,7 +434,7 @@ fun CuisineSelectionGrid() {
                 }
 
                 if (index == appViewModel.rolledSquareIndex) {
-                    borderStroke = cuisinerSelectionBorderStroke.value
+                    borderStroke = cuisineSelectionBorderStroke.value
                 } else {
                     borderStroke = BorderStroke(1.dp,Color.Black)
                 }
@@ -507,7 +497,8 @@ fun InteractionButtons() {
                         if (!appViewModel.getShowRestaurants) {
                             appViewModel.rollCuisine()
                         } else {
-                            appViewModel.rollRestaurant()
+//                            appViewModel.rollRestaurant()
+                            appViewModel.testRestaurantRoll()
                         }
 //                        appViewModel.pressYourLuck()
                     }
@@ -529,8 +520,8 @@ fun InteractionButtons() {
                                 mapInteractions.mapIntent(appViewModel.cuisineStringUri)
                             } else {
 //                                mapInteractions.mapIntent(appViewModel.restaurantStringUri)
-                                val testString = appViewModel.dummyRestaurantList()[0].name.toString()
-                                mapInteractions.mapIntent(appViewModel.dummyRestaurantList()[0].name.toString())
+                                val testString = appViewModel.dummyRestaurantList()[appViewModel.rolledRestaurantIndex].name.toString()
+                                mapInteractions.mapIntent(testString)
                             }
                         }
                     }

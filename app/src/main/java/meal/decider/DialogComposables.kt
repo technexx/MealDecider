@@ -291,9 +291,13 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
         val dummyList = appViewModel.dummyRestaurantList()
         val restaurantUri = dummyList[appViewModel.rolledRestaurantIndex].name.toString()
+        val restaurantSelectionBorderStroke = appViewModel.restaurantSelectionBorderStroke.collectAsStateWithLifecycle()
+
+        var borderStroke: BorderStroke
 
         if (restaurantRollFinished.value) {
             appViewModel.restaurantStringUri = restaurantUri
+            appViewModel.restaurantBorderStrokeToggleAnimation()
         }
 
         LazyVerticalStaggeredGrid(state = sectionGridState,
@@ -311,6 +315,13 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     }
                 }
 
+                if (index == appViewModel.rolledRestaurantIndex) {
+                    borderStroke = restaurantSelectionBorderStroke.value
+                } else {
+                    borderStroke = BorderStroke(1.dp,Color.Black)
+                }
+
+                //TODO: Need to change color of data class item to change rolling color on board.
                 Card(
                     colors = CardDefaults.cardColors(
                         containerColor = colorResource(dummyList[index].color!!),
