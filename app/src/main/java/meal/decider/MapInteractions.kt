@@ -24,15 +24,10 @@ import java.math.RoundingMode
 private lateinit var fusedLocationClient: FusedLocationProviderClient
 private var currentLocation: Location = Location("")
 
-//TODO: Should limit the amount of info returned for billing purposes, i.e. just what we want to use.
 class MapInteractions(private val activity: Activity, private val activityContext: Context, private val appViewModel: AppViewModel) {
-
-    var radius = 0
-    var cuisineType = ""
-
     suspend fun mapsApiCall() {
         withContext(Dispatchers.IO) {
-            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&radius=2000&name=$cuisineType&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
+            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&radius=2000&name=${appViewModel.restaurantSearchCuisineType}&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
             val request = Request.Builder()
                 .url(uri)
@@ -107,7 +102,8 @@ class MapInteractions(private val activity: Activity, private val activityContex
         }
     }
 
-    fun mapIntent(uri: Uri) {
+    fun mapIntent(string: String) {
+        val uri = Uri.parse("geo:0,0?q=$string")
         val intent = Intent(Intent.ACTION_VIEW, uri)
         intent.setPackage("com.google.android.apps.maps")
 

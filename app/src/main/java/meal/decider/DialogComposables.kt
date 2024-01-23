@@ -1,6 +1,5 @@
 package meal.decider
 
-import android.content.Context
 import android.view.Gravity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -20,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -36,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -62,7 +63,7 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
-class DialogComposables(private val activityContext: Context, private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase){
+class DialogComposables(private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase, private val mapInteractions: MapInteractions){
     private val roomInteractions = RoomInteractions(appDatabase, appViewModel)
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -79,6 +80,7 @@ class DialogComposables(private val activityContext: Context, private val appVie
 
         Dialog(onDismissRequest = {
             appViewModel.updateAddMode(false)
+            appViewModel.updateListOfCuisinesToAdd(emptyList())
         })
         {
             Surface(
@@ -128,15 +130,17 @@ class DialogComposables(private val activityContext: Context, private val appVie
                         ) {
                             IconButton(onClick = {
                                 appViewModel.updateAddMode(false)
+                                appViewModel.updateListOfCuisinesToAdd(emptyList())
                             }) {
                                 DialogIcon(imageVector = Icons.Filled.Close, colorResource = android.R.color.holo_red_light)
                             }
                             IconButton(onClick = {
                                 appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd)
-                                appViewModel.updateAddMode(false)
                                 coroutineScope.launch {
                                     roomInteractions.insertMultipleCuisines(appViewModel.getListOfCuisinesToAdd)
+                                    appViewModel.updateListOfCuisinesToAdd(emptyList())
                                 }
+                                appViewModel.updateAddMode(false)
                             }) {
                                 DialogIcon(imageVector = Icons.Filled.Check, colorResource = android.R.color.holo_green_light)
                             }
@@ -283,23 +287,50 @@ class DialogComposables(private val activityContext: Context, private val appVie
 
     @Composable
     fun RestaurantLazyGrid() {
+        val sectionGridState = rememberLazyStaggeredGridState()
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
+        val selectedRestaurantSquare = appViewModel.selectedRestaurantSquare.collectAsStateWithLifecycle()
+        val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
         val dummyList = appViewModel.dummyRestaurantList()
+        val restaurantSelectionBorderStroke = appViewModel.restaurantSelectionBorderStroke.collectAsStateWithLifecycle()
 
-        LazyVerticalStaggeredGrid(
+        //        val restaurantUri = dummyList[appViewModel.rolledRestaurantIndex].name.toString()
+        val rolledRestaurantString = selectedRestaurantSquare.value.name.toString()
+
+        var borderStroke: BorderStroke
+
+        if (restaurantRollFinished.value) {
+            appViewModel.restaurantStringUri = rolledRestaurantString
+            appViewModel.restaurantBorderStrokeToggleAnimation()
+        }
+
+        LazyVerticalStaggeredGrid(state = sectionGridState,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
             columns = StaggeredGridCells.Adaptive(128.dp),
         ) {
-//                        items(restaurantList.value.size) { index ->
-            items(dummyList.size) { index ->
+            items(restaurantList.value.size) { index ->
+//            items(dummyList.size) { index ->
+                if (appViewModel.getRestaurantRollFinished) {
+                    LaunchedEffect(key1 = Unit) {
+                        sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
+                        appViewModel.updateRestaurantRollFinished(false)
+                    }
+                }
+
+                if (index == appViewModel.rolledRestaurantIndex) {
+                    borderStroke = restaurantSelectionBorderStroke.value
+                } else {
+                    borderStroke = BorderStroke(1.dp,Color.Black)
+                }
+
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = colorResource(dummyList[index].color!!),
-//                      containerColor = colorResource(restaurantList.value[index].color!!),
+//                        containerColor = colorResource(dummyList[index].color!!),
+                        containerColor = colorResource(restaurantList.value[index].color!!),
                     ),
-                    border = BorderStroke(1.dp,Color.Black),
+                    border = borderStroke,
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 6.dp
                     ),
@@ -311,15 +342,15 @@ class DialogComposables(private val activityContext: Context, private val appVie
                             }
                         ),
                 ) {
-                    RestaurantListTextUi(dummyList[index].name.toString(), true)
-                    RestaurantListTextUi(dummyList[index].distance.toString(), false)
-                    RatingStars(dummyList[index].rating)
+//                    RestaurantListTextUi(dummyList[index].name.toString(), true)
+//                    RestaurantListTextUi(dummyList[index].distance.toString(), false)
+//                    RatingStars(dummyList[index].rating)
 
-//                            RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
-////                            RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
-//                            RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
-////                            RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
-//                            RatingStars(restaurantList.value[index].rating)
+                            RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
+//                            RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
+                            RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
+//                            RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
+                            RatingStars(restaurantList.value[index].rating)
                 }
             }
         }

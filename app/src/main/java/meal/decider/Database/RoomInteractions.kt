@@ -67,7 +67,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             deleteAllCuisines()
             populateDatabaseWithInitialCuisines()
             populateSquareValuesWithDatabaseValues()
-        appViewModel.updateselectedCuisineSquare(appViewModel.getSquareList[0])
+        appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
         }
     }
 }

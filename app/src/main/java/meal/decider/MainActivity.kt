@@ -108,10 +108,11 @@ class MainActivity : ComponentActivity() {
         appViewModel = AppViewModel()
         cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
         roomInteractions = RoomInteractions(cuisineDatabase, appViewModel)
-        dialogComposables = DialogComposables(activityContext, appViewModel, cuisineDatabase)
 
         mapInteractions = MapInteractions(activity, activityContext, appViewModel)
         mapInteractions.fusedLocationListener()
+
+        dialogComposables = DialogComposables(appViewModel, cuisineDatabase, mapInteractions)
 
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
         ioScope.launch {
@@ -123,7 +124,11 @@ class MainActivity : ComponentActivity() {
         //Populates SquareValues with DB values and set first cuisine as default selection.
         ioScope.launch {
             roomInteractions.populateSquareValuesWithDatabaseValues()
-            appViewModel.updateselectedCuisineSquare(appViewModel.getSquareList[0])
+            appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
+            appViewModel.cuisineStringUri = appViewModel.getselectedCuisineSquare.name + " Food "
+            //TODO: Blank list until we roll restaurants. Can use conditional to only launch maps intent if uri is valid.
+//            appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[0])
+//            appViewModel.restaurantSearchCuisineType = "geo:0,0?q=" + appViewModel.getselectedRestaurantSquare.name
         }
 
         setContent {
@@ -265,23 +270,44 @@ fun DropDownMenuItemUi(text: String, function: () -> Unit) {
 fun Board() {
     Column (modifier = Modifier
         .fillMaxWidth()
+        .height(screenHeightPct(0.1).dp)
         .background(colorResource(id = R.color.grey_50))
     ) {
-        OptionsBarLayout(screenHeightPct(0.1))
         CuisineSelectionGrid(screenHeightPct(0.65))
         InteractionButtons()
+        OptionsBarLayout()
         DialogCompositions()
+    }
+    Surface(
+        color = colorResource(id = R.color.grey_300),
+    ) {
+        Box(modifier = Modifier
+            .fillMaxSize(),
+        ) {
+            Column {
+                CuisineSelectionGrid()
+            }
+        }
+        Box(modifier = Modifier
+            .fillMaxSize()
+        )
+        {
+            Column (modifier = Modifier
+                .fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom) {
+                InteractionButtons()
+            }
+        }
     }
 }
 
 @Composable
-fun OptionsBarLayout(height: Double) {
+fun OptionsBarLayout() {
     val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
     var cardColor: Color
 
     Column (modifier = Modifier
         .fillMaxWidth()
-        .height(height.dp)
         .background(colorResource(id = R.color.grey_50))
     ) {
         LazyHorizontalGrid(rows = GridCells.Adaptive(minSize = 32.dp),
@@ -357,45 +383,35 @@ fun DialogCompositions() {
     }
 }
 
+//TODO: Global foodUri var so can be set by cuisine and restaurants
 @Composable
 fun CuisineSelectionGrid(height: Double) {
     val coroutineScope = rememberCoroutineScope()
     val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
-    val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
-    val rollFinished = appViewModel.rollFinished.collectAsStateWithLifecycle()
-    val cuisinerSelectionBorderStroke = appViewModel.cuisinerSelectionBorderStroke.collectAsStateWithLifecycle()
+    val cuisineRollFinished = appViewModel.cuisineRollFinished.collectAsStateWithLifecycle()
+    val cuisineSelectionBorderStroke = appViewModel.cuisineSelectionBorderStroke.collectAsStateWithLifecycle()
     val sectionGridState = rememberLazyGridState()
 
     val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
     val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()
     val restrictionsString = appViewModel.foodRestrictionsString(restrictionsUi.value)
 
-    //    val foodUri = "geo:0,0?q=" + selectedCuisineSquare.value.name + " Food " + restrictionsString
-    val foodUri = selectedCuisineSquare.value.name + "+" + "Food" + "+" + restrictionsString
+    val rolledCuisineString = selectedCuisineSquare.value.name + " Food " + restrictionsString
 
     var borderStroke: BorderStroke
 
-    if (editMode.value) {
-        borderStroke = BorderStroke(3.dp,Color.Black)
-    } else {
-        borderStroke = BorderStroke(1.dp,Color.Black)
-        appViewModel.resetSquareColors()
-    }
-
-    if (rollFinished.value) {
+    if (cuisineRollFinished.value) {
         LaunchedEffect(Unit) {
             coroutineScope.launch {
-                appViewModel.cuisineBorderStrokeToggle()
-
-                mapInteractions.cuisineType = foodUri
-//                mapInteractions.mapsApiCall()
+                appViewModel.cuisineBorderStrokeToggleAnimation()
+                //For our query to return a list of restaurants matching the rolled cuisine.
+                appViewModel.restaurantSearchCuisineType = rolledCuisineString
+                mapInteractions.mapsApiCall()
 
                 delay(2000)
 
                 appViewModel.cancelCuisineBorderStrokeToggle()
                 appViewModel.updateShowRestaurants(true)
-
-//                appViewModel.rollRestaurant()
             }
         }
     }
@@ -412,20 +428,18 @@ fun CuisineSelectionGrid(height: Double) {
         ),
         content = {
             items(boardUiState.value.squareList.size) { index ->
-                if (appViewModel.getRollFinished) {
+                if (appViewModel.getCuisineRollFinished) {
                     LaunchedEffect(key1 = Unit) {
                         sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
-                        appViewModel.updateRollFinished(false)
+                        appViewModel.updateCuisineRollFinished(false)
                     }
                 }
 
                 if (index == appViewModel.rolledSquareIndex) {
-                    borderStroke = cuisinerSelectionBorderStroke.value
+                    borderStroke = cuisineSelectionBorderStroke.value
                 } else {
                     borderStroke = BorderStroke(1.dp,Color.Black)
                 }
-
-                showLog("test","recomposing board!")
 
                 Card(
                     colors = CardDefaults.cardColors(
@@ -482,7 +496,12 @@ fun InteractionButtons() {
             Button(
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-                        appViewModel.rollCuisine()
+                        if (!appViewModel.getShowRestaurants) {
+                            appViewModel.rollCuisine()
+                        } else {
+                            appViewModel.rollRestaurant()
+//                            appViewModel.testRestaurantRoll()
+                        }
 //                        appViewModel.pressYourLuck()
                     }
                 },
@@ -499,7 +518,13 @@ fun InteractionButtons() {
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         coroutineScope.launch {
-                            //TODO: Open maps goes back here.
+                            if (!appViewModel.getShowRestaurants) {
+                                mapInteractions.mapIntent(appViewModel.cuisineStringUri)
+                            } else {
+                                mapInteractions.mapIntent(appViewModel.restaurantStringUri)
+//                                val testString = appViewModel.dummyRestaurantList()[appViewModel.rolledRestaurantIndex].name.toString()
+//                                mapInteractions.mapIntent(testString)
+                            }
                         }
                     }
                 },
