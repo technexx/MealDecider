@@ -427,29 +427,6 @@ class AppViewModel : ViewModel() {
         handler.post(restaurantRollRunnable)
     }
 
-    fun testRestaurantRoll() {
-        var delay: Long = 100
-        rollCountdown = 500
-        handler.removeCallbacks(restaurantRollRunnable)
-        updateRollEngaged(true)
-
-        restaurantRollRunnable = Runnable {
-            rolledRestaurantIndex = Random.nextInt(0, dummyRestaurantList().size)
-
-            handler.postDelayed(restaurantRollRunnable, delay)
-            if (delay > 100) delay -= 10
-            rollCountdown -= 20
-
-            if (rollCountdown < 20) {
-                updateRollEngaged(false)
-                updateRestaurantRollFinished(true)
-                handler.removeCallbacks(restaurantRollRunnable)
-            }
-        }
-
-        handler.post(restaurantRollRunnable)
-    }
-
     private fun restaurantListWithRandomColorChanged(index: Int): SnapshotStateList<RestaurantValues> {
         val currentList = getRestaurantList
         val newList = SnapshotStateList<RestaurantValues>()

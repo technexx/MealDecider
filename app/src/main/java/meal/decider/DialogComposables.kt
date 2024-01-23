@@ -327,7 +327,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 //                        containerColor = colorResource(dummyList[index].color!!),
                         containerColor = colorResource(restaurantList.value[index].color!!),
                     ),
-                    border = BorderStroke(1.dp,Color.Black),
+                    border = borderStroke,
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 6.dp
                     ),
