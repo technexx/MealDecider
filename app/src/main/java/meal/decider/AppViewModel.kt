@@ -417,7 +417,7 @@ class AppViewModel : ViewModel() {
             rollCountdown -= 20
 
             if (rollCountdown < 20) {
-                updateSelectedRestaurantSquare(getRestaurantList[rolledSquareIndex])
+                updateSelectedRestaurantSquare(getRestaurantList[rolledRestaurantIndex])
                 updateRollEngaged(false)
                 updateRestaurantRollFinished(true)
                 handler.removeCallbacks(restaurantRollRunnable)

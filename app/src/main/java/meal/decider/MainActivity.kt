@@ -404,7 +404,7 @@ fun CuisineSelectionGrid() {
                 appViewModel.cuisineBorderStrokeToggleAnimation()
                 //For our query to return a list of restaurants matching the rolled cuisine.
                 appViewModel.restaurantSearchCuisineType = rolledCuisineString
-//                mapInteractions.mapsApiCall()
+                mapInteractions.mapsApiCall()
 
                 delay(2000)
 
@@ -497,8 +497,8 @@ fun InteractionButtons() {
                         if (!appViewModel.getShowRestaurants) {
                             appViewModel.rollCuisine()
                         } else {
-//                            appViewModel.rollRestaurant()
-                            appViewModel.testRestaurantRoll()
+                            appViewModel.rollRestaurant()
+//                            appViewModel.testRestaurantRoll()
                         }
 //                        appViewModel.pressYourLuck()
                     }

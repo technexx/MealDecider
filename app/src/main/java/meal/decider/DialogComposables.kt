@@ -288,6 +288,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun RestaurantLazyGrid() {
         val sectionGridState = rememberLazyStaggeredGridState()
+        val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
         val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
         val dummyList = appViewModel.dummyRestaurantList()
         val restaurantUri = dummyList[appViewModel.rolledRestaurantIndex].name.toString()
@@ -306,8 +307,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 .padding(12.dp),
             columns = StaggeredGridCells.Adaptive(128.dp),
         ) {
-//                        items(restaurantList.value.size) { index ->
-            items(dummyList.size) { index ->
+            items(restaurantList.value.size) { index ->
+//            items(dummyList.size) { index ->
                 if (appViewModel.getRestaurantRollFinished) {
                     LaunchedEffect(key1 = Unit) {
                         sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
@@ -321,11 +322,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     borderStroke = BorderStroke(1.dp,Color.Black)
                 }
 
-                //TODO: Need to change color of data class item to change rolling color on board.
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = colorResource(dummyList[index].color!!),
-//                      containerColor = colorResource(restaurantList.value[index].color!!),
+//                        containerColor = colorResource(dummyList[index].color!!),
+                        containerColor = colorResource(restaurantList.value[index].color!!),
                     ),
                     border = BorderStroke(1.dp,Color.Black),
                     elevation = CardDefaults.cardElevation(
@@ -339,15 +339,15 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             }
                         ),
                 ) {
-                    RestaurantListTextUi(dummyList[index].name.toString(), true)
-                    RestaurantListTextUi(dummyList[index].distance.toString(), false)
-                    RatingStars(dummyList[index].rating)
+//                    RestaurantListTextUi(dummyList[index].name.toString(), true)
+//                    RestaurantListTextUi(dummyList[index].distance.toString(), false)
+//                    RatingStars(dummyList[index].rating)
 
-//                            RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
-////                            RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
-//                            RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
-////                            RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
-//                            RatingStars(restaurantList.value[index].rating)
+                            RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
+//                            RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
+                            RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
+//                            RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
+                            RatingStars(restaurantList.value[index].rating)
                 }
             }
         }
