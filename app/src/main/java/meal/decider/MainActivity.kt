@@ -273,8 +273,6 @@ fun Board() {
         .height(screenHeightPct(0.1).dp)
         .background(colorResource(id = R.color.grey_50))
     ) {
-        CuisineSelectionGrid(screenHeightPct(0.65))
-        InteractionButtons()
         OptionsBarLayout()
         DialogCompositions()
     }
@@ -300,6 +298,7 @@ fun Board() {
         }
     }
 }
+
 
 @Composable
 fun OptionsBarLayout() {
@@ -385,7 +384,7 @@ fun DialogCompositions() {
 
 //TODO: Global foodUri var so can be set by cuisine and restaurants
 @Composable
-fun CuisineSelectionGrid(height: Double) {
+fun CuisineSelectionGrid() {
     val coroutineScope = rememberCoroutineScope()
     val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
     val cuisineRollFinished = appViewModel.cuisineRollFinished.collectAsStateWithLifecycle()
@@ -417,8 +416,7 @@ fun CuisineSelectionGrid(height: Double) {
     }
 
     LazyVerticalGrid(state = sectionGridState,
-        modifier = Modifier
-            .height(height.dp),
+        modifier = Modifier,
         columns = GridCells.Adaptive(minSize = 128.dp),
         contentPadding = PaddingValues(
             start = 12.dp,
