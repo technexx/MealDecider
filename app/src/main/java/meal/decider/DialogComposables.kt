@@ -289,15 +289,18 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     fun RestaurantLazyGrid() {
         val sectionGridState = rememberLazyStaggeredGridState()
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
+        val selectedRestaurantSquare = appViewModel.selectedRestaurantSquare.collectAsStateWithLifecycle()
         val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
         val dummyList = appViewModel.dummyRestaurantList()
-        val restaurantUri = dummyList[appViewModel.rolledRestaurantIndex].name.toString()
         val restaurantSelectionBorderStroke = appViewModel.restaurantSelectionBorderStroke.collectAsStateWithLifecycle()
+
+        //        val restaurantUri = dummyList[appViewModel.rolledRestaurantIndex].name.toString()
+        val rolledRestaurantString = selectedRestaurantSquare.value.name.toString()
 
         var borderStroke: BorderStroke
 
         if (restaurantRollFinished.value) {
-            appViewModel.restaurantStringUri = restaurantUri
+            appViewModel.restaurantStringUri = rolledRestaurantString
             appViewModel.restaurantBorderStrokeToggleAnimation()
         }
 

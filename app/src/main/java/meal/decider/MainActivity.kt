@@ -519,9 +519,9 @@ fun InteractionButtons() {
                             if (!appViewModel.getShowRestaurants) {
                                 mapInteractions.mapIntent(appViewModel.cuisineStringUri)
                             } else {
-//                                mapInteractions.mapIntent(appViewModel.restaurantStringUri)
-                                val testString = appViewModel.dummyRestaurantList()[appViewModel.rolledRestaurantIndex].name.toString()
-                                mapInteractions.mapIntent(testString)
+                                mapInteractions.mapIntent(appViewModel.restaurantStringUri)
+//                                val testString = appViewModel.dummyRestaurantList()[appViewModel.rolledRestaurantIndex].name.toString()
+//                                mapInteractions.mapIntent(testString)
                             }
                         }
                     }
