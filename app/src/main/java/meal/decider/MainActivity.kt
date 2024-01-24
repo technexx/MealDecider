@@ -89,6 +89,8 @@ private lateinit var mapInteractions: MapInteractions
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
+//TODO: Border animation (light red) is not removed.
+
 //TODO: Sort options in restaurant list.
 //TODO: Filter for restaurants (distance, rating).
 //TODO: Maximum of 20 results seems to return - check if it can be expanded.
@@ -277,7 +279,7 @@ fun Board() {
         DialogCompositions()
     }
     Surface(
-        color = colorResource(id = R.color.grey_300),
+        color = colorResource(id = R.color.grey_100),
     ) {
         Box(modifier = Modifier
             .fillMaxSize(),
@@ -382,11 +384,11 @@ fun DialogCompositions() {
     }
 }
 
-//TODO: Global foodUri var so can be set by cuisine and restaurants
 @Composable
 fun CuisineSelectionGrid() {
     val coroutineScope = rememberCoroutineScope()
     val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
+
     val cuisineRollFinished = appViewModel.cuisineRollFinished.collectAsStateWithLifecycle()
     val cuisineSelectionBorderStroke = appViewModel.cuisineSelectionBorderStroke.collectAsStateWithLifecycle()
     val sectionGridState = rememberLazyGridState()
@@ -409,7 +411,8 @@ fun CuisineSelectionGrid() {
 
                 delay(2000)
 
-                appViewModel.cancelCuisineBorderStrokeToggle()
+                appViewModel.cancelCuisineBorderStrokeToggleRunnable()
+                appViewModel.resetCuisineSelectionBorderStroke()
                 appViewModel.updateShowRestaurants(true)
             }
         }

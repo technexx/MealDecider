@@ -277,12 +277,11 @@ class AppViewModel : ViewModel() {
             }
             removeSquareFromListOfSquareIndicesToUpdate()
         }
-
         updateSquareList(tempSquareList)
 
     }
 
-    fun addSquareTolistOfCuisineSquaresToEdit(index: Int) {
+    private fun addSquareTolistOfCuisineSquaresToEdit(index: Int) {
         val tempList = getlistOfCuisineSquaresToEdit.toMutableList()
         val currentList = getSquareList
         tempList.add(currentList[index])
@@ -311,7 +310,7 @@ class AppViewModel : ViewModel() {
         updateEditMode(false)
     }
 
-    fun resetSquareColors() {
+    private fun resetSquareColors() {
         val squareList = getSquareList
         val selectedCuisineSquare = getselectedCuisineSquare
 
@@ -379,9 +378,8 @@ class AppViewModel : ViewModel() {
 
             if (rollCountdown < 20) {
                 updateSelectedCuisineSquare(getSquareList[rolledSquareIndex])
-                updateRollEngaged(false)
                 updateCuisineRollFinished(true)
-
+                updateRollEngaged(false)
                 handler.removeCallbacks(cuisineRollRunnable)
             }
         }
@@ -418,8 +416,8 @@ class AppViewModel : ViewModel() {
 
             if (rollCountdown < 20) {
                 updateSelectedRestaurantSquare(getRestaurantList[rolledRestaurantIndex])
-                updateRollEngaged(false)
                 updateRestaurantRollFinished(true)
+                updateRollEngaged(false)
                 handler.removeCallbacks(restaurantRollRunnable)
             }
         }
@@ -460,13 +458,13 @@ class AppViewModel : ViewModel() {
 
     fun cuisineBorderStrokeToggleAnimation() {
         handler.removeCallbacks(cuisineBorderStrokeToggleRunnable)
-        updateCuisineSelectionBorderStroke(defaultCuisineSelectionBorderStroke)
+        updateCuisineSelectionBorderStroke(lightCuisineSelectionBorderStroke)
 
         cuisineBorderStrokeToggleRunnable = Runnable {
-            if (getCuisineSelectionBorderStroke == defaultCuisineSelectionBorderStroke) {
-                updateCuisineSelectionBorderStroke(animatedCuisineSelectionBorderStroke)
+            if (getCuisineSelectionBorderStroke == lightCuisineSelectionBorderStroke) {
+                updateCuisineSelectionBorderStroke(heavyCuisineSelectionBorderStroke)
             } else {
-                updateCuisineSelectionBorderStroke(defaultCuisineSelectionBorderStroke)
+                updateCuisineSelectionBorderStroke(lightCuisineSelectionBorderStroke)
             }
 
             handler.postDelayed(cuisineBorderStrokeToggleRunnable, 200)
@@ -475,21 +473,21 @@ class AppViewModel : ViewModel() {
         handler.post(cuisineBorderStrokeToggleRunnable)
     }
 
-    fun cancelCuisineBorderStrokeToggle() { handler.removeCallbacks(cuisineBorderStrokeToggleRunnable) }
+    fun cancelCuisineBorderStrokeToggleRunnable() { handler.removeCallbacks(cuisineBorderStrokeToggleRunnable) }
     
     fun resetCuisineSelectionBorderStroke() { updateCuisineSelectionBorderStroke(defaultCuisineSelectionBorderStroke) }
 
     fun restaurantBorderStrokeToggleAnimation() {
-        var countDown = 2000
+        var countDown = 1000
 
         handler.removeCallbacks(restaurantBorderStrokeToggleRunnable)
-        updateCuisineSelectionBorderStroke(defaultRestaurantSelectionBorderStroke)
+        updateCuisineSelectionBorderStroke(lightRestaurantSelectionBorderStroke)
 
         restaurantBorderStrokeToggleRunnable = Runnable {
-            if (getRestaurantSelectionBorderStroke == defaultRestaurantSelectionBorderStroke) {
-                updateRestaurantSelectionBorderStroke(animatedRestaurantSelectionBorderStroke)
+            if (getRestaurantSelectionBorderStroke == lightRestaurantSelectionBorderStroke) {
+                updateRestaurantSelectionBorderStroke(heavyRestaurantSelectionBorderStroke)
             } else {
-                updateRestaurantSelectionBorderStroke(defaultCuisineSelectionBorderStroke)
+                updateRestaurantSelectionBorderStroke(lightRestaurantSelectionBorderStroke)
             }
 
             handler.postDelayed(restaurantBorderStrokeToggleRunnable, 200)
@@ -502,7 +500,7 @@ class AppViewModel : ViewModel() {
         handler.post(restaurantBorderStrokeToggleRunnable)
     }
 
-    fun cancelRestaurantBorderStrokeToggle() { handler.removeCallbacks(restaurantBorderStrokeToggleRunnable) }
+    fun cancelRestaurantBorderStrokeToggleRunnable() { handler.removeCallbacks(restaurantBorderStrokeToggleRunnable) }
 
     fun resetRestaurantSelectionBorderStroke() { updateRestaurantSelectionBorderStroke(defaultRestaurantSelectionBorderStroke) }
 

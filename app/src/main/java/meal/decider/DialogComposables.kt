@@ -315,6 +315,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 if (appViewModel.getRestaurantRollFinished) {
                     LaunchedEffect(key1 = Unit) {
                         sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
+                        appViewModel.resetRestaurantSelectionBorderStroke()
                         appViewModel.updateRestaurantRollFinished(false)
                     }
                 }
