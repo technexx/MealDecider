@@ -466,10 +466,8 @@ class AppViewModel : ViewModel() {
             } else {
                 updateCuisineSelectionBorderStroke(lightCuisineSelectionBorderStroke)
             }
-
             handler.postDelayed(cuisineBorderStrokeToggleRunnable, 200)
         }
-
         handler.post(cuisineBorderStrokeToggleRunnable)
     }
 
@@ -478,8 +476,6 @@ class AppViewModel : ViewModel() {
     fun resetCuisineSelectionBorderStroke() { updateCuisineSelectionBorderStroke(defaultCuisineSelectionBorderStroke) }
 
     fun restaurantBorderStrokeToggleAnimation() {
-        var countDown = 1000
-
         handler.removeCallbacks(restaurantBorderStrokeToggleRunnable)
         updateCuisineSelectionBorderStroke(lightRestaurantSelectionBorderStroke)
 
@@ -489,12 +485,7 @@ class AppViewModel : ViewModel() {
             } else {
                 updateRestaurantSelectionBorderStroke(lightRestaurantSelectionBorderStroke)
             }
-
             handler.postDelayed(restaurantBorderStrokeToggleRunnable, 200)
-            countDown -= 200
-            if (countDown < 200) {
-                handler.removeCallbacks(restaurantBorderStrokeToggleRunnable)
-            }
         }
 
         handler.post(restaurantBorderStrokeToggleRunnable)

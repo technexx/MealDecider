@@ -404,6 +404,8 @@ fun CuisineSelectionGrid() {
     if (cuisineRollFinished.value) {
         LaunchedEffect(Unit) {
             coroutineScope.launch {
+                sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
+                //Begins runnable to animation cuisine border
                 appViewModel.cuisineBorderStrokeToggleAnimation()
                 //For our query to return a list of restaurants matching the rolled cuisine.
                 appViewModel.restaurantSearchCuisineType = rolledCuisineString
@@ -411,9 +413,13 @@ fun CuisineSelectionGrid() {
 
                 delay(2000)
 
+                //Cancels border animation after above delay, and launches restaurant dialog.
                 appViewModel.cancelCuisineBorderStrokeToggleRunnable()
                 appViewModel.resetCuisineSelectionBorderStroke()
+                appViewModel.updateCuisineRollFinished(false)
+
                 appViewModel.updateShowRestaurants(true)
+
             }
         }
     }
@@ -429,12 +435,6 @@ fun CuisineSelectionGrid() {
         ),
         content = {
             items(boardUiState.value.squareList.size) { index ->
-                if (appViewModel.getCuisineRollFinished) {
-                    LaunchedEffect(key1 = Unit) {
-                        sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
-                        appViewModel.updateCuisineRollFinished(false)
-                    }
-                }
 
                 if (index == appViewModel.rolledSquareIndex) {
                     borderStroke = cuisineSelectionBorderStroke.value

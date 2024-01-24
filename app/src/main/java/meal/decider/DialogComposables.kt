@@ -59,6 +59,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
@@ -287,6 +288,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestaurantLazyGrid() {
+        val coroutineScope = rememberCoroutineScope()
         val sectionGridState = rememberLazyStaggeredGridState()
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
         val selectedRestaurantSquare = appViewModel.selectedRestaurantSquare.collectAsStateWithLifecycle()
@@ -300,8 +302,19 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var borderStroke: BorderStroke
 
         if (restaurantRollFinished.value) {
-            appViewModel.restaurantStringUri = rolledRestaurantString
-            appViewModel.restaurantBorderStrokeToggleAnimation()
+            LaunchedEffect(Unit) {
+                coroutineScope.launch {
+                    sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
+                    appViewModel.restaurantStringUri = rolledRestaurantString
+                    appViewModel.restaurantBorderStrokeToggleAnimation()
+
+                    delay(2000)
+
+                    appViewModel.cancelRestaurantBorderStrokeToggleRunnable()
+                    appViewModel.resetRestaurantSelectionBorderStroke()
+                    appViewModel.updateRestaurantRollFinished(false)
+                }
+            }
         }
 
         LazyVerticalStaggeredGrid(state = sectionGridState,
@@ -312,14 +325,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         ) {
             items(restaurantList.value.size) { index ->
 //            items(dummyList.size) { index ->
-                if (appViewModel.getRestaurantRollFinished) {
-                    LaunchedEffect(key1 = Unit) {
-                        sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
-                        appViewModel.resetRestaurantSelectionBorderStroke()
-                        appViewModel.updateRestaurantRollFinished(false)
-                    }
-                }
-
                 if (index == appViewModel.rolledRestaurantIndex) {
                     borderStroke = restaurantSelectionBorderStroke.value
                 } else {
