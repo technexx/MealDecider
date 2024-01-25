@@ -223,6 +223,24 @@ class AppViewModel : ViewModel() {
         updateSquareList(newSquareList)
     }
 
+    fun sortRestaurants(typeOfSort: String) {
+        val currentRestaurantList = getRestaurantList
+
+        if (typeOfSort == "alphabetical" || typeOfSort == "random") {
+            var namesList = mutableListOf<String>()
+            for (i in currentRestaurantList) {
+                namesList.add(i.name.toString())
+            }
+            if (typeOfSort == "alphabetical") namesList = namesList.sorted().toMutableList()
+            if (typeOfSort == "random") namesList = namesList.shuffled().toMutableList()
+
+            for (i in namesList.indices) {
+                currentRestaurantList[i].name = namesList[i]
+            }
+        }
+        updateRestaurantsList(currentRestaurantList)
+    }
+
     fun squareNamesList(): List<String> {
         val listToReturn = mutableListOf<String>()
         for (i in getSquareList) {

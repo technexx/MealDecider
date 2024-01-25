@@ -89,8 +89,6 @@ private lateinit var mapInteractions: MapInteractions
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Border animation (light red) is not removed.
-
 //TODO: Sort options in restaurant list.
 //TODO: Filter for restaurants (distance, rating).
 //TODO: Maximum of 20 results seems to return - check if it can be expanded.
@@ -415,11 +413,10 @@ fun CuisineSelectionGrid() {
 
                 //Cancels border animation after above delay, and launches restaurant dialog.
                 appViewModel.cancelCuisineBorderStrokeToggleRunnable()
-                appViewModel.resetCuisineSelectionBorderStroke()
                 appViewModel.updateCuisineRollFinished(false)
 
                 appViewModel.updateShowRestaurants(true)
-
+                appViewModel.resetCuisineSelectionBorderStroke()
             }
         }
     }
@@ -522,9 +519,8 @@ fun InteractionButtons() {
                             if (!appViewModel.getShowRestaurants) {
                                 mapInteractions.mapIntent(appViewModel.cuisineStringUri)
                             } else {
-                                mapInteractions.mapIntent(appViewModel.restaurantStringUri)
-//                                val testString = appViewModel.dummyRestaurantList()[appViewModel.rolledRestaurantIndex].name.toString()
-//                                mapInteractions.mapIntent(testString)
+                                appViewModel.sortRestaurants("random")
+//                                mapInteractions.mapIntent(appViewModel.restaurantStringUri)
                             }
                         }
                     }
