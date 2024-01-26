@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -299,9 +300,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     fun RestaurantSortMenu() {
         var expanded by remember { mutableStateOf(false) }
 
-        Row(modifier = Modifier
-            .fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
+        Box(
+            modifier = Modifier
+                .wrapContentSize(Alignment.TopEnd)
         ) {
             IconButton(onClick = { expanded = !expanded }) {
                 Icon(
@@ -313,7 +314,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
             DropdownMenu(modifier = Modifier
                 .background(colorResource(id = R.color.grey_300))
-                .fillMaxWidth(),
+                .wrapContentSize(),
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
