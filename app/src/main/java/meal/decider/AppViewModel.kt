@@ -239,11 +239,10 @@ class AppViewModel : ViewModel() {
         }
 
         newSnapList.addAll(sortedList)
-
         updateRestaurantsList(newSnapList)
     }
 
-    fun squareNamesList(): List<String> {
+    private fun squareNamesList(): List<String> {
         val listToReturn = mutableListOf<String>()
         for (i in getSquareList) {
             listToReturn.add(i.name)

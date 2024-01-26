@@ -127,7 +127,6 @@ class MainActivity : ComponentActivity() {
             roomInteractions.populateSquareValuesWithDatabaseValues()
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
             appViewModel.cuisineStringUri = appViewModel.getselectedCuisineSquare.name + " Food "
-            //TODO: Blank list until we roll restaurants. Can use conditional to only launch maps intent if uri is valid.
 //            appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[0])
 //            appViewModel.restaurantSearchCuisineType = "geo:0,0?q=" + appViewModel.getselectedRestaurantSquare.name
         }
@@ -176,7 +175,6 @@ fun TopBar() {
                                 roomInteractions.deleteMultipleCuisines()
                                 appViewModel.deleteSelectedCuisines()
                             }
-
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Delete,
@@ -408,7 +406,7 @@ fun CuisineSelectionGrid() {
                 appViewModel.cuisineBorderStrokeToggleAnimation()
                 //For our query to return a list of restaurants matching the rolled cuisine.
                 appViewModel.restaurantSearchCuisineType = rolledCuisineString
-                mapInteractions.mapsApiCall()
+//                mapInteractions.mapsApiCall()
 
                 delay(2000)
 
@@ -520,10 +518,7 @@ fun InteractionButtons() {
                             if (!appViewModel.getShowRestaurants) {
                                 mapInteractions.mapIntent(appViewModel.cuisineStringUri)
                             } else {
-                                appViewModel.testSort("name")
-                                appViewModel.testSort("distance")
-                                appViewModel.testSort("rating")
-//                                mapInteractions.mapIntent(appViewModel.restaurantStringUri)
+                                mapInteractions.mapIntent(appViewModel.restaurantStringUri)
                             }
                         }
                     }

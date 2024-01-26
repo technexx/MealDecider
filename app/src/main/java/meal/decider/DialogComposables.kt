@@ -26,6 +26,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -268,6 +269,18 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     .fillMaxSize(),
                 ) {
                     Column {
+                        Row (modifier = Modifier
+                            .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End){
+                            IconButton(modifier = Modifier
+                                .size(48.dp)
+                                .padding(end = 8.dp, top = 8.dp),
+                                onClick = {
+
+                            }) {
+                                DialogIcon(imageVector = Icons.Filled.Menu, colorResource = android.R.color.black)
+                            }
+                        }
                         RestaurantLazyGrid()
                     }
                 }
