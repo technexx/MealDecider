@@ -90,6 +90,7 @@ val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
 //TODO: Sort options in restaurant list.
+//TODO: Floating buttons obscure bottom cuisine list items.
 //TODO: Filter for restaurants (distance, rating).
 //TODO: Maximum of 20 results seems to return - check if it can be expanded.
 //TODO: Less than 2 restaurants = prompt to expand radius.
@@ -519,7 +520,9 @@ fun InteractionButtons() {
                             if (!appViewModel.getShowRestaurants) {
                                 mapInteractions.mapIntent(appViewModel.cuisineStringUri)
                             } else {
-                                appViewModel.sortRestaurants("random")
+                                appViewModel.testSort("name")
+                                appViewModel.testSort("distance")
+                                appViewModel.testSort("rating")
 //                                mapInteractions.mapIntent(appViewModel.restaurantStringUri)
                             }
                         }

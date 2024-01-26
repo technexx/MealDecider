@@ -223,22 +223,24 @@ class AppViewModel : ViewModel() {
         updateSquareList(newSquareList)
     }
 
-    fun sortRestaurants(typeOfSort: String) {
-        val currentRestaurantList = getRestaurantList
+    fun testSort(typeOfSort: String) {
+        var sortedList = getRestaurantList.toList()
+        val newSnapList = SnapshotStateList<RestaurantValues>()
 
-        if (typeOfSort == "alphabetical" || typeOfSort == "random") {
-            var namesList = mutableListOf<String>()
-            for (i in currentRestaurantList) {
-                namesList.add(i.name.toString())
-            }
-            if (typeOfSort == "alphabetical") namesList = namesList.sorted().toMutableList()
-            if (typeOfSort == "random") namesList = namesList.shuffled().toMutableList()
+        if (typeOfSort == "name") {
+            sortedList = getRestaurantList.sortedWith(compareBy { it.name })
 
-            for (i in namesList.indices) {
-                currentRestaurantList[i].name = namesList[i]
-            }
         }
-        updateRestaurantsList(currentRestaurantList)
+        if (typeOfSort == "distance"){
+            sortedList = getRestaurantList.sortedWith(compareBy { it.distance })
+        }
+        if (typeOfSort == "rating"){
+            sortedList = getRestaurantList.sortedWith(compareBy { it.rating })
+        }
+
+        newSnapList.addAll(sortedList)
+
+        updateRestaurantsList(newSnapList)
     }
 
     fun squareNamesList(): List<String> {
@@ -270,7 +272,6 @@ class AppViewModel : ViewModel() {
     }
 
     fun toggleAddCuisineSelections(cuisine: String) {
-        //TODO: Likely because we're drawing from the same list we're updating.
         val listToAdd = getListOfCuisinesToAdd.toMutableList()
 
         if (listToAdd.contains(cuisine)) {
