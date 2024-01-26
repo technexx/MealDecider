@@ -274,7 +274,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         Row (modifier = Modifier
                             .fillMaxWidth(),
                             horizontalArrangement = Arrangement.End) {
-                            //TODO: Dropdown menu here.
                             RestaurantSortMenu()
 
                         }
@@ -300,26 +299,33 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     fun RestaurantSortMenu() {
         var expanded by remember { mutableStateOf(false) }
 
-        IconButton(onClick = { expanded = !expanded }) {
-            Icon(
-                imageVector = Icons.Filled.Menu,
-                contentDescription = "More",
-                tint = Color.Black
-            )
-        }
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
+        Row(modifier = Modifier
+            .fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
         ) {
-            RestaurantDropDownUi(text = "Test") {
-                expanded = false
+            IconButton(onClick = { expanded = !expanded }) {
+                Icon(
+                    imageVector = Icons.Filled.Menu,
+                    contentDescription = "More",
+                    tint = Color.Black
+                )
             }
-            RestaurantDropDownUi(text = "Test") {
-                expanded = false
-            }
-            RestaurantDropDownUi(text = "Test") {
-                expanded = false
+
+            DropdownMenu(modifier = Modifier
+                .background(colorResource(id = R.color.grey_300))
+                .fillMaxWidth(),
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                RestaurantDropDownUi("Test") {
+                    expanded = false
+                }
+                RestaurantDropDownUi("Test") {
+                    expanded = false
+                }
+                RestaurantDropDownUi("Test") {
+                    expanded = false
+                }
             }
         }
     }
@@ -327,7 +333,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun RestaurantDropDownUi(text: String, function: () -> Unit) {
         DropdownMenuItem(
-            text = { Text(text) },
+            text = { RestaurantSortTextUi(text = text) },
             onClick = {
                 function()
             }
