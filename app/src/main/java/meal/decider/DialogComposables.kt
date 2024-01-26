@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -30,6 +29,8 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -272,15 +273,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     Column {
                         Row (modifier = Modifier
                             .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End){
-                            IconButton(modifier = Modifier
-                                .size(48.dp)
-                                .padding(end = 8.dp, top = 8.dp),
-                                onClick = {
+                            horizontalArrangement = Arrangement.End) {
+                            //TODO: Dropdown menu here.
+                            RestaurantSortMenu()
 
-                            }) {
-                                DialogIcon(imageVector = Icons.Filled.Menu, colorResource = android.R.color.black)
-                            }
                         }
                         RestaurantLazyGrid()
                     }
@@ -302,20 +298,40 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestaurantSortMenu() {
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-            color = colorResource(id = R.color.grey_300),
+        var expanded by remember { mutableStateOf(false) }
+
+        IconButton(onClick = { expanded = !expanded }) {
+            Icon(
+                imageVector = Icons.Filled.Menu,
+                contentDescription = "More",
+                tint = Color.Black
+            )
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
         ) {
-            Box(modifier = Modifier
-                .wrapContentSize(),
-            ) {
-                Column {
-                    RestaurantSortTextUi("Blah")
-                    RestaurantSortTextUi("Blah")
-                    RestaurantSortTextUi("Blah")
-                }
+            RestaurantDropDownUi(text = "Test") {
+                expanded = false
+            }
+            RestaurantDropDownUi(text = "Test") {
+                expanded = false
+            }
+            RestaurantDropDownUi(text = "Test") {
+                expanded = false
             }
         }
+    }
+
+    @Composable
+    fun RestaurantDropDownUi(text: String, function: () -> Unit) {
+        DropdownMenuItem(
+            text = { Text(text) },
+            onClick = {
+                function()
+            }
+        )
     }
 
     @Composable
