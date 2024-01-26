@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -297,6 +298,36 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
             }
         }
+    }
+
+    @Composable
+    fun RestaurantSortMenu() {
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = colorResource(id = R.color.grey_300),
+        ) {
+            Box(modifier = Modifier
+                .wrapContentSize(),
+            ) {
+                Column {
+                    RestaurantSortTextUi("Blah")
+                    RestaurantSortTextUi("Blah")
+                    RestaurantSortTextUi("Blah")
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun RestaurantSortTextUi(text: String) {
+        Text(
+            text = text,
+            fontWeight = FontWeight.Medium,
+            fontSize = 14.sp,
+            color = Color.Black,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(6.dp)
+        )
     }
 
     @Composable
