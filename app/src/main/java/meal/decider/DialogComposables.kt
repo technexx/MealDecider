@@ -320,13 +320,16 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                RestaurantDropDownUi("Test") {
+                RestaurantDropDownUi("Sort A-Z") {
                     expanded = false
                 }
-                RestaurantDropDownUi("Test") {
+                RestaurantDropDownUi("Sort by Distance") {
                     expanded = false
                 }
-                RestaurantDropDownUi("Test") {
+                RestaurantDropDownUi("Sort by Rating") {
+                    expanded = false
+                }
+                RestaurantDropDownUi("Sort Randomly") {
                     expanded = false
                 }
             }

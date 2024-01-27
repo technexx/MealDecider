@@ -223,19 +223,29 @@ class AppViewModel : ViewModel() {
         updateSquareList(newSquareList)
     }
 
-    fun testSort(typeOfSort: String) {
+    fun sortAndUpdateRestaurantList(typeOfSort: String) {
         var sortedList = getRestaurantList.toList()
         val newSnapList = SnapshotStateList<RestaurantValues>()
 
         if (typeOfSort == "name") {
             sortedList = getRestaurantList.sortedWith(compareBy { it.name })
-
         }
         if (typeOfSort == "distance"){
             sortedList = getRestaurantList.sortedWith(compareBy { it.distance })
         }
         if (typeOfSort == "rating"){
             sortedList = getRestaurantList.sortedWith(compareBy { it.rating })
+        }
+        if (typeOfSort == "random") {
+            var newNamesList = mutableListOf<String?>()
+            for (i in sortedList.indices) {
+                newNamesList.add(sortedList[i].name)
+            }
+            newNamesList = newNamesList.shuffled().toMutableList()
+
+            for (i in sortedList.indices) {
+                sortedList[i].name = newNamesList[i]
+            }
         }
 
         newSnapList.addAll(sortedList)
