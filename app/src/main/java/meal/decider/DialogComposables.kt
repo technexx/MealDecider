@@ -74,6 +74,27 @@ import meal.decider.Database.RoomInteractions
 class DialogComposables(private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase, private val mapInteractions: MapInteractions){
     private val roomInteractions = RoomInteractions(appDatabase, appViewModel)
 
+    @Composable
+    fun AnimatedTransitionDialog(
+        onDismissRequest: () -> Unit,
+        contentAlignment: Alignment = Alignment.Center,
+        //A composable void input that takes in whatever UI stuff we're adding.
+        content: @Composable () -> Unit
+    ) {
+        Dialog(onDismissRequest = onDismissRequest) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = colorResource(id = R.color.grey_300)
+            ) {
+                Box(contentAlignment = contentAlignment,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    content()
+                }
+            }
+        }
+    }
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun AddDialogBox() {
@@ -81,6 +102,71 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var txtField by remember { mutableStateOf("") }
         val displayedList = appViewModel.displayedCuisineList.collectAsStateWithLifecycle()
         var searchTerms : List<String>
+
+        AnimatedTransitionDialog(
+            onDismissRequest = {
+                appViewModel.updateAddMode(false)
+                appViewModel.updateListOfCuisinesToAdd(emptyList())
+            },
+            content = {
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceEvenly)
+                {
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        TextField(modifier = Modifier,
+//                                .fillMaxWidth(0.8f),
+                            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+                            value = txtField,
+                            placeholder = {Text( "e.g. Filipino") },
+                            onValueChange = {
+                                txtField = it
+                                searchTerms = appViewModel.filterList(fullCuisineList, txtField)
+                                appViewModel.updateDisplayedCuisineList(searchTerms)},
+                            singleLine = true,
+                            textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                containerColor = colorResource(id = R.color.grey_50),
+                            ),
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    DisplayedCuisineList(displayedList)
+                    appViewModel.adjustDisplayedCuisineListFromDisplayedSquares()
+
+                    Row (modifier = Modifier
+                        .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        IconButton(onClick = {
+                            appViewModel.updateAddMode(false)
+                            appViewModel.updateListOfCuisinesToAdd(emptyList())
+                        }) {
+                            DialogIcon(imageVector = Icons.Filled.Close, colorResource = android.R.color.holo_red_light)
+                        }
+                        IconButton(onClick = {
+                            appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd)
+                            coroutineScope.launch {
+                                roomInteractions.insertMultipleCuisines(appViewModel.getListOfCuisinesToAdd)
+                                appViewModel.updateListOfCuisinesToAdd(emptyList())
+                            }
+                            appViewModel.updateAddMode(false)
+                        }) {
+                            DialogIcon(imageVector = Icons.Filled.Check, colorResource = android.R.color.holo_green_light)
+                        }
+                    }
+                }
+            }
+        )
 
         //Full list of cuisines added, then existing squares on main board subtracted.
         appViewModel.updateDisplayedCuisineList(fullCuisineList)
