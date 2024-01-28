@@ -76,6 +76,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun AnimatedTransitionDialog(
+        height: Int,
+        width: Int,
         onDismissRequest: () -> Unit,
         contentAlignment: Alignment = Alignment.Center,
         //A composable void input that takes in whatever UI stuff we're adding.
@@ -87,8 +89,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 color = colorResource(id = R.color.grey_300)
             ) {
                 Box(contentAlignment = contentAlignment,
-                    modifier = Modifier.fillMaxSize()
-                ) {
+                    modifier = Modifier
+                        .size(height = height.dp, width = width.dp),
+                    ) {
                     content()
                 }
             }
@@ -104,6 +107,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var searchTerms : List<String>
 
         AnimatedTransitionDialog(
+            height = 400,
+            width = 300,
             onDismissRequest = {
                 appViewModel.updateAddMode(false)
                 appViewModel.updateListOfCuisinesToAdd(emptyList())
@@ -115,7 +120,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceEvenly)
                 {
-
                     Spacer(modifier = Modifier.height(10.dp))
 
                     Row(
@@ -167,83 +171,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 }
             }
         )
-
-        //Full list of cuisines added, then existing squares on main board subtracted.
-        appViewModel.updateDisplayedCuisineList(fullCuisineList)
-        appViewModel.adjustDisplayedCuisineListFromDisplayedSquares()
-
-        Dialog(onDismissRequest = {
-            appViewModel.updateAddMode(false)
-            appViewModel.updateListOfCuisinesToAdd(emptyList())
-        })
-        {
-            Surface(
-                shape = RoundedCornerShape(16.dp),
-                color = colorResource(id = R.color.grey_300)
-            ) {
-                Box(modifier = Modifier
-                    .size(height = 400.dp, width = 300.dp),
-                ) {
-                    Column(modifier = Modifier
-                        .fillMaxSize()
-                        .padding(20.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.SpaceEvenly)
-                    {
-
-                        Spacer(modifier = Modifier.height(10.dp))
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            TextField(modifier = Modifier,
-//                                .fillMaxWidth(0.8f),
-                                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
-                                value = txtField,
-                                placeholder = {Text( "e.g. Filipino") },
-                                onValueChange = {
-                                    txtField = it
-                                    searchTerms = appViewModel.filterList(fullCuisineList, txtField)
-                                    appViewModel.updateDisplayedCuisineList(searchTerms)},
-                                singleLine = true,
-                                textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
-                                colors = TextFieldDefaults.outlinedTextFieldColors(
-                                    containerColor = colorResource(id = R.color.grey_50),
-                                ),
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(10.dp))
-
-                        DisplayedCuisineList(displayedList)
-                        appViewModel.adjustDisplayedCuisineListFromDisplayedSquares()
-
-                        Row (modifier = Modifier
-                            .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                        ) {
-                            IconButton(onClick = {
-                                appViewModel.updateAddMode(false)
-                                appViewModel.updateListOfCuisinesToAdd(emptyList())
-                            }) {
-                                DialogIcon(imageVector = Icons.Filled.Close, colorResource = android.R.color.holo_red_light)
-                            }
-                            IconButton(onClick = {
-                                appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd)
-                                coroutineScope.launch {
-                                    roomInteractions.insertMultipleCuisines(appViewModel.getListOfCuisinesToAdd)
-                                    appViewModel.updateListOfCuisinesToAdd(emptyList())
-                                }
-                                appViewModel.updateAddMode(false)
-                            }) {
-                                DialogIcon(imageVector = Icons.Filled.Check, colorResource = android.R.color.holo_green_light)
-                            }
-                        }
-                    }
-                }
-            }
-
-        }
     }
 
     //List (or any object) in State<Object> is accessed w/ (Var).value.
