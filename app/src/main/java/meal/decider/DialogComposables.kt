@@ -388,7 +388,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestaurantFilterDialog() {
-        var sliderPosition by remember { mutableFloatStateOf(0f) }
+        var distanceSliderPosition by remember { mutableFloatStateOf(0f) }
+        var ratingSliderPosition by remember { mutableFloatStateOf(0f) }
 
         Dialog(onDismissRequest = {
             appViewModel.updateShowRestaurants(false)
@@ -405,20 +406,39 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             RestaurantFilterTextUi(text = "Filters", size = 22, bold = true)
                         }
+                        Spacer(modifier = Modifier.height(16.dp))
                         Column {
                             RestaurantFilterTextUi(text = "Distance", size = 20 , bold = false)
-                            Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(8.dp))
                             Row () {
                                 Slider(modifier = Modifier
-                                    .fillMaxWidth(0.8f)
+                                    .fillMaxWidth(0.75f)
                                     .padding(start = 4.dp),
-                                    value = sliderPosition,
-                                    onValueChange = { sliderPosition = it },
+                                    value = distanceSliderPosition,
+                                    onValueChange = { distanceSliderPosition = it },
                                     valueRange = 1f..20f
                                 )
-                                RestaurantFilterTextUi(text = sliderPosition.toInt().toString() + " mi", size = 20, bold = false)
+//                                Text(modifier = Modifier
+//                                    .fillMaxWidth(0.75f),
+//                                    text =  distanceSliderPosition.toInt().toString() + " mi",
+//                                    color = Color.Black,
+//                                    fontSize = 20.sp)
+                                RestaurantFilterTextUi(text = distanceSliderPosition.toInt().toString() + " mi", size = 18, bold = false)
                             }
-
+                            Spacer(modifier = Modifier.height(16.dp))
+                            RestaurantFilterTextUi(text = "Rating", size = 20 , bold = false)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Row () {
+                                Slider(modifier = Modifier
+                                    .fillMaxWidth(0.7f)
+                                    .padding(start = 4.dp),
+                                    value = ratingSliderPosition,
+                                    onValueChange = { ratingSliderPosition = it },
+                                    valueRange = 3f..4.5f,
+                                    steps = 2
+                                )
+                                RestaurantFilterTextUi(text = ratingSliderPosition.toString() + " stars", size = 18, bold = false)
+                            }
                         }
                     }
                 }
@@ -433,7 +453,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         if (text != null) {
             Text(
                 modifier = Modifier
-                    .padding(8.dp, 4.dp),
+                    .padding(8.dp, 10.dp),
                 fontSize = size.sp,
                 color = Color.Black,
                 text = text,
