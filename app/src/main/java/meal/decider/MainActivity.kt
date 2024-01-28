@@ -89,8 +89,7 @@ private lateinit var mapInteractions: MapInteractions
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Sort options in restaurant list.
-//TODO: Floating buttons obscure bottom cuisine list items.
+//TODO: Floating buttons obscure bottom cuisine and restaurant list items.
 //TODO: Filter for restaurants (distance, rating).
 //TODO: Maximum of 20 results seems to return - check if it can be expanded.
 //TODO: Less than 2 restaurants = prompt to expand radius.
@@ -406,7 +405,7 @@ fun CuisineSelectionGrid() {
                 appViewModel.cuisineBorderStrokeToggleAnimation()
                 //For our query to return a list of restaurants matching the rolled cuisine.
                 appViewModel.restaurantSearchCuisineType = rolledCuisineString
-                mapInteractions.mapsApiCall()
+//                mapInteractions.mapsApiCall()
 
                 delay(2000)
 

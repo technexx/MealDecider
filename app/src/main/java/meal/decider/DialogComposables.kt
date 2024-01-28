@@ -28,6 +28,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -35,6 +36,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -43,6 +45,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -260,6 +263,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestaurantDialog() {
+        val showRestaurantSettings = appViewModel.showRestaurantSettings.collectAsStateWithLifecycle()
+
         Dialog(onDismissRequest = {
             appViewModel.updateShowRestaurants(false)
         })
@@ -271,11 +276,17 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 Box(modifier = Modifier
                     .fillMaxSize(),
                 ) {
+                    if (showRestaurantSettings.value) {
+                        RestaurantFilterDialog()
+                    }
+
                     Column {
                         Row (modifier = Modifier
                             .fillMaxWidth(),
                             horizontalArrangement = Arrangement.End) {
-                            RestaurantSortMenu()
+                            RestaurantFilterIcon()
+//                            Spacer(modifier = Modifier.width(8.dp))
+                            RestaurantSortDropdownMenu()
 
                         }
                         RestaurantLazyGrid()
@@ -297,7 +308,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     }
 
     @Composable
-    fun RestaurantSortMenu() {
+    fun RestaurantSortDropdownMenu() {
         var expanded by remember { mutableStateOf(false) }
 
         Box(
@@ -360,6 +371,75 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(6.dp)
         )
+    }
+
+    @Composable
+    fun RestaurantFilterIcon() {
+            IconButton(onClick = {
+                if (!appViewModel.getShowRestaurantSettings) appViewModel.updateShowRestaurantSettings(true)
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Settings,
+                    contentDescription = "More",
+                    tint = Color.Black
+                )
+            }
+    }
+
+    @Composable
+    fun RestaurantFilterDialog() {
+        var sliderPosition by remember { mutableFloatStateOf(0f) }
+
+        Dialog(onDismissRequest = {
+            appViewModel.updateShowRestaurants(false)
+        })
+        {
+            Surface(
+                color = colorResource(id = R.color.grey_300),
+            ) {
+                Box(modifier = Modifier
+                    .fillMaxSize(),
+                ) {
+                    Column (horizontalAlignment = Alignment.CenterHorizontally)
+                    {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            RestaurantFilterTextUi(text = "Filters", size = 22, bold = true)
+                        }
+                        Column {
+                            RestaurantFilterTextUi(text = "Distance", size = 20 , bold = false)
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Row () {
+                                Slider(modifier = Modifier
+                                    .fillMaxWidth(0.8f)
+                                    .padding(start = 4.dp),
+                                    value = sliderPosition,
+                                    onValueChange = { sliderPosition = it },
+                                    valueRange = 1f..20f
+                                )
+                                RestaurantFilterTextUi(text = sliderPosition.toInt().toString() + " mi", size = 20, bold = false)
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun RestaurantFilterTextUi(text: String?, size: Int, bold: Boolean) {
+        var fontWeight: FontWeight = FontWeight.Normal
+        if (bold) fontWeight = FontWeight.Bold
+        if (text != null) {
+            Text(
+                modifier = Modifier
+                    .padding(8.dp, 4.dp),
+                fontSize = size.sp,
+                color = Color.Black,
+                text = text,
+                fontWeight = fontWeight
+            )
+        }
     }
 
     @Composable
