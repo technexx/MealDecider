@@ -390,6 +390,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     fun RestaurantFilterDialog() {
         var distanceSliderPosition by remember { mutableFloatStateOf(0f) }
         var ratingSliderPosition by remember { mutableFloatStateOf(0f) }
+        var priceSliderPosition by remember { mutableFloatStateOf(0f) }
+        var priceString = ""
 
         Dialog(onDismissRequest = {
             appViewModel.updateShowRestaurants(false)
@@ -437,7 +439,25 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     valueRange = 3f..4.5f,
                                     steps = 2
                                 )
-                                RestaurantFilterTextUi(text = ratingSliderPosition.toString() + " stars", size = 18, bold = false)
+                                RestaurantFilterTextUi(text = "$ratingSliderPosition stars", size = 18, bold = false)
+                            }
+                            Spacer(modifier = Modifier.height(16.dp))
+                            RestaurantFilterTextUi(text = "Price", size = 20 , bold = false)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Row () {
+                                Slider(modifier = Modifier
+                                    .fillMaxWidth(0.7f)
+                                    .padding(start = 4.dp),
+                                    value = priceSliderPosition,
+                                    onValueChange = { priceSliderPosition = it },
+                                    valueRange = 1f..4f,
+                                    steps = 2
+                                )
+                                priceString = ""
+                                for (i in 1..priceSliderPosition.toInt()) {
+                                    priceString += "$"
+                                }
+                                RestaurantFilterTextUi(text = priceString, size = 18, bold = false)
                             }
                         }
                     }
