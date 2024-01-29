@@ -112,7 +112,7 @@ class MainActivity : ComponentActivity() {
         mapInteractions = MapInteractions(activity, activityContext, appViewModel)
         mapInteractions.fusedLocationListener()
 
-        dialogComposables = DialogComposables(appViewModel, cuisineDatabase, mapInteractions)
+        dialogComposables = DialogComposables(appViewModel, cuisineDatabase)
 
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
         ioScope.launch {

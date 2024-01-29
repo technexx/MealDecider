@@ -1,6 +1,11 @@
 package meal.decider
 
 import android.view.Gravity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -71,7 +76,7 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
-class DialogComposables(private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase, private val mapInteractions: MapInteractions){
+class DialogComposables(private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase){
     private val roomInteractions = RoomInteractions(appDatabase, appViewModel)
 
     @Composable
@@ -83,6 +88,15 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         //A composable void input that takes in whatever UI stuff we're adding.
         content: @Composable () -> Unit
     ) {
+        val animateTrigger = remember { mutableStateOf(false) }
+
+        LaunchedEffect(Unit) {
+            launch {
+                delay(500)
+                animateTrigger.value = true
+            }
+        }
+
         Dialog(onDismissRequest = onDismissRequest) {
             Surface(
                 shape = RoundedCornerShape(16.dp),
@@ -91,11 +105,31 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 Box(contentAlignment = contentAlignment,
                     modifier = Modifier
                         .size(height = height.dp, width = width.dp),
-                    ) {
-                    content()
+                ) {
+                    AnimatedScaleInTransition(time = 2000, visible = animateTrigger.value) {
+                        content()
+                    }
                 }
             }
         }
+    }
+
+    @Composable
+    fun AnimatedScaleInTransition(
+        time: Int,
+        visible: Boolean,
+        content: @Composable AnimatedVisibilityScope.() -> Unit
+    ) {
+        AnimatedVisibility(
+            visible = visible,
+            enter = scaleIn(
+                animationSpec = tween(time)
+            ),
+            exit = scaleOut(
+                animationSpec = tween(time)
+            ),
+            content = content
+        )
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -121,7 +155,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     verticalArrangement = Arrangement.SpaceEvenly)
                 {
                     Spacer(modifier = Modifier.height(10.dp))
-
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
