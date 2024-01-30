@@ -48,6 +48,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -71,6 +72,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
@@ -78,6 +80,15 @@ import meal.decider.Database.RoomInteractions
 
 class DialogComposables(private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase){
     private val roomInteractions = RoomInteractions(appDatabase, appViewModel)
+
+    suspend fun startDismissWithExitAnimation(
+        animateTrigger: MutableState<Boolean>,
+        onDismissRequest: () -> Unit
+    ) {
+        animateTrigger.value = false
+        delay(0)
+        onDismissRequest()
+    }
 
     @Composable
     fun AnimatedTransitionDialog(
@@ -87,14 +98,23 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         contentAlignment: Alignment = Alignment.Center,
         content: @Composable () -> Unit
     ) {
+        val coroutineScope: CoroutineScope = rememberCoroutineScope()
         val animateTrigger = remember { mutableStateOf(false) }
+
         LaunchedEffect(key1 = Unit) {
             launch {
                 delay(0)
                 animateTrigger.value = true
             }
         }
-        Dialog(onDismissRequest = onDismissRequest) {
+
+        Dialog(onDismissRequest = {
+            coroutineScope.launch {
+                startDismissWithExitAnimation(animateTrigger, onDismissRequest)
+            }
+        }
+        ) {
+
             Box(contentAlignment = contentAlignment,
                 modifier = Modifier
                     .fillMaxSize()
@@ -111,6 +131,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 }
             }
         }
+
     }
 
     @Composable
