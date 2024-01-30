@@ -86,7 +86,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         onDismissRequest: () -> Unit
     ) {
         animateTrigger.value = false
-        delay(0)
+        delay(300)
         onDismissRequest()
     }
 
@@ -101,13 +101,14 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         LaunchedEffect(key1 = Unit) {
             launch {
-                delay(500)
+                delay(0)
                 animateTrigger.value = true
             }
         }
 
         Dialog(onDismissRequest = {
             coroutineScope.launch {
+                showLog("test", "dismissing")
                 startDismissWithExitAnimation(animateTrigger, onDismissRequest)
             }
         }
@@ -117,7 +118,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     .height(300.dp)
                     .width(400.dp)
             ) {
-                AnimatedScaleInTransition(visible = animateTrigger.value) {
+                AnimatedScaleInTransition(time = 300, visible = animateTrigger.value) {
                     content()
                 }
             }
@@ -126,16 +127,17 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     internal fun AnimatedScaleInTransition(
+        time: Int,
         visible: Boolean,
         content: @Composable AnimatedVisibilityScope.() -> Unit
     ) {
         AnimatedVisibility(
             visible = visible,
             enter = scaleIn(
-                animationSpec = tween(500)
+                animationSpec = tween(time)
             ),
             exit = scaleOut(
-                animationSpec = tween(500)
+                animationSpec = tween(time)
             ),
             content = content
         )
