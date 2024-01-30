@@ -124,10 +124,12 @@ class MainActivity : ComponentActivity() {
         //Populates SquareValues with DB values and set first cuisine as default selection.
         ioScope.launch {
             roomInteractions.populateSquareValuesWithDatabaseValues()
+            //Populates "add cuisine" list with all cuisines.
+            appViewModel.updateDisplayedCuisineList(fullCuisineList)
+            //Updates "add cuisine" list to omit cuisines already added on board.
+            appViewModel.adjustDisplayedCuisineListFromDisplayedSquares()
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
             appViewModel.cuisineStringUri = appViewModel.getselectedCuisineSquare.name + " Food "
-//            appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[0])
-//            appViewModel.restaurantSearchCuisineType = "geo:0,0?q=" + appViewModel.getselectedRestaurantSquare.name
         }
 
         setContent {

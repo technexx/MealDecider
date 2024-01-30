@@ -108,15 +108,14 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         Dialog(onDismissRequest = {
             coroutineScope.launch {
-                showLog("test", "dismissing")
                 startDismissWithExitAnimation(animateTrigger, onDismissRequest)
             }
         }
         ) {
             Box(contentAlignment = contentAlignment,
                 modifier = Modifier
-                    .height(300.dp)
-                    .width(400.dp)
+                    .height(400.dp)
+                    .width(300.dp)
             ) {
                 AnimatedScaleInTransition(time = 300, visible = animateTrigger.value) {
                     content()
@@ -187,6 +186,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
                     Spacer(modifier = Modifier.height(10.dp))
 
+                    showLog("test", "list is $displayedList")
                     DisplayedCuisineList(displayedList)
                     appViewModel.adjustDisplayedCuisineListFromDisplayedSquares()
 
