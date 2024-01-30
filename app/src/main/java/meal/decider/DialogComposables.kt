@@ -91,14 +91,15 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun AnimatedTransitionDialog(
-        height: Int,
-        width: Int,
+        modifier: Modifier,
         onDismissRequest: () -> Unit,
         contentAlignment: Alignment = Alignment.Center,
         content: @Composable () -> Unit,
     ) {
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         val animateTrigger = remember { mutableStateOf(false) }
+
+
 
         LaunchedEffect(key1 = Unit) {
             launch {
@@ -114,9 +115,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         }
         ) {
             Box(contentAlignment = contentAlignment,
-                modifier = Modifier
-                    .height(height.dp)
-                    .width(width.dp)
+                modifier = modifier
             ) {
                 AnimatedScaleInTransition(time = 300, visible = animateTrigger.value) {
                     content()
@@ -152,8 +151,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var searchTerms : List<String>
 
         AnimatedTransitionDialog(
-            height = 400,
-            width = 300,
+            modifier = Modifier
+                .height(300.dp)
+                .width(400.dp),
             onDismissRequest = {
                 appViewModel.updateAddMode(false)
                 appViewModel.updateListOfCuisinesToAdd(emptyList())
@@ -263,8 +263,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun ConfirmRestoreDefaultsDialog() {
         AnimatedTransitionDialog(
-            height = 200,
-            width = 300,
+            modifier = Modifier
+                .height(200.dp)
+                .width(300.dp),
             onDismissRequest = {
                 appViewModel.updateRestoreDefaults(false)
             },
@@ -325,46 +326,49 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     fun RestaurantDialog() {
         val showRestaurantSettings = appViewModel.showRestaurantSettings.collectAsStateWithLifecycle()
 
-        Dialog(onDismissRequest = {
-            appViewModel.updateShowRestaurants(false)
-        })
-        {
-            Surface(
-                shape = RoundedCornerShape(16.dp),
-                color = colorResource(id = R.color.grey_300),
-            ) {
-                Box(modifier = Modifier
-                    .fillMaxSize(),
+        AnimatedTransitionDialog(
+            modifier = Modifier
+                .fillMaxSize(),
+            onDismissRequest = {
+                appViewModel.updateShowRestaurants(false)
+            },
+            content = {
+                Surface(
+                    shape = RoundedCornerShape(16.dp),
+                    color = colorResource(id = R.color.grey_300),
                 ) {
-                    if (showRestaurantSettings.value) {
-                        RestaurantFilterDialog()
-                    }
-
-                    Column {
-                        Row (modifier = Modifier
-                            .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End) {
-                            RestaurantFilterIcon()
-//                            Spacer(modifier = Modifier.width(8.dp))
-                            RestaurantSortDropdownMenu()
-
+                    Box(modifier = Modifier
+                    ) {
+                        if (showRestaurantSettings.value) {
+                            RestaurantFilterDialog()
                         }
-                        RestaurantLazyGrid()
-                    }
-                }
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                )
-                {
-                    Column (modifier = Modifier
-                        .fillMaxSize(),
-                        verticalArrangement = Arrangement.Bottom) {
-                        InteractionButtons()
-                    }
-                }
 
+                        Column {
+                            Row (modifier = Modifier
+                                .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.End) {
+                                RestaurantFilterIcon()
+//                            Spacer(modifier = Modifier.width(8.dp))
+                                RestaurantSortDropdownMenu()
+
+                            }
+                            RestaurantLazyGrid()
+                        }
+                    }
+                    Box(modifier = Modifier
+                        .fillMaxSize()
+                    )
+                    {
+                        Column (modifier = Modifier
+                            .fillMaxSize(),
+                            verticalArrangement = Arrangement.Bottom) {
+                            InteractionButtons()
+                        }
+                    }
+
+                }
             }
-        }
+        )
     }
 
     @Composable
