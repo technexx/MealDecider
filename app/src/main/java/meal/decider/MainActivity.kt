@@ -397,6 +397,7 @@ fun CuisineSelectionGrid() {
 
     val rolledCuisineString = selectedCuisineSquare.value.name + " Food " + restrictionsString
 
+    val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
     var borderStroke: BorderStroke
 
     if (cuisineRollFinished.value) {
@@ -433,10 +434,12 @@ fun CuisineSelectionGrid() {
         content = {
             items(boardUiState.value.squareList.size) { index ->
 
-                if (index == appViewModel.rolledSquareIndex) {
+                if (editMode.value) {
+                    borderStroke = cuisineEditModeBorderStroke
+                } else if (index == appViewModel.rolledRestaurantIndex) {
                     borderStroke = cuisineSelectionBorderStroke.value
                 } else {
-                    borderStroke = BorderStroke(1.dp,Color.Black)
+                    borderStroke = defaultCuisineSelectionBorderStroke
                 }
 
                 Card(
