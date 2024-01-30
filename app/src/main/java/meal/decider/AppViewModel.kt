@@ -307,7 +307,7 @@ class AppViewModel : ViewModel() {
 
         if (tempSquareList[index].color == chosenSquareColor || tempSquareList[index].color == defaultSquareColor) {
             tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
-            addSquareTolistOfCuisineSquaresToEdit(index)
+            addSquareToListOfCuisineSquaresToEdit(index)
         } else {
             if (tempSquareList[index].name == selectedCuisineSquare.value.name) {
                 tempSquareList[index] = SquareValues(tempSquareList[index].name, chosenSquareColor)
@@ -320,7 +320,7 @@ class AppViewModel : ViewModel() {
 
     }
 
-    private fun addSquareTolistOfCuisineSquaresToEdit(index: Int) {
+    private fun addSquareToListOfCuisineSquaresToEdit(index: Int) {
         val tempList = getlistOfCuisineSquaresToEdit.toMutableList()
         val currentList = getSquareList
         tempList.add(currentList[index])

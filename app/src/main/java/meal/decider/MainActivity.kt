@@ -436,7 +436,7 @@ fun CuisineSelectionGrid() {
 
                 if (editMode.value) {
                     borderStroke = cuisineEditModeBorderStroke
-                } else if (index == appViewModel.rolledRestaurantIndex) {
+                } else if (index == appViewModel.rolledSquareIndex) {
                     borderStroke = cuisineSelectionBorderStroke.value
                 } else {
                     borderStroke = defaultCuisineSelectionBorderStroke
