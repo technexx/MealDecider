@@ -81,34 +81,34 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun AnimatedTransitionDialog(
-        height: Int,
-        width: Int,
         onDismissRequest: () -> Unit,
         contentAlignment: Alignment = Alignment.Center,
-        //A composable void input that takes in whatever UI stuff we're adding.
         content: @Composable () -> Unit
     ) {
         val animateTrigger = remember { mutableStateOf(false) }
-
-        LaunchedEffect(Unit) {
+        LaunchedEffect(key1 = Unit) {
             launch {
                 delay(500)
                 animateTrigger.value = true
             }
         }
-
         Dialog(onDismissRequest = onDismissRequest) {
-            Surface(
-                shape = RoundedCornerShape(16.dp),
-                color = colorResource(id = R.color.grey_300)
+            Box(contentAlignment = contentAlignment,
+                modifier = Modifier
+//                    .background(colorResource(id = R.color.grey_300))
+                    .fillMaxSize()
+//                    .height(300.dp)
+//                    .width(400.dp)
             ) {
-                Box(contentAlignment = contentAlignment,
-                    modifier = Modifier
-                        .size(height = height.dp, width = width.dp),
-                ) {
-                    AnimatedScaleInTransition(time = 2000, visible = animateTrigger.value) {
+                AnimatedScaleInTransition(1000, visible = animateTrigger.value) {
+                    Box(modifier = Modifier
+                        .height(300.dp)
+                        .width(300.dp)
+                        .background(colorResource(id = R.color.grey_300))
+                    ) {
                         content()
                     }
+
                 }
             }
         }
@@ -141,8 +141,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var searchTerms : List<String>
 
         AnimatedTransitionDialog(
-            height = 400,
-            width = 300,
             onDismissRequest = {
                 appViewModel.updateAddMode(false)
                 appViewModel.updateListOfCuisinesToAdd(emptyList())
