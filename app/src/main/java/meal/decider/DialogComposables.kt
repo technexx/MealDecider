@@ -92,8 +92,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun AnimatedTransitionDialog(
-        height: Int,
-        width: Int,
         onDismissRequest: () -> Unit,
         contentAlignment: Alignment = Alignment.Center,
         content: @Composable () -> Unit
@@ -103,7 +101,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         LaunchedEffect(key1 = Unit) {
             launch {
-                delay(0)
+                delay(500)
                 animateTrigger.value = true
             }
         }
@@ -114,39 +112,30 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             }
         }
         ) {
-
             Box(contentAlignment = contentAlignment,
                 modifier = Modifier
-                    .fillMaxSize()
+                    .height(300.dp)
+                    .width(400.dp)
             ) {
-                AnimatedScaleInTransition(300, visible = animateTrigger.value) {
-                    Box(modifier = Modifier
-                        .height(height.dp)
-                        .width(width.dp)
-                        .background(colorResource(id = R.color.grey_300))
-                    ) {
-                        content()
-                    }
-
+                AnimatedScaleInTransition(visible = animateTrigger.value) {
+                    content()
                 }
             }
         }
-
     }
 
     @Composable
-    fun AnimatedScaleInTransition(
-        time: Int,
+    internal fun AnimatedScaleInTransition(
         visible: Boolean,
         content: @Composable AnimatedVisibilityScope.() -> Unit
     ) {
         AnimatedVisibility(
             visible = visible,
             enter = scaleIn(
-                animationSpec = tween(time)
+                animationSpec = tween(500)
             ),
             exit = scaleOut(
-                animationSpec = tween(time)
+                animationSpec = tween(500)
             ),
             content = content
         )
@@ -161,14 +150,13 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var searchTerms : List<String>
 
         AnimatedTransitionDialog(
-            height = 300,
-            width = 300,
             onDismissRequest = {
                 appViewModel.updateAddMode(false)
                 appViewModel.updateListOfCuisinesToAdd(emptyList())
             },
             content = {
                 Column(modifier = Modifier
+                    .background(colorResource(id = R.color.grey_300))
                     .fillMaxSize()
                     .padding(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
