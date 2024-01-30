@@ -99,8 +99,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         val animateTrigger = remember { mutableStateOf(false) }
 
-
-
         LaunchedEffect(key1 = Unit) {
             launch {
                 delay(0)
@@ -374,7 +372,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun RestaurantSortDropdownMenu() {
         var expanded by remember { mutableStateOf(false) }
-
         Box(
             modifier = Modifier
                 .wrapContentSize(Alignment.TopEnd)
@@ -395,6 +392,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
+
                 RestaurantDropDownUi("Sort A-Z") {
                     appViewModel.sortAndUpdateRestaurantList("name")
                     expanded = false
@@ -450,6 +448,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             }
     }
 
+    //TODO: Need a transition that does not overlay w/ a box since a dialog is already popped up.
     @Composable
     fun RestaurantFilterDialog() {
         var distanceSliderPosition by remember { mutableFloatStateOf(1f) }
@@ -457,72 +456,77 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var priceSliderPosition by remember { mutableFloatStateOf(1f) }
         var priceString: String
 
-        Dialog(onDismissRequest = {
-            appViewModel.updateShowRestaurants(false)
-        })
-        {
-            Surface(
-                color = colorResource(id = R.color.grey_300),
-            ) {
-                Box(modifier = Modifier
-                    .fillMaxSize(),
+        AnimatedTransitionDialog(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(colorResource(id = R.color.grey_50)),
+            onDismissRequest = {
+                appViewModel.updateShowRestaurantSettings(false)
+            },
+            content = {
+                Surface(
+                    color = colorResource(id = R.color.grey_300),
                 ) {
-                    Column (horizontalAlignment = Alignment.CenterHorizontally)
-                    {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            RestaurantFilterTextUi(text = "Filters", size = 22, bold = true)
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Column {
-                            RestaurantFilterTextUi(text = "Distance", size = 20 , bold = false)
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Row () {
-                                Slider(modifier = Modifier
-                                    .fillMaxWidth(0.75f)
-                                    .padding(start = 4.dp),
-                                    value = distanceSliderPosition,
-                                    onValueChange = { distanceSliderPosition = it },
-                                    valueRange = 1f..20f
-                                )
-                                RestaurantFilterTextUi(text = distanceSliderPosition.toInt().toString() + " mi", size = 18, bold = false)
+                    Box(modifier = Modifier
+                        .fillMaxSize(),
+                    ) {
+                        Column (horizontalAlignment = Alignment.CenterHorizontally)
+                        {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                RestaurantFilterTextUi(text = "Filters", size = 22, bold = true)
                             }
                             Spacer(modifier = Modifier.height(16.dp))
-                            RestaurantFilterTextUi(text = "Rating", size = 20 , bold = false)
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Row () {
-                                Slider(modifier = Modifier
-                                    .fillMaxWidth(0.7f)
-                                    .padding(start = 4.dp),
-                                    value = ratingSliderPosition,
-                                    onValueChange = { ratingSliderPosition = it },
-                                    valueRange = 3f..4.5f,
-                                    steps = 2
-                                )
-                                RestaurantFilterTextUi(text = "$ratingSliderPosition stars", size = 18, bold = false)
-                            }
-                            Spacer(modifier = Modifier.height(16.dp))
-                            RestaurantFilterTextUi(text = "Price", size = 20 , bold = false)
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Row () {
-                                Slider(modifier = Modifier
-                                    .fillMaxWidth(0.7f)
-                                    .padding(start = 4.dp),
-                                    value = priceSliderPosition,
-                                    onValueChange = { priceSliderPosition = it },
-                                    valueRange = 1f..4f,
-                                    steps = 2
-                                )
-                                priceString = ""
-                                for (i in 1..priceSliderPosition.toInt()) {
-                                    priceString += "$"
+                            Column {
+                                RestaurantFilterTextUi(text = "Distance", size = 20 , bold = false)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Row () {
+                                    Slider(modifier = Modifier
+                                        .fillMaxWidth(0.75f)
+                                        .padding(start = 4.dp),
+                                        value = distanceSliderPosition,
+                                        onValueChange = { distanceSliderPosition = it },
+                                        valueRange = 1f..20f
+                                    )
+                                    RestaurantFilterTextUi(text = distanceSliderPosition.toInt().toString() + " mi", size = 18, bold = false)
                                 }
-                                RestaurantFilterTextUi(text = priceString, size = 18, bold = false)
+                                Spacer(modifier = Modifier.height(16.dp))
+                                RestaurantFilterTextUi(text = "Rating", size = 20 , bold = false)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Row () {
+                                    Slider(modifier = Modifier
+                                        .fillMaxWidth(0.7f)
+                                        .padding(start = 4.dp),
+                                        value = ratingSliderPosition,
+                                        onValueChange = { ratingSliderPosition = it },
+                                        valueRange = 3f..4.5f,
+                                        steps = 2
+                                    )
+                                    RestaurantFilterTextUi(text = "$ratingSliderPosition stars", size = 18, bold = false)
+                                }
+                                Spacer(modifier = Modifier.height(16.dp))
+                                RestaurantFilterTextUi(text = "Price", size = 20 , bold = false)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Row () {
+                                    Slider(modifier = Modifier
+                                        .fillMaxWidth(0.7f)
+                                        .padding(start = 4.dp),
+                                        value = priceSliderPosition,
+                                        onValueChange = { priceSliderPosition = it },
+                                        valueRange = 1f..4f,
+                                        steps = 2
+                                    )
+                                    priceString = ""
+                                    for (i in 1..priceSliderPosition.toInt()) {
+                                        priceString += "$"
+                                    }
+                                    RestaurantFilterTextUi(text = priceString, size = 18, bold = false)
+                                }
                             }
                         }
                     }
                 }
             }
-        }
+        )
     }
 
     @Composable
