@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -81,7 +80,7 @@ import meal.decider.Database.RoomInteractions
 class DialogComposables(private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase){
     private val roomInteractions = RoomInteractions(appDatabase, appViewModel)
 
-    suspend fun startDismissWithExitAnimation(
+    private suspend fun startDismissWithExitAnimation(
         animateTrigger: MutableState<Boolean>,
         onDismissRequest: () -> Unit
     ) {
@@ -92,9 +91,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun AnimatedTransitionDialog(
+        height: Int,
+        width: Int,
         onDismissRequest: () -> Unit,
         contentAlignment: Alignment = Alignment.Center,
-        content: @Composable () -> Unit
+        content: @Composable () -> Unit,
     ) {
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         val animateTrigger = remember { mutableStateOf(false) }
@@ -114,8 +115,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         ) {
             Box(contentAlignment = contentAlignment,
                 modifier = Modifier
-                    .height(400.dp)
-                    .width(300.dp)
+                    .height(height.dp)
+                    .width(width.dp)
             ) {
                 AnimatedScaleInTransition(time = 300, visible = animateTrigger.value) {
                     content()
@@ -125,7 +126,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     }
 
     @Composable
-    internal fun AnimatedScaleInTransition(
+    fun AnimatedScaleInTransition(
         time: Int,
         visible: Boolean,
         content: @Composable AnimatedVisibilityScope.() -> Unit
@@ -151,6 +152,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var searchTerms : List<String>
 
         AnimatedTransitionDialog(
+            height = 400,
+            width = 300,
             onDismissRequest = {
                 appViewModel.updateAddMode(false)
                 appViewModel.updateListOfCuisinesToAdd(emptyList())
@@ -186,7 +189,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    showLog("test", "list is $displayedList")
                     DisplayedCuisineList(displayedList)
                     appViewModel.adjustDisplayedCuisineListFromDisplayedSquares()
 
@@ -260,61 +262,63 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun ConfirmRestoreDefaultsDialog() {
-        Dialog(onDismissRequest = {
-            appViewModel.updateRestoreDefaults(false)
-        })
-        {
-            Surface(
-                shape = RoundedCornerShape(16.dp),
-                color = colorResource(id = R.color.grey_300)
-            ) {
-                Box(modifier = Modifier
-                    .size(height = 200.dp, width = 300.dp),
+        AnimatedTransitionDialog(
+            height = 200,
+            width = 300,
+            onDismissRequest = {
+                appViewModel.updateRestoreDefaults(false)
+            },
+            content = {
+                Surface(
+                    shape = RoundedCornerShape(16.dp),
+                    color = colorResource(id = R.color.grey_300)
                 ) {
-                    Column(modifier = Modifier
-                        .fillMaxSize()
-                        .padding(20.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.SpaceEvenly)
-                    {
+                    Box(modifier = Modifier
+                    ) {
+                        Column(modifier = Modifier
+                            .fillMaxSize()
+                            .padding(20.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.SpaceEvenly)
+                        {
 
-                        Spacer(modifier = Modifier.height(10.dp))
+                            Spacer(modifier = Modifier.height(10.dp))
 
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "This will restore cuisine list to default!",
-                                fontSize = 18.sp,
-                                color = Color.Black,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(12.dp)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(10.dp))
-
-                        Row (modifier = Modifier
-                            .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                        ) {
-                            IconButton(onClick = {
-                                appViewModel.updateRestoreDefaults(false)
-                            }) {
-                                DialogIcon(imageVector = Icons.Default.Close, colorResource = android.R.color.holo_red_light)
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "This will restore cuisine list to default!",
+                                    fontSize = 18.sp,
+                                    color = Color.Black,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.padding(12.dp)
+                                )
                             }
-                            IconButton(onClick = {
-                                roomInteractions.setSquareValuesAndDatabaseToDefaultStartingValues()
-                                appViewModel.updateRestoreDefaults(false)
-                            }) {
-                                DialogIcon(imageVector = Icons.Default.Check, colorResource = android.R.color.holo_green_light)
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Row (modifier = Modifier
+                                .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                            ) {
+                                IconButton(onClick = {
+                                    appViewModel.updateRestoreDefaults(false)
+                                }) {
+                                    DialogIcon(imageVector = Icons.Default.Close, colorResource = android.R.color.holo_red_light)
+                                }
+                                IconButton(onClick = {
+                                    roomInteractions.setSquareValuesAndDatabaseToDefaultStartingValues()
+                                    appViewModel.updateRestoreDefaults(false)
+                                }) {
+                                    DialogIcon(imageVector = Icons.Default.Check, colorResource = android.R.color.holo_green_light)
+                                }
                             }
                         }
                     }
                 }
             }
-
-        }
+        )
     }
 
     @Composable
