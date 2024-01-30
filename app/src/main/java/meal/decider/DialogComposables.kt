@@ -81,6 +81,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun AnimatedTransitionDialog(
+        height: Int,
+        width: Int,
         onDismissRequest: () -> Unit,
         contentAlignment: Alignment = Alignment.Center,
         content: @Composable () -> Unit
@@ -88,22 +90,19 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val animateTrigger = remember { mutableStateOf(false) }
         LaunchedEffect(key1 = Unit) {
             launch {
-                delay(500)
+                delay(0)
                 animateTrigger.value = true
             }
         }
         Dialog(onDismissRequest = onDismissRequest) {
             Box(contentAlignment = contentAlignment,
                 modifier = Modifier
-//                    .background(colorResource(id = R.color.grey_300))
                     .fillMaxSize()
-//                    .height(300.dp)
-//                    .width(400.dp)
             ) {
-                AnimatedScaleInTransition(1000, visible = animateTrigger.value) {
+                AnimatedScaleInTransition(300, visible = animateTrigger.value) {
                     Box(modifier = Modifier
-                        .height(300.dp)
-                        .width(300.dp)
+                        .height(height.dp)
+                        .width(width.dp)
                         .background(colorResource(id = R.color.grey_300))
                     ) {
                         content()
@@ -141,6 +140,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var searchTerms : List<String>
 
         AnimatedTransitionDialog(
+            height = 300,
+            width = 300,
             onDismissRequest = {
                 appViewModel.updateAddMode(false)
                 appViewModel.updateListOfCuisinesToAdd(emptyList())
