@@ -12,7 +12,7 @@ data class Cuisines(
     @ColumnInfo(name = "cuisine_color") val color: Int?
 )
 
-@Entity (tableName = "restaurant_filters", indices = [Index(value = ["restaurant_filter"], unique = true)])
+@Entity (tableName = "restaurant_filters")
 data class RestaurantFilters(
     @PrimaryKey (autoGenerate = false) val uid: Int? = 0,
     @ColumnInfo(name = "distance") val distance: Double?,
