@@ -15,7 +15,7 @@ data class Cuisines(
 @Entity (tableName = "restaurant_filters")
 data class RestaurantFilters(
     @PrimaryKey (autoGenerate = false) val uid: Int? = 0,
-    @ColumnInfo(name = "distance") val distance: Double?,
-    @ColumnInfo(name = "rating") val rating: Double?,
-    @ColumnInfo(name = "price") val price: Double?
+    @ColumnInfo(name = "distance") val distance: Double,
+    @ColumnInfo(name = "rating") val rating: Double,
+    @ColumnInfo(name = "price") val price: Double
 )

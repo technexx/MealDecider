@@ -78,6 +78,14 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
                 " is ${restaurantFiltersDao.getAllRestaurantFilters()}")
     }
 
+    suspend fun getRestaurantFilters(): List<RestaurantFilters> {
+        val restaurantFilters: List<RestaurantFilters>
+        withContext(Dispatchers.IO) {
+            restaurantFilters = restaurantFiltersDao.getAllRestaurantFilters()
+        }
+        return restaurantFilters
+    }
+
     suspend fun updateRestaurantFilters(distance: Double, rating: Double, price: Double) {
         withContext(Dispatchers.IO) {
             restaurantFiltersDao.updateDistance(distance)

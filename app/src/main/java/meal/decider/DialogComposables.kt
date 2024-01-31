@@ -453,9 +453,21 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun RestaurantFilterDialog() {
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
-        var distanceSliderPosition by remember { mutableFloatStateOf(1f) }
+        var distanceSliderPosition by remember { mutableFloatStateOf(3f) }
         var ratingSliderPosition by remember { mutableFloatStateOf(3f) }
         var priceSliderPosition by remember { mutableFloatStateOf(1f) }
+
+        LaunchedEffect(Unit) {
+            coroutineScope.launch {
+                val restaurantFilters = roomInteractions.getRestaurantFilters()
+                distanceSliderPosition = restaurantFilters[0].distance.toFloat()
+                ratingSliderPosition = restaurantFilters[0].rating.toFloat()
+                priceSliderPosition = restaurantFilters[0].price.toFloat()
+                showLog("test", "distance slider retrieved is $distanceSliderPosition")
+
+            }
+        }
+
         var priceString: String
 
         AnimatedTransitionDialog(
@@ -463,7 +475,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 .fillMaxSize()
                 .background(colorResource(id = R.color.grey_50)),
             onDismissRequest = {
-                //TODO: Update database here.
                 appViewModel.updateShowRestaurantSettings(false)
                 coroutineScope.launch {
                     roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
@@ -490,7 +501,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         .fillMaxWidth(0.75f)
                                         .padding(start = 4.dp),
                                         value = distanceSliderPosition,
-                                        onValueChange = { distanceSliderPosition = it },
+                                        onValueChange = { distanceSliderPosition = it
+                                        },
                                         valueRange = 1f..20f
                                     )
                                     RestaurantFilterTextUi(text = distanceSliderPosition.toInt().toString() + " mi", size = 18, bold = false)
