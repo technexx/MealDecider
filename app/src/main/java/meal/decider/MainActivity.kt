@@ -89,8 +89,8 @@ private lateinit var mapInteractions: MapInteractions
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
+//TODO: Need an animation for Restaurant Filters that does not overlay w/ a box since a dialog is already popped up.
 //TODO: Floating buttons obscure bottom cuisine and restaurant list items.
-//TODO: Filter for restaurants (distance, rating).
 //TODO: Maximum of 20 results seems to return - check if it can be expanded.
 //TODO: Less than 2 restaurants = prompt to expand radius.
 //TODO: Randomization speed/duration options.

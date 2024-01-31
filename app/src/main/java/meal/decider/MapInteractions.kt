@@ -23,6 +23,9 @@ import java.math.RoundingMode
 
 private lateinit var fusedLocationClient: FusedLocationProviderClient
 private var currentLocation: Location = Location("")
+private var distance = 0
+private var rating = 0.0
+private var price = 0
 
 class MapInteractions(private val activity: Activity, private val activityContext: Context, private val appViewModel: AppViewModel) {
     suspend fun mapsApiCall() {
@@ -71,12 +74,6 @@ class MapInteractions(private val activity: Activity, private val activityContex
         return restaurantList
     }
 
-    private fun metersToMiles(meters: FloatArray): Double {
-        val miles = (meters[0] * .00062137)
-        val roundedMiles = BigDecimal(miles).setScale(1, RoundingMode.DOWN)
-        return roundedMiles.toDouble()
-    }
-
     fun fusedLocationListener() {
         checkForLocationPermission()
 
@@ -109,4 +106,12 @@ class MapInteractions(private val activity: Activity, private val activityContex
 
         activityContext.startActivity(intent)
     }
+
+    private fun metersToMiles(meters: FloatArray): Double {
+        val miles = (meters[0] * .00062137)
+        val roundedMiles = BigDecimal(miles).setScale(1, RoundingMode.DOWN)
+        return roundedMiles.toDouble()
+    }
+
+    fun milesToMeters(miles: Int): Int { return miles*1609}
 }

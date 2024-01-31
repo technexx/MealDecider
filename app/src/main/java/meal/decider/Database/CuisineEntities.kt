@@ -11,3 +11,11 @@ data class Cuisines(
     @ColumnInfo(name = "cuisine_name") val name: String?,
     @ColumnInfo(name = "cuisine_color") val color: Int?
 )
+
+@Entity (tableName = "restaurant_filters", indices = [Index(value = ["restaurant_filter"], unique = true)])
+data class RestaurantFilters(
+    @PrimaryKey (autoGenerate = false) val uid: Int? = 0,
+    @ColumnInfo(name = "distance") val name: Int?,
+    @ColumnInfo(name = "rating") val color: Int?,
+    @ColumnInfo(name = "price") val price: Int?
+)

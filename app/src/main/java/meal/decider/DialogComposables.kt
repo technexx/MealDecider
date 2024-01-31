@@ -448,7 +448,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             }
     }
 
-    //TODO: Need a transition that does not overlay w/ a box since a dialog is already popped up.
     @Composable
     fun RestaurantFilterDialog() {
         var distanceSliderPosition by remember { mutableFloatStateOf(1f) }

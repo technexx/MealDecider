@@ -35,3 +35,18 @@ interface CuisineDao {
     @Delete
     fun deleteAllCuisines(list: List<Cuisines>)
 }
+
+@Dao
+interface RestaurantFiltersDao {
+    @Query("SELECT * from restaurant_filters")
+    fun getAllRestaurantFilters(): List<RestaurantFilters>
+
+    @Query("UPDATE restaurant_filters SET distance = :newDistance")
+    fun updateDistance(newDistance: Int)
+
+    @Query("UPDATE restaurant_filters SET rating = :newRating")
+    fun updateRating(newRating: Int)
+
+    @Query("UPDATE restaurant_filters SET price = :newPrice")
+    fun updatePrice(newPrice: Int)
+}
