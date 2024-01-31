@@ -417,7 +417,7 @@ fun CuisineSelectionGrid() {
                 appViewModel.cuisineBorderStrokeToggleAnimation()
                 //For our query to return a list of restaurants matching the rolled cuisine.
                 appViewModel.restaurantSearchCuisineType = rolledCuisineString
-//                mapInteractions.mapsApiCall()
+                mapInteractions.mapsApiCall()
 
                 delay(2000)
 

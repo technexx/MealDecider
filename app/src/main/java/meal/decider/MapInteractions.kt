@@ -23,9 +23,6 @@ import java.math.RoundingMode
 
 private lateinit var fusedLocationClient: FusedLocationProviderClient
 private var currentLocation: Location = Location("")
-private var distance = 0
-private var rating = 0.0
-private var price = 0
 
 class MapInteractions(private val activity: Activity, private val activityContext: Context, private val appViewModel: AppViewModel) {
     suspend fun mapsApiCall() {
@@ -84,7 +81,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
                 println("location is $location")
             }
             .addOnFailureListener {
-                println("nope!")
+                println("location listener failed!")
             }
     }
 

@@ -259,10 +259,6 @@ class AppViewModel : ViewModel() {
         updateRestaurantsList(newSnapList)
     }
 
-    fun filterRestaurants() {
-
-    }
-
     private fun squareNamesList(): List<String> {
         val listToReturn = mutableListOf<String>()
         for (i in getSquareList) {
@@ -474,6 +470,20 @@ class AppViewModel : ViewModel() {
         newList[index].color = chosenSquareColor
 
         return newList
+    }
+
+    fun filterRestaurantList(distance: Double, rating: Double, price: Double) {
+        val restaurantList = getRestaurantList
+        showLog("test", "original list is $restaurantList")
+
+        for (i in restaurantList) {
+            if (i.distance!! > distance || i.rating!! < rating || i.priceLevel!! > price) {
+                restaurantList.remove(i)
+                showLog("test", "$i removed")
+            }
+        }
+        showLog("test", "filtered list is $restaurantList")
+        updateRestaurantsList(restaurantList)
     }
 
     fun pressYourLuck() {

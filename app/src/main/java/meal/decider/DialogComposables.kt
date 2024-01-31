@@ -478,6 +478,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 appViewModel.updateShowRestaurantSettings(false)
                 coroutineScope.launch {
                     roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
+                    appViewModel.filterRestaurantList(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
                 }
             },
             content = {
