@@ -114,15 +114,16 @@ class MainActivity : ComponentActivity() {
 
         dialogComposables = DialogComposables(appViewModel, cuisineDatabase)
 
+        //TODO: Square database not populated before squareList tries to copy it.
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
         ioScope.launch {
             if (roomInteractions.cuisineDao.getAllCuisines().isEmpty()) {
                 roomInteractions.setSquareValuesAndDatabaseToDefaultStartingValues()
             }
-        }
+            if (roomInteractions.restaurantFiltersDao.getAllRestaurantFilters().isEmpty()) {
+                roomInteractions.populateRestaurantFiltersWithInitialValues()
+            }
 
-        //Populates SquareValues with DB values and set first cuisine as default selection.
-        ioScope.launch {
             roomInteractions.populateSquareValuesWithDatabaseValues()
             //Populates "add cuisine" list with all cuisines.
             appViewModel.updateDisplayedCuisineList(fullCuisineList)
@@ -130,6 +131,11 @@ class MainActivity : ComponentActivity() {
             appViewModel.adjustDisplayedCuisineListFromDisplayedSquares()
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
             appViewModel.cuisineStringUri = appViewModel.getselectedCuisineSquare.name + " Food "
+        }
+
+        //Populates SquareValues with DB values and set first cuisine as default selection.
+        ioScope.launch {
+
         }
 
         setContent {

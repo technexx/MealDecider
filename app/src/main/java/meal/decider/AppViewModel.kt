@@ -464,12 +464,6 @@ class AppViewModel : ViewModel() {
         handler.post(restaurantRollRunnable)
     }
 
-    //TODO: Should be stored in and retrieved from database.
-    fun filterRestaurantList(distance: Float, rating: Float, price: Float) {
-
-
-    }
-
     private fun restaurantListWithRandomColorChanged(index: Int): SnapshotStateList<RestaurantValues> {
         val currentList = getRestaurantList
         val newList = SnapshotStateList<RestaurantValues>()

@@ -450,6 +450,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestaurantFilterDialog() {
+        val coroutineScope: CoroutineScope = rememberCoroutineScope()
         var distanceSliderPosition by remember { mutableFloatStateOf(1f) }
         var ratingSliderPosition by remember { mutableFloatStateOf(3f) }
         var priceSliderPosition by remember { mutableFloatStateOf(1f) }
@@ -460,7 +461,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 .fillMaxSize()
                 .background(colorResource(id = R.color.grey_50)),
             onDismissRequest = {
+                //TODO: Update database here.
                 appViewModel.updateShowRestaurantSettings(false)
+                coroutineScope.launch {
+                    roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
+                }
             },
             content = {
                 Surface(
