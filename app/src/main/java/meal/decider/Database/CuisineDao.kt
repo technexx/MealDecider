@@ -41,12 +41,15 @@ interface RestaurantFiltersDao {
     @Query("SELECT * from restaurant_filters")
     fun getAllRestaurantFilters(): List<RestaurantFilters>
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertRestaurantFilters(vararg restaurantFilters: RestaurantFilters)
+
     @Query("UPDATE restaurant_filters SET distance = :newDistance")
-    fun updateDistance(newDistance: Int)
+    fun updateDistance(newDistance: Double)
 
     @Query("UPDATE restaurant_filters SET rating = :newRating")
-    fun updateRating(newRating: Int)
+    fun updateRating(newRating: Double)
 
     @Query("UPDATE restaurant_filters SET price = :newPrice")
-    fun updatePrice(newPrice: Int)
+    fun updatePrice(newPrice: Double)
 }

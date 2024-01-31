@@ -7,7 +7,7 @@ class CuisineDatabase {
     @Database(entities = [Cuisines::class, RestaurantFilters::class], version = 1)
     abstract class AppDatabase : RoomDatabase() {
         abstract fun cuisineDao(): CuisineDao
-        abstract fun RestaurantFiltersDao(): RestaurantFiltersDao
+        abstract fun restaurantFiltersDao(): RestaurantFiltersDao
     }
 }
 

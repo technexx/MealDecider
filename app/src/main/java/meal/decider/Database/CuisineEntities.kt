@@ -15,7 +15,7 @@ data class Cuisines(
 @Entity (tableName = "restaurant_filters", indices = [Index(value = ["restaurant_filter"], unique = true)])
 data class RestaurantFilters(
     @PrimaryKey (autoGenerate = false) val uid: Int? = 0,
-    @ColumnInfo(name = "distance") val name: Int?,
-    @ColumnInfo(name = "rating") val color: Int?,
-    @ColumnInfo(name = "price") val price: Int?
+    @ColumnInfo(name = "distance") val distance: Double?,
+    @ColumnInfo(name = "rating") val rating: Double?,
+    @ColumnInfo(name = "price") val price: Double?
 )

@@ -14,6 +14,7 @@ import meal.decider.defaultSquareColor
 class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel) {
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
     val cuisineDao = cuisineDatabase.cuisineDao()
+    val restaurantFiltersDao = cuisineDatabase.restaurantFiltersDao()
 
     suspend fun populateDatabaseWithInitialCuisines() {
         for (i in appViewModel.starterSquareList().indices) {
@@ -69,5 +70,10 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             populateSquareValuesWithDatabaseValues()
         appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
         }
+    }
+
+    suspend fun populateRestaurantFiltersWithInitialValues() {
+        val restaurantFilters = RestaurantFilters(5.0, 3.0, 1.0)
+        restaurantFiltersDao.insertRestaurantFilters()
     }
 }
