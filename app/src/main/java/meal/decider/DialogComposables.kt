@@ -307,7 +307,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     DialogIcon(imageVector = Icons.Default.Close, colorResource = android.R.color.holo_red_light)
                                 }
                                 IconButton(onClick = {
-                                    roomInteractions.setSquareValuesAndDatabaseToDefaultStartingValues()
+                                    roomInteractions.setSquareDatabaseToDefaultStartingValues()
+                                    appViewModel.updateSquareList(appViewModel.starterSquareList())
+                                    appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
                                     appViewModel.updateRestoreDefaults(false)
                                 }) {
                                     DialogIcon(imageVector = Icons.Default.Check, colorResource = android.R.color.holo_green_light)

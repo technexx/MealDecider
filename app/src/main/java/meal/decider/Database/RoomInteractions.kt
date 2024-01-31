@@ -32,7 +32,6 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
                 squareList.add(SquareValues(i.name!!, i.color!!))
             }
 
-            showLog("test", "square list is ${squareList.toList()}")
             appViewModel.updateSquareList(squareList)
         }
     }
@@ -65,13 +64,11 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         }
     }
 
-    fun setSquareValuesAndDatabaseToDefaultStartingValues() {
+    fun setSquareDatabaseToDefaultStartingValues() {
         ioScope.launch {
             deleteAllCuisines()
             populateDatabaseWithInitialCuisines()
         }
-        appViewModel.updateSquareList(appViewModel.starterSquareList())
-        appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
     }
 
     suspend fun populateRestaurantFiltersWithInitialValues() {

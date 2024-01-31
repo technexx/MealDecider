@@ -118,10 +118,11 @@ class MainActivity : ComponentActivity() {
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
         ioScope.launch {
             if (roomInteractions.cuisineDao.getAllCuisines().isEmpty()) {
-                roomInteractions.setSquareValuesAndDatabaseToDefaultStartingValues()
+                roomInteractions.setSquareDatabaseToDefaultStartingValues()
+                appViewModel.updateSquareList(appViewModel.starterSquareList())
+                appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
             } else {
                 roomInteractions.populateSquareValuesWithDatabaseValues()
-
             }
             if (roomInteractions.restaurantFiltersDao.getAllRestaurantFilters().isEmpty()) {
                 roomInteractions.populateRestaurantFiltersWithInitialValues()
