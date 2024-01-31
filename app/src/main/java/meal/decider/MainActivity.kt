@@ -119,12 +119,14 @@ class MainActivity : ComponentActivity() {
         ioScope.launch {
             if (roomInteractions.cuisineDao.getAllCuisines().isEmpty()) {
                 roomInteractions.setSquareValuesAndDatabaseToDefaultStartingValues()
+            } else {
+                roomInteractions.populateSquareValuesWithDatabaseValues()
+
             }
             if (roomInteractions.restaurantFiltersDao.getAllRestaurantFilters().isEmpty()) {
                 roomInteractions.populateRestaurantFiltersWithInitialValues()
             }
 
-            roomInteractions.populateSquareValuesWithDatabaseValues()
             //Populates "add cuisine" list with all cuisines.
             appViewModel.updateDisplayedCuisineList(fullCuisineList)
             //Updates "add cuisine" list to omit cuisines already added on board.

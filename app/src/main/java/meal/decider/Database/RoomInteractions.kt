@@ -69,9 +69,9 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         ioScope.launch {
             deleteAllCuisines()
             populateDatabaseWithInitialCuisines()
-            populateSquareValuesWithDatabaseValues()
-        appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
         }
+        appViewModel.updateSquareList(appViewModel.starterSquareList())
+        appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
     }
 
     suspend fun populateRestaurantFiltersWithInitialValues() {
