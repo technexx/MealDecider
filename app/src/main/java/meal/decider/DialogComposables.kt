@@ -480,7 +480,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 coroutineScope.launch {
                     //TODO: filterRestaurantList doesn't execute if updateRestaurantFilters goes beforehand.
 //                    roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
-                    appViewModel.filterRestaurantList(floor(distanceSliderPosition.toDouble()), ratingSliderPosition.toDouble(), priceSliderPosition.toInt())
+                    appViewModel.filterRestaurantList(floor(distanceSliderPosition.toDouble()), ratingSliderPosition.toDouble(),
+                        floor(priceSliderPosition).toInt()
+                    )
                 }
             },
             content = {
@@ -525,7 +527,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     RestaurantFilterTextUi(text = "$ratingSliderPosition stars", size = 18, bold = false)
                                 }
                                 Spacer(modifier = Modifier.height(16.dp))
-                                RestaurantFilterTextUi(text = "Price", size = 20 , bold = false)
+                                RestaurantFilterTextUi(text = "Max Price", size = 20 , bold = false)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Row () {
                                     Slider(modifier = Modifier

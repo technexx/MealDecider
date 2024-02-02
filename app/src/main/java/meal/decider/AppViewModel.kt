@@ -482,9 +482,7 @@ class AppViewModel : ViewModel() {
             showLog("test", "original list is $i")
         }
 
-        showLog("Test","passed distance is $distance")
         for (i in restaurantList) {
-            showLog("test", "distance in list is ${i.distance}")
             if (i.distance!! > distance || ratingToStarValue( i.rating!!) < ratingToStarValue( rating) || priceToDollarSigns( i.priceLevel!!).length > priceToDollarSigns(price).length) {
             listItemsToRemove.add(i)
             }
