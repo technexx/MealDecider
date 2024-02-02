@@ -3,6 +3,10 @@ package meal.decider
 import java.math.BigDecimal
 import java.math.RoundingMode
 
+fun doubleToTwoDecimals(double: Double?): Double {
+    return BigDecimal(double!!).setScale(2, RoundingMode.DOWN).toDouble()
+}
+
 fun floatArrayMetersToMiles(meters: FloatArray): Double {
     val miles = (meters[0] * .00062137)
     val roundedMiles = BigDecimal(miles).setScale(1, RoundingMode.DOWN)

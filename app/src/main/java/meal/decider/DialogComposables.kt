@@ -630,7 +630,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         ),
                 ) {
                     RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
-                            RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
+                            RestaurantListTextUi(doubleToTwoDecimals(restaurantList.value[index].distance).toString() + " miles", false)
                             RatingStars(restaurantList.value[index].rating)
                             RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
                 }
