@@ -18,8 +18,6 @@ import com.squareup.okhttp.Request
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 private lateinit var fusedLocationClient: FusedLocationProviderClient
 private var currentLocation: Location = Location("")
@@ -117,14 +115,4 @@ class MapInteractions(private val activity: Activity, private val activityContex
 
         activityContext.startActivity(intent)
     }
-
-    private fun floatArrayMetersToMiles(meters: FloatArray): Double {
-        val miles = (meters[0] * .00062137)
-        val roundedMiles = BigDecimal(miles).setScale(1, RoundingMode.DOWN)
-        return roundedMiles.toDouble()
-    }
-
-    private fun doubleMetersToMiles(meters: Double): Double { return meters * .00062137}
-
-    fun milesToMeters(miles: Int): Int { return miles*1609}
 }

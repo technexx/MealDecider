@@ -479,10 +479,11 @@ class AppViewModel : ViewModel() {
 
         showLog("test", "restaurant list size in filter function is ${restaurantList.size}")
         for (i in restaurantList) {
-            showLog("test", "original list is ${i.name}")
+            showLog("test", "original list is ${i}")
         }
 
-        for (i in restaurantList.indices) { if (restaurantList[i].distance!! > distance || restaurantList[i].rating!! < rating || restaurantList[i].priceLevel!! > price) {
+        for (i in restaurantList.indices) {
+            if (restaurantList[i].distance!! > distance || restaurantList[i].rating!! < rating || restaurantList[i].priceLevel!! > price) {
             listItemsToRemove.add(restaurantList[i])
             }
         }
@@ -490,7 +491,7 @@ class AppViewModel : ViewModel() {
         restaurantList.removeAll(listItemsToRemove)
 
         for (i in restaurantList) {
-            showLog("test", "filtered list is ${i.name}")
+            showLog("test", "filtered list is ${i}")
         }
 
         updateRestaurantsList(restaurantList)
