@@ -32,3 +32,13 @@ fun ratingToStarValue(rating: Double?): Double {
     }
     return valueToReturn
 }
+
+fun priceToDollarSigns(price: Int?): String {
+    var stringToReturn = ""
+    if (price != null) {
+        for (i in 1..price) {
+            stringToReturn += "$"
+        }
+    }
+    return stringToReturn
+}

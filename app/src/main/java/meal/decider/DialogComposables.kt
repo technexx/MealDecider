@@ -76,6 +76,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
+import kotlin.math.floor
 
 class DialogComposables(private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase){
     private val roomInteractions = RoomInteractions(appDatabase, appViewModel)
@@ -479,7 +480,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 coroutineScope.launch {
                     //TODO: filterRestaurantList doesn't execute if updateRestaurantFilters goes beforehand.
 //                    roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
-                    appViewModel.filterRestaurantList(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
+                    appViewModel.filterRestaurantList(floor(distanceSliderPosition.toDouble()), ratingSliderPosition.toDouble(), priceSliderPosition.toInt())
                 }
             },
             content = {
@@ -627,7 +628,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         ),
                 ) {
                     RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
-//                 RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
                             RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
                             RatingStars(restaurantList.value[index].rating)
                             RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
@@ -671,16 +671,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 }
             }
         }
-    }
-
-    private fun priceToDollarSigns(price: Int?): String {
-        var stringToReturn = ""
-        if (price != null) {
-            for (i in 1..price) {
-                stringToReturn += "$"
-            }
-        }
-        return stringToReturn
     }
 
     @Composable
