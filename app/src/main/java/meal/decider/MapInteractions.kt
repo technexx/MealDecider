@@ -58,7 +58,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
     private fun restaurantResultListFromSerializedJson(result: Root): SnapshotStateList<RestaurantValues>{
         val restaurantList = mutableStateListOf<RestaurantValues>()
         for (i in result.results!!.indices) {
-            val distance = metersToMiles(distanceOfRestaurantFromCurrentLocation(currentLocation.latitude, currentLocation.longitude,
+            val distance = floatArrayMetersToMiles(distanceOfRestaurantFromCurrentLocation(currentLocation.latitude, currentLocation.longitude,
                 result.results[i].geometry?.location?.lat, result.results[i].geometry?.location?.lng))
             restaurantList.add(RestaurantValues(result.results[i].name, result.results[i].vicinity, distance,
                 result.results[i].price_level, result.results[i].rating, R.color.grey_300)
@@ -67,6 +67,8 @@ class MapInteractions(private val activity: Activity, private val activityContex
         return restaurantList
     }
 
+    fun testRestaurants() { appViewModel.updateRestaurantsList(dummyRestaurantList())}
+
     fun dummyRestaurantList(): SnapshotStateList<RestaurantValues> {
         val listToReturn = mutableStateListOf<RestaurantValues>()
         var distance = 2000.0
@@ -74,7 +76,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
         var price = 1
         for (i in 1..20) {
             distance += 1000; rating += 0.1; if (i%5==0) price += 1
-            listToReturn.add(RestaurantValues("So Good Restaurant With Way More Text Here It Is", "123 Bird Brain Lane", distance, price, rating, defaultSquareColor))
+            listToReturn.add(RestaurantValues("So Good Restaurant With Way More Text Here It Is", "123 Bird Brain Lane", doubleMetersToMiles(distance), price, rating, defaultSquareColor))
         }
         return listToReturn
     }
@@ -112,11 +114,13 @@ class MapInteractions(private val activity: Activity, private val activityContex
         activityContext.startActivity(intent)
     }
 
-    private fun metersToMiles(meters: FloatArray): Double {
+    private fun floatArrayMetersToMiles(meters: FloatArray): Double {
         val miles = (meters[0] * .00062137)
         val roundedMiles = BigDecimal(miles).setScale(1, RoundingMode.DOWN)
         return roundedMiles.toDouble()
     }
+
+    private fun doubleMetersToMiles(meters: Double): Double { return meters * .00062137}
 
     fun milesToMeters(miles: Int): Int { return miles*1609}
 }

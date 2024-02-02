@@ -477,6 +477,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 showLog("test", "restaurants dismissed!")
                 appViewModel.updateShowRestaurantSettings(false)
                 coroutineScope.launch {
+                    //TODO: filterRestaurantList doesn't execute if updateRestaurantFilters goes beforehand.
 //                    roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
                     appViewModel.filterRestaurantList(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
                 }
@@ -571,7 +572,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
         val selectedRestaurantSquare = appViewModel.selectedRestaurantSquare.collectAsStateWithLifecycle()
         val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
-        val dummyList = appViewModel.dummyRestaurantList()
         val restaurantSelectionBorderStroke = appViewModel.restaurantSelectionBorderStroke.collectAsStateWithLifecycle()
 
         //        val restaurantUri = dummyList[appViewModel.rolledRestaurantIndex].name.toString()
@@ -626,15 +626,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             }
                         ),
                 ) {
-//                    RestaurantListTextUi(dummyList[index].name.toString(), true)
-//                    RestaurantListTextUi(dummyList[index].distance.toString(), false)
-//                    RatingStars(dummyList[index].rating)
-
-                            RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
-//                            RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
+                    RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
+//                 RestaurantListTextUi(restaurantList.value[index].address.toString(), false)
                             RestaurantListTextUi(restaurantList.value[index].distance.toString() + " miles", false)
-//                            RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
                             RatingStars(restaurantList.value[index].rating)
+                            RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
                 }
             }
         }
