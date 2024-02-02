@@ -41,12 +41,8 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val jsonSerialized = json.decodeFromString<Root>(prettyJson)
 
             val restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
-            appViewModel.updateRestaurantsList(restaurantList)
 
-//            showLog("test", "serializable is $jsonSerialized")
-//            showLog("test", "restaurant list is $restaurantList")
-//            showLog("test", "pretty json is $prettyJson")
-//            showLog("test","number of returns are ${restaurantList.size}")
+            appViewModel.updateRestaurantsList(restaurantList)
         }
     }
 
@@ -69,6 +65,18 @@ class MapInteractions(private val activity: Activity, private val activityContex
             )
         }
         return restaurantList
+    }
+
+    fun dummyRestaurantList(): SnapshotStateList<RestaurantValues> {
+        val listToReturn = mutableStateListOf<RestaurantValues>()
+        var distance = 2000.0
+        var rating = 3.0
+        var price = 1
+        for (i in 1..20) {
+            distance += 1000; rating += 0.1; if (i%5==0) price += 1
+            listToReturn.add(RestaurantValues("So Good Restaurant With Way More Text Here It Is", "123 Bird Brain Lane", distance, price, rating, defaultSquareColor))
+        }
+        return listToReturn
     }
 
     fun fusedLocationListener() {

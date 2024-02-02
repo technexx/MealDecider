@@ -89,6 +89,7 @@ private lateinit var mapInteractions: MapInteractions
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
+//TODO: OnDismissRequest does not trigger when clicking outside of box - only when hitting back button.
 //TODO: Need an animation for Restaurant Filters that does not overlay w/ a box since a dialog is already popped up.
 //TODO: Floating buttons obscure bottom cuisine and restaurant list items.
 //TODO: Maximum of 20 results seems to return - check if it can be expanded.

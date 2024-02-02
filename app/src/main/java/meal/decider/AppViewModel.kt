@@ -472,17 +472,25 @@ class AppViewModel : ViewModel() {
         return newList
     }
 
+    //TODO: Iterating through list while removing item may be causing issue. Solution trial is iterating through original list and removing from a copy of it.
     fun filterRestaurantList(distance: Double, rating: Double, price: Double) {
         val restaurantList = getRestaurantList
-        showLog("test", "original list is $restaurantList")
-
+//        val iterator = restaurantList.iterator()
+        showLog("test", "restaurant list size in filter function is ${restaurantList.size}")
         for (i in restaurantList) {
-            if (i.distance!! > distance || i.rating!! < rating || i.priceLevel!! > price) {
-                restaurantList.remove(i)
-                showLog("test", "$i removed")
+            showLog("test", "original list is ${i.name}")
+        }
+
+        for (i in getRestaurantList.indices) { if (restaurantList[i].distance!! > distance || restaurantList[i].rating!! < rating || restaurantList[i].priceLevel!! > price) {
+                restaurantList.removeAt(i)
+                showLog("test", "${restaurantList[i]} removed")
             }
         }
-        showLog("test", "filtered list is $restaurantList")
+
+        for (i in restaurantList) {
+            showLog("test", "filtered list is ${i.name}")
+        }
+
         updateRestaurantsList(restaurantList)
     }
 
@@ -543,14 +551,6 @@ class AppViewModel : ViewModel() {
     fun cancelRestaurantBorderStrokeToggleRunnable() { handler.removeCallbacks(restaurantBorderStrokeToggleRunnable) }
 
     fun resetRestaurantSelectionBorderStroke() { updateRestaurantSelectionBorderStroke(defaultRestaurantSelectionBorderStroke) }
-
-    fun dummyRestaurantList(): SnapshotStateList<RestaurantValues> {
-        val listToReturn = mutableStateListOf<RestaurantValues>()
-        for (i in 1..20) {
-            listToReturn.add(RestaurantValues("So Good Restaurant With Way More Text Here It Is", "123 Bird Brain Lane", 2000.0, 2, 4.0, defaultSquareColor))
-        }
-        return listToReturn
-    }
 
     val getSquareList get() = boardUiState.value.squareList
     val getselectedCuisineSquare get() = selectedCuisineSquare.value

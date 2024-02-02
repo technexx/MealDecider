@@ -463,7 +463,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 distanceSliderPosition = restaurantFilters[0].distance.toFloat()
                 ratingSliderPosition = restaurantFilters[0].rating.toFloat()
                 priceSliderPosition = restaurantFilters[0].price.toFloat()
-                showLog("test", "distance slider retrieved is $distanceSliderPosition")
 
             }
         }
@@ -475,9 +474,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 .fillMaxSize()
                 .background(colorResource(id = R.color.grey_50)),
             onDismissRequest = {
+                showLog("test", "restaurants dismissed!")
                 appViewModel.updateShowRestaurantSettings(false)
                 coroutineScope.launch {
-                    roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
+//                    roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
                     appViewModel.filterRestaurantList(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
                 }
             },

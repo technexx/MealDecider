@@ -10,7 +10,6 @@ import meal.decider.AppViewModel
 import meal.decider.SquareValues
 import meal.decider.chosenSquareColor
 import meal.decider.defaultSquareColor
-import meal.decider.showLog
 
 class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel) {
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
@@ -74,8 +73,6 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
     suspend fun populateRestaurantFiltersWithInitialValues() {
         val restaurantFilters = RestaurantFilters(null,5.0, 3.0, 1.0)
         restaurantFiltersDao.insertRestaurantFilters(restaurantFilters)
-        showLog("test", "filter list from initial pop" +
-                " is ${restaurantFiltersDao.getAllRestaurantFilters()}")
     }
 
     suspend fun getRestaurantFilters(): List<RestaurantFilters> {
@@ -91,7 +88,6 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             restaurantFiltersDao.updateDistance(distance)
             restaurantFiltersDao.updateRating(rating)
             restaurantFiltersDao.updatePrice(price)
-            showLog("test", "filter list from dialog is ${restaurantFiltersDao.getAllRestaurantFilters()}")
         }
     }
 }
