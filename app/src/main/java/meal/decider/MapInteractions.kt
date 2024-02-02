@@ -42,6 +42,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
 
             val restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
 
+            appViewModel.originalRestaurantList = restaurantList
             appViewModel.updateRestaurantsList(restaurantList)
         }
     }
@@ -67,7 +68,10 @@ class MapInteractions(private val activity: Activity, private val activityContex
         return restaurantList
     }
 
-    fun testRestaurants() { appViewModel.updateRestaurantsList(dummyRestaurantList())}
+    fun testRestaurants() {
+        appViewModel.originalRestaurantList = dummyRestaurantList()
+        appViewModel.updateRestaurantsList(dummyRestaurantList())
+    }
 
     fun dummyRestaurantList(): SnapshotStateList<RestaurantValues> {
         val listToReturn = mutableStateListOf<RestaurantValues>()

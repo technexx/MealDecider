@@ -6,6 +6,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -23,9 +24,9 @@ class AppViewModel : ViewModel() {
     var rollCountdown: Long = 1000
 
     var restaurantSearchCuisineType = ""
-
     var cuisineStringUri = ""
     var restaurantStringUri = ""
+    var originalRestaurantList: SnapshotStateList<RestaurantValues> = mutableStateListOf()
 
     private val handler = Handler(Looper.getMainLooper())
     private var cuisineRollRunnable = Runnable {}
@@ -472,20 +473,21 @@ class AppViewModel : ViewModel() {
         return newList
     }
 
-    //TODO: Iterating through list while removing item may be causing issue. Solution trial is iterating through original list and removing from a copy of it.
     fun filterRestaurantList(distance: Double, rating: Double, price: Double) {
-        val restaurantList = getRestaurantList
-//        val iterator = restaurantList.iterator()
+        val restaurantList = originalRestaurantList.map { it.copy() }.toMutableStateList()
+        val listItemsToRemove: SnapshotStateList<RestaurantValues> = mutableStateListOf()
+
         showLog("test", "restaurant list size in filter function is ${restaurantList.size}")
         for (i in restaurantList) {
             showLog("test", "original list is ${i.name}")
         }
 
-        for (i in getRestaurantList.indices) { if (restaurantList[i].distance!! > distance || restaurantList[i].rating!! < rating || restaurantList[i].priceLevel!! > price) {
-                restaurantList.removeAt(i)
-                showLog("test", "${restaurantList[i]} removed")
+        for (i in restaurantList.indices) { if (restaurantList[i].distance!! > distance || restaurantList[i].rating!! < rating || restaurantList[i].priceLevel!! > price) {
+            listItemsToRemove.add(restaurantList[i])
             }
         }
+
+        restaurantList.removeAll(listItemsToRemove)
 
         for (i in restaurantList) {
             showLog("test", "filtered list is ${i.name}")
