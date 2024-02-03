@@ -477,11 +477,6 @@ class AppViewModel : ViewModel() {
         val restaurantList = originalRestaurantList.map { it.copy() }.toMutableStateList()
         val listItemsToRemove: SnapshotStateList<RestaurantValues> = mutableStateListOf()
 
-        showLog("test", "original restaurant list function is ${restaurantList.size}")
-        for (i in restaurantList) {
-            showLog("test", "original list is $i")
-        }
-
         for (i in restaurantList) {
             if (i.distance!! > distance || ratingToStarValue( i.rating!!) < ratingToStarValue( rating) || priceToDollarSigns( i.priceLevel!!).length > priceToDollarSigns(price).length) {
             listItemsToRemove.add(i)
@@ -489,11 +484,6 @@ class AppViewModel : ViewModel() {
         }
 
         restaurantList.removeAll(listItemsToRemove)
-
-        for (i in restaurantList) {
-            showLog("test", "filtered list is $i")
-        }
-
         updateRestaurantsList(restaurantList)
     }
 

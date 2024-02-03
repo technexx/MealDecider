@@ -475,15 +475,14 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 .fillMaxSize()
                 .background(colorResource(id = R.color.grey_50)),
             onDismissRequest = {
-                showLog("test", "restaurants dismissed!")
                 appViewModel.updateShowRestaurantSettings(false)
                 coroutineScope.launch {
-                    //TODO: filterRestaurantList doesn't execute if updateRestaurantFilters goes beforehand.
-//                    roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
-                    appViewModel.filterRestaurantList(floor(distanceSliderPosition.toDouble()), ratingSliderPosition.toDouble(),
-                        floor(priceSliderPosition).toInt()
-                    )
+                    roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
                 }
+                //Having this in coroutineScope prevented its execution.
+                appViewModel.filterRestaurantList(
+                    floor(distanceSliderPosition.toDouble()), ratingSliderPosition.toDouble(),
+                    floor(priceSliderPosition).toInt())
             },
             content = {
                 Surface(
@@ -576,8 +575,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val selectedRestaurantSquare = appViewModel.selectedRestaurantSquare.collectAsStateWithLifecycle()
         val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
         val restaurantSelectionBorderStroke = appViewModel.restaurantSelectionBorderStroke.collectAsStateWithLifecycle()
-
-        //        val restaurantUri = dummyList[appViewModel.rolledRestaurantIndex].name.toString()
         val rolledRestaurantString = selectedRestaurantSquare.value.name.toString()
 
         var borderStroke: BorderStroke
