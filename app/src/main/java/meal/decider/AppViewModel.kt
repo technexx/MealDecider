@@ -474,16 +474,21 @@ class AppViewModel : ViewModel() {
     }
 
     fun filterRestaurantList(distance: Double, rating: Double, price: Int) {
+        //Uses copy of original restaurant list that is a stable reference to all restaurants queried, so filters can be applied/removed.
         val restaurantList = originalRestaurantList.map { it.copy() }.toMutableStateList()
         val listItemsToRemove: SnapshotStateList<RestaurantValues> = mutableStateListOf()
 
+        showLog("test","restaurant list size in original list is ${restaurantList.size}")
         for (i in restaurantList) {
-            if (i.distance!! > distance || ratingToStarValue( i.rating!!) < ratingToStarValue( rating) || priceToDollarSigns( i.priceLevel!!).length > priceToDollarSigns(price).length) {
+            if (i.distance!! > distance || ratingToStarValue( i.rating!!) < ratingToStarValue( rating) || priceToDollarSigns( i.priceLevel!!).length < priceToDollarSigns(price).length) {
             listItemsToRemove.add(i)
             }
         }
 
         restaurantList.removeAll(listItemsToRemove)
+
+        showLog("test","restaurant list size in filtered list is ${restaurantList.size}")
+
         updateRestaurantsList(restaurantList)
     }
 
