@@ -464,7 +464,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 distanceSliderPosition = restaurantFilters[0].distance.toFloat()
                 ratingSliderPosition = restaurantFilters[0].rating.toFloat()
                 priceSliderPosition = restaurantFilters[0].price.toFloat()
-
             }
         }
 
