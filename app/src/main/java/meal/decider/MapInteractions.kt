@@ -48,9 +48,9 @@ class MapInteractions(private val activity: Activity, private val activityContex
             appViewModel.updateRestaurantsList(restaurantList)
 
             showLog("test", "number returned is ${restaurantList.size}")
-            for (i in restaurantList) {
-                showLog("test", i.toString())
-            }
+//            for (i in restaurantList) {
+//                showLog("test", i.toString())
+//            }
         }
     }
 

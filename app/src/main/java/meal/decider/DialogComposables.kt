@@ -478,13 +478,16 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                 coroutineScope.launch {
                     roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
                 }
-                coroutineScope.launch {
-                    mapInteractions.mapsApiCall()
-                }
                 //Having this in coroutineScope prevented its execution.
-                appViewModel.maxRestaurantDistance = milesToMeters(floor(distanceSliderPosition).toInt())
-                appViewModel.minRestaurantRating = ratingSliderPosition.toDouble()
-                appViewModel.maxRestaurantPrice = floor(priceSliderPosition).toInt()
+                val maxDistance = milesToMeters(floor(distanceSliderPosition).toInt())
+                val minRating = ratingSliderPosition.toDouble()
+                val maxPrice = floor(priceSliderPosition).toInt()
+                if (appViewModel.haveRestaurantFiltersChanged(maxDistance, minRating, maxPrice)) {
+                    appViewModel.setLocalRestaurantFilterValues(maxDistance, minRating, maxPrice)
+                    coroutineScope.launch {
+                        mapInteractions.mapsApiCall()
+                    }
+                }
             },
             content = {
                 Surface(

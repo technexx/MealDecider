@@ -521,6 +521,10 @@ class AppViewModel : ViewModel() {
         maxRestaurantPrice = price
     }
 
+    fun haveRestaurantFiltersChanged(distance: Int, rating: Double, price: Int): Boolean {
+        return maxRestaurantDistance !=distance || minRestaurantRating != rating || maxRestaurantPrice != price
+    }
+
     val getSquareList get() = boardUiState.value.squareList
     val getselectedCuisineSquare get() = selectedCuisineSquare.value
     val getDisplayedCuisineList get() = displayedCuisineList.value

@@ -128,8 +128,6 @@ class MainActivity : ComponentActivity() {
             val restaurantFilters = roomInteractions.getRestaurantFilters()[0]
             appViewModel.setLocalRestaurantFilterValues(milesToMeters(restaurantFilters.distance.toInt()), restaurantFilters.rating, restaurantFilters.price.toInt())
 
-            showLog("test", "filters are $restaurantFilters")
-
             //Populates "add cuisine" list with all cuisines.
             appViewModel.updateDisplayedCuisineList(fullCuisineList)
             //Updates "add cuisine" list to omit cuisines already added on board.
