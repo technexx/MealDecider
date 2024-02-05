@@ -506,7 +506,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         value = distanceSliderPosition,
                                         onValueChange = { distanceSliderPosition = it
                                         },
-                                        valueRange = 1f..20f
+                                        valueRange = 1f..10f
                                     )
                                     RestaurantFilterTextUi(text = distanceSliderPosition.toInt().toString() + " mi", size = 18, bold = false)
                                 }
