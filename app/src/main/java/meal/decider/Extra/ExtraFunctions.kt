@@ -65,3 +65,38 @@ package meal.decider.Extra
 //                }
 //            }
 //    }
+
+//fun filterRestaurantList(distance: Double, rating: Double, price: Int) {
+//    //Uses copy of original restaurant list that is a stable reference to all restaurants queried, so filters can be applied/removed.
+//    val restaurantList = originalRestaurantList.map { it.copy() }.toMutableStateList()
+//    val listItemsToRemove: SnapshotStateList<RestaurantValues> = mutableStateListOf()
+//
+//    for (i in restaurantList) {
+//        if (i.distance!! > distance || ratingToStarValue( i.rating!!) < ratingToStarValue( rating) || priceToDollarSigns( i.priceLevel!!).length < priceToDollarSigns(price).length) {
+//            listItemsToRemove.add(i)
+//        }
+//    }
+//
+//    restaurantList.removeAll(listItemsToRemove)
+//
+//    updateRestaurantsList(restaurantList)
+//}
+//
+//fun pressYourLuck() {
+//    var delay: Long = 800
+//    handler.removeCallbacks(pressYourLuckRunnable)
+//
+//    pressYourLuckRunnable = Runnable {
+//        sortAndUpdateCuisineList("random")
+//
+//        handler.postDelayed(pressYourLuckRunnable, delay)
+//        if (delay > 200) delay -= 20
+//        rollCountdown -= 20
+//
+//        if (rollCountdown < 60) {
+//            handler.removeCallbacks(pressYourLuckRunnable)
+//        }
+//    }
+//
+//    handler.post(pressYourLuckRunnable)
+//}
