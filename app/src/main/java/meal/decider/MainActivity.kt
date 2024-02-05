@@ -114,7 +114,7 @@ class MainActivity : ComponentActivity() {
         mapInteractions = MapInteractions(activity, activityContext, appViewModel)
         mapInteractions.fusedLocationListener()
 
-        dialogComposables = DialogComposables(appViewModel, cuisineDatabase)
+        dialogComposables = DialogComposables(appViewModel, cuisineDatabase, mapInteractions)
 
         //TODO: Square database not populated before squareList tries to copy it.
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).

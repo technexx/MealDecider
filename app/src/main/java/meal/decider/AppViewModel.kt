@@ -6,7 +6,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -27,6 +26,10 @@ class AppViewModel : ViewModel() {
     var cuisineStringUri = ""
     var restaurantStringUri = ""
     var originalRestaurantList: SnapshotStateList<RestaurantValues> = mutableStateListOf()
+
+    var maxRestaurantDistance = 0
+    var minRestaurantRating = 3.0
+    var maxRestaurantPrice = 1
 
     private val handler = Handler(Looper.getMainLooper())
     private var cuisineRollRunnable = Runnable {}
@@ -471,22 +474,6 @@ class AppViewModel : ViewModel() {
         newList[index].color = chosenSquareColor
 
         return newList
-    }
-
-    fun filterRestaurantList(distance: Double, rating: Double, price: Int) {
-        //Uses copy of original restaurant list that is a stable reference to all restaurants queried, so filters can be applied/removed.
-        val restaurantList = originalRestaurantList.map { it.copy() }.toMutableStateList()
-        val listItemsToRemove: SnapshotStateList<RestaurantValues> = mutableStateListOf()
-
-        for (i in restaurantList) {
-            if (i.distance!! > distance || ratingToStarValue( i.rating!!) < ratingToStarValue( rating) || priceToDollarSigns( i.priceLevel!!).length < priceToDollarSigns(price).length) {
-            listItemsToRemove.add(i)
-            }
-        }
-
-        restaurantList.removeAll(listItemsToRemove)
-
-        updateRestaurantsList(restaurantList)
     }
 
     fun pressYourLuck() {

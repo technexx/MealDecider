@@ -78,7 +78,7 @@ import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 import kotlin.math.floor
 
-class DialogComposables(private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase){
+class DialogComposables(private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, private val mapInteractions: MapInteractions){
     private val roomInteractions = RoomInteractions(appDatabase, appViewModel)
 
     private suspend fun startDismissWithExitAnimation(
@@ -478,10 +478,13 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 coroutineScope.launch {
                     roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
                 }
+                coroutineScope.launch {
+                    mapInteractions.mapsApiCall()
+                }
                 //Having this in coroutineScope prevented its execution.
-                appViewModel.filterRestaurantList(
-                    floor(distanceSliderPosition.toDouble()), ratingSliderPosition.toDouble(),
-                    floor(priceSliderPosition).toInt())
+                appViewModel.maxRestaurantDistance = milesToMeters(floor(distanceSliderPosition).toInt())
+                appViewModel.minRestaurantRating = ratingSliderPosition.toDouble()
+                appViewModel.maxRestaurantPrice = floor(priceSliderPosition).toInt()
             },
             content = {
                 Surface(

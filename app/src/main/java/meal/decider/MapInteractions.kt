@@ -25,7 +25,11 @@ private var currentLocation: Location = Location("")
 class MapInteractions(private val activity: Activity, private val activityContext: Context, private val appViewModel: AppViewModel) {
     suspend fun mapsApiCall() {
         withContext(Dispatchers.IO) {
-            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&radius=16000&name=${appViewModel.restaurantSearchCuisineType}&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
+            val cuisineType = appViewModel.restaurantSearchCuisineType
+            val distance = appViewModel.maxRestaurantDistance
+            val rating = appViewModel.minRestaurantRating
+            val price = appViewModel.maxRestaurantPrice
+            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&name=$cuisineType&radius=$distance&rating=$rating&maxprice=$price&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
             val request = Request.Builder()
                 .url(uri)
@@ -44,6 +48,9 @@ class MapInteractions(private val activity: Activity, private val activityContex
             appViewModel.updateRestaurantsList(restaurantList)
 
             showLog("test", "number returned is ${restaurantList.size}")
+            for (i in restaurantList) {
+                showLog("test", i.toString())
+            }
         }
     }
 
