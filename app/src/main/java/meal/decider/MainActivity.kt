@@ -89,12 +89,8 @@ private lateinit var mapInteractions: MapInteractions
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Initial map query should either (A)Use full 10 mile radius or (B)Re-query maps when changing distance (or other filters), though this could end up using more billing than just a single initial query.
-    //TODO: Get closest 20 places from current location. Right now, distance return varies.
 //TODO: Need an animation for Restaurant Filters that does not overlay w/ a box since a dialog is already popped up.
 //TODO: Floating buttons obscure bottom cuisine and restaurant list items.
-//TODO: Maximum of 20 results seems to return - check if it can be expanded.
-//TODO: Less than 2 restaurants = prompt to expand radius.
 //TODO: Randomization speed/duration options.
 //TODO: Keep statistics (how many rolls, how many re-rolls, how many maps opened, etc.)
 //TODO: Option to select category and just roll for restaurant.
@@ -116,7 +112,6 @@ class MainActivity : ComponentActivity() {
 
         dialogComposables = DialogComposables(appViewModel, cuisineDatabase, mapInteractions)
 
-        //TODO: Square database not populated before squareList tries to copy it.
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
         ioScope.launch {
             if (roomInteractions.cuisineDao.getAllCuisines().isEmpty()) {
@@ -129,6 +124,11 @@ class MainActivity : ComponentActivity() {
             if (roomInteractions.restaurantFiltersDao.getAllRestaurantFilters().isEmpty()) {
                 roomInteractions.populateRestaurantFiltersWithInitialValues()
             }
+
+            val restaurantFilters = roomInteractions.getRestaurantFilters()[0]
+            appViewModel.setLocalRestaurantFilterValues(milesToMeters(restaurantFilters.distance.toInt()), restaurantFilters.rating, restaurantFilters.price.toInt())
+
+            showLog("test", "filters are $restaurantFilters")
 
             //Populates "add cuisine" list with all cuisines.
             appViewModel.updateDisplayedCuisineList(fullCuisineList)

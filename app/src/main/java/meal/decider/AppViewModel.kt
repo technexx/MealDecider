@@ -515,6 +515,12 @@ class AppViewModel : ViewModel() {
 
     fun resetRestaurantSelectionBorderStroke() { updateRestaurantSelectionBorderStroke(defaultRestaurantSelectionBorderStroke) }
 
+    fun setLocalRestaurantFilterValues(distance: Int, rating: Double, price: Int) {
+        maxRestaurantDistance = distance
+        minRestaurantRating = rating
+        maxRestaurantPrice = price
+    }
+
     val getSquareList get() = boardUiState.value.squareList
     val getselectedCuisineSquare get() = selectedCuisineSquare.value
     val getDisplayedCuisineList get() = displayedCuisineList.value
