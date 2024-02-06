@@ -421,8 +421,8 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                 if (appViewModel.haveRestaurantFiltersChanged(maxDistance, minRating, maxPrice)) {
                     appViewModel.setLocalRestaurantFilterValues(maxDistance, minRating, maxPrice)
                     coroutineScope.launch {
-//                        mapInteractions.mapsApiCall()
-                        mapInteractions.testRestaurants()
+                        mapInteractions.mapsApiCall()
+//                        mapInteractions.testRestaurants()
                     }
                 }
             },

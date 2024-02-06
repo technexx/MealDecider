@@ -117,7 +117,6 @@ class MainActivity : ComponentActivity() {
             if (roomInteractions.cuisineDao.getAllCuisines().isEmpty()) {
                 roomInteractions.setSquareDatabaseToDefaultStartingValues()
                 appViewModel.updateSquareList(appViewModel.starterSquareList())
-                appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
             } else {
                 roomInteractions.populateSquareValuesWithDatabaseValues()
             }
@@ -128,10 +127,6 @@ class MainActivity : ComponentActivity() {
             val restaurantFilters = roomInteractions.getRestaurantFilters()[0]
             appViewModel.setLocalRestaurantFilterValues(milesToMeters(restaurantFilters.distance.toInt()), restaurantFilters.rating, restaurantFilters.price.toInt())
 
-            //Populates "add cuisine" list with all cuisines.
-            appViewModel.updateDisplayedCuisineList(fullCuisineList)
-            //Updates "add cuisine" list to omit cuisines already added on board.
-            appViewModel.adjustDisplayedCuisineListFromDisplayedSquares()
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
             appViewModel.cuisineStringUri = appViewModel.getselectedCuisineSquare.name + " Food "
         }
@@ -402,6 +397,7 @@ fun CuisineSelectionGrid() {
     val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()
     val restrictionsString = appViewModel.foodRestrictionsString(restrictionsUi.value)
 
+    showLog("test", selectedCuisineSquare.value.toString())
     val rolledCuisineString = selectedCuisineSquare.value.name + " Food " + restrictionsString
 
     val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
@@ -415,10 +411,10 @@ fun CuisineSelectionGrid() {
                 appViewModel.cuisineBorderStrokeToggleAnimation()
                 //For our query to return a list of restaurants matching the rolled cuisine.
                 appViewModel.restaurantSearchCuisineType = rolledCuisineString
-                mapInteractions.testRestaurants()
-//                mapInteractions.mapsApiCall()
+//                mapInteractions.testRestaurants()
+                mapInteractions.mapsApiCall()
 
-                delay(2000)
+//                delay(2000)
 
                 //Cancels border animation after above delay, and launches restaurant dialog.
                 appViewModel.cancelCuisineBorderStrokeToggleRunnable()
