@@ -440,7 +440,7 @@ class AppViewModel : ViewModel() {
 
     fun rollRestaurant() {
         var delay: Long = 100
-        rollCountdown = 1000
+        rollCountdown = 100
         handler.removeCallbacks(restaurantRollRunnable)
         updateRollEngaged(true)
 

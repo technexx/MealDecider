@@ -89,9 +89,7 @@ private lateinit var mapInteractions: MapInteractions
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Sometimes a five $ restaurant can show.
 //TODO: Need an animation for Restaurant Filters that does not overlay w/ a box since a dialog is already popped up.
-//TODO: Floating buttons obscure bottom cuisine and restaurant list items.
 //TODO: Randomization speed/duration options.
 //TODO: Keep statistics (how many rolls, how many re-rolls, how many maps opened, etc.)
 //TODO: Option to select category and just roll for restaurant.
@@ -203,7 +201,8 @@ fun TopBar() {
                                 contentDescription = "More"
                             )
                         }
-                        DropdownMenu(
+                        DropdownMenu(modifier = Modifier
+                            .background(colorResource(id = R.color.white)),
                             expanded = expanded,
                             onDismissRequest = { expanded = false }
                         ) {
@@ -269,7 +268,7 @@ fun TopBar() {
 @Composable
 fun DropDownMenuItemUi(text: String, function: () -> Unit) {
     DropdownMenuItem(
-        text = { Text(text) },
+        text = { Text(text = text, color = Color.Black, fontSize = 14.sp) },
         onClick = {
             function()
         }

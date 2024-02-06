@@ -86,7 +86,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
         var rating = 3.0
         var price = 1
         for (i in 1..20) {
-            distance += 1000; rating += 0.1; if (i%5==0) price += 1
+            distance += 1000; rating += 0.1; if (i%5==0 && price <4) price += 1
             listToReturn.add(RestaurantValues("So Good Restaurant With Way More Text Here It Is", "123 Bird Brain Lane", doubleMetersToMiles(distance), price, rating, defaultSquareColor))
         }
         return listToReturn
