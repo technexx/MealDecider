@@ -122,8 +122,8 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    DisplayedCuisineList(displayedList)
                     appViewModel.adjustDisplayedCuisineListFromDisplayedSquares()
+                    DisplayedCuisineList(displayedList)
 
                     Row (modifier = Modifier
                         .fillMaxWidth(),
@@ -139,6 +139,7 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                             appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd)
                             coroutineScope.launch {
                                 roomInteractions.insertMultipleCuisines(appViewModel.getListOfCuisinesToAdd)
+                                //Resets list of cuisines we have just added.
                                 appViewModel.updateListOfCuisinesToAdd(emptyList())
                             }
                             appViewModel.updateAddMode(false)

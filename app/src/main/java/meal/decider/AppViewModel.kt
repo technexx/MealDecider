@@ -279,16 +279,17 @@ class AppViewModel : ViewModel() {
         return listToReturn
     }
 
-    //Val declares first element in our data object (i.e. "name", thought it can be named anything).
     fun adjustDisplayedCuisineListFromDisplayedSquares() {
-        val displayedCuisineList = getDisplayedCuisineList.toMutableList()
-        for (i in getSquareList) {
-            val (name) = i
-            if (displayedCuisineList.contains(name)) {
-                displayedCuisineList.remove(name)
+        val listToDisplay = fullCuisineList.toMutableList()
+        val squareNameList = getListOfSquareNames().toMutableList()
+
+        for (i in squareNameList) {
+            if (fullCuisineList.contains(i)) {
+                listToDisplay.remove(i)
             }
         }
-        updateDisplayedCuisineList(displayedCuisineList)
+
+        updateDisplayedCuisineList(listToDisplay)
     }
 
     fun toggleAddCuisineSelections(cuisine: String) {
@@ -327,7 +328,7 @@ class AppViewModel : ViewModel() {
         updatelistOfCuisineSquaresToEdit(tempList)
     }
 
-    fun removeSquareFromListOfSquareIndicesToUpdate() {
+    private fun removeSquareFromListOfSquareIndicesToUpdate() {
         val tempList = getlistOfCuisineSquaresToEdit.toMutableList()
         tempList.removeLast()
         updatelistOfCuisineSquaresToEdit(tempList)
