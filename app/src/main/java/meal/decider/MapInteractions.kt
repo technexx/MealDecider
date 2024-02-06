@@ -44,7 +44,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
 
             val restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
 
-            appViewModel.originalRestaurantList = restaurantList
+//            appViewModel.originalRestaurantList = restaurantList
             appViewModel.updateRestaurantsList(restaurantList)
 
             showLog("test", "number returned is ${restaurantList.size}")
@@ -76,7 +76,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
     }
 
     fun testRestaurants() {
-        appViewModel.originalRestaurantList = dummyRestaurantList()
+//        appViewModel.originalRestaurantList = dummyRestaurantList()
         appViewModel.updateRestaurantsList(dummyRestaurantList())
     }
 

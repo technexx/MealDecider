@@ -338,35 +338,37 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                     shape = RoundedCornerShape(16.dp),
                     color = colorResource(id = R.color.grey_300),
                 ) {
-                    Box(modifier = Modifier
+                    Column(modifier = Modifier
+                        .fillMaxSize()
                     ) {
                         if (showRestaurantSettings.value) {
                             RestaurantFilterDialog()
                         }
 
-                        Column {
+                        Column(modifier = Modifier
+                            .wrapContentSize()
+//                            .height(screenHeightPct(0.075).dp)
+                        ) {
                             Row (modifier = Modifier
                                 .fillMaxWidth(),
                                 horizontalArrangement = Arrangement.End) {
                                 RestaurantFilterIcon()
-//                            Spacer(modifier = Modifier.width(8.dp))
                                 RestaurantSortDropdownMenu()
-
                             }
+                        }
+
+                        Column(modifier = Modifier
+                            .height(screenHeightPct(0.8).dp)
+                        ) {
                             RestaurantLazyGrid()
                         }
-                    }
-                    Box(modifier = Modifier
-                        .fillMaxSize()
-                    )
-                    {
-                        Column (modifier = Modifier
-                            .fillMaxSize(),
-                            verticalArrangement = Arrangement.Bottom) {
+
+                        Column(modifier = Modifier
+                            .wrapContentSize()
+                        ) {
                             InteractionButtons()
                         }
                     }
-
                 }
             }
         )
@@ -485,7 +487,8 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                 if (appViewModel.haveRestaurantFiltersChanged(maxDistance, minRating, maxPrice)) {
                     appViewModel.setLocalRestaurantFilterValues(maxDistance, minRating, maxPrice)
                     coroutineScope.launch {
-                        mapInteractions.mapsApiCall()
+//                        mapInteractions.mapsApiCall()
+                        mapInteractions.testRestaurants()
                     }
                 }
             },

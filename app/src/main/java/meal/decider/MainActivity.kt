@@ -89,6 +89,7 @@ private lateinit var mapInteractions: MapInteractions
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
+//TODO: Sometimes a five $ restaurant can show.
 //TODO: Need an animation for Restaurant Filters that does not overlay w/ a box since a dialog is already popped up.
 //TODO: Floating buttons obscure bottom cuisine and restaurant list items.
 //TODO: Randomization speed/duration options.
@@ -288,20 +289,17 @@ fun Board() {
     Surface(
         color = colorResource(id = R.color.grey_100),
     ) {
-        Box(modifier = Modifier
-            .fillMaxSize(),
+        Column(
         ) {
-            Column {
+            Column(modifier = Modifier
+                .height(screenHeightPct(0.7).dp)) {
                 CuisineSelectionGrid()
             }
-        }
-        Box(modifier = Modifier
-            .fillMaxSize()
-        )
-        {
-            Column (modifier = Modifier
-                .fillMaxSize(),
-                verticalArrangement = Arrangement.Bottom) {
+            Column(modifier = Modifier
+                .height(screenHeightPct(0.2).dp)
+                .background(colorResource(id = R.color.grey_50))
+            )
+            {
                 InteractionButtons()
             }
         }
@@ -417,8 +415,8 @@ fun CuisineSelectionGrid() {
                 appViewModel.cuisineBorderStrokeToggleAnimation()
                 //For our query to return a list of restaurants matching the rolled cuisine.
                 appViewModel.restaurantSearchCuisineType = rolledCuisineString
-//                mapInteractions.testRestaurants()
-                mapInteractions.mapsApiCall()
+                mapInteractions.testRestaurants()
+//                mapInteractions.mapsApiCall()
 
                 delay(2000)
 
@@ -501,7 +499,7 @@ fun InteractionButtons() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 12.dp),
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
 
             Button(
@@ -511,7 +509,6 @@ fun InteractionButtons() {
                             appViewModel.rollCuisine()
                         } else {
                             appViewModel.rollRestaurant()
-//                            appViewModel.testRestaurantRoll()
                         }
 //                        appViewModel.pressYourLuck()
                     }
