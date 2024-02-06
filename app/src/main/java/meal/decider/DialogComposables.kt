@@ -139,8 +139,6 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                             appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd)
                             coroutineScope.launch {
                                 roomInteractions.insertMultipleCuisines(appViewModel.getListOfCuisinesToAdd)
-                                //Resets list of cuisines we have just added.
-                                appViewModel.updateListOfCuisinesToAdd(emptyList())
                             }
                             appViewModel.updateAddMode(false)
                         }) {
@@ -246,6 +244,7 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                                     roomInteractions.setSquareDatabaseToDefaultStartingValues()
                                     appViewModel.updateSquareList(appViewModel.starterSquareList())
                                     appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
+                                    appViewModel.updateEditMode(false)
                                     appViewModel.updateRestoreDefaults(false)
                                 }) {
                                     DialogIcon(imageVector = Icons.Default.Check, colorResource = android.R.color.holo_green_light)
