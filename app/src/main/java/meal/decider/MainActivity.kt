@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -19,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -56,8 +56,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -201,11 +201,6 @@ fun TopBar() {
                             expanded = expanded,
                             onDismissRequest = { expanded = false }
                         ) {
-//                            DropDownMenuItemUi(text = "Options") {
-//                                appViewModel.updateOptionsMode(true)
-//                                appViewModel.updateEditMode(false)
-//                                expanded = false
-//                            }
                             DropDownMenuItemUi(text = "Add Cuisine") {
                                 appViewModel.updateAddMode(true)
                                 appViewModel.updateEditMode(false)
@@ -474,6 +469,31 @@ fun CuisineSelectionGrid() {
             }
         }
     )
+
+    Box(modifier = Modifier
+        .fillMaxSize(),
+        contentAlignment = Alignment.Center
+        ) {
+        IconButton(modifier = Modifier
+            .size(72.dp),
+            onClick = {
+                if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
+                    if (!appViewModel.getShowRestaurants) {
+                        appViewModel.rollCuisine()
+                    } else {
+                        appViewModel.rollRestaurant()
+//                            appViewModel.testRestaurantRoll()
+                    }
+                }
+            },
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.dice),
+                contentDescription = "Dice Icon",
+                tint = colorResource(id = R.color.blue_600)
+            )
+        }
+    }
 }
 
 @SuppressLint("MissingPermission")
@@ -503,7 +523,6 @@ fun InteractionButtons() {
                         } else {
                             appViewModel.rollRestaurant()
                         }
-//                        appViewModel.pressYourLuck()
                     }
                 },
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
@@ -512,9 +531,7 @@ fun InteractionButtons() {
                 ) {
                 ButtonText(text = "Decide")
             }
-
             Spacer(modifier = Modifier.width(24.dp))
-
             Button(
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
@@ -539,16 +556,6 @@ fun InteractionButtons() {
 @Composable
 fun ButtonText(text: String) {
     Text(text = text, color = Color.Black, fontSize = 20.sp)
-}
-
-@Composable
-fun screenHeightPct(pct: Double) : Double {
-    val configuration = LocalConfiguration.current
-    return configuration.screenHeightDp.toDouble() * pct
-}
-
-fun showLog(name: String, text: String) {
-    Log.i(name, text)
 }
 
 @Preview(showBackground = true)

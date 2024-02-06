@@ -1,5 +1,8 @@
 package meal.decider
 
+import android.util.Log
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalConfiguration
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -45,4 +48,14 @@ fun priceToDollarSigns(price: Int?): String {
         }
     }
     return stringToReturn
+}
+
+@Composable
+fun screenHeightPct(pct: Double) : Double {
+    val configuration = LocalConfiguration.current
+    return configuration.screenHeightDp.toDouble() * pct
+}
+
+fun showLog(name: String, text: String) {
+    Log.i(name, text)
 }

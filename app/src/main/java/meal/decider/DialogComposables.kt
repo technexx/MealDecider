@@ -150,7 +150,6 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
         )
     }
 
-    //List (or any object) in State<Object> is accessed w/ (Var).value.
     @Composable
     fun DisplayedCuisineList(list: State<List<String>>) {
         val listOfCuisinesToAdd = appViewModel.listOfCuisinesToAdd.collectAsStateWithLifecycle()
@@ -169,7 +168,6 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                 } else {
                     backgroundColor = R.color.grey_500
                 }
-
                 Column (modifier = Modifier
                     .padding(4.dp)
                     .selectable(
@@ -214,9 +212,7 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.SpaceEvenly)
                         {
-
                             Spacer(modifier = Modifier.height(10.dp))
-
                             Row(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
@@ -228,9 +224,7 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                                     modifier = Modifier.padding(12.dp)
                                 )
                             }
-
                             Spacer(modifier = Modifier.height(10.dp))
-
                             Row (modifier = Modifier
                                 .fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -278,10 +272,8 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                         if (showRestaurantSettings.value) {
                             RestaurantFilterDialog()
                         }
-
                         Column(modifier = Modifier
                             .wrapContentSize()
-//                            .height(screenHeightPct(0.075).dp)
                         ) {
                             Row (modifier = Modifier
                                 .fillMaxWidth(),
@@ -290,13 +282,11 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                                 RestaurantSortDropdownMenu()
                             }
                         }
-
                         Column(modifier = Modifier
                             .height(screenHeightPct(0.8).dp)
                         ) {
                             RestaurantLazyGrid()
                         }
-
                         Column(modifier = Modifier
                             .wrapContentSize()
                         ) {
@@ -331,7 +321,6 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-
                 RestaurantDropDownUi("Sort A-Z") {
                     appViewModel.sortAndUpdateRestaurantList("name")
                     expanded = false
