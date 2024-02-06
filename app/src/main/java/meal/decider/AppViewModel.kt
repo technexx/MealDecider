@@ -420,6 +420,7 @@ class AppViewModel : ViewModel() {
                 updateSelectedCuisineSquare(getSquareList[rolledSquareIndex])
                 updateCuisineRollFinished(true)
                 updateRollEngaged(false)
+                cuisineStringUri = selectedCuisineSquare.value.name + " Food " + foodRestrictionsString(getRestrictionsList)
                 handler.removeCallbacks(cuisineRollRunnable)
             }
         }
