@@ -85,8 +85,8 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
 
         AnimatedTransitionDialog(
             modifier = Modifier
-                .height(300.dp)
-                .width(400.dp),
+                .height(400.dp)
+                .width(500.dp),
             onDismissRequest = {
                 appViewModel.updateAddMode(false)
                 appViewModel.updateListOfCuisinesToAdd(emptyList())
