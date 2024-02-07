@@ -2,6 +2,7 @@ package meal.decider
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalConfiguration
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -48,6 +49,25 @@ fun priceToDollarSigns(price: Int?): String {
         }
     }
     return stringToReturn
+}
+
+fun filterList(list: List<String>, searchString: String) : List<String> {
+    //If search string equals the first X characters typed, filter list with just those matching entries. If search string is empty, display full list.
+    return if (searchString != "") {
+        list.filter { a -> a.substring(0, searchString.length).equals(searchString, true) }
+    } else {
+        list
+    }
+}
+
+fun foodRestrictionsString(list: SnapshotStateList<RestrictionsValues>): String {
+    var stringList = ""
+    for (i in list) {
+        if (i.selected) {
+            stringList = stringList+ "+" + (i.name)
+        }
+    }
+    return stringList
 }
 
 @Composable

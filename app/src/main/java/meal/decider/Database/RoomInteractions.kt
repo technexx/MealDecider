@@ -16,7 +16,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
     val cuisineDao = cuisineDatabase.cuisineDao()
     val restaurantFiltersDao = cuisineDatabase.restaurantFiltersDao()
 
-    suspend fun populateDatabaseWithInitialCuisines() {
+    private suspend fun populateDatabaseWithInitialCuisines() {
         for (i in appViewModel.starterSquareList().indices) {
             if (i==0) insertCuisine(appViewModel.starterSquareList()[i].name, chosenSquareColor) else
                 insertCuisine(appViewModel.starterSquareList()[i].name, defaultSquareColor)
@@ -35,7 +35,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         }
     }
 
-    suspend fun insertCuisine(name: String, color: Int) =
+    private suspend fun insertCuisine(name: String, color: Int) =
         withContext(Dispatchers.IO) {
             cuisineDao.insertCuisine(Cuisines(null, name, color))
         }

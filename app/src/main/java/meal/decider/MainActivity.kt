@@ -128,11 +128,6 @@ class MainActivity : ComponentActivity() {
             appViewModel.cuisineStringUri = appViewModel.getselectedCuisineSquare.name + " Food "
         }
 
-        //Populates SquareValues with DB values and set first cuisine as default selection.
-        ioScope.launch {
-
-        }
-
         setContent {
             MealDeciderTheme {
                 Surface(
@@ -387,7 +382,7 @@ fun CuisineSelectionGrid() {
 
     val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
     val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()
-    val restrictionsString = appViewModel.foodRestrictionsString(restrictionsUi.value)
+    val restrictionsString = foodRestrictionsString(restrictionsUi.value)
 
     val rolledCuisineString = selectedCuisineSquare.value.name + " Food " + restrictionsString
 
