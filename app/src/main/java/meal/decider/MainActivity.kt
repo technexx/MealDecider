@@ -87,6 +87,7 @@ private lateinit var mapInteractions: MapInteractions
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
+//TODO: Sorting cuisines should not need to delete/repop database.
 //TODO: Need an animation for Restaurant Filters that does not overlay w/ a box since a dialog is already popped up.
 //TODO: Randomization speed/duration options.
 //TODO: Keep statistics (how many rolls, how many re-rolls, how many maps opened, etc.)
@@ -116,6 +117,7 @@ class MainActivity : ComponentActivity() {
                 appViewModel.updateSquareList(appViewModel.starterSquareList())
             } else {
                 roomInteractions.populateSquareValuesWithDatabaseValues()
+                appViewModel.setFirstSquareToDefaultColor()
             }
             if (roomInteractions.restaurantFiltersDao.getAllRestaurantFilters().isEmpty()) {
                 roomInteractions.populateRestaurantFiltersWithInitialValues()

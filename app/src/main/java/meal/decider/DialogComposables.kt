@@ -110,7 +110,7 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                             placeholder = {Text( "e.g. Filipino") },
                             onValueChange = {
                                 txtField = it
-                                searchTerms = appViewModel.filterList(fullCuisineList, txtField)
+                                searchTerms = filterList(fullCuisineList, txtField)
                                 appViewModel.updateDisplayedCuisineList(searchTerms)},
                             singleLine = true,
                             textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),

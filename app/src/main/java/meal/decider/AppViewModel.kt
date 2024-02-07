@@ -288,7 +288,6 @@ class AppViewModel : ViewModel() {
                 listToDisplay.remove(i)
             }
         }
-
         updateDisplayedCuisineList(listToDisplay)
     }
 
@@ -370,17 +369,22 @@ class AppViewModel : ViewModel() {
         updateSquareList(squareList)
     }
 
+    fun setFirstSquareToDefaultColor() {
+        val squareList = getSquareList
+        squareList[0].color = chosenSquareColor
+        updateSquareList(squareList)
+    }
+
     private fun doesSelectedCuisineSquareExist() : Boolean {
         val squareList = getSquareList
         val selectedCuisineSquare = getselectedCuisineSquare
 
         for (i in squareList) {
-            if (i.name.equals(selectedCuisineSquare.name)) return true
+            if (i.name == selectedCuisineSquare.name) return true
         }
         return false
     }
 
-    //Cuisine and Press Your Luck run at different intervals but both stop when rollCountDown hits 20.
     fun rollCuisine() {
         var delay: Long = 100
         rollCountdown = 100
