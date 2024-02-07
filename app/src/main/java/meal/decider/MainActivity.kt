@@ -13,13 +13,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -469,31 +467,6 @@ fun CuisineSelectionGrid() {
             }
         }
     )
-
-    Box(modifier = Modifier
-        .fillMaxSize(),
-        contentAlignment = Alignment.Center
-        ) {
-        IconButton(modifier = Modifier
-            .size(72.dp),
-            onClick = {
-                if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-                    if (!appViewModel.getShowRestaurants) {
-                        appViewModel.rollCuisine()
-                    } else {
-                        appViewModel.rollRestaurant()
-//                            appViewModel.testRestaurantRoll()
-                    }
-                }
-            },
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.dice),
-                contentDescription = "Dice Icon",
-                tint = colorResource(id = R.color.blue_600)
-            )
-        }
-    }
 }
 
 @SuppressLint("MissingPermission")
@@ -504,14 +477,14 @@ fun InteractionButtons() {
     Column (
         modifier = Modifier
             .wrapContentSize()
-            .padding(16.dp),
+            .padding(top = 12.dp, bottom = 12.dp),
         verticalArrangement = Arrangement.Bottom
 
     ) {
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 12.dp),
+                .padding(bottom = 0.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
 
@@ -527,11 +500,28 @@ fun InteractionButtons() {
                 },
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
-
                 ) {
-                ButtonText(text = "Decide")
+                ButtonText(text = "Places")
             }
-            Spacer(modifier = Modifier.width(24.dp))
+            IconButton(modifier = Modifier
+                .size(72.dp),
+                onClick = {
+                    if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
+                        if (!appViewModel.getShowRestaurants) {
+                            appViewModel.rollCuisine()
+                        } else {
+                            appViewModel.rollRestaurant()
+//                            appViewModel.testRestaurantRoll()
+                        }
+                    }
+                },
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.dice),
+                    contentDescription = "Dice Icon",
+                    tint = colorResource(id = R.color.blue_600)
+                )
+            }
             Button(
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
@@ -547,7 +537,7 @@ fun InteractionButtons() {
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
             ) {
-                ButtonText(text = "Open Maps")
+                ButtonText(text = "Map")
             }
         }
     }
