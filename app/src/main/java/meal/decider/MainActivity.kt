@@ -411,7 +411,7 @@ fun CuisineSelectionGrid() {
                 appViewModel.cancelCuisineBorderStrokeToggleRunnable()
                 appViewModel.updateCuisineRollFinished(false)
 
-                appViewModel.updateShowRestaurants(true)
+//                appViewModel.updateShowRestaurants(true)
                 appViewModel.resetCuisineSelectionBorderStroke()
             }
         }
@@ -487,16 +487,9 @@ fun InteractionButtons() {
                 .padding(bottom = 0.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
-
             Button(
                 onClick = {
-                    if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-                        if (!appViewModel.getShowRestaurants) {
-                            appViewModel.rollCuisine()
-                        } else {
-                            appViewModel.rollRestaurant()
-                        }
-                    }
+                    appViewModel.updateShowRestaurants(true)
                 },
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
