@@ -16,6 +16,13 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
     val cuisineDao = cuisineDatabase.cuisineDao()
     val restaurantFiltersDao = cuisineDatabase.restaurantFiltersDao()
 
+    fun setSquareDatabaseToDefaultStartingValues() {
+        ioScope.launch {
+            deleteAllCuisines()
+            populateDatabaseWithInitialCuisines()
+        }
+    }
+
     private suspend fun populateDatabaseWithInitialCuisines() {
         for (i in appViewModel.starterSquareList().indices) {
             if (i==0) insertCuisine(appViewModel.starterSquareList()[i].name, chosenSquareColor) else
@@ -48,6 +55,17 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         }
     }
 
+    //This will rely on lists being same length, so add a check exception.
+    //With unique keys set to true in Cuisine Entity, we can't update database values one by one, because that will result in temporary identical entries.
+    suspend fun updateCuisines(list: SnapshotStateList<SquareValues>) {
+        withContext(Dispatchers.IO) {
+            val dbSquareList = cuisineDao.getAllCuisines()
+            for (i in dbSquareList.indices) {
+                cuisineDao.updateCuisine(list[i].name, list[i].color)
+            }
+        }
+    }
+
     suspend fun deleteMultipleCuisines() {
         withContext(Dispatchers.IO) {
             val listOfNames = appViewModel.getlistOfCuisineSquaresToEdit
@@ -60,13 +78,6 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
     suspend fun deleteAllCuisines() {
         withContext(Dispatchers.IO) {
             cuisineDao.deleteAllCuisines(cuisineDao.getAllCuisines())
-        }
-    }
-
-    fun setSquareDatabaseToDefaultStartingValues() {
-        ioScope.launch {
-            deleteAllCuisines()
-            populateDatabaseWithInitialCuisines()
         }
     }
 

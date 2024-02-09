@@ -215,6 +215,7 @@ fun TopBar() {
                             DropDownMenuItemUi(text = "Sort Alphabetically") {
                                 appViewModel.sortAndUpdateCuisineList("alphabetical")
                                 coroutineScope.launch {
+//                                    roomInteractions.updateCuisines(appViewModel.getSquareList)
                                     roomInteractions.deleteAllCuisines()
                                     roomInteractions.insertMultipleCuisines(appViewModel.getListOfSquareNames())
                                 }

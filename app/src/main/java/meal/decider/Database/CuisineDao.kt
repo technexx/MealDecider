@@ -20,11 +20,11 @@ interface CuisineDao {
     @Query("SELECT * FROM cuisine WHERE cuisine_name LIKE :name AND " + "cuisine_color LIKE :color LIMIT 1")
     fun getCuisineByNameAndColor(name: String, color: Int): Cuisines
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCuisine(vararg cuisine: Cuisines)
 
-    @Query("UPDATE cuisine SET cuisine_name = :newName WHERE cuisine_name = :oldName")
-    fun updateCuisineName(oldName: String, newName: String)
+    @Query("UPDATE cuisine SET cuisine_name = :name, cuisine_color = :color")
+    fun updateCuisine(name: String, color: Int)
 
     @Query("DELETE FROM cuisine WHERE cuisine_name = :name")
     fun deleteCuisineFromName(name: String)
