@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -27,6 +29,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -87,7 +90,6 @@ private lateinit var mapInteractions: MapInteractions
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Sorting cuisines should not need to delete/repop database.
 //TODO: Need an animation for Restaurant Filters that does not overlay w/ a box since a dialog is already popped up.
 //TODO: Randomization speed/duration options.
 //TODO: Keep statistics (how many rolls, how many re-rolls, how many maps opened, etc.)
@@ -152,6 +154,7 @@ fun TopBar() {
     var expanded by remember { mutableStateOf(false) }
     val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
     val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
+    val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -185,12 +188,25 @@ fun TopBar() {
                         modifier = Modifier
                             .wrapContentSize(Alignment.TopEnd)
                     ) {
-                        IconButton(onClick = { expanded = !expanded }) {
-                            Icon(
-                                imageVector = Icons.Filled.Menu,
-                                contentDescription = "More"
-                            )
+                        //TODO: Options Dialog
+                        Row() {
+                            IconButton(onClick = {
+                                appViewModel.updateOptionsMode(true)
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Settings,
+                                    contentDescription = "Options"
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            IconButton(onClick = { expanded = !expanded }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Menu,
+                                    contentDescription = "More"
+                                )
+                            }
                         }
+
                         DropdownMenu(modifier = Modifier
                             .background(colorResource(id = R.color.white)),
                             expanded = expanded,

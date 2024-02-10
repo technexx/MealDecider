@@ -30,6 +30,7 @@ private suspend fun startDismissWithExitAnimation(
     onDismissRequest()
 }
 
+//Background color must be set in whichever columns/rows are being used in the content input, otherwise background will be the same as the Box here.
 @Composable
 fun AnimatedTransitionDialog(
     modifier: Modifier,
