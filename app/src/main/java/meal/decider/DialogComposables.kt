@@ -607,7 +607,6 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                     .fillMaxSize(),
                 onDismissRequest = {
                     appViewModel.updateOptionsMode(false)
-
                 },
                 content = {
                     Column(modifier = Modifier

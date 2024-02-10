@@ -90,6 +90,9 @@ private lateinit var mapInteractions: MapInteractions
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
+//TODO: Increasing distance with a max price of "$" returns 3 different results - does not increase number of returns. These results have further distances and do not include the shorter distances of before.
+    //TODO: Further distance can actually return LESS results than closer
+//TODO: "Places" returns no results when app first launched, even with a cuisine selected.
 //TODO: Need an animation for Restaurant Filters that does not overlay w/ a box since a dialog is already popped up.
 //TODO: Randomization speed/duration options.
 //TODO: Keep statistics (how many rolls, how many re-rolls, how many maps opened, etc.)
