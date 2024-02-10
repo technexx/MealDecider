@@ -91,8 +91,8 @@ val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
 //TODO: Increasing distance with a max price of "$" returns 3 different results - does not increase number of returns. These results have further distances and do not include the shorter distances of before.
-    //TODO: Further distance can actually return LESS results than closer
-//TODO: "Places" returns no results when app first launched, even with a cuisine selected.
+    //TODO: Further distance can actually return LESS results than closer.
+    //TODO: Seems more related to when max price is set at "$".
 //TODO: Need an animation for Restaurant Filters that does not overlay w/ a box since a dialog is already popped up.
 //TODO: Randomization speed/duration options.
 //TODO: Keep statistics (how many rolls, how many re-rolls, how many maps opened, etc.)
@@ -133,6 +133,9 @@ class MainActivity : ComponentActivity() {
 
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
             appViewModel.cuisineStringUri = appViewModel.getselectedCuisineSquare.name + " Food "
+            appViewModel.restaurantSearchCuisineType = appViewModel.selectedCuisineSquare.value.name
+            //Gets restaurants on app launch for selected cuisine.
+            mapInteractions.mapsApiCall()
         }
 
         setContent {
