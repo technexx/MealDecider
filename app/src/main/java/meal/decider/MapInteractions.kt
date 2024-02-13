@@ -31,12 +31,13 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val price = appViewModel.maxRestaurantPrice
 
             /////////////////////////
-//            cuisineType = "cuban food"
+            cuisineType = "cuban food"
             /////////////////////////
             showLog("test", "$cuisineType + $distance + $rating + $price")
 
-            //TODO: Issue may be that rating/price return ONLY the value specified, not filtered by "at least" or "at most"
-            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&name=$cuisineType&radius=$distance&rating=$rating&maxprice=$price&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
+            //TODO: We can iterate through distances, e.g. get all results from 1 mile, then query @ 2 and add only if an item is not in previous list.
+            //TODO: EX: Between 6 and 7 miles, a restaurant that is 6.2 will appear in former and disappear in latter.
+            val uri = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&location=${currentLocation.latitude},${currentLocation.longitude}&input=$cuisineType&radius=$distance&locationbias=ipbias&maxprice=$price&fields=geometry, name, vicinity, price_level, rating&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
             val request = Request.Builder()
                 .url(uri)
