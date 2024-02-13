@@ -35,6 +35,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
             /////////////////////////
             showLog("test", "$cuisineType + $distance + $rating + $price")
 
+            //TODO: Issue may be that rating/price return ONLY the value specified, not filtered by "at least" or "at most"
             val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&name=$cuisineType&radius=$distance&rating=$rating&maxprice=$price&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
             val request = Request.Builder()

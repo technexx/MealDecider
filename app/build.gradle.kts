@@ -87,5 +87,7 @@ dependencies {
 
     implementation ("com.google.code.gson:gson:2.8.7")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+    implementation ("com.google.maps.android:android-maps-utils:0.5")
 //    annotationProcessor("androidx.room:room-compiler:$room_version")
 }
