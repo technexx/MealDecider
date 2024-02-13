@@ -66,6 +66,58 @@ package meal.decider.Extra
 //            }
 //    }
 
+//suspend fun testApi() {
+//    withContext(Dispatchers.IO) {
+//        val apiKey = BuildConfig.PLACES_API_KEY
+////            val apiKey = "AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
+//
+//        Places.initializeWithNewPlacesApiEnabled(activityContext, apiKey)
+//        showLog("test", apiKey)
+//
+//        var cuisineType = appViewModel.restaurantSearchCuisineType
+//        val distance = appViewModel.maxRestaurantDistance
+//        val rating = appViewModel.minRestaurantRating
+//        val price = appViewModel.maxRestaurantPrice
+//
+//        // Specify the list of fields to return.
+//        val placeFields = Arrays.asList(Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.RATING, Place.Field.PRICE_LEVEL)
+//
+//// Define latitude and longitude coordinates of the search area.
+//        val searchCenter = LatLng(currentLocation.latitude, currentLocation.longitude)
+//        val ne = SphericalUtil.computeOffset(searchCenter, distance.toDouble(), 45.0)
+//        val sw = SphericalUtil.computeOffset(searchCenter, distance.toDouble(), 225.0)
+//
+//        showLog("test", "sw is $sw and ne is $ne")
+//
+//// Use the builder to create a SearchByTextRequest object.
+//        val searchByTextRequest = SearchByTextRequest.builder("Spicy Vegetarian Food", placeFields)
+//            .setMaxResultCount(10)
+//            .setLocationRestriction(RectangularBounds.newInstance(sw, ne)).build();
+//
+//// Call PlacesClient.searchByText() to perform the search.
+//// Define a response handler to process the returned List of Place objects.
+//        Places.initializeWithNewPlacesApiEnabled(activityContext, apiKey)
+//
+////            Places.initialize(activityContext, apiKey)
+//        val placesClient = Places.createClient(activityContext)
+//
+//        showLog("test", "distance is $distance")
+//
+//        placesClient.searchByText(searchByTextRequest)
+//            .addOnSuccessListener { response ->
+//                val places: List<Place> = response.places
+//                for (i in places) {
+//                    showLog("test", i.toString())
+//                }
+//            }
+//            .addOnFailureListener {  exception: Exception? ->
+//                if (exception is ApiException) {
+//                    Log.i("test", "Place not found: ${exception.statusCode}")
+//                }
+//            }
+//    }
+//}
+
 //fun filterRestaurantList(distance: Double, rating: Double, price: Int) {
 //    //Uses copy of original restaurant list that is a stable reference to all restaurants queried, so filters can be applied/removed.
 //    val restaurantList = originalRestaurantList.map { it.copy() }.toMutableStateList()
