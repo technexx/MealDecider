@@ -61,9 +61,17 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     private val buttons = Buttons(appViewModel, mapInteractions, runnables)
     private val dialogComposables = DialogComposables(appViewModel, appDatabase, mapInteractions, runnables)
 
+    @Composable
+    fun BoardUi() {
+        TopBar {
+            Board()
+        }
+    }
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun TopBar() {
+    //"Void" Composable input.
+    fun TopBar(content: @Composable (() -> Unit)) {
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         var expanded by remember { mutableStateOf(false) }
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
@@ -176,7 +184,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 modifier = Modifier
                     .padding(innerPadding),
             ) {
-                Board()
+                content()
             }
         }
     }
