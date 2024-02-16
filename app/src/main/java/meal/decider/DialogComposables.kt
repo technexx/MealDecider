@@ -67,7 +67,7 @@ import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 import kotlin.math.floor
 
-class DialogComposables(private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, private val mapInteractions: MapInteractions){
+class DialogComposables(private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase, private val mapInteractions: MapInteractions, private val runnables: Runnables){
     private val roomInteractions = RoomInteractions(appDatabase, appViewModel)
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -508,14 +508,14 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
         if (restaurantRollFinished.value) {
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
-                    sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
+                    sectionGridState.animateScrollToItem(runnables.rolledRestaurantIndex)
                     appViewModel.restaurantStringUri = rolledRestaurantString
-                    appViewModel.restaurantBorderStrokeToggleAnimation()
+                    runnables.restaurantBorderStrokeToggleAnimation()
 
                     delay(2000)
 
-                    appViewModel.cancelRestaurantBorderStrokeToggleRunnable()
-                    appViewModel.resetRestaurantSelectionBorderStroke()
+                    runnables.cancelRestaurantBorderStrokeToggleRunnable()
+                    runnables.resetRestaurantSelectionBorderStroke()
                     appViewModel.updateRestaurantRollFinished(false)
                 }
             }
@@ -527,14 +527,14 @@ class DialogComposables(private val appViewModel: AppViewModel, private val appD
                 .padding(12.dp),
             columns = StaggeredGridCells.Adaptive(128.dp),
         ) {
+            //TODO: Not changing because our interaction buttons are lodged in Main and we use its local runnable class to change the index.
             items(restaurantList.value.size) { index ->
 //            items(dummyList.size) { index ->
-                if (index == appViewModel.rolledRestaurantIndex) {
+                if (index == runnables.rolledRestaurantIndex) {
                     borderStroke = restaurantSelectionBorderStroke.value
                 } else {
                     borderStroke = BorderStroke(1.dp,Color.Black)
                 }
-
                 Card(
                     colors = CardDefaults.cardColors(
 //                        containerColor = colorResource(dummyList[index].color!!),

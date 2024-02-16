@@ -1,7 +1,5 @@
 package meal.decider
 
-import android.os.Handler
-import android.os.Looper
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateListOf
@@ -13,14 +11,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlin.random.Random
 
 @Stable
 class AppViewModel : ViewModel() {
     var singleSquareIndexToEdit = 0
-    var rolledSquareIndex = 0
-    var rolledRestaurantIndex = 0
-    var rollCountdown: Long = 1000
 
     var restaurantSearchCuisineType = ""
     var cuisineStringUri = ""
@@ -30,13 +24,6 @@ class AppViewModel : ViewModel() {
     var maxRestaurantDistance = 0
     var minRestaurantRating = 3.0
     var maxRestaurantPrice = 1
-
-    private val handler = Handler(Looper.getMainLooper())
-    private var cuisineRollRunnable = Runnable {}
-    private var restaurantRollRunnable = Runnable {}
-    private var pressYourLuckRunnable = Runnable {}
-    private var cuisineBorderStrokeToggleRunnable = Runnable {}
-    private var restaurantBorderStrokeToggleRunnable = Runnable {}
 
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
@@ -244,6 +231,7 @@ class AppViewModel : ViewModel() {
         if (typeOfSort == "distance"){
             sortedList = getRestaurantList.sortedWith(compareBy { it.distance })
         }
+        //TODO: Should sort by best -> worst, sorting other way.
         if (typeOfSort == "rating"){
             sortedList = getRestaurantList.sortedWith(compareBy { it.rating })
         }
@@ -384,123 +372,6 @@ class AppViewModel : ViewModel() {
         }
         return false
     }
-
-    fun rollCuisine() {
-        var delay: Long = 100
-        rollCountdown = 100
-
-        updateRollEngaged(true)
-        handler.removeCallbacks(cuisineRollRunnable)
-
-        cuisineRollRunnable = Runnable {
-            rolledSquareIndex = Random.nextInt(0, getSquareList.size)
-            val newSquareList = squareListWithRandomColorChanged(rolledSquareIndex)
-            updateSquareList(newSquareList)
-
-            handler.postDelayed(cuisineRollRunnable, delay)
-            if (delay > 100) delay -= 10
-            rollCountdown -= 20
-
-            if (rollCountdown < 20) {
-                updateSelectedCuisineSquare(getSquareList[rolledSquareIndex])
-                updateCuisineRollFinished(true)
-                updateRollEngaged(false)
-                cuisineStringUri = selectedCuisineSquare.value.name + " Food " + foodRestrictionsString(getRestrictionsList)
-                handler.removeCallbacks(cuisineRollRunnable)
-            }
-        }
-
-        handler.post((cuisineRollRunnable))
-    }
-
-    private fun squareListWithRandomColorChanged(index: Int): SnapshotStateList<SquareValues> {
-        val currentList = getSquareList
-        val newList = SnapshotStateList<SquareValues>()
-
-        for (i in currentList) {
-            newList.add(SquareValues(i.name, defaultSquareColor))
-        }
-        newList[index].color = chosenSquareColor
-
-        return newList
-    }
-
-    fun rollRestaurant() {
-        var delay: Long = 100
-        rollCountdown = 100
-        handler.removeCallbacks(restaurantRollRunnable)
-        updateRollEngaged(true)
-
-        restaurantRollRunnable = Runnable {
-            rolledRestaurantIndex = Random.nextInt(0, getRestaurantList.size)
-            val newRestaurantList = restaurantListWithRandomColorChanged(rolledRestaurantIndex)
-            updateRestaurantsList(newRestaurantList)
-
-            handler.postDelayed(restaurantRollRunnable, delay)
-            if (delay > 100) delay -= 10
-            rollCountdown -= 20
-
-            if (rollCountdown < 20) {
-                updateSelectedRestaurantSquare(getRestaurantList[rolledRestaurantIndex])
-                updateRestaurantRollFinished(true)
-                updateRollEngaged(false)
-                handler.removeCallbacks(restaurantRollRunnable)
-            }
-        }
-
-        handler.post(restaurantRollRunnable)
-    }
-
-    private fun restaurantListWithRandomColorChanged(index: Int): SnapshotStateList<RestaurantValues> {
-        val currentList = getRestaurantList
-        val newList = SnapshotStateList<RestaurantValues>()
-
-        for (i in currentList) {
-            newList.add(RestaurantValues(i.name, i.address, i.distance, i.priceLevel, i.rating, defaultSquareColor))
-        }
-        newList[index].color = chosenSquareColor
-
-        return newList
-    }
-
-    fun cuisineBorderStrokeToggleAnimation() {
-        handler.removeCallbacks(cuisineBorderStrokeToggleRunnable)
-        updateCuisineSelectionBorderStroke(lightCuisineSelectionBorderStroke)
-
-        cuisineBorderStrokeToggleRunnable = Runnable {
-            if (getCuisineSelectionBorderStroke == lightCuisineSelectionBorderStroke) {
-                updateCuisineSelectionBorderStroke(heavyCuisineSelectionBorderStroke)
-            } else {
-                updateCuisineSelectionBorderStroke(lightCuisineSelectionBorderStroke)
-            }
-            handler.postDelayed(cuisineBorderStrokeToggleRunnable, 200)
-        }
-        handler.post(cuisineBorderStrokeToggleRunnable)
-    }
-
-    fun cancelCuisineBorderStrokeToggleRunnable() { handler.removeCallbacks(cuisineBorderStrokeToggleRunnable) }
-    
-    fun resetCuisineSelectionBorderStroke() { updateCuisineSelectionBorderStroke(defaultCuisineSelectionBorderStroke) }
-
-    fun restaurantBorderStrokeToggleAnimation() {
-        handler.removeCallbacks(restaurantBorderStrokeToggleRunnable)
-        updateCuisineSelectionBorderStroke(lightRestaurantSelectionBorderStroke)
-
-        restaurantBorderStrokeToggleRunnable = Runnable {
-            if (getRestaurantSelectionBorderStroke == lightRestaurantSelectionBorderStroke) {
-                updateRestaurantSelectionBorderStroke(heavyRestaurantSelectionBorderStroke)
-            } else {
-                updateRestaurantSelectionBorderStroke(lightRestaurantSelectionBorderStroke)
-            }
-            handler.postDelayed(restaurantBorderStrokeToggleRunnable, 200)
-        }
-
-        handler.post(restaurantBorderStrokeToggleRunnable)
-    }
-
-    fun cancelRestaurantBorderStrokeToggleRunnable() { handler.removeCallbacks(restaurantBorderStrokeToggleRunnable) }
-
-    fun resetRestaurantSelectionBorderStroke() { updateRestaurantSelectionBorderStroke(defaultRestaurantSelectionBorderStroke) }
 
     fun setLocalRestaurantFilterValues(distance: Int, rating: Double, price: Int) {
         maxRestaurantDistance = distance

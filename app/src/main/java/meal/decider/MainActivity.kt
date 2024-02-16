@@ -86,6 +86,7 @@ private lateinit var dialogComposables : DialogComposables
 private lateinit var roomInteractions: RoomInteractions
 @SuppressLint("StaticFieldLeak")
 private lateinit var mapInteractions: MapInteractions
+private lateinit var runnables: Runnables
 
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
@@ -110,7 +111,9 @@ class MainActivity : ComponentActivity() {
         mapInteractions = MapInteractions(activity, activityContext, appViewModel)
         mapInteractions.fusedLocationListener()
 
-        dialogComposables = DialogComposables(appViewModel, cuisineDatabase, mapInteractions)
+        runnables = Runnables(appViewModel)
+
+        dialogComposables = DialogComposables(appViewModel, cuisineDatabase, mapInteractions, runnables)
 
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
         ioScope.launch {
@@ -414,9 +417,9 @@ fun CuisineSelectionGrid() {
     if (cuisineRollFinished.value) {
         LaunchedEffect(Unit) {
             coroutineScope.launch {
-                sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
+                sectionGridState.animateScrollToItem(runnables.rolledSquareIndex)
                 //Begins runnable to animation cuisine border
-                appViewModel.cuisineBorderStrokeToggleAnimation()
+                runnables.cuisineBorderStrokeToggleAnimation()
                 //For our query to return a list of restaurants matching the rolled cuisine.
                 appViewModel.restaurantSearchCuisineType = rolledCuisineString
 //                mapInteractions.testRestaurants()
@@ -425,11 +428,11 @@ fun CuisineSelectionGrid() {
 //                delay(2000)
 
                 //Cancels border animation after above delay, and launches restaurant dialog.
-                appViewModel.cancelCuisineBorderStrokeToggleRunnable()
+                runnables.cancelCuisineBorderStrokeToggleRunnable()
                 appViewModel.updateCuisineRollFinished(false)
 
 //                appViewModel.updateShowRestaurants(true)
-                appViewModel.resetCuisineSelectionBorderStroke()
+                runnables.resetCuisineSelectionBorderStroke()
             }
         }
     }
@@ -447,7 +450,7 @@ fun CuisineSelectionGrid() {
             items(boardUiState.value.squareList.size) { index ->
                 if (editMode.value) {
                     borderStroke = cuisineEditModeBorderStroke
-                } else if (index == appViewModel.rolledSquareIndex) {
+                } else if (index == runnables.rolledSquareIndex) {
                     borderStroke = cuisineSelectionBorderStroke.value
                 } else {
                     borderStroke = defaultCuisineSelectionBorderStroke
@@ -518,9 +521,9 @@ fun InteractionButtons() {
                 onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         if (!appViewModel.getShowRestaurants) {
-                            appViewModel.rollCuisine()
+                            runnables.rollCuisine()
                         } else {
-                            appViewModel.rollRestaurant()
+                            runnables.rollRestaurant()
 //                            appViewModel.testRestaurantRoll()
                         }
                     }

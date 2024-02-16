@@ -31,9 +31,8 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val price = appViewModel.maxRestaurantPrice
 
             /////////////////////////
-            cuisineType = "cuban food"
+//            cuisineType = "cuban food"
             /////////////////////////
-            showLog("test", "$cuisineType + $distance + $rating + $price")
 
             //We can iterate through distances, e.g. get all results from 1 mile, then query @ 2 and add only if an item is not in previous list.
             //EX: Between 6 and 7 miles, a restaurant that is 6.2 will appear in former and disappear in latter.
