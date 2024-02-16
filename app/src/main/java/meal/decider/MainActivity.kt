@@ -429,10 +429,11 @@ fun CuisineSelectionGrid() {
 
                 //Cancels border animation after above delay, and launches restaurant dialog.
                 runnables.cancelCuisineBorderStrokeToggleRunnable()
+                appViewModel.updateCuisineSelectionBorderStroke(heavyCuisineSelectionBorderStroke)
                 appViewModel.updateCuisineRollFinished(false)
 
 //                appViewModel.updateShowRestaurants(true)
-                runnables.resetCuisineSelectionBorderStroke()
+//                runnables.resetCuisineSelectionBorderStroke()
             }
         }
     }

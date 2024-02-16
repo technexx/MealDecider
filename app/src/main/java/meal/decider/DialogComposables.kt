@@ -515,7 +515,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     delay(2000)
 
                     runnables.cancelRestaurantBorderStrokeToggleRunnable()
-                    runnables.resetRestaurantSelectionBorderStroke()
+                    appViewModel.updateRestaurantSelectionBorderStroke(heavyRestaurantSelectionBorderStroke)
                     appViewModel.updateRestaurantRollFinished(false)
                 }
             }
