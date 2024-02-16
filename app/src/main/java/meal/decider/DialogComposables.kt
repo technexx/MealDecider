@@ -69,6 +69,7 @@ import kotlin.math.floor
 
 class DialogComposables(private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase, private val mapInteractions: MapInteractions, private val runnables: Runnables){
     private val roomInteractions = RoomInteractions(appDatabase, appViewModel)
+    private val buttons = Buttons(appViewModel, mapInteractions, runnables)
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -285,7 +286,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         Column(modifier = Modifier
                             .wrapContentSize()
                         ) {
-                            InteractionButtons()
+                            buttons.InteractionButtons()
                         }
                     }
                 }
@@ -527,7 +528,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 .padding(12.dp),
             columns = StaggeredGridCells.Adaptive(128.dp),
         ) {
-            //TODO: Not changing because our interaction buttons are lodged in Main and we use its local runnable class to change the index.
             items(restaurantList.value.size) { index ->
 //            items(dummyList.size) { index ->
                 if (index == runnables.rolledRestaurantIndex) {
