@@ -509,7 +509,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         if (restaurantRollFinished.value) {
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
-                    sectionGridState.animateScrollToItem(runnables.rolledRestaurantIndex)
+                    sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
                     appViewModel.restaurantStringUri = rolledRestaurantString
                     runnables.restaurantBorderStrokeToggleAnimation()
 
@@ -530,7 +530,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         ) {
             items(restaurantList.value.size) { index ->
 //            items(dummyList.size) { index ->
-                if (index == runnables.rolledRestaurantIndex) {
+                if (index == appViewModel.rolledRestaurantIndex) {
                     borderStroke = restaurantSelectionBorderStroke.value
                 } else {
                     borderStroke = BorderStroke(1.dp,Color.Black)

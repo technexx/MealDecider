@@ -6,15 +6,12 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlin.random.Random
 
 class Runnables (val appViewModel: AppViewModel) {
-    var rolledSquareIndex = 0
-    var rolledRestaurantIndex = 0
-    var rollCountdown: Long = 1000
-
     private val handler = Handler(Looper.getMainLooper())
     private var cuisineRollRunnable = Runnable {}
     private var restaurantRollRunnable = Runnable {}
     private var cuisineBorderStrokeToggleRunnable = Runnable {}
     private var restaurantBorderStrokeToggleRunnable = Runnable {}
+    var rollCountdown: Long = 1000
 
     fun rollCuisine() {
         var delay: Long = 100
@@ -24,8 +21,8 @@ class Runnables (val appViewModel: AppViewModel) {
         handler.removeCallbacks(cuisineRollRunnable)
 
         cuisineRollRunnable = Runnable {
-            rolledSquareIndex = Random.nextInt(0, appViewModel.getSquareList.size)
-            val newSquareList = squareListWithRandomColorChanged(rolledSquareIndex)
+            appViewModel.rolledSquareIndex = Random.nextInt(0, appViewModel.getSquareList.size)
+            val newSquareList = squareListWithRandomColorChanged(appViewModel.rolledSquareIndex)
             appViewModel.updateSquareList(newSquareList)
 
             handler.postDelayed(cuisineRollRunnable, delay)
@@ -33,7 +30,7 @@ class Runnables (val appViewModel: AppViewModel) {
             rollCountdown -= 20
 
             if (rollCountdown < 20) {
-                appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[rolledSquareIndex])
+                appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[appViewModel.rolledSquareIndex])
                 appViewModel.updateCuisineRollFinished(true)
                 appViewModel.updateRollEngaged(false)
                 appViewModel.cuisineStringUri = appViewModel.selectedCuisineSquare.value.name + " Food " + foodRestrictionsString(appViewModel.getRestrictionsList)
@@ -63,8 +60,8 @@ class Runnables (val appViewModel: AppViewModel) {
         appViewModel.updateRollEngaged(true)
 
         restaurantRollRunnable = Runnable {
-            rolledRestaurantIndex = Random.nextInt(0, appViewModel.getRestaurantList.size)
-            val newRestaurantList = restaurantListWithRandomColorChanged(rolledRestaurantIndex)
+            appViewModel.rolledRestaurantIndex = Random.nextInt(0, appViewModel.getRestaurantList.size)
+            val newRestaurantList = restaurantListWithRandomColorChanged(appViewModel.rolledRestaurantIndex)
             appViewModel.updateRestaurantsList(newRestaurantList)
 
             handler.postDelayed(restaurantRollRunnable, delay)
@@ -72,7 +69,7 @@ class Runnables (val appViewModel: AppViewModel) {
             rollCountdown -= 20
 
             if (rollCountdown < 20) {
-                appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[rolledRestaurantIndex])
+                appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[appViewModel.rolledRestaurantIndex])
                 appViewModel.updateRestaurantRollFinished(true)
                 appViewModel.updateRollEngaged(false)
                 handler.removeCallbacks(restaurantRollRunnable)

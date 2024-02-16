@@ -333,7 +333,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         if (cuisineRollFinished.value) {
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
-                    sectionGridState.animateScrollToItem(runnables.rolledSquareIndex)
+                    sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
                     //Begins runnable to animation cuisine border
                     runnables.cuisineBorderStrokeToggleAnimation()
                     //For our query to return a list of restaurants matching the rolled cuisine.
@@ -363,9 +363,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             ),
             content = {
                 items(boardUiState.value.squareList.size) { index ->
+                    showLog("test", "rolled square index is ${appViewModel.rolledSquareIndex}")
                     if (editMode.value) {
                         borderStroke = cuisineEditModeBorderStroke
-                    } else if (index == runnables.rolledSquareIndex) {
+                    } else if (index == appViewModel.rolledSquareIndex) {
                         borderStroke = cuisineSelectionBorderStroke.value
                     } else {
                         borderStroke = defaultCuisineSelectionBorderStroke

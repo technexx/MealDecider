@@ -21,6 +21,9 @@ class AppViewModel : ViewModel() {
     var restaurantStringUri = ""
     var originalRestaurantList: SnapshotStateList<RestaurantValues> = mutableStateListOf()
 
+    var rolledSquareIndex = 0
+    var rolledRestaurantIndex = 0
+
     var maxRestaurantDistance = 0
     var minRestaurantRating = 3.0
     var maxRestaurantPrice = 1
@@ -215,6 +218,7 @@ class AppViewModel : ViewModel() {
                 newSquareList[i] = SquareValues(newSquareList[i].name, defaultSquareColor)
             } else {
                 newSquareList[i] = SquareValues(newSquareList[i].name, chosenSquareColor)
+                rolledSquareIndex = i
             }
         }
 
@@ -231,7 +235,6 @@ class AppViewModel : ViewModel() {
         if (typeOfSort == "distance"){
             sortedList = getRestaurantList.sortedWith(compareBy { it.distance })
         }
-        //TODO: Should sort by best -> worst, sorting other way.
         if (typeOfSort == "rating"){
             sortedList = getRestaurantList.sortedWith(compareByDescending { it.rating })
         }
