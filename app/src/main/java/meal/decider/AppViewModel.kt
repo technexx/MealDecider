@@ -233,7 +233,7 @@ class AppViewModel : ViewModel() {
         }
         //TODO: Should sort by best -> worst, sorting other way.
         if (typeOfSort == "rating"){
-            sortedList = getRestaurantList.sortedWith(compareBy { it.rating })
+            sortedList = getRestaurantList.sortedWith(compareByDescending { it.rating })
         }
         if (typeOfSort == "random") {
             var newNamesList = mutableListOf<String?>()
