@@ -39,12 +39,6 @@ private lateinit var runnables: Runnables
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Sorting after rolling does not move heavy border.
-//TODO: Need an animation for Restaurant Filters that does not overlay w/ a box since a dialog is already popped up.
-//TODO: Randomization speed/duration options.
-//TODO: Keep statistics (how many rolls, how many re-rolls, how many maps opened, etc.)
-//TODO: Option to select category and just roll for restaurant.
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

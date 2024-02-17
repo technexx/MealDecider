@@ -1,5 +1,6 @@
 package meal.decider
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlinx.serialization.Serializable
@@ -10,7 +11,8 @@ data class BoardValues(
 
 data class SquareValues(
     var name: String = "",
-    var color: Int = 0
+    var color: Int = 0,
+    var border: BorderStroke = defaultCuisineSelectionBorderStroke
 )
 
 data class RestrictionsValues(

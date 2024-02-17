@@ -2,6 +2,7 @@ package meal.decider
 
 import android.os.Handler
 import android.os.Looper
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlin.random.Random
 
@@ -91,16 +92,28 @@ class Runnables (val appViewModel: AppViewModel) {
         return newList
     }
 
+    //TODO: Cancel runnable after duration (running infinitely now)
+    //New lists always have to be created when dealing w/ live data. Edited lists (even of snapshot lists) will not trigger recomposition.
     fun cuisineBorderStrokeToggleAnimation() {
         handler.removeCallbacks(cuisineBorderStrokeToggleRunnable)
-        appViewModel.updateCuisineSelectionBorderStroke(lightCuisineSelectionBorderStroke)
 
         cuisineBorderStrokeToggleRunnable = Runnable {
-            if (appViewModel.getCuisineSelectionBorderStroke == lightCuisineSelectionBorderStroke) {
-                appViewModel.updateCuisineSelectionBorderStroke(heavyCuisineSelectionBorderStroke)
+            val squareList = appViewModel.getSquareList
+
+            val newSquareList: SnapshotStateList<SquareValues> = mutableStateListOf()
+            newSquareList.addAll(squareList)
+            val selectedSquare = newSquareList[appViewModel.rolledSquareIndex]
+
+            if (selectedSquare.border == defaultCuisineSelectionBorderStroke) {
+                selectedSquare.border = heavyCuisineSelectionBorderStroke
             } else {
-                appViewModel.updateCuisineSelectionBorderStroke(lightCuisineSelectionBorderStroke)
+                selectedSquare.border = defaultCuisineSelectionBorderStroke
             }
+
+            newSquareList[appViewModel.rolledSquareIndex] = selectedSquare
+            showLog("test", "updated border in runnable is ${newSquareList[appViewModel.rolledSquareIndex].border}")
+
+            appViewModel.updateSquareList(newSquareList)
             handler.postDelayed(cuisineBorderStrokeToggleRunnable, 200)
         }
         handler.post(cuisineBorderStrokeToggleRunnable)

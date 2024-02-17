@@ -344,13 +344,15 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
 //                delay(2000)
 
                     //Cancels border animation after above delay, and launches restaurant dialog.
-                    runnables.cancelCuisineBorderStrokeToggleRunnable()
+//                    runnables.cancelCuisineBorderStrokeToggleRunnable()
                     appViewModel.updateCuisineSelectionBorderStroke(heavyCuisineSelectionBorderStroke)
                     appViewModel.updateCuisineRollFinished(false)
 
                 }
             }
         }
+
+        showLog("test", "recomposing cuisines")
 
         LazyVerticalGrid(state = sectionGridState,
             modifier = Modifier,
@@ -363,7 +365,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             ),
             content = {
                 items(boardUiState.value.squareList.size) { index ->
-                    showLog("test", "rolled square index is ${appViewModel.rolledSquareIndex}")
                     if (editMode.value) {
                         borderStroke = cuisineEditModeBorderStroke
                     } else if (index == appViewModel.rolledSquareIndex) {
@@ -376,7 +377,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         colors = CardDefaults.cardColors(
                             containerColor = colorResource(id = appViewModel.getSquareList[index].color),
                         ),
-                        border = borderStroke,
+                        border = appViewModel.getSquareList[index].border,
                         elevation = CardDefaults.cardElevation(
                             defaultElevation = 6.dp
                         ),

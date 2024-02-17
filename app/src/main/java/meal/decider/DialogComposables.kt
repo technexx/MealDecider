@@ -529,6 +529,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             columns = StaggeredGridCells.Adaptive(128.dp),
         ) {
             items(restaurantList.value.size) { index ->
+                showLog("test", "redrawing border in runnable")
 //            items(dummyList.size) { index ->
                 if (index == appViewModel.rolledRestaurantIndex) {
                     borderStroke = restaurantSelectionBorderStroke.value
@@ -540,7 +541,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 //                        containerColor = colorResource(dummyList[index].color!!),
                         containerColor = colorResource(restaurantList.value[index].color!!),
                     ),
-                    border = borderStroke,
+                    border = appViewModel.getSquareList[index].border,
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 6.dp
                     ),
