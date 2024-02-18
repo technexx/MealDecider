@@ -333,13 +333,13 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
                     sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
-                    runnables.cuisineBorderStrokeToggleAnimation()
+                    runnables.cuisineBorderStrokeToggleAnimation(2000, 200)
                     //mapInteractions.testRestaurants()
                     mapInteractions.mapsApiCall()
                     appViewModel.restaurantSearchCuisineType = rolledCuisineString
 
                     delay(2000)
-                    runnables.cancelCuisineBorderStrokeToggleRunnable()
+//                    runnables.cancelCuisineBorderStrokeToggleRunnable()
                     appViewModel.updateCuisineRollFinished(false)
                 }
             }

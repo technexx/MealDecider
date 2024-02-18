@@ -30,16 +30,6 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val rating = appViewModel.minRestaurantRating
             val price = appViewModel.maxRestaurantPrice
 
-            /////////////////////////
-//            cuisineType = "cuban food"
-            /////////////////////////
-
-            //We can iterate through distances, e.g. get all results from 1 mile, then query @ 2 and add only if an item is not in previous list.
-            //EX: Between 6 and 7 miles, a restaurant that is 6.2 will appear in former and disappear in latter.
-
-            //Old query.
-//            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&name=$cuisineType&radius=$distance&rating=$rating&maxprice=$price&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
-
             //This ranks by distance and disallows radius, but will return the closest -> furthests without omitting results.
             val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&name=$cuisineType&rating=$rating&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 

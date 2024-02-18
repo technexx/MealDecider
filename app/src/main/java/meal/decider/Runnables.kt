@@ -92,27 +92,33 @@ class Runnables (val appViewModel: AppViewModel) {
         return newList
     }
 
-    //TODO: Cancel runnable after duration (running infinitely now)
     //New lists always have to be created when dealing w/ live data. Edited lists (even of snapshot lists) will not trigger recomposition.
-    fun cuisineBorderStrokeToggleAnimation() {
+    fun cuisineBorderStrokeToggleAnimation(duration: Long, delay: Long) {
         handler.removeCallbacks(cuisineBorderStrokeToggleRunnable)
+        //Odd number of iterations so we end on heavy border.
+        var iterations = duration / delay + 1
 
         cuisineBorderStrokeToggleRunnable = Runnable {
-            val squareList = appViewModel.getSquareList
-            val newSquareList: SnapshotStateList<SquareValues> = mutableStateListOf()
-            newSquareList.addAll(squareList)
-            val selectedSquare = newSquareList[appViewModel.rolledSquareIndex]
+            if (iterations > 0) {
+                val squareList = appViewModel.getSquareList
+                val newSquareList: SnapshotStateList<SquareValues> = mutableStateListOf()
+                newSquareList.addAll(squareList)
+                val selectedSquare = newSquareList[appViewModel.rolledSquareIndex]
 
-            if (selectedSquare.border == defaultCuisineSelectionBorderStroke) {
-                selectedSquare.border = heavyCuisineSelectionBorderStroke
-            } else {
-                selectedSquare.border = defaultCuisineSelectionBorderStroke
+                if (selectedSquare.border == defaultCuisineSelectionBorderStroke) {
+                    selectedSquare.border = heavyCuisineSelectionBorderStroke
+                } else {
+                    selectedSquare.border = defaultCuisineSelectionBorderStroke
+                }
+
+                newSquareList[appViewModel.rolledSquareIndex] = selectedSquare
+                appViewModel.updateSquareList(newSquareList)
+                iterations -=1
+
+                handler.postDelayed(cuisineBorderStrokeToggleRunnable, delay)
             }
-
-            newSquareList[appViewModel.rolledSquareIndex] = selectedSquare
-            appViewModel.updateSquareList(newSquareList)
-            handler.postDelayed(cuisineBorderStrokeToggleRunnable, 200)
         }
+
         handler.post(cuisineBorderStrokeToggleRunnable)
     }
 
