@@ -501,7 +501,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
         val selectedRestaurantSquare = appViewModel.selectedRestaurantSquare.collectAsStateWithLifecycle()
         val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
-        val restaurantSelectionBorderStroke = appViewModel.restaurantSelectionBorderStroke.collectAsStateWithLifecycle()
         val rolledRestaurantString = selectedRestaurantSquare.value.name.toString()
 
         var borderStroke: BorderStroke
@@ -516,7 +515,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     delay(2000)
 
                     runnables.cancelRestaurantBorderStrokeToggleRunnable()
-                    appViewModel.updateRestaurantSelectionBorderStroke(heavyRestaurantSelectionBorderStroke)
                     appViewModel.updateRestaurantRollFinished(false)
                 }
             }
@@ -529,10 +527,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             columns = StaggeredGridCells.Adaptive(128.dp),
         ) {
             items(restaurantList.value.size) { index ->
-                showLog("test", "redrawing border in runnable")
 //            items(dummyList.size) { index ->
                 if (index == appViewModel.rolledRestaurantIndex) {
-                    borderStroke = restaurantSelectionBorderStroke.value
+                    borderStroke = appViewModel.getRestaurantList[index].border
                 } else {
                     borderStroke = BorderStroke(1.dp,Color.Black)
                 }
@@ -541,7 +538,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 //                        containerColor = colorResource(dummyList[index].color!!),
                         containerColor = colorResource(restaurantList.value[index].color!!),
                     ),
-                    border = appViewModel.getSquareList[index].border,
+                    border = borderStroke,
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 6.dp
                     ),

@@ -82,12 +82,6 @@ class AppViewModel : ViewModel() {
     private val _showRestaurantSettings = MutableStateFlow(false)
     val showRestaurantSettings: StateFlow<Boolean> = _showRestaurantSettings.asStateFlow()
 
-    private val _cuisineSelectionBorderStroke = MutableStateFlow(BorderStroke(1.dp, Color.Black))
-    val cuisineSelectionBorderStroke: StateFlow<BorderStroke> = _cuisineSelectionBorderStroke.asStateFlow()
-
-    private val _restaurantSelectionBorderStroke = MutableStateFlow(BorderStroke(1.dp, Color.Black))
-    val restaurantSelectionBorderStroke: StateFlow<BorderStroke> = _restaurantSelectionBorderStroke.asStateFlow()
-
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
             currentState.copy(squareList = list)
@@ -160,14 +154,6 @@ class AppViewModel : ViewModel() {
 
     fun updateSelectedRestaurantSquare(selectedSquare: RestaurantValues) {
         _selectedRestaurantSquare.value = selectedSquare
-    }
-
-    fun updateCuisineSelectionBorderStroke(borderStroke: BorderStroke) {
-        _cuisineSelectionBorderStroke.value = borderStroke
-    }
-
-    fun updateRestaurantSelectionBorderStroke(borderStroke: BorderStroke) {
-        _restaurantSelectionBorderStroke.value = borderStroke
     }
 
     fun addMultipleSquaresToList(squares: List<String>) {
@@ -395,8 +381,6 @@ class AppViewModel : ViewModel() {
     val getShowRestaurants get() = _showRestaurants.value
     val getShowRestaurantSettings get() = _showRestaurantSettings.value
     val getselectedRestaurantSquare get() = selectedRestaurantSquare.value
-    val getCuisineSelectionBorderStroke get() = _cuisineSelectionBorderStroke.value
-    val getRestaurantSelectionBorderStroke get() = _restaurantSelectionBorderStroke.value
 
     val getRollEngaged get() = rollEngaged.value
     val getCuisineRollFinished get() = _cuisineRollFinished.value

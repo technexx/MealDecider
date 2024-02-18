@@ -52,6 +52,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
@@ -316,9 +317,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     fun CuisineSelectionGrid() {
         val coroutineScope = rememberCoroutineScope()
         val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
-
         val cuisineRollFinished = appViewModel.cuisineRollFinished.collectAsStateWithLifecycle()
-        val cuisineSelectionBorderStroke = appViewModel.cuisineSelectionBorderStroke.collectAsStateWithLifecycle()
         val sectionGridState = rememberLazyGridState()
 
         val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
@@ -334,20 +333,14 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
                     sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
-                    //Begins runnable to animation cuisine border
                     runnables.cuisineBorderStrokeToggleAnimation()
-                    //For our query to return a list of restaurants matching the rolled cuisine.
-                    appViewModel.restaurantSearchCuisineType = rolledCuisineString
-//                mapInteractions.testRestaurants()
+                    //mapInteractions.testRestaurants()
                     mapInteractions.mapsApiCall()
+                    appViewModel.restaurantSearchCuisineType = rolledCuisineString
 
-//                delay(2000)
-
-                    //Cancels border animation after above delay, and launches restaurant dialog.
-//                    runnables.cancelCuisineBorderStrokeToggleRunnable()
-                    appViewModel.updateCuisineSelectionBorderStroke(heavyCuisineSelectionBorderStroke)
+                    delay(2000)
+                    runnables.cancelCuisineBorderStrokeToggleRunnable()
                     appViewModel.updateCuisineRollFinished(false)
-
                 }
             }
         }
@@ -368,7 +361,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     if (editMode.value) {
                         borderStroke = cuisineEditModeBorderStroke
                     } else if (index == appViewModel.rolledSquareIndex) {
-                        borderStroke = cuisineSelectionBorderStroke.value
+                        borderStroke = appViewModel.getSquareList[index].border
                     } else {
                         borderStroke = defaultCuisineSelectionBorderStroke
                     }
@@ -377,7 +370,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         colors = CardDefaults.cardColors(
                             containerColor = colorResource(id = appViewModel.getSquareList[index].color),
                         ),
-                        border = appViewModel.getSquareList[index].border,
+                        border = borderStroke,
                         elevation = CardDefaults.cardElevation(
                             defaultElevation = 6.dp
                         ),
