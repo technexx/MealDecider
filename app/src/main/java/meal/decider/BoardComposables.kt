@@ -345,8 +345,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             }
         }
 
-        showLog("test", "recomposing cuisines")
-
         LazyVerticalGrid(state = sectionGridState,
             modifier = Modifier,
             columns = GridCells.Adaptive(minSize = 128.dp),

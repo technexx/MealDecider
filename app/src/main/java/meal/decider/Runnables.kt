@@ -118,32 +118,33 @@ class Runnables (val appViewModel: AppViewModel) {
                 handler.postDelayed(cuisineBorderStrokeToggleRunnable, delay)
             }
         }
-
         handler.post(cuisineBorderStrokeToggleRunnable)
     }
 
-    fun cancelCuisineBorderStrokeToggleRunnable() { handler.removeCallbacks(cuisineBorderStrokeToggleRunnable) }
-
-    fun restaurantBorderStrokeToggleAnimation() {
+    fun restaurantBorderStrokeToggleAnimation(duration: Long, delay: Long) {
         handler.removeCallbacks(restaurantBorderStrokeToggleRunnable)
+        var iterations = duration / delay + 1
 
         restaurantBorderStrokeToggleRunnable = Runnable {
-            val restaurantList = appViewModel.getRestaurantList
-            val newRestaurantList: SnapshotStateList<RestaurantValues> = mutableStateListOf()
-            newRestaurantList.addAll(restaurantList)
-            val selectedRestaurant = newRestaurantList[appViewModel.rolledRestaurantIndex]
+            if (iterations > 0) {
+                val restaurantList = appViewModel.getRestaurantList
+                val newRestaurantList: SnapshotStateList<RestaurantValues> = mutableStateListOf()
+                newRestaurantList.addAll(restaurantList)
+                val selectedRestaurant = newRestaurantList[appViewModel.rolledRestaurantIndex]
 
-            if (selectedRestaurant.border == defaultRestaurantSelectionBorderStroke) {
-                selectedRestaurant.border = heavyRestaurantSelectionBorderStroke
-            } else {
-                selectedRestaurant.border = defaultRestaurantSelectionBorderStroke
+                if (selectedRestaurant.border == defaultRestaurantSelectionBorderStroke) {
+                    selectedRestaurant.border = heavyRestaurantSelectionBorderStroke
+                } else {
+                    selectedRestaurant.border = defaultRestaurantSelectionBorderStroke
+                }
+
+                newRestaurantList[appViewModel.rolledRestaurantIndex] = selectedRestaurant
+                appViewModel.updateRestaurantsList(newRestaurantList)
+                iterations -= 1
+
+                handler.postDelayed(restaurantBorderStrokeToggleRunnable, delay)
             }
-
-            newRestaurantList[appViewModel.rolledRestaurantIndex] = selectedRestaurant
-            appViewModel.updateRestaurantsList(newRestaurantList)
-            handler.postDelayed(restaurantBorderStrokeToggleRunnable, 200)
         }
-
         handler.post(restaurantBorderStrokeToggleRunnable)
     }
 

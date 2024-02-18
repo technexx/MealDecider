@@ -30,7 +30,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val rating = appViewModel.minRestaurantRating
             val price = appViewModel.maxRestaurantPrice
 
-            //This ranks by distance and disallows radius, but will return the closest -> furthests without omitting results.
+            //Per docs, we want to use "findplacefromtext" instead of "nearbysearch" in order to filter results and minimize billing. We are getting unnecessary data right now, but also getting null exceptions when using other query.
             val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&name=$cuisineType&rating=$rating&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
             val request = Request.Builder()
@@ -45,13 +45,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val jsonSerialized = json.decodeFromString<Root>(prettyJson)
 
             val restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
-
-//            appViewModel.originalRestaurantList = restaurantList
             appViewModel.updateRestaurantsList(restaurantList)
-
-//            for (i in restaurantList) {
-//                showLog("test", i.toString())
-//            }
         }
     }
 
