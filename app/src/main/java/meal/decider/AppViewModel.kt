@@ -1,11 +1,8 @@
 package meal.decider
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -82,6 +79,9 @@ class AppViewModel : ViewModel() {
     private val _showRestaurantSettings = MutableStateFlow(false)
     val showRestaurantSettings: StateFlow<Boolean> = _showRestaurantSettings.asStateFlow()
 
+    private val _mapsQueryFinished = MutableStateFlow(false)
+    val mapsQueryFinished: StateFlow<Boolean> = _mapsQueryFinished.asStateFlow()
+
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
             currentState.copy(squareList = list)
@@ -154,6 +154,10 @@ class AppViewModel : ViewModel() {
 
     fun updateSelectedRestaurantSquare(selectedSquare: RestaurantValues) {
         _selectedRestaurantSquare.value = selectedSquare
+    }
+
+    fun updateMapsQueryFinished(finished: Boolean) {
+        _mapsQueryFinished.value = finished
     }
 
     fun addMultipleSquaresToList(squares: List<String>) {
@@ -393,4 +397,6 @@ class AppViewModel : ViewModel() {
     val getRestoreDefaults get() = restoreDefaults.value
 
     val getRestrictionsList get() = restrictionsList.value
+
+    val getMapsQueryFinished get() = mapsQueryFinished.value
 }

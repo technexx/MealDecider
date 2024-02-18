@@ -43,15 +43,9 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                     .padding(bottom = 0.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
-                Button(
-                    onClick = {
-                        appViewModel.updateShowRestaurants(true)
-                    },
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
-                ) {
-                    ButtonText(text = "Places")
-                }
+                ButtonUi(text = "Places", onClickAction =  {
+                    appViewModel.updateShowRestaurants(true)
+                })
                 IconButton(modifier = Modifier
                     .size(72.dp),
                     onClick = {
@@ -71,24 +65,31 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                         tint = colorResource(id = R.color.blue_600)
                     )
                 }
-                Button(
-                    onClick = {
-                        if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-                            coroutineScope.launch {
-                                if (!appViewModel.getShowRestaurants) {
-                                    mapInteractions.mapIntent(appViewModel.cuisineStringUri)
-                                } else {
-                                    mapInteractions.mapIntent(appViewModel.restaurantStringUri)
-                                }
+                ButtonUi(text = "Map", onClickAction = {
+                    if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
+                        coroutineScope.launch {
+                            if (!appViewModel.getShowRestaurants) {
+                                mapInteractions.mapIntent(appViewModel.cuisineStringUri)
+                            } else {
+                                mapInteractions.mapIntent(appViewModel.restaurantStringUri)
                             }
                         }
-                    },
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
-                ) {
-                    ButtonText(text = "Map")
-                }
+                    }
+                })
             }
+        }
+    }
+
+    @Composable
+    fun ButtonUi(text: String, onClickAction: () -> Unit) {
+        Button(
+            onClick = {
+                onClickAction()
+            },
+            elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
+        ) {
+            ButtonText(text = text)
         }
     }
 

@@ -57,6 +57,8 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
+//TODO: Include categories as a parent of cuisines: e.g. fast food, fine dining, etc.
+
 class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, private val roomInteractions: RoomInteractions, private val mapInteractions: MapInteractions, private val runnables: Runnables){
 
     private val buttons = Buttons(appViewModel, mapInteractions, runnables)
@@ -332,6 +334,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         if (cuisineRollFinished.value) {
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
+                    //TODO: Set delay as receipt of json query in mapsApi, and use that to (a) activate Places and Maps buttons and b) end border runnable.
                     sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
                     runnables.cuisineBorderStrokeToggleAnimation(2000, 200)
                     //mapInteractions.testRestaurants()

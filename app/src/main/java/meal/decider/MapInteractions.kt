@@ -25,7 +25,7 @@ private var currentLocation: Location = Location("")
 class MapInteractions(private val activity: Activity, private val activityContext: Context, private val appViewModel: AppViewModel) {
     suspend fun mapsApiCall() {
         withContext(Dispatchers.IO) {
-            var cuisineType = appViewModel.restaurantSearchCuisineType
+            val cuisineType = appViewModel.restaurantSearchCuisineType
             val distance = appViewModel.maxRestaurantDistance
             val rating = appViewModel.minRestaurantRating
             val price = appViewModel.maxRestaurantPrice
@@ -46,6 +46,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
 
             val restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
             appViewModel.updateRestaurantsList(restaurantList)
+            appViewModel.updateMapsQueryFinished(true)
         }
     }
 
@@ -54,7 +55,6 @@ class MapInteractions(private val activity: Activity, private val activityContex
         if (oldLat != null && oldLong != null && newLat != null && newLong != null)  {
             Location.distanceBetween(oldLat, oldLong, newLat, newLong, results)
         }
-
         return results
     }
 
