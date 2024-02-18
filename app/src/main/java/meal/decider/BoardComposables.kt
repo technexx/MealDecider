@@ -335,11 +335,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
                     runnables.cuisineBorderStrokeToggleAnimation(2000, 200)
                     //mapInteractions.testRestaurants()
-                    mapInteractions.mapsApiCall()
                     appViewModel.restaurantSearchCuisineType = rolledCuisineString
+                    mapInteractions.mapsApiCall()
 
                     delay(2000)
-//                    runnables.cancelCuisineBorderStrokeToggleRunnable()
                     appViewModel.updateCuisineRollFinished(false)
                 }
             }

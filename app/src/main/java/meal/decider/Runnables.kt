@@ -32,6 +32,7 @@ class Runnables (val appViewModel: AppViewModel) {
 
             if (rollCountdown < 20) {
                 appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[appViewModel.rolledSquareIndex])
+
                 appViewModel.updateCuisineRollFinished(true)
                 appViewModel.updateRollEngaged(false)
                 appViewModel.cuisineStringUri = appViewModel.selectedCuisineSquare.value.name + " Food " + foodRestrictionsString(appViewModel.getRestrictionsList)
