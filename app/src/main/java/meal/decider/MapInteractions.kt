@@ -46,7 +46,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
 
             val restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
             appViewModel.updateRestaurantsList(restaurantList)
-            appViewModel.updateMapsQueryFinished(true)
+            appViewModel.updateRestaurantQueryFinished(true)
         }
     }
 

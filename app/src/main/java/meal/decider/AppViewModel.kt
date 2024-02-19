@@ -79,8 +79,8 @@ class AppViewModel : ViewModel() {
     private val _showRestaurantSettings = MutableStateFlow(false)
     val showRestaurantSettings: StateFlow<Boolean> = _showRestaurantSettings.asStateFlow()
 
-    private val _mapsQueryFinished = MutableStateFlow(false)
-    val mapsQueryFinished: StateFlow<Boolean> = _mapsQueryFinished.asStateFlow()
+    private val _restaurantQueryFinished = MutableStateFlow(true)
+    val restaurantQueryFinished: StateFlow<Boolean> = _restaurantQueryFinished.asStateFlow()
 
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
@@ -156,8 +156,8 @@ class AppViewModel : ViewModel() {
         _selectedRestaurantSquare.value = selectedSquare
     }
 
-    fun updateMapsQueryFinished(finished: Boolean) {
-        _mapsQueryFinished.value = finished
+    fun updateRestaurantQueryFinished(finished: Boolean) {
+        _restaurantQueryFinished.value = finished
     }
 
     fun addMultipleSquaresToList(squares: List<String>) {
@@ -401,5 +401,5 @@ class AppViewModel : ViewModel() {
 
     val getRestrictionsList get() = restrictionsList.value
 
-    val getMapsQueryFinished get() = mapsQueryFinished.value
+    val getRestaurantQueryFinished get() = restaurantQueryFinished.value
 }

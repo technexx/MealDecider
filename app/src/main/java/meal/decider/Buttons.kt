@@ -44,7 +44,11 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 ButtonUi(text = "Places", onClickAction =  {
-                    appViewModel.updateShowRestaurants(true)
+                    if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
+                        if (appViewModel.getRestaurantQueryFinished) {
+                            appViewModel.updateShowRestaurants(true)
+                        }
+                    }
                 })
                 IconButton(modifier = Modifier
                     .size(72.dp),
@@ -53,8 +57,10 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                             if (!appViewModel.getShowRestaurants) {
                                 runnables.rollCuisine()
                             } else {
-                                runnables.rollRestaurant()
+                                if (appViewModel.getRestaurantQueryFinished) {
+                                    runnables.rollRestaurant()
 //                            appViewModel.testRestaurantRoll()
+                                }
                             }
                         }
                     },
@@ -71,7 +77,9 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                             if (!appViewModel.getShowRestaurants) {
                                 mapInteractions.mapIntent(appViewModel.cuisineStringUri)
                             } else {
-                                mapInteractions.mapIntent(appViewModel.restaurantStringUri)
+                                if (appViewModel.getRestaurantQueryFinished) {
+                                    mapInteractions.mapIntent(appViewModel.restaurantStringUri)
+                                }
                             }
                         }
                     }
