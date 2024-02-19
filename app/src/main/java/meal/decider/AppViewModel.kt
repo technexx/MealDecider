@@ -228,6 +228,9 @@ class AppViewModel : ViewModel() {
         if (typeOfSort == "rating"){
             sortedList = getRestaurantList.sortedWith(compareByDescending { it.rating })
         }
+        if (typeOfSort == "price") {
+            sortedList = getRestaurantList.sortedWith(compareBy { it.priceLevel })
+        }
         if (typeOfSort == "random") {
             var newNamesList = mutableListOf<String?>()
             for (i in sortedList.indices) {

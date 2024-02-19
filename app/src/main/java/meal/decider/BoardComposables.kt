@@ -59,7 +59,7 @@ import meal.decider.Database.RoomInteractions
 
 //TODO: Include categories as a parent of cuisines: e.g. fast food, fine dining, etc.
 
-class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, private val roomInteractions: RoomInteractions, private val mapInteractions: MapInteractions, private val runnables: Runnables){
+class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, private val roomInteractions: RoomInteractions, private val mapInteractions: MapInteractions, private val runnables: Runnables) {
 
     private val buttons = Buttons(appViewModel, mapInteractions, runnables)
     private val dialogComposables = DialogComposables(appViewModel, appDatabase, mapInteractions, runnables)

@@ -329,6 +329,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     appViewModel.sortAndUpdateRestaurantList("rating")
                     expanded = false
                 }
+                RestaurantDropDownUi("Sort by Price") {
+                    appViewModel.sortAndUpdateRestaurantList("price")
+                    expanded = false
+                }
                 RestaurantDropDownUi("Sort Randomly") {
                     appViewModel.sortAndUpdateRestaurantList("random")
                     expanded = false
