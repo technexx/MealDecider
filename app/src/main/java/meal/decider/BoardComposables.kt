@@ -347,7 +347,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         if (cuisineRollFinished.value) {
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
-                    //TODO: Set delay as receipt of json query in mapsApi, and use that to (a) activate Places and Maps buttons and b) end border runnable.
                     sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
                     runnables.cuisineBorderStrokeToggleAnimation(2000, 200)
                     //mapInteractions.testRestaurants()
@@ -393,7 +392,12 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 selected = true,
                                 onClick = {
                                     if (appViewModel.getEditMode) {
-                                        appViewModel.toggleEditCuisineHighlight(index)
+                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(
+                                            index
+                                        )
+                                    }
+                                    if (appViewModel.getCuisineSelectionMode) {
+                                        appViewModel.updateSingleCuisineColor(index, chosenSquareColor)
                                     }
                                 }
                             ),

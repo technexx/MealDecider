@@ -293,7 +293,7 @@ class AppViewModel : ViewModel() {
         updateListOfCuisinesToAdd(listToAdd)
     }
 
-    fun toggleEditCuisineHighlight(index: Int) {
+    fun toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(index: Int) {
         val tempSquareList = getSquareList
 
         if (tempSquareList[index].color == chosenSquareColor || tempSquareList[index].color == defaultSquareColor) {
@@ -308,7 +308,18 @@ class AppViewModel : ViewModel() {
             removeSquareFromListOfSquareIndicesToUpdate()
         }
         updateSquareList(tempSquareList)
+    }
 
+    fun updateSingleCuisineColor(index: Int, color: Int) {
+        val tempSquareList = getSquareList
+        val newList = SnapshotStateList<SquareValues>()
+
+        for (i in tempSquareList) {
+            newList.add(SquareValues(i.name, defaultSquareColor))
+        }
+        newList[index].color = color
+
+        updateSquareList(newList)
     }
 
     private fun addSquareToListOfCuisineSquaresToEdit(index: Int) {
