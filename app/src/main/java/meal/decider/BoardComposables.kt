@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
@@ -80,8 +81,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
         val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
         val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
-
+        val cuisineSelectionMode = appViewModel.cuisineSelectionMode.collectAsStateWithLifecycle()
         val coroutineScope = rememberCoroutineScope()
+
+        val tint: Color = if (cuisineSelectionMode.value) Color.Red; else Color.White
 
         Scaffold(
             modifier = Modifier
@@ -109,25 +112,35 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 )
                             }
                         }
+                        IconButton(onClick = {
+                            appViewModel.updateCuisineSelectionMode(!appViewModel.getCuisineSelectionMode)
+                        }) {
+                            Icon(modifier = Modifier,
+                                imageVector = Icons.Filled.Create,
+                                contentDescription = "Select",
+                                tint = tint
+                            )
+                        }
                         Box(
                             modifier = Modifier
                                 .wrapContentSize(Alignment.TopEnd)
                         ) {
-                            //TODO: Options Dialog
                             Row() {
                                 IconButton(onClick = {
                                     appViewModel.updateOptionsMode(true)
                                 }) {
                                     Icon(
                                         imageVector = Icons.Filled.Settings,
-                                        contentDescription = "Options"
+                                        contentDescription = "Options",
+                                        tint = Color.White
                                     )
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
                                 IconButton(onClick = { expanded = !expanded }) {
                                     Icon(
                                         imageVector = Icons.Filled.Menu,
-                                        contentDescription = "More"
+                                        contentDescription = "More",
+                                        tint = Color.White
                                     )
                                 }
                             }

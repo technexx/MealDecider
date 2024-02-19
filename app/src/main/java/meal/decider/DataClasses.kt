@@ -12,7 +12,7 @@ data class BoardValues(
 data class SquareValues(
     var name: String = "",
     var color: Int = 0,
-    var border: BorderStroke = defaultCuisineSelectionBorderStroke
+    var border: BorderStroke = heavyCuisineSelectionBorderStroke
 )
 
 data class RestrictionsValues(
@@ -37,7 +37,7 @@ data class RestaurantValues(
     var priceLevel: Int? = 0,
     var rating: Double? = 0.0,
     var color: Int? = 0,
-    var border: BorderStroke = defaultRestaurantSelectionBorderStroke
+    var border: BorderStroke = heavyRestaurantSelectionBorderStroke
 ): Comparable<RestaurantValues> {
     override fun compareTo(other: RestaurantValues): Int {
         val blah = compareValuesBy(this, other, { it.name }, { it.distance }, {it.rating })

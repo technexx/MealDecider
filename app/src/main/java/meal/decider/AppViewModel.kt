@@ -82,6 +82,9 @@ class AppViewModel : ViewModel() {
     private val _restaurantQueryFinished = MutableStateFlow(true)
     val restaurantQueryFinished: StateFlow<Boolean> = _restaurantQueryFinished.asStateFlow()
 
+    private val _cuisineSelectionMode = MutableStateFlow(false)
+    val cuisineSelectionMode: StateFlow<Boolean> = _cuisineSelectionMode.asStateFlow()
+
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
             currentState.copy(squareList = list)
@@ -158,6 +161,10 @@ class AppViewModel : ViewModel() {
 
     fun updateRestaurantQueryFinished(finished: Boolean) {
         _restaurantQueryFinished.value = finished
+    }
+
+    fun updateCuisineSelectionMode(enabled: Boolean) {
+        _cuisineSelectionMode.value = enabled
     }
 
     fun addMultipleSquaresToList(squares: List<String>) {
@@ -400,6 +407,7 @@ class AppViewModel : ViewModel() {
     val getRestoreDefaults get() = restoreDefaults.value
 
     val getRestrictionsList get() = restrictionsList.value
-
     val getRestaurantQueryFinished get() = restaurantQueryFinished.value
+
+    val getCuisineSelectionMode get() = cuisineSelectionMode.value
 }
