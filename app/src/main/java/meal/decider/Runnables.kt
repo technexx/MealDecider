@@ -106,10 +106,10 @@ class Runnables (val appViewModel: AppViewModel) {
                 newSquareList.addAll(squareList)
                 val selectedSquare = newSquareList[appViewModel.rolledSquareIndex]
 
-                if (selectedSquare.border == defaultCuisineSelectionBorderStroke) {
+                if (selectedSquare.border == defaultCuisineBorderStroke) {
                     selectedSquare.border = heavyCuisineSelectionBorderStroke
                 } else {
-                    selectedSquare.border = defaultCuisineSelectionBorderStroke
+                    selectedSquare.border = defaultCuisineBorderStroke
                 }
 
                 newSquareList[appViewModel.rolledSquareIndex] = selectedSquare

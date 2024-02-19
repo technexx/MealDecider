@@ -1,5 +1,6 @@
 package meal.decider
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -310,15 +311,26 @@ class AppViewModel : ViewModel() {
         updateSquareList(tempSquareList)
     }
 
-    fun updateSingleCuisineColor(index: Int, color: Int) {
+    fun updateSingleCuisineSquareColorAndBorder(index: Int, color: Int, border: BorderStroke) {
         val tempSquareList = getSquareList
         val newList = SnapshotStateList<SquareValues>()
 
         for (i in tempSquareList) {
-            newList.add(SquareValues(i.name, defaultSquareColor))
+            newList.add(SquareValues(i.name, defaultSquareColor, defaultCuisineBorderStroke))
         }
         newList[index].color = color
+        newList[index].border = border
 
+        updateSquareList(newList)
+    }
+
+    fun updateAllCuisineBorders(border: BorderStroke) {
+        val tempSquareList = getSquareList
+        val newList = SnapshotStateList<SquareValues>()
+
+        for (i in tempSquareList) {
+            newList.add(SquareValues(i.name, i.color, border))
+        }
         updateSquareList(newList)
     }
 

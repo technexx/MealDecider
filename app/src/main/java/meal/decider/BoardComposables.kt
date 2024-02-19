@@ -158,11 +158,12 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 DropDownMenuItemUi(text = "Edit Cuisines") {
                                     //Resets list of squares to edit.
                                     appViewModel.updatelistOfCuisineSquaresToEdit(listOf())
-
                                     if (!appViewModel.getEditMode) {
                                         appViewModel.updateEditMode(true)
+                                        appViewModel.updateAllCuisineBorders(cuisineEditModeBorderStroke)
                                     } else {
                                         appViewModel.updateEditMode(false)
+                                        appViewModel.updateAllCuisineBorders(defaultCuisineBorderStroke)
                                     }
                                     expanded = false
                                 }
@@ -370,14 +371,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             ),
             content = {
                 items(boardUiState.value.squareList.size) { index ->
-                    if (editMode.value) {
-                        borderStroke = cuisineEditModeBorderStroke
-                    } else if (index == appViewModel.rolledSquareIndex) {
-                        borderStroke = appViewModel.getSquareList[index].border
-                    } else {
-                        borderStroke = defaultCuisineSelectionBorderStroke
-                    }
-
+                    borderStroke = appViewModel.getSquareList[index].border
                     Card(
                         colors = CardDefaults.cardColors(
                             containerColor = colorResource(id = appViewModel.getSquareList[index].color),
@@ -396,8 +390,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                             index
                                         )
                                     }
+                                    //TODO: Change all selection stuff as we do when roll finishes
                                     if (appViewModel.getCuisineSelectionMode) {
-                                        appViewModel.updateSingleCuisineColor(index, chosenSquareColor)
+                                        appViewModel.updateSingleCuisineSquareColorAndBorder(index, chosenSquareColor, heavyCuisineSelectionBorderStroke)
                                     }
                                 }
                             ),
