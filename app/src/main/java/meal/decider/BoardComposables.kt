@@ -58,6 +58,7 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
+//TODO: Should only re-query maps on main board if cuisine has changed.
 //TODO: Restaurant selection should default to index 0 when launching Dialog (blank at start and uses old uri when exiting and re-opening, e.g. if we re-roll cuisine and launch new Dialog, old uri will remain).
 //TODO: Restaurant selection may want to reset to index 0 when closing Dialog.
 //TODO: Include categories as a parent of cuisines: e.g. fast food, fine dining, etc.
@@ -353,7 +354,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
                     runnables.cuisineBorderStrokeToggleAnimation(2000, 200)
                     //mapInteractions.testRestaurants()
-                    appViewModel.restaurantSearchCuisineType = rolledCuisineString
+                    appViewModel.cuisineStringUri = rolledCuisineString
 
                     delay(2000)
                     appViewModel.updateCuisineRollFinished(false)
@@ -392,6 +393,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                     if (appViewModel.getCuisineSelectionMode) {
                                         appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[index])
                                         appViewModel.cuisineStringUri = appViewModel.selectedCuisineSquare.value.name + " Food " + foodRestrictionsString(appViewModel.getRestrictionsList)
+
+                                        showLog("test","onClick selection cuisine uri is ${appViewModel.cuisineStringUri}")
+
                                         appViewModel.updateSingleCuisineSquareColorAndBorder(index, chosenSquareColor, heavyCuisineSelectionBorderStroke)
                                     }
                                 }

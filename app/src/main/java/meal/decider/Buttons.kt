@@ -85,7 +85,7 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                                 mapInteractions.mapIntent(appViewModel.cuisineStringUri)
                             } else {
                                 if (appViewModel.getRestaurantQueryFinished) {
-                                    mapInteractions.mapIntent(appViewModel.restaurantStringUri)
+                                    mapInteractions.mapIntent(appViewModel.cuisineStringUri)
                                 }
                             }
                         }

@@ -23,12 +23,17 @@ private lateinit var fusedLocationClient: FusedLocationProviderClient
 private var currentLocation: Location = Location("")
 
 class MapInteractions(private val activity: Activity, private val activityContext: Context, private val appViewModel: AppViewModel) {
+
     suspend fun mapsApiCall() {
         withContext(Dispatchers.IO) {
-            val cuisineType = appViewModel.restaurantSearchCuisineType
+            //TODO: Rating not filtering.
+            //TODO: Also need to deal w/ distance since we have removed radius (can do separate filtering out post-query)
+            val cuisineType = appViewModel.cuisineStringUri
             val distance = appViewModel.maxRestaurantDistance
             val rating = appViewModel.minRestaurantRating
             val price = appViewModel.maxRestaurantPrice
+
+            showLog("test", "rating is $rating")
 
             //Per docs, we want to use "findplacefromtext" instead of "nearbysearch" in order to filter results and minimize billing. We are getting unnecessary data right now, but also getting null exceptions when using other query.
             val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&name=$cuisineType&rating=$rating&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"

@@ -12,13 +12,9 @@ import kotlinx.coroutines.flow.update
 
 @Stable
 class AppViewModel : ViewModel() {
-    var singleSquareIndexToEdit = 0
-
-    var restaurantSearchCuisineType = ""
     var cuisineStringUri = ""
-    var restaurantStringUri = ""
-    var originalRestaurantList: SnapshotStateList<RestaurantValues> = mutableStateListOf()
 
+    var singleSquareIndexToEdit = 0
     var rolledSquareIndex = 0
     var rolledRestaurantIndex = 0
 

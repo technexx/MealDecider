@@ -513,7 +513,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
                     sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
-                    appViewModel.restaurantStringUri = rolledRestaurantString
+                    appViewModel.cuisineStringUri = rolledRestaurantString
                     runnables.restaurantBorderStrokeToggleAnimation(2000, 200)
 
                     delay(2000)

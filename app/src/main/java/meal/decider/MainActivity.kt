@@ -75,7 +75,6 @@ class MainActivity : ComponentActivity() {
 
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
             appViewModel.cuisineStringUri = appViewModel.getselectedCuisineSquare.name + " Food "
-            appViewModel.restaurantSearchCuisineType = appViewModel.selectedCuisineSquare.value.name
             //Gets restaurants on app launch for selected cuisine.
 //            mapInteractions.mapsApiCall()
         }
