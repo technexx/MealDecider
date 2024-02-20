@@ -58,6 +58,7 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
+//TODO: Map query should only occur when selecting PLACES. This is to reduce queries on multiple successive rolls, and to deal w/ manual selections.
 //TODO: Include categories as a parent of cuisines: e.g. fast food, fine dining, etc.
 
 class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, private val roomInteractions: RoomInteractions, private val mapInteractions: MapInteractions, private val runnables: Runnables) {
@@ -390,8 +391,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                             index
                                         )
                                     }
-                                    //TODO: Change all selection stuff as we do when roll finishes
                                     if (appViewModel.getCuisineSelectionMode) {
+                                        appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[index])
+                                        appViewModel.cuisineStringUri = appViewModel.selectedCuisineSquare.value.name + " Food " + foodRestrictionsString(appViewModel.getRestrictionsList)
                                         appViewModel.updateSingleCuisineSquareColorAndBorder(index, chosenSquareColor, heavyCuisineSelectionBorderStroke)
                                     }
                                 }
