@@ -58,6 +58,8 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
+//TODO: Restaurant selection should default to index 0 when launching Dialog (blank at start and uses old uri when exiting and re-opening, e.g. if we re-roll cuisine and launch new Dialog, old uri will remain).
+//TODO: Restaurant selection may want to reset to index 0 when closing Dialog.
 //TODO: Map query should only occur when selecting PLACES. This is to reduce queries on multiple successive rolls, and to deal w/ manual selections.
 //TODO: Include categories as a parent of cuisines: e.g. fast food, fine dining, etc.
 
@@ -387,9 +389,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 selected = true,
                                 onClick = {
                                     if (appViewModel.getEditMode) {
-                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(
-                                            index
-                                        )
+                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(index)
                                     }
                                     if (appViewModel.getCuisineSelectionMode) {
                                         appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[index])

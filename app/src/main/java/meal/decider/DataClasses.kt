@@ -37,7 +37,7 @@ data class RestaurantValues(
     var priceLevel: Int? = 0,
     var rating: Double? = 0.0,
     var color: Int? = 0,
-    var border: BorderStroke = heavyRestaurantSelectionBorderStroke
+    var border: BorderStroke = defaultRestaurantBorderStroke
 ): Comparable<RestaurantValues> {
     override fun compareTo(other: RestaurantValues): Int {
         val blah = compareValuesBy(this, other, { it.name }, { it.distance }, {it.rating })

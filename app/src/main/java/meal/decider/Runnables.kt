@@ -133,10 +133,10 @@ class Runnables (val appViewModel: AppViewModel) {
                 newRestaurantList.addAll(restaurantList)
                 val selectedRestaurant = newRestaurantList[appViewModel.rolledRestaurantIndex]
 
-                if (selectedRestaurant.border == defaultRestaurantSelectionBorderStroke) {
+                if (selectedRestaurant.border == defaultRestaurantBorderStroke) {
                     selectedRestaurant.border = heavyRestaurantSelectionBorderStroke
                 } else {
-                    selectedRestaurant.border = defaultRestaurantSelectionBorderStroke
+                    selectedRestaurant.border = defaultRestaurantBorderStroke
                 }
 
                 newRestaurantList[appViewModel.rolledRestaurantIndex] = selectedRestaurant

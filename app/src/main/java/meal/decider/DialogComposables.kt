@@ -531,11 +531,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         ) {
             items(restaurantList.value.size) { index ->
 //            items(dummyList.size) { index ->
-                if (index == appViewModel.rolledRestaurantIndex) {
-                    borderStroke = appViewModel.getRestaurantList[index].border
-                } else {
-                    borderStroke = BorderStroke(1.dp,Color.Black)
-                }
+                borderStroke = appViewModel.getRestaurantList[index].border
                 Card(
                     colors = CardDefaults.cardColors(
                         containerColor = colorResource(restaurantList.value[index].color!!),
