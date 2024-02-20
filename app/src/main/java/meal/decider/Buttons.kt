@@ -46,7 +46,12 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                 ButtonUi(text = "Places", onClickAction =  {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         if (appViewModel.getRestaurantQueryFinished) {
-                            appViewModel.updateShowRestaurants(true)
+                            coroutineScope.launch {
+                                if (!appViewModel.getShowRestaurants) {
+                                    mapInteractions.mapsApiCall()
+                                    appViewModel.updateShowRestaurants(true)
+                                }
+                            }
                         }
                     }
                 })
