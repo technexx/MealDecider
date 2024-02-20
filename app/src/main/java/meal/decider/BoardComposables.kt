@@ -60,7 +60,6 @@ import meal.decider.Database.RoomInteractions
 
 //TODO: Restaurant selection should default to index 0 when launching Dialog (blank at start and uses old uri when exiting and re-opening, e.g. if we re-roll cuisine and launch new Dialog, old uri will remain).
 //TODO: Restaurant selection may want to reset to index 0 when closing Dialog.
-//TODO: Remove "Places" when showing Restaurant Dialog.
 //TODO: Include categories as a parent of cuisines: e.g. fast food, fine dining, etc.
 
 class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, private val roomInteractions: RoomInteractions, private val mapInteractions: MapInteractions, private val runnables: Runnables) {

@@ -43,18 +43,20 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                     .padding(bottom = 0.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
-                ButtonUi(text = "Places", onClickAction =  {
-                    if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-                        if (appViewModel.getRestaurantQueryFinished) {
-                            coroutineScope.launch {
-                                if (!appViewModel.getShowRestaurants) {
-                                    mapInteractions.mapsApiCall()
-                                    appViewModel.updateShowRestaurants(true)
+                if (!appViewModel.getShowRestaurants) {
+                    ButtonUi(text = "Places", onClickAction =  {
+                        if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
+                            if (appViewModel.getRestaurantQueryFinished) {
+                                coroutineScope.launch {
+                                    if (!appViewModel.getShowRestaurants) {
+                                        mapInteractions.mapsApiCall()
+                                        appViewModel.updateShowRestaurants(true)
+                                    }
                                 }
                             }
                         }
-                    }
-                })
+                    })
+                }
                 IconButton(modifier = Modifier
                     .size(72.dp),
                     onClick = {
