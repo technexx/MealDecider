@@ -404,7 +404,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
                 }
                 //Having this in coroutineScope prevented its execution.
-                val maxDistance = milesToMeters(floor(distanceSliderPosition).toInt())
+                val maxDistance = milesToMeters(floor(distanceSliderPosition).toDouble())
                 val minRating = ratingSliderPosition.toDouble()
                 val maxPrice = floor(priceSliderPosition).toInt()
                 if (appViewModel.haveRestaurantFiltersChanged(maxDistance, minRating, maxPrice)) {
@@ -549,9 +549,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         ),
                 ) {
                     RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
-                            RestaurantListTextUi(doubleToTwoDecimals(restaurantList.value[index].distance).toString() + " miles", false)
-                            RatingStars(restaurantList.value[index].rating)
-                            RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
+                    val distanceInMeters = (restaurantList.value[index].distance)
+                    RestaurantListTextUi(doubleMetersToMiles(distanceInMeters!!).toString() + " miles", false)
+                    RatingStars(restaurantList.value[index].rating)
+                    RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
                 }
             }
         }

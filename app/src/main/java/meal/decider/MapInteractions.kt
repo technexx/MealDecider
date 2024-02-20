@@ -28,15 +28,15 @@ class MapInteractions(private val activity: Activity, private val activityContex
         withContext(Dispatchers.IO) {
             //TODO: Rating not filtering.
             //TODO: Also need to deal w/ distance since we have removed radius (can do separate filtering out post-query)
+            //Used in uri to filter results.
             val cuisineType = appViewModel.cuisineStringUri
+            val price = appViewModel.maxRestaurantPrice
+            //Values filtered once retrieved from json result.
             val distance = appViewModel.maxRestaurantDistance
             val rating = appViewModel.minRestaurantRating
-            val price = appViewModel.maxRestaurantPrice
-
-            showLog("test", "rating is $rating")
 
             //Per docs, we want to use "findplacefromtext" instead of "nearbysearch" in order to filter results and minimize billing. We are getting unnecessary data right now, but also getting null exceptions when using other query.
-            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&name=$cuisineType&rating=$rating&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
+            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&name=$cuisineType&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
             val request = Request.Builder()
                 .url(uri)
@@ -49,10 +49,29 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val json = Json { ignoreUnknownKeys = true }
             val jsonSerialized = json.decodeFromString<Root>(prettyJson)
 
-            val restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
+            showLog("test", "filters for distance and price are $distance and $rating")
+
+            var restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
+            showLog("test", "unfiltered size is ${restaurantList.size}")
+            for (i in restaurantList) {
+                showLog("test","unfiltered distance and rating are ${i.distance} and ${i.rating}")
+            }
+            restaurantList = filteredDistanceAndRatingRestaurantList(restaurantList, distance, rating)
+            showLog("test", "filtered size is ${restaurantList.size}")
+            for (i in restaurantList) {
+                showLog("test","filtered distance and rating are ${i.distance} and ${i.rating}")
+            }
             appViewModel.updateRestaurantsList(restaurantList)
             appViewModel.updateRestaurantQueryFinished(true)
         }
+    }
+
+    private fun filteredDistanceAndRatingRestaurantList(list: SnapshotStateList<RestaurantValues>, distanceLimit: Double, minimumRating: Double): SnapshotStateList<RestaurantValues> {
+        val newList = SnapshotStateList<RestaurantValues>()
+        for (i in list) {
+            if (i.distance!! <= distanceLimit && i.rating!! >= minimumRating) newList.add(i)
+        }
+        return newList
     }
 
     private fun distanceOfRestaurantFromCurrentLocation(oldLat: Double?, oldLong: Double?, newLat: Double?, newLong: Double?): FloatArray {
@@ -66,7 +85,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
     private fun restaurantResultListFromSerializedJson(result: Root): SnapshotStateList<RestaurantValues>{
         val restaurantList = mutableStateListOf<RestaurantValues>()
         for (i in result.results!!.indices) {
-            val distance = floatArrayMetersToMiles(distanceOfRestaurantFromCurrentLocation(currentLocation.latitude, currentLocation.longitude,
+            val distance = floatArrayToDouble(distanceOfRestaurantFromCurrentLocation(currentLocation.latitude, currentLocation.longitude,
                 result.results[i].geometry?.location?.lat, result.results[i].geometry?.location?.lng))
             restaurantList.add(RestaurantValues(result.results[i].name, result.results[i].vicinity, distance,
                 result.results[i].price_level, result.results[i].rating, R.color.grey_300)

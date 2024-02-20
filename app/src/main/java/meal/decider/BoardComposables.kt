@@ -394,8 +394,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                         appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[index])
                                         appViewModel.cuisineStringUri = appViewModel.selectedCuisineSquare.value.name + " Food " + foodRestrictionsString(appViewModel.getRestrictionsList)
 
-                                        showLog("test","onClick selection cuisine uri is ${appViewModel.cuisineStringUri}")
-
                                         appViewModel.updateSingleCuisineSquareColorAndBorder(index, chosenSquareColor, heavyCuisineSelectionBorderStroke)
                                     }
                                 }

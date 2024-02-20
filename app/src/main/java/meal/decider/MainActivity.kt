@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
             }
 
             val restaurantFilters = roomInteractions.getRestaurantFilters()[0]
-            appViewModel.setLocalRestaurantFilterValues(milesToMeters(restaurantFilters.distance.toInt()), restaurantFilters.rating, restaurantFilters.price.toInt())
+            appViewModel.setLocalRestaurantFilterValues(milesToMeters(restaurantFilters.distance), restaurantFilters.rating, restaurantFilters.price.toInt())
 
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
             appViewModel.cuisineStringUri = appViewModel.getselectedCuisineSquare.name + " Food "

@@ -18,7 +18,7 @@ class AppViewModel : ViewModel() {
     var rolledSquareIndex = 0
     var rolledRestaurantIndex = 0
 
-    var maxRestaurantDistance = 0
+    var maxRestaurantDistance = 0.0
     var minRestaurantRating = 3.0
     var maxRestaurantPrice = 1
 
@@ -395,13 +395,13 @@ class AppViewModel : ViewModel() {
         return false
     }
 
-    fun setLocalRestaurantFilterValues(distance: Int, rating: Double, price: Int) {
+    fun setLocalRestaurantFilterValues(distance: Double, rating: Double, price: Int) {
         maxRestaurantDistance = distance
         minRestaurantRating = rating
         maxRestaurantPrice = price
     }
 
-    fun haveRestaurantFiltersChanged(distance: Int, rating: Double, price: Int): Boolean {
+    fun haveRestaurantFiltersChanged(distance: Double, rating: Double, price: Int): Boolean {
         return maxRestaurantDistance !=distance || minRestaurantRating != rating || maxRestaurantPrice != price
     }
 
