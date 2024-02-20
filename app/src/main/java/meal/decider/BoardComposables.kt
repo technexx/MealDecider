@@ -61,6 +61,7 @@ import meal.decider.Database.RoomInteractions
 //TODO: Should only re-query maps on main board if cuisine has changed.
 //TODO: Restaurant selection should default to index 0 when launching Dialog (blank at start and uses old uri when exiting and re-opening, e.g. if we re-roll cuisine and launch new Dialog, old uri will remain).
 //TODO: Restaurant selection may want to reset to index 0 when closing Dialog.
+//TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
 //TODO: Include categories as a parent of cuisines: e.g. fast food, fine dining, etc.
 
 class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, private val roomInteractions: RoomInteractions, private val mapInteractions: MapInteractions, private val runnables: Runnables) {

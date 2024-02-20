@@ -401,6 +401,10 @@ class AppViewModel : ViewModel() {
         maxRestaurantPrice = price
     }
 
+    fun hasCuisineSelectionChanged(currentCuisine: String, newCuisine: String): Boolean {
+        return (currentCuisine == newCuisine)
+    }
+
     fun haveRestaurantFiltersChanged(distance: Double, rating: Double, price: Int): Boolean {
         return maxRestaurantDistance !=distance || minRestaurantRating != rating || maxRestaurantPrice != price
     }

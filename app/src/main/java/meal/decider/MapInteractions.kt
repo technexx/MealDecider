@@ -26,8 +26,6 @@ class MapInteractions(private val activity: Activity, private val activityContex
 
     suspend fun mapsApiCall() {
         withContext(Dispatchers.IO) {
-            //TODO: Rating not filtering.
-            //TODO: Also need to deal w/ distance since we have removed radius (can do separate filtering out post-query)
             //Used in uri to filter results.
             val cuisineType = appViewModel.cuisineStringUri
             val price = appViewModel.maxRestaurantPrice
@@ -49,18 +47,9 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val json = Json { ignoreUnknownKeys = true }
             val jsonSerialized = json.decodeFromString<Root>(prettyJson)
 
-            showLog("test", "filters for distance and price are $distance and $rating")
-
             var restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
-            showLog("test", "unfiltered size is ${restaurantList.size}")
-            for (i in restaurantList) {
-                showLog("test","unfiltered distance and rating are ${i.distance} and ${i.rating}")
-            }
             restaurantList = filteredDistanceAndRatingRestaurantList(restaurantList, distance, rating)
-            showLog("test", "filtered size is ${restaurantList.size}")
-            for (i in restaurantList) {
-                showLog("test","filtered distance and rating are ${i.distance} and ${i.rating}")
-            }
+
             appViewModel.updateRestaurantsList(restaurantList)
             appViewModel.updateRestaurantQueryFinished(true)
         }

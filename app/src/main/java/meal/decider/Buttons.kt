@@ -49,6 +49,7 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                             if (appViewModel.getRestaurantQueryFinished) {
                                 coroutineScope.launch {
                                     if (!appViewModel.getShowRestaurants) {
+
                                         mapInteractions.mapsApiCall()
                                         appViewModel.updateShowRestaurants(true)
                                     }
