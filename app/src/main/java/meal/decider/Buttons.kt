@@ -51,6 +51,8 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                                     if (!appViewModel.getShowRestaurants) {
                                         if (appViewModel.hasCuisineStringUriChanged) {
                                             mapInteractions.mapsApiCall()
+                                            //Sets first entry to string for maps launch.
+                                            appViewModel.restaurantStringUri = appViewModel.getRestaurantList[0].name.toString()
                                         }
                                         appViewModel.updateShowRestaurants(true)
                                     }
