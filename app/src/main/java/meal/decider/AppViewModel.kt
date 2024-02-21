@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.update
 @Stable
 class AppViewModel : ViewModel() {
     var cuisineStringUri = ""
+    var restaurantStringUri = ""
+    var hasCuisineStringUriChanged = false
 
     var singleSquareIndexToEdit = 0
     var rolledSquareIndex = 0
@@ -401,12 +403,13 @@ class AppViewModel : ViewModel() {
         maxRestaurantPrice = price
     }
 
-    fun hasCuisineSelectionChanged(currentCuisine: String, newCuisine: String): Boolean {
-        return (currentCuisine == newCuisine)
-    }
-
     fun haveRestaurantFiltersChanged(distance: Double, rating: Double, price: Int): Boolean {
         return maxRestaurantDistance !=distance || minRestaurantRating != rating || maxRestaurantPrice != price
+    }
+
+    fun updateCuisineStringUriAndHasChangedBoolean(cuisineSelected: String) {
+        hasCuisineStringUriChanged = (cuisineStringUri != cuisineSelected)
+        cuisineStringUri = cuisineSelected
     }
 
     val getSquareList get() = boardUiState.value.squareList
@@ -417,7 +420,6 @@ class AppViewModel : ViewModel() {
     val getRestaurantList get() = _restaurantList.value
     val getShowRestaurants get() = _showRestaurants.value
     val getShowRestaurantSettings get() = _showRestaurantSettings.value
-    val getselectedRestaurantSquare get() = selectedRestaurantSquare.value
 
     val getRollEngaged get() = rollEngaged.value
     val getCuisineRollFinished get() = _cuisineRollFinished.value

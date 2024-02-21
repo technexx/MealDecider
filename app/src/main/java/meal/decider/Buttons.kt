@@ -49,8 +49,9 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                             if (appViewModel.getRestaurantQueryFinished) {
                                 coroutineScope.launch {
                                     if (!appViewModel.getShowRestaurants) {
-
-                                        mapInteractions.mapsApiCall()
+                                        if (appViewModel.hasCuisineStringUriChanged) {
+                                            mapInteractions.mapsApiCall()
+                                        }
                                         appViewModel.updateShowRestaurants(true)
                                     }
                                 }
@@ -86,7 +87,7 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                                 mapInteractions.mapIntent(appViewModel.cuisineStringUri)
                             } else {
                                 if (appViewModel.getRestaurantQueryFinished) {
-                                    mapInteractions.mapIntent(appViewModel.cuisineStringUri)
+                                    mapInteractions.mapIntent(appViewModel.restaurantStringUri)
                                 }
                             }
                         }

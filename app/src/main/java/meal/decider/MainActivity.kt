@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
             appViewModel.setLocalRestaurantFilterValues(milesToMeters(restaurantFilters.distance), restaurantFilters.rating, restaurantFilters.price.toInt())
 
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
-            appViewModel.cuisineStringUri = appViewModel.getselectedCuisineSquare.name + " Food "
+            appViewModel.updateCuisineStringUriAndHasChangedBoolean(appViewModel.getselectedCuisineSquare.name + " Food ")
             //Gets restaurants on app launch for selected cuisine.
 //            mapInteractions.mapsApiCall()
         }

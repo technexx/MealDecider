@@ -35,7 +35,7 @@ class Runnables (val appViewModel: AppViewModel) {
 
                 appViewModel.updateCuisineRollFinished(true)
                 appViewModel.updateRollEngaged(false)
-                appViewModel.cuisineStringUri = appViewModel.selectedCuisineSquare.value.name + " Food " + foodRestrictionsString(appViewModel.getRestrictionsList)
+                appViewModel.updateCuisineStringUriAndHasChangedBoolean(appViewModel.selectedCuisineSquare.value.name + " Food " + foodRestrictionsString(appViewModel.getRestrictionsList))
                 handler.removeCallbacks(cuisineRollRunnable)
             }
         }
