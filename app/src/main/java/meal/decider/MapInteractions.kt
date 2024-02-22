@@ -51,6 +51,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
             restaurantList = filteredDistanceAndRatingRestaurantList(restaurantList, distance, rating)
 
             appViewModel.updateRestaurantsList(restaurantList)
+            appViewModel.updateSingleRestaurantColorAndBorder(0, chosenRestaurantColor, lightRestaurantSelectionBorderStroke)
             appViewModel.updateRestaurantQueryFinished(true)
         }
     }
