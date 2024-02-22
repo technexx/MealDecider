@@ -371,7 +371,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
             //Order of modifiers matters. Background needs to be set BEFORE padding, otherwise background outside of padding will not be changed.
             DropdownMenu(modifier = Modifier
-                .background(colorResource(id = R.color.black))
+                .background(colorResource(id = R.color.white))
                 .padding(0.dp)
                 .wrapContentSize(),
                 expanded = expanded,
@@ -417,7 +417,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             text = text,
             fontWeight = FontWeight.Medium,
             fontSize = 14.sp,
-            color = Color.White,
+            color = Color.Black,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(6.dp)
         )
