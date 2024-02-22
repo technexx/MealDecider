@@ -54,6 +54,8 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                                         if (appViewModel.hasCuisineStringUriChanged) {
                                             mapInteractions.mapsApiCall()
                                             //Sets first entry to string for maps launch.
+                                            appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[0])
+                                            appViewModel.updateSingleCuisineRestaurantColorAndBorder(0, chosenRestaurantColor, heavyRestaurantSelectionBorderStroke)
                                             appViewModel.restaurantStringUri = appViewModel.getRestaurantList[0].name.toString()
                                         }
                                         appViewModel.updateShowRestaurants(true)

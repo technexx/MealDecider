@@ -309,7 +309,7 @@ class AppViewModel : ViewModel() {
         updateSquareList(tempSquareList)
     }
 
-    fun updateSingleCuisineSquareColorAndBorder(index: Int, color: Int, border: BorderStroke) {
+    fun toggleSelectionOfSingleCuisineSquareColorAndBorder(index: Int, color: Int, border: BorderStroke) {
         val tempSquareList = getSquareList
         val newList = SnapshotStateList<SquareValues>()
 
@@ -395,6 +395,17 @@ class AppViewModel : ViewModel() {
             if (i.name == selectedCuisineSquare.name) return true
         }
         return false
+    }
+
+    fun updateSingleCuisineRestaurantColorAndBorder(index: Int, color: Int, border: BorderStroke) {
+        val tempRestaurantList = getRestaurantList
+        val newList = SnapshotStateList<RestaurantValues>()
+        newList.addAll(tempRestaurantList)
+
+        newList[index].color = color
+        newList[index].border = border
+
+        updateRestaurantsList(newList)
     }
 
     fun setLocalRestaurantFilterValues(distance: Double, rating: Double, price: Int) {

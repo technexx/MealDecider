@@ -295,6 +295,66 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     }
 
     @Composable
+    fun RestaurantLazyGrid() {
+        val coroutineScope = rememberCoroutineScope()
+        val sectionGridState = rememberLazyStaggeredGridState()
+        val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
+        val selectedRestaurantSquare = appViewModel.selectedRestaurantSquare.collectAsStateWithLifecycle()
+        val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
+        val rolledRestaurantString = selectedRestaurantSquare.value.name.toString()
+
+        var borderStroke: BorderStroke
+
+        if (restaurantRollFinished.value) {
+            LaunchedEffect(Unit) {
+                coroutineScope.launch {
+                    sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
+                    appViewModel.restaurantStringUri = rolledRestaurantString
+                    runnables.restaurantBorderStrokeToggleAnimation(2000, 200)
+
+                    delay(2000)
+
+                    appViewModel.updateRestaurantRollFinished(false)
+                }
+            }
+        }
+
+        LazyVerticalStaggeredGrid(state = sectionGridState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            columns = StaggeredGridCells.Adaptive(128.dp),
+        ) {
+            items(restaurantList.value.size) { index ->
+//            items(dummyList.size) { index ->
+                borderStroke = appViewModel.getRestaurantList[index].border
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = colorResource(restaurantList.value[index].color!!),
+                    ),
+                    border = borderStroke,
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 6.dp
+                    ),
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .selectable(
+                            selected = true,
+                            onClick = {
+                            }
+                        ),
+                ) {
+                    RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
+                    val distanceInMeters = (restaurantList.value[index].distance)
+                    RestaurantListTextUi(doubleMetersToMiles(distanceInMeters!!).toString() + " miles", false)
+                    RatingStars(restaurantList.value[index].rating)
+                    RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
+                }
+            }
+        }
+    }
+
+    @Composable
     fun RestaurantSortDropdownMenu() {
         var expanded by remember { mutableStateOf(false) }
         Box(
@@ -495,66 +555,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 text = text,
                 fontWeight = fontWeight
             )
-        }
-    }
-
-    @Composable
-    fun RestaurantLazyGrid() {
-        val coroutineScope = rememberCoroutineScope()
-        val sectionGridState = rememberLazyStaggeredGridState()
-        val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
-        val selectedRestaurantSquare = appViewModel.selectedRestaurantSquare.collectAsStateWithLifecycle()
-        val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
-        val rolledRestaurantString = selectedRestaurantSquare.value.name.toString()
-
-        var borderStroke: BorderStroke
-
-        if (restaurantRollFinished.value) {
-            LaunchedEffect(Unit) {
-                coroutineScope.launch {
-                    sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
-                    appViewModel.restaurantStringUri = rolledRestaurantString
-                    runnables.restaurantBorderStrokeToggleAnimation(2000, 200)
-
-                    delay(2000)
-
-                    appViewModel.updateRestaurantRollFinished(false)
-                }
-            }
-        }
-
-        LazyVerticalStaggeredGrid(state = sectionGridState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            columns = StaggeredGridCells.Adaptive(128.dp),
-        ) {
-            items(restaurantList.value.size) { index ->
-//            items(dummyList.size) { index ->
-                borderStroke = appViewModel.getRestaurantList[index].border
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = colorResource(restaurantList.value[index].color!!),
-                    ),
-                    border = borderStroke,
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp
-                    ),
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .selectable(
-                            selected = true,
-                            onClick = {
-                            }
-                        ),
-                ) {
-                    RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
-                    val distanceInMeters = (restaurantList.value[index].distance)
-                    RestaurantListTextUi(doubleMetersToMiles(distanceInMeters!!).toString() + " miles", false)
-                    RatingStars(restaurantList.value[index].rating)
-                    RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
-                }
-            }
         }
     }
 

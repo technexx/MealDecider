@@ -12,7 +12,7 @@ class Runnables (val appViewModel: AppViewModel) {
     private var restaurantRollRunnable = Runnable {}
     private var cuisineBorderStrokeToggleRunnable = Runnable {}
     private var restaurantBorderStrokeToggleRunnable = Runnable {}
-    var rollCountdown: Long = 1000
+    private var rollCountdown: Long = 1000
 
     fun rollCuisine() {
         var delay: Long = 100

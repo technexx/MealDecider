@@ -9,11 +9,11 @@ val chosenSquareColor = R.color.red_200
 val editSquareColor = R.color.light_blue_100
 
 val defaultCuisineBorderStroke = BorderStroke(1.dp, Color.Black)
-
-val cuisineEditModeBorderStroke = BorderStroke(3.dp, Color.Black)
-
 val lightCuisineSelectionBorderStroke = BorderStroke(1.dp, Color.Red)
 val heavyCuisineSelectionBorderStroke = BorderStroke(3.dp, Color.Red)
+val cuisineEditModeBorderStroke = BorderStroke(3.dp, Color.Black)
+
+val chosenRestaurantColor = R.color.red_200
 val defaultRestaurantBorderStroke = BorderStroke(1.dp, Color.Black)
 val lightRestaurantSelectionBorderStroke = BorderStroke(1.dp, Color.Red)
 val heavyRestaurantSelectionBorderStroke = BorderStroke(3.dp, Color.Red)
