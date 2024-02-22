@@ -13,6 +13,7 @@ val lightCuisineSelectionBorderStroke = BorderStroke(1.dp, Color.Red)
 val heavyCuisineSelectionBorderStroke = BorderStroke(3.dp, Color.Red)
 val cuisineEditModeBorderStroke = BorderStroke(3.dp, Color.Black)
 
+val defaultRestaurantColor = R.color.grey_300
 val chosenRestaurantColor = R.color.red_200
 val defaultRestaurantBorderStroke = BorderStroke(1.dp, Color.Black)
 val lightRestaurantSelectionBorderStroke = BorderStroke(1.dp, Color.Red)

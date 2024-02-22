@@ -17,8 +17,8 @@ class Runnables (val appViewModel: AppViewModel) {
     fun rollCuisine() {
         var delay: Long = 100
         rollCountdown = 100
-
         appViewModel.updateRollEngaged(true)
+        appViewModel.toggleSelectionOfSingleCuisineSquareColorAndBorder(appViewModel.rolledSquareIndex, defaultSquareColor, lightRestaurantSelectionBorderStroke)
         handler.removeCallbacks(cuisineRollRunnable)
 
         cuisineRollRunnable = Runnable {
@@ -58,8 +58,9 @@ class Runnables (val appViewModel: AppViewModel) {
     fun rollRestaurant() {
         var delay: Long = 100
         rollCountdown = 100
-        handler.removeCallbacks(restaurantRollRunnable)
         appViewModel.updateRollEngaged(true)
+        appViewModel.updateSingleRestaurantColorAndBorder(appViewModel.rolledRestaurantIndex, chosenRestaurantColor, lightRestaurantSelectionBorderStroke)
+        handler.removeCallbacks(restaurantRollRunnable)
 
         restaurantRollRunnable = Runnable {
             appViewModel.rolledRestaurantIndex = Random.nextInt(0, appViewModel.getRestaurantList.size)

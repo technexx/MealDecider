@@ -397,7 +397,7 @@ class AppViewModel : ViewModel() {
         return false
     }
 
-    fun updateSingleCuisineRestaurantColorAndBorder(index: Int, color: Int, border: BorderStroke) {
+    fun updateSingleRestaurantColorAndBorder(index: Int, color: Int, border: BorderStroke) {
         val tempRestaurantList = getRestaurantList
         val newList = SnapshotStateList<RestaurantValues>()
         newList.addAll(tempRestaurantList)
