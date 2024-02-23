@@ -437,6 +437,54 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     }
 
     @Composable
+    fun Slider (value: Float,
+                onValueChange: () -> Unit,
+                valueRange: ClosedFloatingPointRange<Float>,
+                steps: Int, ) {
+        Slider(modifier = Modifier
+            .fillMaxWidth(0.7f)
+            .padding(start = 4.dp),
+            value = value,
+            onValueChange = { onValueChange },
+            valueRange = valueRange,
+            steps = steps)
+    }
+
+    @Composable
+    fun OptionsDialogUi() {
+        val coroutineScope: CoroutineScope = rememberCoroutineScope()
+        var rollDurationSliderPosition by remember { mutableFloatStateOf(3f) }
+        var rollSpeedSliderPosition by remember { mutableFloatStateOf(3f) }
+
+        Column (modifier = Modifier
+            .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            Row () {
+                Slider(modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .padding(start = 4.dp),
+                    value = rollDurationSliderPosition,
+                    onValueChange = { rollDurationSliderPosition = it },
+                    valueRange = 1f..10f,
+                    steps = 9
+                )
+                SliderTextUi(text = "$rollDurationSliderPosition stars", size = 18, bold = false)
+            }
+            Row () {
+                Slider(modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .padding(start = 4.dp),
+                    value = rollSpeedSliderPosition,
+                    onValueChange = { rollSpeedSliderPosition = it },
+                    valueRange = 1f..5f,
+                    steps = 4
+                )
+                SliderTextUi(text = "$rollDurationSliderPosition stars", size = 18, bold = false)
+            }
+        }
+    }
+
+    @Composable
     fun RestaurantFilterDialog() {
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         var distanceSliderPosition by remember { mutableFloatStateOf(3f) }
@@ -485,11 +533,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         Column (horizontalAlignment = Alignment.CenterHorizontally)
                         {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                RestaurantFilterTextUi(text = "Filters", size = 22, bold = true)
+                                SliderTextUi(text = "Filters", size = 22, bold = true)
                             }
                             Spacer(modifier = Modifier.height(16.dp))
                             Column {
-                                RestaurantFilterTextUi(text = "Distance", size = 20 , bold = false)
+                                SliderTextUi(text = "Distance", size = 20 , bold = false)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Row () {
                                     Slider(modifier = Modifier
@@ -500,10 +548,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         },
                                         valueRange = 1f..10f
                                     )
-                                    RestaurantFilterTextUi(text = distanceSliderPosition.toInt().toString() + " mi", size = 18, bold = false)
+                                    SliderTextUi(text = distanceSliderPosition.toInt().toString() + " mi", size = 18, bold = false)
                                 }
                                 Spacer(modifier = Modifier.height(16.dp))
-                                RestaurantFilterTextUi(text = "Rating", size = 20 , bold = false)
+                                SliderTextUi(text = "Rating", size = 20 , bold = false)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Row () {
                                     Slider(modifier = Modifier
@@ -514,10 +562,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         valueRange = 3f..4.5f,
                                         steps = 2
                                     )
-                                    RestaurantFilterTextUi(text = "$ratingSliderPosition stars", size = 18, bold = false)
+                                    SliderTextUi(text = "$ratingSliderPosition stars", size = 18, bold = false)
                                 }
                                 Spacer(modifier = Modifier.height(16.dp))
-                                RestaurantFilterTextUi(text = "Max Price", size = 20 , bold = false)
+                                SliderTextUi(text = "Max Price", size = 20 , bold = false)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Row () {
                                     Slider(modifier = Modifier
@@ -532,7 +580,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     for (i in 1..priceSliderPosition.toInt()) {
                                         priceString += "$"
                                     }
-                                    RestaurantFilterTextUi(text = priceString, size = 18, bold = false)
+                                    SliderTextUi(text = priceString, size = 18, bold = false)
                                 }
                             }
                         }
@@ -543,7 +591,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     }
 
     @Composable
-    fun RestaurantFilterTextUi(text: String?, size: Int, bold: Boolean) {
+    fun SliderTextUi(text: String?, size: Int, bold: Boolean) {
         var fontWeight: FontWeight = FontWeight.Normal
         if (bold) fontWeight = FontWeight.Bold
         if (text != null) {
@@ -616,15 +664,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     }
                 }
             )
-    }
-
-    @Composable
-    fun OptionsDialogUi() {
-        Column (modifier = Modifier
-            .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally) {
-
-        }
     }
 
     @Composable

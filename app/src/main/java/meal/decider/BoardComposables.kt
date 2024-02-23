@@ -85,7 +85,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val cuisineSelectionMode = appViewModel.cuisineSelectionMode.collectAsStateWithLifecycle()
         val coroutineScope = rememberCoroutineScope()
 
-        val tint: Color = if (cuisineSelectionMode.value) Color.Red; else Color.White
+        val tint: Color = if (cuisineSelectionMode.value) Color.Black; else Color.White
 
         Scaffold(
             modifier = Modifier
