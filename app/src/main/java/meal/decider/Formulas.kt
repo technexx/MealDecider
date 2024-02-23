@@ -11,12 +11,6 @@ fun doubleToTwoDecimals(double: Double?): Double {
     return BigDecimal(double!!).setScale(2, RoundingMode.DOWN).toDouble()
 }
 
-//fun floatArrayMetersToMiles(meters: FloatArray): Double {
-//    val miles = (meters[0] * .00062137)
-//    val roundedMiles = BigDecimal(miles).setScale(1, RoundingMode.DOWN)
-//    return roundedMiles.toDouble()
-//}
-
 fun floatArrayToDouble(meters: FloatArray): Double {
     val roundedMiles = BigDecimal(meters[0].toDouble()).setScale(1, RoundingMode.DOWN)
     return roundedMiles.toDouble()
@@ -55,6 +49,14 @@ fun foodRestrictionsString(list: SnapshotStateList<RestrictionsValues>): String 
         }
     }
     return stringList
+}
+
+fun rollDurationSettingToMillis(setting: Int): Int {
+    return setting * 1000
+}
+
+fun rollSpeedSettingToMillis(setting: Int): Int {
+    return 1000 / setting
 }
 
 @Composable
