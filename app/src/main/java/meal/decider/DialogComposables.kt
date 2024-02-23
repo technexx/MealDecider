@@ -437,24 +437,12 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     }
 
     @Composable
-    fun Slider (value: Float,
-                onValueChange: () -> Unit,
-                valueRange: ClosedFloatingPointRange<Float>,
-                steps: Int, ) {
-        Slider(modifier = Modifier
-            .fillMaxWidth(0.7f)
-            .padding(start = 4.dp),
-            value = value,
-            onValueChange = { onValueChange },
-            valueRange = valueRange,
-            steps = steps)
-    }
-
-    @Composable
     fun OptionsDialogUi() {
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
-        var rollDurationSliderPosition by remember { mutableFloatStateOf(3f) }
-        var rollSpeedSliderPosition by remember { mutableFloatStateOf(3f) }
+        var cuisineRollDurationSliderPosition by remember { mutableFloatStateOf(3f) }
+        var cuisineRollSpeedSliderPosition by remember { mutableFloatStateOf(3f) }
+        var restaurantRollDurationSliderPosition by remember { mutableFloatStateOf(3f) }
+        var restaurantRollSpeedSliderPosition by remember { mutableFloatStateOf(3f) }
 
         Column (modifier = Modifier
             .fillMaxWidth(),
@@ -463,24 +451,47 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 Slider(modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .padding(start = 4.dp),
-                    value = rollDurationSliderPosition,
-                    onValueChange = { rollDurationSliderPosition = it },
+                    value = cuisineRollDurationSliderPosition,
+                    onValueChange = { cuisineRollDurationSliderPosition = it },
                     valueRange = 1f..10f,
                     steps = 9
                 )
-                SliderTextUi(text = "$rollDurationSliderPosition stars", size = 18, bold = false)
+                SliderTextUi(text = "$cuisineRollDurationSliderPosition stars", size = 18, bold = false)
             }
             Row () {
                 Slider(modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .padding(start = 4.dp),
-                    value = rollSpeedSliderPosition,
-                    onValueChange = { rollSpeedSliderPosition = it },
+                    value = cuisineRollSpeedSliderPosition,
+                    onValueChange = { cuisineRollSpeedSliderPosition = it },
                     valueRange = 1f..5f,
                     steps = 4
                 )
-                SliderTextUi(text = "$rollDurationSliderPosition stars", size = 18, bold = false)
+                SliderTextUi(text = "$cuisineRollSpeedSliderPosition stars", size = 18, bold = false)
             }
+        }
+        Row () {
+            Slider(modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .padding(start = 4.dp),
+                value = restaurantRollDurationSliderPosition,
+                onValueChange = { restaurantRollDurationSliderPosition = it },
+                valueRange = 1f..5f,
+                steps = 4
+            )
+            SliderTextUi(text = "$restaurantRollDurationSliderPosition stars", size = 18, bold = false)
+        }
+
+        Row () {
+            Slider(modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .padding(start = 4.dp),
+                value = restaurantRollSpeedSliderPosition,
+                onValueChange = { restaurantRollSpeedSliderPosition = it },
+                valueRange = 1f..5f,
+                steps = 4
+            )
+            SliderTextUi(text = "$restaurantRollSpeedSliderPosition stars", size = 18, bold = false)
         }
     }
 
