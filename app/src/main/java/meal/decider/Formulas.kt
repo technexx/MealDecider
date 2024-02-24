@@ -51,12 +51,14 @@ fun foodRestrictionsString(list: SnapshotStateList<RestrictionsValues>): String 
     return stringList
 }
 
-fun rollDurationSettingToMillis(setting: Int): Int {
+fun rollDurationSettingToMillis(setting: Long): Long {
     return setting * 1000
 }
 
-fun rollSpeedSettingToMillis(setting: Int): Int {
-    return 1000 / setting
+//TODO: Speed should increase as roll continues.
+fun rollSpeedSettingToMillis(setting: Long, duration: Long): Long {
+    val durationInSeconds = duration/1000
+    return (1000 / setting) / durationInSeconds
 }
 
 @Composable
