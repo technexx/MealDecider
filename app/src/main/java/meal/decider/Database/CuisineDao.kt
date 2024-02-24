@@ -44,9 +44,18 @@ interface RestaurantFiltersDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertRestaurantFilters(vararg restaurantFilters: RestaurantFilters)
 
-    //Not working.
     @Query("UPDATE restaurant_filters SET distance = :newDistance, rating =:newRating, price = :newPrice")
     fun updateFilters(newDistance: Double, newRating: Double, newPrice: Double)
+}
 
+//Test this. Getting everything from options entity but only returning from RollOptions data class.
+@Dao interface OptionsDao {
+    @Query("SELECT * from options")
+    fun getAllRollOptions(): List<RollOptions>
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertRollOptions(vararg rollOptions: RollOptions)
+
+    @Query("UPDATE options SET cuisine_roll_duration = :cuisineRollDuration, cuisine_roll_delay = :cuisineRollDelay, restaurant_roll_duration = :restaurantRollDuration, restaurant_roll_delay = :restaurantRollDelay")
+    fun updateRollOptions(cuisineRollDuration: Long, cuisineRollDelay: Long, restaurantRollDuration: Long, restaurantRollDelay: Long)
 }

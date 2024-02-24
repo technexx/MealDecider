@@ -24,7 +24,7 @@ class AppViewModel : ViewModel() {
     var minRestaurantRating = 3.0
     var maxRestaurantPrice = 1
 
-    var cuisineRollDelay : Long= 0
+    var cuisineRollDelay : Long = 0
     var cuisineRollDuration : Long = 0
     var restaurantRollDelay : Long = 0
     var restaurantRollDuration : Long= 0
