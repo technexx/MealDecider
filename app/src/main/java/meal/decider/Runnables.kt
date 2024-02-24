@@ -15,22 +15,22 @@ class Runnables (val appViewModel: AppViewModel) {
     private var rollCountdown: Long = 1000
 
     fun rollCuisine() {
-        var delay: Long = 100
-        rollCountdown = 100
         appViewModel.updateRollEngaged(true)
         appViewModel.toggleSelectionOfSingleCuisineSquareColorAndBorder(appViewModel.rolledSquareIndex, defaultSquareColor, lightRestaurantSelectionBorderStroke)
         handler.removeCallbacks(cuisineRollRunnable)
+
+        var duration = rollDurationSettingToMillis(appViewModel.cuisineRollDuration)
 
         cuisineRollRunnable = Runnable {
             appViewModel.rolledSquareIndex = Random.nextInt(0, appViewModel.getSquareList.size)
             val newSquareList = squareListWithRandomColorChanged(appViewModel.rolledSquareIndex)
             appViewModel.updateSquareList(newSquareList)
 
+            val delay = rollDelaySettingToMillis(appViewModel.cuisineRollDelay, duration)
             handler.postDelayed(cuisineRollRunnable, delay)
-            if (delay > 100) delay -= 10
-            rollCountdown -= 20
+            duration -= delay
 
-            if (rollCountdown < 20) {
+            if (duration < 20) {
                 appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[appViewModel.rolledSquareIndex])
 
                 appViewModel.updateCuisineRollFinished(true)

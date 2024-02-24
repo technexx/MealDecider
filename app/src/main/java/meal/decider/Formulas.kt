@@ -55,8 +55,8 @@ fun rollDurationSettingToMillis(setting: Long): Long {
     return setting * 1000
 }
 
-//TODO: Speed should increase as roll continues.
-fun rollSpeedSettingToMillis(setting: Long, duration: Long): Long {
+//TODO: Won't work unless duration iterates down.
+fun rollDelaySettingToMillis(setting: Long, duration: Long): Long {
     val durationInSeconds = duration/1000
     return (1000 / setting) / durationInSeconds
 }

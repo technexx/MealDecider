@@ -24,10 +24,10 @@ class AppViewModel : ViewModel() {
     var minRestaurantRating = 3.0
     var maxRestaurantPrice = 1
 
-    var cuisineRollSpeed = 0
-    var cuisineRollDuration = 0
-    var restaurantRollSpeed = 0
-    var restaurantRollDuration = 0
+    var cuisineRollDelay : Long= 0
+    var cuisineRollDuration : Long = 0
+    var restaurantRollDelay : Long = 0
+    var restaurantRollDuration : Long= 0
 
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
