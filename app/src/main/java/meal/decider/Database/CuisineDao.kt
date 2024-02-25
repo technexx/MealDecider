@@ -51,7 +51,7 @@ interface RestaurantFiltersDao {
 //Test this. Getting everything from options entity but only returning from RollOptions data class.
 @Dao interface OptionsDao {
     @Query("SELECT * from options")
-    fun getAllRollOptions(): List<RollOptions>
+    fun getRollOptions(): List<RollOptions>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertRollOptions(vararg rollOptions: RollOptions)

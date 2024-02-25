@@ -8,6 +8,7 @@ class CuisineDatabase {
     abstract class AppDatabase : RoomDatabase() {
         abstract fun cuisineDao(): CuisineDao
         abstract fun restaurantFiltersDao(): RestaurantFiltersDao
+        abstract fun optionsDao() : OptionsDao
     }
 }
 

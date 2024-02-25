@@ -440,9 +440,19 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     fun OptionsDialogUi() {
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         var cuisineRollDurationSliderPosition by remember { mutableFloatStateOf(3f) }
-        var cuisineRollSpeedSliderPosition by remember { mutableFloatStateOf(3f) }
+        var cuisineRollDelaySliderPosition by remember { mutableFloatStateOf(3f) }
         var restaurantRollDurationSliderPosition by remember { mutableFloatStateOf(3f) }
-        var restaurantRollSpeedSliderPosition by remember { mutableFloatStateOf(3f) }
+        var restaurantRollDelaySliderPosition by remember { mutableFloatStateOf(3f) }
+
+        LaunchedEffect(Unit) {
+            coroutineScope.launch {
+                val rollOptions = roomInteractions.getRollOptions()
+                cuisineRollDurationSliderPosition = rollOptions[0].cuisineRollDuration.toFloat()
+                cuisineRollDelaySliderPosition = rollOptions[0].cuisineRollDelay.toFloat()
+                restaurantRollDurationSliderPosition = rollOptions[0].restaurantRollDuration.toFloat()
+                restaurantRollDelaySliderPosition = rollOptions[0]. restaurantRollDelay.toFloat()
+            }
+        }
 
         Column (modifier = Modifier
             .fillMaxWidth(),
@@ -462,12 +472,12 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 Slider(modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .padding(start = 4.dp),
-                    value = cuisineRollSpeedSliderPosition,
-                    onValueChange = { cuisineRollSpeedSliderPosition = it },
+                    value = cuisineRollDelaySliderPosition,
+                    onValueChange = { cuisineRollDelaySliderPosition = it },
                     valueRange = 1f..5f,
                     steps = 4
                 )
-                SliderTextUi(text = "$cuisineRollSpeedSliderPosition stars", size = 18, bold = false)
+                SliderTextUi(text = "$cuisineRollDelaySliderPosition stars", size = 18, bold = false)
             }
         }
         Row () {
@@ -486,12 +496,12 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             Slider(modifier = Modifier
                 .fillMaxWidth(0.7f)
                 .padding(start = 4.dp),
-                value = restaurantRollSpeedSliderPosition,
-                onValueChange = { restaurantRollSpeedSliderPosition = it },
+                value = restaurantRollDelaySliderPosition,
+                onValueChange = { restaurantRollDelaySliderPosition = it },
                 valueRange = 1f..5f,
                 steps = 4
             )
-            SliderTextUi(text = "$restaurantRollSpeedSliderPosition stars", size = 18, bold = false)
+            SliderTextUi(text = "$restaurantRollDelaySliderPosition stars", size = 18, bold = false)
         }
     }
 

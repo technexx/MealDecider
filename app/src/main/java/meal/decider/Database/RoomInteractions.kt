@@ -15,6 +15,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
     val cuisineDao = cuisineDatabase.cuisineDao()
     val restaurantFiltersDao = cuisineDatabase.restaurantFiltersDao()
+    val optionsDao = cuisineDatabase.optionsDao()
 
     fun setSquareDatabaseToDefaultStartingValues() {
         ioScope.launch {
@@ -97,6 +98,20 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
     suspend fun updateRestaurantFilters(distance: Double, rating: Double, price: Double) {
         withContext(Dispatchers.IO) {
             restaurantFiltersDao.updateFilters(distance, rating, price)
+        }
+    }
+
+    suspend fun getRollOptions(): List<RollOptions> {
+        val rollOptions: List<RollOptions>
+        withContext(Dispatchers.IO) {
+            rollOptions = optionsDao.getRollOptions()
+        }
+        return rollOptions
+    }
+
+    suspend fun updateCRollOptions(cuisineDuration: Long, cuisineDelay: Long, restaurantDuration: Long, restaurantDelay: Long) {
+        withContext(Dispatchers.IO) {
+            optionsDao.updateRollOptions(cuisineDuration, cuisineDelay, restaurantDuration, restaurantDelay)
         }
     }
 }
