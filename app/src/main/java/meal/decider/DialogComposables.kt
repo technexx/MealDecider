@@ -458,7 +458,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             .fillMaxSize()
             .background(colorResource(id = R.color.grey_50)),
             onDismissRequest = {
-
+                coroutineScope.launch {
+                    roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
+                }
         },
             content = {
                 Column (modifier = Modifier
