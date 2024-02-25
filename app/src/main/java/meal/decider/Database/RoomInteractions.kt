@@ -101,6 +101,11 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         }
     }
 
+    fun populateRollOptionsWithInitialValues() {
+        val rollOptions = RollOptions(null, 5, 5, 5, 5)
+        optionsDao.insertRollOptions(rollOptions)
+    }
+
     suspend fun getRollOptions(): List<RollOptions> {
         val rollOptions: List<RollOptions>
         withContext(Dispatchers.IO) {
@@ -109,7 +114,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         return rollOptions
     }
 
-    suspend fun updateCRollOptions(cuisineDuration: Long, cuisineDelay: Long, restaurantDuration: Long, restaurantDelay: Long) {
+    suspend fun updateRollOptions(cuisineDuration: Long, cuisineDelay: Long, restaurantDuration: Long, restaurantDelay: Long) {
         withContext(Dispatchers.IO) {
             optionsDao.updateRollOptions(cuisineDuration, cuisineDelay, restaurantDuration, restaurantDelay)
         }

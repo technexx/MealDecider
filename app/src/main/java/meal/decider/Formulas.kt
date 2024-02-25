@@ -55,10 +55,9 @@ fun rollDurationSettingToMillis(setting: Long): Long {
     return setting * 1000
 }
 
-//TODO: Won't work unless duration iterates down.
-fun rollDelaySettingToMillis(setting: Long, duration: Long): Long {
-    val durationInSeconds = duration/1000
-    return (1000 / setting) / durationInSeconds
+fun rollDelaySettingToMillis(delaySetting: Long, durationSetting: Long): Long {
+//    val durationInSeconds = durationSetting/1000
+    return (1000 / delaySetting) * (1 - durationSetting)
 }
 
 @Composable

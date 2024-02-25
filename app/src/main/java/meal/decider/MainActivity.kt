@@ -69,14 +69,15 @@ class MainActivity : ComponentActivity() {
             if (roomInteractions.restaurantFiltersDao.getAllRestaurantFilters().isEmpty()) {
                 roomInteractions.populateRestaurantFiltersWithInitialValues()
             }
+            if (roomInteractions.optionsDao.getRollOptions().isEmpty()) {
+                roomInteractions.populateRollOptionsWithInitialValues()
+            }
 
             val restaurantFilters = roomInteractions.getRestaurantFilters()[0]
             appViewModel.setLocalRestaurantFilterValues(milesToMeters(restaurantFilters.distance), restaurantFilters.rating, restaurantFilters.price.toInt())
 
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
             appViewModel.updateCuisineStringUriAndHasChangedBoolean(appViewModel.getselectedCuisineSquare.name + " Food ")
-            //Gets restaurants on app launch for selected cuisine.
-//            mapInteractions.mapsApiCall()
         }
 
         val boardComposables = BoardComposables(appViewModel, cuisineDatabase, roomInteractions, mapInteractions, runnables)
