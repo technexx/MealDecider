@@ -588,7 +588,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 modifier = Modifier
                     .fillMaxSize(),
                 onDismissRequest = {
-                    appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = false, colors = false)},
+                    appViewModel.updateOptionsMode(false) },
                 content = {
                     Column(modifier = Modifier
                         .background(colorResource(id = R.color.grey_300))

@@ -311,7 +311,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
         val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
         val restoreDefaults = appViewModel.restoreDefaults.collectAsStateWithLifecycle()
-        val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
+        val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
 
         if (addMode.value) {
             dialogComposables.AddDialogBox()
@@ -321,7 +321,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             dialogComposables.ConfirmRestoreDefaultsDialog()
         }
 
-        if (settingsDialogVisibility.value) {
+        if (optionsMode.value) {
             dialogComposables.OptionsDialog()
         }
 

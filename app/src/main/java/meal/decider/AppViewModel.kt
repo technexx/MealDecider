@@ -86,8 +86,15 @@ class AppViewModel : ViewModel() {
     private val _cuisineSelectionMode = MutableStateFlow(false)
     val cuisineSelectionMode: StateFlow<Boolean> = _cuisineSelectionMode.asStateFlow()
 
+    private val _optionsMode = MutableStateFlow(false)
+    val optionsMode : StateFlow<Boolean> = _optionsMode
+
     private val _settingsDialogVisibility = MutableStateFlow(SettingsDialogVisibility())
     val settingsDialogVisibility : StateFlow<SettingsDialogVisibility> = _settingsDialogVisibility.asStateFlow()
+
+    fun updateOptionsMode(optionsMode: Boolean) {
+        _optionsMode.value = optionsMode
+    }
 
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
