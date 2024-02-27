@@ -436,6 +436,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             }
     }
 
+    //TODO: Sub categories (speed, color, etc.). Can use the same Dialog.
     @Composable
     fun OptionsDialogUi() {
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
@@ -445,12 +446,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var restaurantRollDelaySliderPosition by remember { mutableFloatStateOf(3f) }
 
         LaunchedEffect(Unit) {
-//            val rollOptions = roomInteractions.getRollOptions()
-//            cuisineRollDurationSliderPosition = rollOptions[0].cuisineRollDuration.toFloat()
-//            cuisineRollDelaySliderPosition = rollOptions[0].cuisineRollDelay.toFloat()
-//            restaurantRollDurationSliderPosition = rollOptions[0].restaurantRollDuration.toFloat()
-//            restaurantRollDelaySliderPosition = rollOptions[0]. restaurantRollDelay.toFloat()
-
             cuisineRollDurationSliderPosition = appViewModel.cuisineRollDurationSetting.toFloat()
             cuisineRollDelaySliderPosition = appViewModel.cuisineRollDelaySetting.toFloat()
             restaurantRollDurationSliderPosition = appViewModel.restaurantRollDurationSetting.toFloat()
@@ -465,7 +460,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 coroutineScope.launch {
                     roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
                 }
-
                 appViewModel.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
             },
             content = {
@@ -473,9 +467,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,) {
                     Column (horizontalAlignment = Alignment.CenterHorizontally){
-                        SliderTextUi("Settings", size = 24, bold = true)
+                        DialogTextUi("Settings", size = 26, bold = true)
 
-                        SliderTextUi("Cuisine Selection Duration", size = 18, bold = false)
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        DialogTextUi("Cuisine Selection Duration", size = 18, bold = false)
                         Row () {
                             Slider(modifier = Modifier
                                 .fillMaxWidth(0.7f)
@@ -485,9 +481,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 valueRange = 1f..10f,
                                 steps = 9
                             )
-                            SliderTextUi(text = "${cuisineRollDurationSliderPosition.toInt()}", size = 18, bold = false)
+                            DialogTextUi(text = "${cuisineRollDurationSliderPosition.toInt()}", size = 18, bold = false)
                         }
-                        SliderTextUi("Cuisine Selection Speed", size = 18, bold = false)
+                        DialogTextUi("Cuisine Selection Speed", size = 18, bold = false)
                         Row () {
                             Slider(modifier = Modifier
                                 .fillMaxWidth(0.7f)
@@ -497,9 +493,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 valueRange = 1f..10f,
                                 steps = 9
                             )
-                            SliderTextUi(text = "${cuisineRollDelaySliderPosition.toInt()}", size = 18, bold = false)
+                            DialogTextUi(text = "${cuisineRollDelaySliderPosition.toInt()}", size = 18, bold = false)
                         }
-                        SliderTextUi("Restaurant Selection Duration", size = 18, bold = false)
+                        DialogTextUi("Restaurant Selection Duration", size = 18, bold = false)
                         Row () {
                             Slider(modifier = Modifier
                                 .fillMaxWidth(0.7f)
@@ -509,9 +505,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 valueRange = 1f..10f,
                                 steps = 9
                             )
-                            SliderTextUi(text = "${restaurantRollDurationSliderPosition.toInt()}", size = 18, bold = false)
+                            DialogTextUi(text = "${restaurantRollDurationSliderPosition.toInt()}", size = 18, bold = false)
                         }
-                        SliderTextUi("Restaurant Selection Speed", size = 18, bold = false)
+                        DialogTextUi("Restaurant Selection Speed", size = 18, bold = false)
                         Row () {
                             Slider(modifier = Modifier
                                 .fillMaxWidth(0.7f)
@@ -521,14 +517,23 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 valueRange = 1f..10f,
                                 steps = 9
                             )
-                            SliderTextUi(text = "${restaurantRollDelaySliderPosition.toInt()}", size = 18, bold = false)
+                            DialogTextUi(text = "${restaurantRollDelaySliderPosition.toInt()}", size = 18, bold = false)
                         }
                     }
 
                 }
             })
-
-
+    }
+    
+    @Composable
+    fun SpeedSettingsDialog() {
+        AnimatedTransitionDialog(
+            modifier = Modifier.fillMaxSize(),
+            onDismissRequest = { 
+                
+            }) {
+            DialogTextUi(text = "Speeds", size = 26, bold = true)
+        }
     }
 
     @Composable
@@ -580,11 +585,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         Column (horizontalAlignment = Alignment.CenterHorizontally)
                         {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                SliderTextUi(text = "Filters", size = 22, bold = true)
+                                DialogTextUi(text = "Filters", size = 22, bold = true)
                             }
                             Spacer(modifier = Modifier.height(16.dp))
                             Column {
-                                SliderTextUi(text = "Distance", size = 20 , bold = false)
+                                DialogTextUi(text = "Distance", size = 20 , bold = false)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Row () {
                                     Slider(modifier = Modifier
@@ -595,10 +600,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         },
                                         valueRange = 1f..10f
                                     )
-                                    SliderTextUi(text = distanceSliderPosition.toInt().toString() + " mi", size = 18, bold = false)
+                                    DialogTextUi(text = distanceSliderPosition.toInt().toString() + " mi", size = 18, bold = false)
                                 }
                                 Spacer(modifier = Modifier.height(16.dp))
-                                SliderTextUi(text = "Rating", size = 20 , bold = false)
+                                DialogTextUi(text = "Rating", size = 20 , bold = false)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Row () {
                                     Slider(modifier = Modifier
@@ -609,10 +614,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         valueRange = 3f..4.5f,
                                         steps = 2
                                     )
-                                    SliderTextUi(text = "$ratingSliderPosition stars", size = 18, bold = false)
+                                    DialogTextUi(text = "$ratingSliderPosition stars", size = 18, bold = false)
                                 }
                                 Spacer(modifier = Modifier.height(16.dp))
-                                SliderTextUi(text = "Max Price", size = 20 , bold = false)
+                                DialogTextUi(text = "Max Price", size = 20 , bold = false)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Row () {
                                     Slider(modifier = Modifier
@@ -627,7 +632,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     for (i in 1..priceSliderPosition.toInt()) {
                                         priceString += "$"
                                     }
-                                    SliderTextUi(text = priceString, size = 18, bold = false)
+                                    DialogTextUi(text = priceString, size = 18, bold = false)
                                 }
                             }
                         }
@@ -638,7 +643,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     }
 
     @Composable
-    fun SliderTextUi(text: String?, size: Int, bold: Boolean) {
+    fun DialogTextUi(text: String?, size: Int, bold: Boolean) {
         var fontWeight: FontWeight = FontWeight.Normal
         if (bold) fontWeight = FontWeight.Bold
         if (text != null) {
