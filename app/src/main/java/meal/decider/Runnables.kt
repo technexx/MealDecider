@@ -14,6 +14,7 @@ class Runnables (val appViewModel: AppViewModel) {
     private var restaurantBorderStrokeToggleRunnable = Runnable {}
     private var rollCountdown: Long = 1000
 
+    //Todo: Duration increasing (since delay is negative), delay stuck at -800.
     fun rollCuisine() {
         appViewModel.updateRollEngaged(true)
         appViewModel.toggleSelectionOfSingleCuisineSquareColorAndBorder(appViewModel.rolledSquareIndex, defaultSquareColor, lightRestaurantSelectionBorderStroke)
@@ -21,9 +22,9 @@ class Runnables (val appViewModel: AppViewModel) {
 
         var duration = rollDurationSettingToMillis(appViewModel.cuisineRollDurationSetting)
 
-        showLog("test", "At start, duration is $duration and delay is ${rollDelaySettingToMillis(appViewModel.cuisineRollDelaySetting, appViewModel.cuisineRollDurationSetting)}")
+        showLog("test", "At start, duration is $duration and delay is ${rollDelaySettingToMillis(duration)}")
         cuisineRollRunnable = Runnable {
-            val delay = rollDelaySettingToMillis(appViewModel.cuisineRollDelaySetting, duration)
+            val delay = rollDelaySettingToMillis(duration)
 
             showLog("test", "duration is $duration and delay is $delay")
 

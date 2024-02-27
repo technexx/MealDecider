@@ -55,10 +55,13 @@ fun rollDurationSettingToMillis(setting: Long): Long {
     return setting * 1000
 }
 
-fun rollDelaySettingToMillis(delaySetting: Long, durationSetting: Long): Long {
-//    val durationInSeconds = durationSetting/1000
-    return (1000 / delaySetting) * (1 - durationSetting)
+fun rollDelaySettingToMillis(duration: Long): Long {
+    return duration / 10
 }
+
+//fun rollDelaySettingToMillis(delaySetting: Long, durationSetting: Long): Long {
+//    return (1000 / delaySetting) * (durationSetting)
+//}
 
 @Composable
 fun screenHeightPct(pct: Double) : Double {
