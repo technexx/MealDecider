@@ -466,13 +466,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
                 }
 
-//                coroutineScope.launch {
-//                    showLog("test", "from db, roll options are ${roomInteractions.getRollOptions()}")
-//                }
-
                 appViewModel.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
-//                showLog("test", "from viewModel, roll option values are ${appViewModel.cuisineRollDuration}, ${appViewModel.cuisineRollDelay}, ${appViewModel.restaurantRollDuration}, ${appViewModel.restaurantRollDelay}")
-
             },
             content = {
                 Column (modifier = Modifier
