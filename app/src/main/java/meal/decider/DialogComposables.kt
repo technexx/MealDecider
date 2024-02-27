@@ -64,7 +64,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
-import meal.decider.Database.RollOptions
 import meal.decider.Database.RoomInteractions
 import kotlin.math.floor
 
@@ -451,6 +450,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 //            cuisineRollDelaySliderPosition = rollOptions[0].cuisineRollDelay.toFloat()
 //            restaurantRollDurationSliderPosition = rollOptions[0].restaurantRollDuration.toFloat()
 //            restaurantRollDelaySliderPosition = rollOptions[0]. restaurantRollDelay.toFloat()
+
             cuisineRollDurationSliderPosition = appViewModel.cuisineRollDuration.toFloat()
             cuisineRollDelaySliderPosition = appViewModel.cuisineRollDelay.toFloat()
             restaurantRollDurationSliderPosition = appViewModel.restaurantRollDuration.toFloat()
@@ -461,17 +461,18 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             .fillMaxSize()
             .background(colorResource(id = R.color.grey_50)),
             onDismissRequest = {
-                var rollOptions: List<RollOptions>
+                appViewModel.updateOptionsMode(false)
                 coroutineScope.launch {
                     roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
-                    delay(1000)
                 }
-                appViewModel.updateOptionsMode(false)
 
-                coroutineScope.launch {
-                    rollOptions = roomInteractions.getRollOptions()
-                    showLog("test", "$rollOptions")
-                }
+//                coroutineScope.launch {
+//                    showLog("test", "from db, roll options are ${roomInteractions.getRollOptions()}")
+//                }
+
+                appViewModel.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
+//                showLog("test", "from viewModel, roll option values are ${appViewModel.cuisineRollDuration}, ${appViewModel.cuisineRollDelay}, ${appViewModel.restaurantRollDuration}, ${appViewModel.restaurantRollDelay}")
+
             },
             content = {
                 Column (modifier = Modifier

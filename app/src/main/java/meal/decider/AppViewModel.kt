@@ -24,7 +24,6 @@ class AppViewModel : ViewModel() {
     var minRestaurantRating = 3.0
     var maxRestaurantPrice = 1
 
-
     var cuisineRollDelay : Long = 0
     var cuisineRollDuration : Long = 0
     var restaurantRollDelay : Long = 0
@@ -427,6 +426,10 @@ class AppViewModel : ViewModel() {
     fun updateCuisineStringUriAndHasChangedBoolean(cuisineSelected: String) {
         hasCuisineStringUriChanged = (cuisineStringUri != cuisineSelected)
         cuisineStringUri = cuisineSelected
+    }
+
+    fun updateRollOptions(cuisineDuration: Long, cuisineDelay: Long, restaurantDuration: Long, restaurantDelay: Long) {
+        cuisineRollDuration = cuisineDuration; cuisineRollDelay = cuisineDelay; restaurantRollDuration = restaurantDuration; restaurantRollDelay = restaurantDelay
     }
 
     val getSquareList get() = boardUiState.value.squareList
