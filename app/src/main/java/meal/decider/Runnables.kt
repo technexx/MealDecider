@@ -19,11 +19,11 @@ class Runnables (val appViewModel: AppViewModel) {
         appViewModel.toggleSelectionOfSingleCuisineSquareColorAndBorder(appViewModel.rolledSquareIndex, defaultSquareColor, lightRestaurantSelectionBorderStroke)
         handler.removeCallbacks(cuisineRollRunnable)
 
-        var duration = rollDurationSettingToMillis(appViewModel.cuisineRollDuration)
+        var duration = rollDurationSettingToMillis(appViewModel.cuisineRollDurationSetting)
 
-        showLog("test", "At start, duration is $duration and delay is ${rollDelaySettingToMillis(appViewModel.cuisineRollDelay, duration)}")
+        showLog("test", "At start, duration is $duration and delay is ${rollDelaySettingToMillis(appViewModel.cuisineRollDelaySetting, appViewModel.cuisineRollDurationSetting)}")
         cuisineRollRunnable = Runnable {
-            val delay = rollDelaySettingToMillis(appViewModel.cuisineRollDelay, duration)
+            val delay = rollDelaySettingToMillis(appViewModel.cuisineRollDelaySetting, duration)
 
             showLog("test", "duration is $duration and delay is $delay")
 

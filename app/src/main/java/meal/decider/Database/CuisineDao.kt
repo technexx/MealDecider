@@ -57,6 +57,6 @@ interface OptionsDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertRollOptions(vararg rollOptions: RollOptions)
 
-    @Query("UPDATE options SET cuisine_roll_duration = :cuisineRollDuration, cuisine_roll_delay = :cuisineRollDelay, restaurant_roll_duration = :restaurantRollDuration, restaurant_roll_delay = :restaurantRollDelay")
-    fun updateRollOptions(cuisineRollDuration: Long, cuisineRollDelay: Long, restaurantRollDuration: Long, restaurantRollDelay: Long)
+    @Query("UPDATE options SET cuisine_roll_duration_setting = :cuisineRollDurationSetting, cuisine_roll_delay_setting = :cuisineRollDelaySetting, restaurant_roll_duration_setting = :restaurantRollDurationSetting, restaurant_roll_delay_setting = :restaurantRollDelaySetting")
+    fun updateRollOptions(cuisineRollDurationSetting: Long, cuisineRollDelaySetting: Long, restaurantRollDurationSetting: Long, restaurantRollDelaySetting: Long)
 }

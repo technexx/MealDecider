@@ -451,10 +451,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 //            restaurantRollDurationSliderPosition = rollOptions[0].restaurantRollDuration.toFloat()
 //            restaurantRollDelaySliderPosition = rollOptions[0]. restaurantRollDelay.toFloat()
 
-            cuisineRollDurationSliderPosition = appViewModel.cuisineRollDuration.toFloat()
-            cuisineRollDelaySliderPosition = appViewModel.cuisineRollDelay.toFloat()
-            restaurantRollDurationSliderPosition = appViewModel.restaurantRollDuration.toFloat()
-            restaurantRollDelaySliderPosition = appViewModel.restaurantRollDelay.toFloat()
+            cuisineRollDurationSliderPosition = appViewModel.cuisineRollDurationSetting.toFloat()
+            cuisineRollDelaySliderPosition = appViewModel.cuisineRollDelaySetting.toFloat()
+            restaurantRollDurationSliderPosition = appViewModel.restaurantRollDurationSetting.toFloat()
+            restaurantRollDelaySliderPosition = appViewModel.restaurantRollDelaySetting.toFloat()
         }
 
         AnimatedTransitionDialog(modifier = Modifier

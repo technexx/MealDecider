@@ -24,10 +24,10 @@ class AppViewModel : ViewModel() {
     var minRestaurantRating = 3.0
     var maxRestaurantPrice = 1
 
-    var cuisineRollDelay : Long = 0
-    var cuisineRollDuration : Long = 0
-    var restaurantRollDelay : Long = 0
-    var restaurantRollDuration : Long= 0
+    var cuisineRollDelaySetting : Long = 0
+    var cuisineRollDurationSetting : Long = 0
+    var restaurantRollDelaySetting : Long = 0
+    var restaurantRollDurationSetting : Long= 0
 
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
@@ -429,7 +429,7 @@ class AppViewModel : ViewModel() {
     }
 
     fun updateRollOptions(cuisineDuration: Long, cuisineDelay: Long, restaurantDuration: Long, restaurantDelay: Long) {
-        cuisineRollDuration = cuisineDuration; cuisineRollDelay = cuisineDelay; restaurantRollDuration = restaurantDuration; restaurantRollDelay = restaurantDelay
+        cuisineRollDurationSetting = cuisineDuration; cuisineRollDelaySetting = cuisineDelay; restaurantRollDurationSetting = restaurantDuration; restaurantRollDelaySetting = restaurantDelay
     }
 
     val getSquareList get() = boardUiState.value.squareList
