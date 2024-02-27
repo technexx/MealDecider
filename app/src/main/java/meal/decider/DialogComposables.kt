@@ -501,7 +501,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 value = cuisineRollDelaySliderPosition,
                                 onValueChange = { cuisineRollDelaySliderPosition = it },
                                 valueRange = 1f..10f,
-                                steps = 4
+                                steps = 9
                             )
                             SliderTextUi(text = "${cuisineRollDelaySliderPosition.toInt()}", size = 18, bold = false)
                         }
@@ -513,7 +513,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 value = restaurantRollDurationSliderPosition,
                                 onValueChange = { restaurantRollDurationSliderPosition = it },
                                 valueRange = 1f..10f,
-                                steps = 4
+                                steps = 9
                             )
                             SliderTextUi(text = "${restaurantRollDurationSliderPosition.toInt()}", size = 18, bold = false)
                         }
@@ -525,7 +525,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 value = restaurantRollDelaySliderPosition,
                                 onValueChange = { restaurantRollDelaySliderPosition = it },
                                 valueRange = 1f..10f,
-                                steps = 4
+                                steps = 9
                             )
                             SliderTextUi(text = "${restaurantRollDelaySliderPosition.toInt()}", size = 18, bold = false)
                         }

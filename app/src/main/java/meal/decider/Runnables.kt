@@ -21,12 +21,16 @@ class Runnables (val appViewModel: AppViewModel) {
 
         var duration = rollDurationSettingToMillis(appViewModel.cuisineRollDuration)
 
+        showLog("test", "At start, duration is $duration and delay is ${rollDelaySettingToMillis(appViewModel.cuisineRollDelay, duration)}")
         cuisineRollRunnable = Runnable {
+            val delay = rollDelaySettingToMillis(appViewModel.cuisineRollDelay, duration)
+
+            showLog("test", "duration is $duration and delay is $delay")
+
             appViewModel.rolledSquareIndex = Random.nextInt(0, appViewModel.getSquareList.size)
             val newSquareList = squareListWithRandomColorChanged(appViewModel.rolledSquareIndex)
             appViewModel.updateSquareList(newSquareList)
 
-            val delay = rollDelaySettingToMillis(appViewModel.cuisineRollDelay, duration)
             handler.postDelayed(cuisineRollRunnable, delay)
             duration -= delay
 
