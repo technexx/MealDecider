@@ -5,6 +5,12 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlinx.serialization.Serializable
 
+data class SettingsDialogVisibility(
+    var speeds: Boolean = false,
+    var colors: Boolean = false,
+    var sounds: Boolean = false
+)
+
 data class BoardValues(
     var squareList: SnapshotStateList<SquareValues> = mutableStateListOf(),
 )

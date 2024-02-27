@@ -50,9 +50,6 @@ class AppViewModel : ViewModel() {
     private val _restoreDefaults = MutableStateFlow(false)
     val restoreDefaults: StateFlow<Boolean> = _restoreDefaults.asStateFlow()
 
-    private val _optionsMode = MutableStateFlow(false)
-    val optionsMode : StateFlow<Boolean> = _optionsMode
-
     private val _selectedCuisineSquare = MutableStateFlow(SquareValues())
     val selectedCuisineSquare: StateFlow<SquareValues> = _selectedCuisineSquare.asStateFlow()
 
@@ -89,9 +86,18 @@ class AppViewModel : ViewModel() {
     private val _cuisineSelectionMode = MutableStateFlow(false)
     val cuisineSelectionMode: StateFlow<Boolean> = _cuisineSelectionMode.asStateFlow()
 
+    private val _settingsDialogVisibility = MutableStateFlow(SettingsDialogVisibility())
+    val settingsDialogVisibility : StateFlow<SettingsDialogVisibility> = _settingsDialogVisibility.asStateFlow()
+
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
             currentState.copy(squareList = list)
+        }
+    }
+
+    fun updateSettingsDialogVisibility(speeds: Boolean, colors: Boolean, sounds: Boolean) {
+        _settingsDialogVisibility.update { currentState ->
+            currentState.copy(speeds = speeds, colors = colors, sounds = sounds)
         }
     }
 
@@ -117,10 +123,6 @@ class AppViewModel : ViewModel() {
 
     fun updateRestoreDefaults(restore: Boolean) {
         _restoreDefaults.value = restore
-    }
-
-    fun updateOptionsMode(optionsMode: Boolean) {
-        _optionsMode.value = optionsMode
     }
 
     fun updateSelectedCuisineSquare(selectedCuisineSquare: SquareValues) {
@@ -448,7 +450,7 @@ class AppViewModel : ViewModel() {
     val getAddMode get() = addMode.value
     val getEditMode get() = editMode.value
     val getActiveEdit get() = activeEdit.value
-    val getOptionsMode get() = optionsMode.value
+    val getOptionsMode get() = settingsDialogVisibility.value
     val getRestoreDefaults get() = restoreDefaults.value
 
     val getRestrictionsList get() = restrictionsList.value

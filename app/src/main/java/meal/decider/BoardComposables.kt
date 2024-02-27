@@ -81,7 +81,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         var expanded by remember { mutableStateOf(false) }
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
         val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
-        val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
+        val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
         val cuisineSelectionMode = appViewModel.cuisineSelectionMode.collectAsStateWithLifecycle()
         val coroutineScope = rememberCoroutineScope()
 
@@ -311,7 +311,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
         val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
         val restoreDefaults = appViewModel.restoreDefaults.collectAsStateWithLifecycle()
-        val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
+        val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
 
         if (addMode.value) {
             dialogComposables.AddDialogBox()
@@ -321,7 +321,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             dialogComposables.ConfirmRestoreDefaultsDialog()
         }
 
-        if (optionsMode.value) {
+        if (settingsDialogVisibility.value) {
             dialogComposables.OptionsDialog()
         }
 
