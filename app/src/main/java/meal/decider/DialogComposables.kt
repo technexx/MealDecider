@@ -64,6 +64,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
+import meal.decider.Database.RollOptions
 import meal.decider.Database.RoomInteractions
 import kotlin.math.floor
 
@@ -445,23 +446,29 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var restaurantRollDelaySliderPosition by remember { mutableFloatStateOf(3f) }
 
         LaunchedEffect(Unit) {
-            coroutineScope.launch {
-                val rollOptions = roomInteractions.getRollOptions()
-                cuisineRollDurationSliderPosition = rollOptions[0].cuisineRollDuration.toFloat()
-                cuisineRollDelaySliderPosition = rollOptions[0].cuisineRollDelay.toFloat()
-                restaurantRollDurationSliderPosition = rollOptions[0].restaurantRollDuration.toFloat()
-                restaurantRollDelaySliderPosition = rollOptions[0]. restaurantRollDelay.toFloat()
-            }
+            val rollOptions = roomInteractions.getRollOptions()
+            cuisineRollDurationSliderPosition = rollOptions[0].cuisineRollDuration.toFloat()
+            cuisineRollDelaySliderPosition = rollOptions[0].cuisineRollDelay.toFloat()
+            restaurantRollDurationSliderPosition = rollOptions[0].restaurantRollDuration.toFloat()
+            restaurantRollDelaySliderPosition = rollOptions[0]. restaurantRollDelay.toFloat()
         }
 
         AnimatedTransitionDialog(modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.grey_50)),
             onDismissRequest = {
+                var rollOptions: List<RollOptions>
                 coroutineScope.launch {
                     roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
+                    delay(1000)
                 }
-        },
+                appViewModel.updateOptionsMode(false)
+
+                coroutineScope.launch {
+                    rollOptions = roomInteractions.getRollOptions()
+                    showLog("test", "$rollOptions")
+                }
+            },
             content = {
                 Column (modifier = Modifier
                     .fillMaxSize(),
@@ -469,7 +476,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     Column (horizontalAlignment = Alignment.CenterHorizontally){
                         SliderTextUi("Settings", size = 24, bold = true)
 
-                        SliderTextUi("Cuisine Selection Speed", size = 18, bold = false)
+                        SliderTextUi("Cuisine Selection Duration", size = 18, bold = false)
                         Row () {
                             Slider(modifier = Modifier
                                 .fillMaxWidth(0.7f)
@@ -481,7 +488,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             )
                             SliderTextUi(text = "${cuisineRollDurationSliderPosition.toInt()}", size = 18, bold = false)
                         }
-                        SliderTextUi("Cuisine Selection Duration", size = 18, bold = false)
+                        SliderTextUi("Cuisine Selection Speed", size = 18, bold = false)
                         Row () {
                             Slider(modifier = Modifier
                                 .fillMaxWidth(0.7f)
@@ -493,7 +500,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             )
                             SliderTextUi(text = "${cuisineRollDelaySliderPosition.toInt()}", size = 18, bold = false)
                         }
-                        SliderTextUi("Restaurant Selection Speed", size = 18, bold = false)
+                        SliderTextUi("Restaurant Selection Duration", size = 18, bold = false)
                         Row () {
                             Slider(modifier = Modifier
                                 .fillMaxWidth(0.7f)
@@ -505,7 +512,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             )
                             SliderTextUi(text = "${restaurantRollDurationSliderPosition.toInt()}", size = 18, bold = false)
                         }
-                        SliderTextUi("Restaurant Selection Duration", size = 18, bold = false)
+                        SliderTextUi("Restaurant Selection Speed", size = 18, bold = false)
                         Row () {
                             Slider(modifier = Modifier
                                 .fillMaxWidth(0.7f)
