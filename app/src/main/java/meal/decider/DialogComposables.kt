@@ -439,6 +439,30 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     //TODO: Sub categories (speed, color, etc.). Can use the same Dialog.
     @Composable
     fun OptionsDialogUi() {
+        AnimatedTransitionDialog(modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.grey_50)),
+            onDismissRequest = {
+                appViewModel.updateOptionsMode(false)
+
+            },
+            content = {
+                Column (modifier = Modifier
+                    .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,) {
+                    Column (horizontalAlignment = Alignment.CenterHorizontally){
+                        DialogTextUi("Settings", size = 28, bold = true)
+                        Spacer(modifier = Modifier.height(20.dp))
+                        DialogTextUi(text = "Speeds", size = 26, bold = true)
+
+                    }
+
+                }
+            })
+    }
+    
+    @Composable
+    fun SpeedSettingsDialog() {
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         var cuisineRollDurationSliderPosition by remember { mutableFloatStateOf(3f) }
         var cuisineRollDelaySliderPosition by remember { mutableFloatStateOf(3f) }
@@ -452,88 +476,64 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             restaurantRollDelaySliderPosition = appViewModel.restaurantRollDelaySetting.toFloat()
         }
 
-        AnimatedTransitionDialog(modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.grey_50)),
+        AnimatedTransitionDialog(
+            modifier = Modifier.fillMaxSize(),
             onDismissRequest = {
-                appViewModel.updateOptionsMode(false)
                 coroutineScope.launch {
                     roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
                 }
                 appViewModel.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
             },
             content = {
-                Column (modifier = Modifier
-                    .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,) {
-                    Column (horizontalAlignment = Alignment.CenterHorizontally){
-                        DialogTextUi("Settings", size = 26, bold = true)
-
-                        Spacer(modifier = Modifier.height(20.dp))
-
-                        DialogTextUi("Cuisine Selection Duration", size = 18, bold = false)
-                        Row () {
-                            Slider(modifier = Modifier
-                                .fillMaxWidth(0.7f)
-                                .padding(start = 4.dp),
-                                value = cuisineRollDurationSliderPosition,
-                                onValueChange = { cuisineRollDurationSliderPosition = it },
-                                valueRange = 1f..10f,
-                                steps = 9
-                            )
-                            DialogTextUi(text = "${cuisineRollDurationSliderPosition.toInt()}", size = 18, bold = false)
-                        }
-                        DialogTextUi("Cuisine Selection Speed", size = 18, bold = false)
-                        Row () {
-                            Slider(modifier = Modifier
-                                .fillMaxWidth(0.7f)
-                                .padding(start = 4.dp),
-                                value = cuisineRollDelaySliderPosition,
-                                onValueChange = { cuisineRollDelaySliderPosition = it },
-                                valueRange = 1f..10f,
-                                steps = 9
-                            )
-                            DialogTextUi(text = "${cuisineRollDelaySliderPosition.toInt()}", size = 18, bold = false)
-                        }
-                        DialogTextUi("Restaurant Selection Duration", size = 18, bold = false)
-                        Row () {
-                            Slider(modifier = Modifier
-                                .fillMaxWidth(0.7f)
-                                .padding(start = 4.dp),
-                                value = restaurantRollDurationSliderPosition,
-                                onValueChange = { restaurantRollDurationSliderPosition = it },
-                                valueRange = 1f..10f,
-                                steps = 9
-                            )
-                            DialogTextUi(text = "${restaurantRollDurationSliderPosition.toInt()}", size = 18, bold = false)
-                        }
-                        DialogTextUi("Restaurant Selection Speed", size = 18, bold = false)
-                        Row () {
-                            Slider(modifier = Modifier
-                                .fillMaxWidth(0.7f)
-                                .padding(start = 4.dp),
-                                value = restaurantRollDelaySliderPosition,
-                                onValueChange = { restaurantRollDelaySliderPosition = it },
-                                valueRange = 1f..10f,
-                                steps = 9
-                            )
-                            DialogTextUi(text = "${restaurantRollDelaySliderPosition.toInt()}", size = 18, bold = false)
-                        }
-                    }
-
+                DialogTextUi("Cuisine Selection Duration", size = 18, bold = false)
+                Row () {
+                    Slider(modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .padding(start = 4.dp),
+                        value = cuisineRollDurationSliderPosition,
+                        onValueChange = { cuisineRollDurationSliderPosition = it },
+                        valueRange = 1f..10f,
+                        steps = 9
+                    )
+                    DialogTextUi(text = "${cuisineRollDurationSliderPosition.toInt()}", size = 18, bold = false)
+                }
+                DialogTextUi("Cuisine Selection Speed", size = 18, bold = false)
+                Row () {
+                    Slider(modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .padding(start = 4.dp),
+                        value = cuisineRollDelaySliderPosition,
+                        onValueChange = { cuisineRollDelaySliderPosition = it },
+                        valueRange = 1f..10f,
+                        steps = 9
+                    )
+                    DialogTextUi(text = "${cuisineRollDelaySliderPosition.toInt()}", size = 18, bold = false)
+                }
+                DialogTextUi("Restaurant Selection Duration", size = 18, bold = false)
+                Row () {
+                    Slider(modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .padding(start = 4.dp),
+                        value = restaurantRollDurationSliderPosition,
+                        onValueChange = { restaurantRollDurationSliderPosition = it },
+                        valueRange = 1f..10f,
+                        steps = 9
+                    )
+                    DialogTextUi(text = "${restaurantRollDurationSliderPosition.toInt()}", size = 18, bold = false)
+                }
+                DialogTextUi("Restaurant Selection Speed", size = 18, bold = false)
+                Row () {
+                    Slider(modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .padding(start = 4.dp),
+                        value = restaurantRollDelaySliderPosition,
+                        onValueChange = { restaurantRollDelaySliderPosition = it },
+                        valueRange = 1f..10f,
+                        steps = 9
+                    )
+                    DialogTextUi(text = "${restaurantRollDelaySliderPosition.toInt()}", size = 18, bold = false)
                 }
             })
-    }
-    
-    @Composable
-    fun SpeedSettingsDialog() {
-        AnimatedTransitionDialog(
-            modifier = Modifier.fillMaxSize(),
-            onDismissRequest = { 
-                
-            }) {
-            DialogTextUi(text = "Speeds", size = 26, bold = true)
-        }
     }
 
     @Composable
