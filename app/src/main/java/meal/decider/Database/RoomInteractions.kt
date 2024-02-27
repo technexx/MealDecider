@@ -119,4 +119,14 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             optionsDao.updateRollOptions(cuisineDuration, cuisineDelay, restaurantDuration, restaurantDelay)
         }
     }
+
+    suspend fun setViewModelRollDelayVariablesFromDatabaseValues() {
+        withContext(Dispatchers.IO) {
+            val rollOptions = getRollOptions()
+            appViewModel.cuisineRollDuration = rollOptions[0].cuisineRollDuration
+            appViewModel.cuisineRollDelay = rollOptions[0].cuisineRollDelay
+            appViewModel.restaurantRollDuration = rollOptions[0].restaurantRollDuration
+            appViewModel.restaurantRollDelay = rollOptions[0].restaurantRollDelay
+        }
+    }
 }

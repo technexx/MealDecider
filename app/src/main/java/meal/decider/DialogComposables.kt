@@ -446,11 +446,15 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var restaurantRollDelaySliderPosition by remember { mutableFloatStateOf(3f) }
 
         LaunchedEffect(Unit) {
-            val rollOptions = roomInteractions.getRollOptions()
-            cuisineRollDurationSliderPosition = rollOptions[0].cuisineRollDuration.toFloat()
-            cuisineRollDelaySliderPosition = rollOptions[0].cuisineRollDelay.toFloat()
-            restaurantRollDurationSliderPosition = rollOptions[0].restaurantRollDuration.toFloat()
-            restaurantRollDelaySliderPosition = rollOptions[0]. restaurantRollDelay.toFloat()
+//            val rollOptions = roomInteractions.getRollOptions()
+//            cuisineRollDurationSliderPosition = rollOptions[0].cuisineRollDuration.toFloat()
+//            cuisineRollDelaySliderPosition = rollOptions[0].cuisineRollDelay.toFloat()
+//            restaurantRollDurationSliderPosition = rollOptions[0].restaurantRollDuration.toFloat()
+//            restaurantRollDelaySliderPosition = rollOptions[0]. restaurantRollDelay.toFloat()
+            cuisineRollDurationSliderPosition = appViewModel.cuisineRollDuration.toFloat()
+            cuisineRollDelaySliderPosition = appViewModel.cuisineRollDelay.toFloat()
+            restaurantRollDurationSliderPosition = appViewModel.restaurantRollDuration.toFloat()
+            restaurantRollDelaySliderPosition = appViewModel.restaurantRollDelay.toFloat()
         }
 
         AnimatedTransitionDialog(modifier = Modifier

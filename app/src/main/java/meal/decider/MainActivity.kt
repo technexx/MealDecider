@@ -72,6 +72,8 @@ class MainActivity : ComponentActivity() {
             if (roomInteractions.optionsDao.getRollOptions().isEmpty()) {
                 roomInteractions.populateRollOptionsWithInitialValues()
             }
+            roomInteractions.setViewModelRollDelayVariablesFromDatabaseValues()
+            showLog("test", "from viewModel, roll option values are ${appViewModel.cuisineRollDuration}, ${appViewModel.cuisineRollDelay}, ${appViewModel.restaurantRollDuration}, ${appViewModel.restaurantRollDelay}")
 
             val restaurantFilters = roomInteractions.getRestaurantFilters()[0]
             appViewModel.setLocalRestaurantFilterValues(milesToMeters(restaurantFilters.distance), restaurantFilters.rating, restaurantFilters.price.toInt())
