@@ -312,6 +312,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
         val restoreDefaults = appViewModel.restoreDefaults.collectAsStateWithLifecycle()
         val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
+        val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
 
         if (addMode.value) {
             dialogComposables.AddDialogBox()
@@ -323,6 +324,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
 
         if (optionsMode.value) {
             dialogComposables.OptionsDialog()
+        }
+
+        if (settingsDialogVisibility.value.speeds) {
+            dialogComposables.SpeedSettingsDialog()
         }
 
         if (showRestaurants.value) {
@@ -386,12 +391,22 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 selected = true,
                                 onClick = {
                                     if (appViewModel.getEditMode) {
-                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(index)
+                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(
+                                            index
+                                        )
                                     }
                                     if (appViewModel.getCuisineSelectionMode) {
                                         appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[index])
-                                        appViewModel.updateCuisineStringUriAndHasChangedBoolean(appViewModel.selectedCuisineSquare.value.name + " Food " + foodRestrictionsString(appViewModel.getRestrictionsList))
-                                        appViewModel.toggleSelectionOfSingleCuisineSquareColorAndBorder(index, chosenSquareColor, heavyCuisineSelectionBorderStroke)
+                                        appViewModel.updateCuisineStringUriAndHasChangedBoolean(
+                                            appViewModel.selectedCuisineSquare.value.name + " Food " + foodRestrictionsString(
+                                                appViewModel.getRestrictionsList
+                                            )
+                                        )
+                                        appViewModel.toggleSelectionOfSingleCuisineSquareColorAndBorder(
+                                            index,
+                                            chosenSquareColor,
+                                            heavyCuisineSelectionBorderStroke
+                                        )
                                     }
                                 }
                             ),
