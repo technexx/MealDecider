@@ -611,10 +611,22 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             Column (horizontalAlignment = Alignment.CenterHorizontally){
                 DialogTextUi("Settings", size = 28, bold = true)
                 Spacer(modifier = Modifier.height(20.dp))
-                DialogTextButtonUi(text = "Speeds", size = 26, bold = true,
+                DialogTextButtonUi(text = "Speeds", size = 24, bold = true,
                     onClick = {
                         appViewModel.updateOptionsMode(false)
                         appViewModel.updateSettingsDialogVisibility(speeds = true, sounds = false, colors = false)
+                    })
+                Spacer(modifier = Modifier.height(10.dp))
+                DialogTextButtonUi(text = "Sounds", size = 24, bold = true,
+                    onClick = {
+                        appViewModel.updateOptionsMode(false)
+                        appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = true, colors = false)
+                    })
+                Spacer(modifier = Modifier.height(10.dp))
+                DialogTextButtonUi(text = "Colors", size = 24, bold = true,
+                    onClick = {
+                        appViewModel.updateOptionsMode(false)
+                        appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = false, colors = true)
                     })
             }
         }
