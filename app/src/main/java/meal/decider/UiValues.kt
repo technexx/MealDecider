@@ -18,3 +18,4 @@ val chosenRestaurantColor = R.color.red_200
 val defaultRestaurantBorderStroke = BorderStroke(1.dp, Color.Black)
 val lightRestaurantSelectionBorderStroke = BorderStroke(1.dp, Color.Red)
 val heavyRestaurantSelectionBorderStroke = BorderStroke(3.dp, Color.Red)
+

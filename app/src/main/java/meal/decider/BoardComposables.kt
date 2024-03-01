@@ -50,6 +50,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -376,6 +377,8 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             ),
             content = {
                 items(boardUiState.value.squareList.size) { index ->
+                    val elevation: Dp = if (index == appViewModel.rolledSquareIndex) 40.dp else 6.dp
+
                     borderStroke = appViewModel.getSquareList[index].border
                     Card(
                         colors = CardDefaults.cardColors(
@@ -383,7 +386,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         ),
                         border = borderStroke,
                         elevation = CardDefaults.cardElevation(
-                            defaultElevation = 6.dp
+                            defaultElevation = elevation
                         ),
                         modifier = Modifier
                             .padding(6.dp)
@@ -391,9 +394,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 selected = true,
                                 onClick = {
                                     if (appViewModel.getEditMode) {
-                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(
-                                            index
-                                        )
+                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(index)
                                     }
                                     if (appViewModel.getCuisineSelectionMode) {
                                         appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[index])

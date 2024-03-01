@@ -14,7 +14,6 @@ class Runnables (val appViewModel: AppViewModel) {
     private var restaurantBorderStrokeToggleRunnable = Runnable {}
     private var rollCountdown: Long = 1000
 
-    //Todo: Duration increasing (since delay is negative), delay stuck at -800.
     fun rollCuisine() {
         appViewModel.updateRollEngaged(true)
         appViewModel.toggleSelectionOfSingleCuisineSquareColorAndBorder(appViewModel.rolledSquareIndex, defaultSquareColor, lightRestaurantSelectionBorderStroke)
@@ -26,7 +25,7 @@ class Runnables (val appViewModel: AppViewModel) {
         cuisineRollRunnable = Runnable {
             val delay = rollDelaySettingToMillis(duration, appViewModel.cuisineRollDelaySetting)
 
-            showLog("test", "duration is $duration and delay is $delay")
+//            showLog("test", "duration is $duration and delay is $delay")
 
             appViewModel.rolledSquareIndex = Random.nextInt(0, appViewModel.getSquareList.size)
             val newSquareList = squareListWithRandomColorChanged(appViewModel.rolledSquareIndex)
@@ -35,7 +34,7 @@ class Runnables (val appViewModel: AppViewModel) {
             handler.postDelayed(cuisineRollRunnable, delay)
             duration -= delay
 
-            if (duration < 20) {
+            if (duration < 100) {
                 appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[appViewModel.rolledSquareIndex])
 
                 appViewModel.updateCuisineRollFinished(true)
@@ -76,7 +75,7 @@ class Runnables (val appViewModel: AppViewModel) {
             handler.postDelayed(restaurantRollRunnable, delay)
             duration -= delay
 
-            if (duration < 20) {
+            if (duration < 100) {
                 appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[appViewModel.rolledRestaurantIndex])
                 appViewModel.updateRestaurantRollFinished(true)
                 appViewModel.updateRollEngaged(false)
