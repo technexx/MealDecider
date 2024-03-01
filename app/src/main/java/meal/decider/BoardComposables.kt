@@ -229,7 +229,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             DialogCompositions()
         }
         Surface(
-            color = colorResource(id = R.color.grey_100),
+            color = colorResource(id = R.color.grey_50),
         ) {
             Column(
             ) {
@@ -239,7 +239,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 }
                 Column(modifier = Modifier
                     .height(screenHeightPct(0.2).dp)
-                    .background(colorResource(id = R.color.grey_50))
+                    .background(colorResource(id = R.color.grey_100))
                 )
                 {
                     buttons.InteractionButtons()
@@ -377,9 +377,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             ),
             content = {
                 items(boardUiState.value.squareList.size) { index ->
-                    val elevation: Dp = if (index == appViewModel.rolledSquareIndex) 40.dp else 6.dp
-
+                    val elevation: Dp = if (index == appViewModel.rolledSquareIndex) 12.dp else 4.dp
                     borderStroke = appViewModel.getSquareList[index].border
+
                     Card(
                         colors = CardDefaults.cardColors(
                             containerColor = colorResource(id = appViewModel.getSquareList[index].color),

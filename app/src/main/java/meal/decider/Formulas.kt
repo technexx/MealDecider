@@ -57,7 +57,7 @@ fun rollDurationSettingToMillis(setting: Long): Long {
 
 fun rollDelaySettingToMillis(duration: Long, delaySetting: Long): Long {
     var valueToReturn = ((duration / 2) / delaySetting) / 5
-    if (valueToReturn < 50) valueToReturn = 50
+    if (valueToReturn < 100) valueToReturn = 100
     return valueToReturn
 }
 

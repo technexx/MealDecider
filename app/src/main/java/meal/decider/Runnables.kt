@@ -91,7 +91,7 @@ class Runnables (val appViewModel: AppViewModel) {
         val newList = SnapshotStateList<RestaurantValues>()
 
         for (i in currentList) {
-            newList.add(RestaurantValues(i.name, i.address, i.distance, i.priceLevel, i.rating, defaultSquareColor))
+            newList.add(RestaurantValues(i.name, i.address, i.distance, i.priceLevel, i.rating, defaultRestaurantColor))
         }
         newList[index].color = chosenSquareColor
 
