@@ -437,6 +437,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             }
     }
 
+    //TODO: Should either remove animation from this or have Restaurants use same surface/box as Cuisines.
     @Composable
     fun RestaurantFilterDialog() {
         val coroutineScope: CoroutineScope = rememberCoroutineScope()

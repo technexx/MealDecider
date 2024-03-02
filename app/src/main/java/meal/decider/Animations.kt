@@ -19,8 +19,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
-
 private suspend fun startDismissWithExitAnimation(
     animateTrigger: MutableState<Boolean>,
     onDismissRequest: () -> Unit
@@ -61,6 +59,16 @@ fun AnimatedTransitionDialog(
                 content()
             }
         }
+    }
+}
+
+@Composable
+fun AnimatedTransition(
+    visibility: Boolean,
+    content: @Composable () -> Unit,
+) {
+    AnimatedScaleInTransition(time = 300, visible = visibility) {
+        content()
     }
 }
 
