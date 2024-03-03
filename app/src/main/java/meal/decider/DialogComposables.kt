@@ -456,6 +456,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         var priceString: String
 
+
         AnimatedTransitionDialog(
             modifier = Modifier
                 .fillMaxSize()

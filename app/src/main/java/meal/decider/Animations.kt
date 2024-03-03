@@ -3,8 +3,8 @@ package meal.decider
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,7 +12,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +32,6 @@ private suspend fun startDismissWithExitAnimation(
 fun AnimatedTransitionDialog(
     modifier: Modifier,
     onDismissRequest: () -> Unit,
-    contentAlignment: Alignment = Alignment.Center,
     content: @Composable () -> Unit,
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
@@ -41,7 +39,7 @@ fun AnimatedTransitionDialog(
 
     LaunchedEffect(key1 = Unit) {
         launch {
-            delay(0)
+            delay(1000)
             animateTrigger.value = true
         }
     }
@@ -52,23 +50,14 @@ fun AnimatedTransitionDialog(
         }
     }
     ) {
-        Box(contentAlignment = contentAlignment,
+        //TODO: This does not affect the white background surface in our Filters Dialog. It occurs from the execution of the above Dialog.
+        Box(
             modifier = modifier
         ) {
-            AnimatedScaleInTransition(time = 300, visible = animateTrigger.value) {
+            AnimatedScaleInTransition(time = 200, visible = animateTrigger.value) {
                 content()
             }
         }
-    }
-}
-
-@Composable
-fun AnimatedTransition(
-    visibility: Boolean,
-    content: @Composable () -> Unit,
-) {
-    AnimatedScaleInTransition(time = 300, visible = visibility) {
-        content()
     }
 }
 
@@ -80,12 +69,55 @@ fun AnimatedScaleInTransition(
 ) {
     AnimatedVisibility(
         visible = visible,
-        enter = scaleIn(
+        enter = expandHorizontally(
             animationSpec = tween(time)
         ),
-        exit = scaleOut(
+        exit = shrinkHorizontally(
             animationSpec = tween(time)
         ),
         content = content
     )
+}
+
+@Composable
+fun AnimatedTransitionDialogTest(
+    modifier: Modifier,
+    onDismissRequest: () -> Unit,
+    parentContent: @Composable () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val animateTrigger = remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = Unit) {
+        launch {
+            delay(200)
+            animateTrigger.value = true
+        }
+    }
+
+    Dialog(onDismissRequest = {
+        coroutineScope.launch {
+            startDismissWithExitAnimation(animateTrigger, onDismissRequest)
+        }
+    }
+    ) {
+        Box(
+            modifier = modifier
+        ) {
+            AnimatedScaleInTransition(time = 200, visible = animateTrigger.value) {
+                content()
+            }
+        }
+    }
+}
+
+@Composable
+fun AnimatedTransitionTest(
+    visibility: Boolean,
+    content: @Composable () -> Unit,
+) {
+    AnimatedScaleInTransition(time = 300, visible = visibility) {
+        content()
+    }
 }
