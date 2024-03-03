@@ -5,7 +5,9 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -13,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -60,6 +63,24 @@ fun AnimatedTransitionDialog(
             }
         }
     }
+
+//    //No delay because unlike stock Dialog, we have a Box launch right away.
+//    CustomDialog(
+//        onDismissRequest = {
+//            coroutineScope.launch {
+//                startDismissWithExitAnimation(animateTrigger, onDismissRequest)
+//            }
+//        },
+//        content = {
+//            Box(
+//                modifier = modifier
+//            ) {
+//                AnimatedScaleInTransition(time = 200, visible = animateTrigger.value) {
+//                    content()
+//                }
+//            }
+//        }
+//    )
 }
 
 @Composable
@@ -80,35 +101,16 @@ fun AnimatedScaleInTransition(
     )
 }
 
+
 @Composable
-fun AnimatedTransitionDialogTest(
-    modifier: Modifier,
+fun CustomDialog(
     onDismissRequest: () -> Unit,
-    parentContent: @Composable () -> Unit,
-    content: @Composable () -> Unit,
-) {
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val animateTrigger = remember { mutableStateOf(false) }
-
-    LaunchedEffect(key1 = Unit) {
-        launch {
-            delay(200)
-            animateTrigger.value = true
-        }
-    }
-
-    Dialog(onDismissRequest = {
-        coroutineScope.launch {
-            startDismissWithExitAnimation(animateTrigger, onDismissRequest)
-        }
-    }
-    ) {
-        Box(
-            modifier = modifier
-        ) {
-            AnimatedScaleInTransition(time = 200, visible = animateTrigger.value) {
-                content()
-            }
+    content: @Composable () -> Unit) {
+    Dialog(onDismissRequest = { onDismissRequest() }) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.grey_50))) {
+            content()
         }
     }
 }
