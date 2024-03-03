@@ -60,6 +60,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -252,47 +253,42 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     fun RestaurantDialog() {
         val showRestaurantSettings = appViewModel.showRestaurantSettings.collectAsStateWithLifecycle()
 
-        AnimatedTransitionDialog(
-            modifier = Modifier
-                .fillMaxSize(),
-            onDismissRequest = {
-                appViewModel.updateShowRestaurants(false)
-            },
-            content = {
-                Surface(
-                    shape = RoundedCornerShape(16.dp),
-                    color = colorResource(id = R.color.grey_300),
+        Dialog(onDismissRequest = {
+            appViewModel.updateShowRestaurants(false)
+        }) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = colorResource(id = R.color.grey_300),
+            ) {
+                Column(modifier = Modifier
+                    .fillMaxSize()
                 ) {
+                    if (showRestaurantSettings.value) {
+                        RestaurantFilterDialog()
+                    }
                     Column(modifier = Modifier
-                        .fillMaxSize()
+                        .wrapContentSize()
                     ) {
-                        if (showRestaurantSettings.value) {
-                            RestaurantFilterDialog()
+                        Row (modifier = Modifier
+                            .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End) {
+                            RestaurantFilterIcon()
+                            RestaurantSortDropdownMenu()
                         }
-                        Column(modifier = Modifier
-                            .wrapContentSize()
-                        ) {
-                            Row (modifier = Modifier
-                                .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.End) {
-                                RestaurantFilterIcon()
-                                RestaurantSortDropdownMenu()
-                            }
-                        }
-                        Column(modifier = Modifier
-                            .height(screenHeightPct(0.8).dp)
-                        ) {
-                            RestaurantLazyGrid()
-                        }
-                        Column(modifier = Modifier
-                            .wrapContentSize()
-                        ) {
-                            buttons.InteractionButtons()
-                        }
+                    }
+                    Column(modifier = Modifier
+                        .height(screenHeightPct(0.8).dp)
+                    ) {
+                        RestaurantLazyGrid()
+                    }
+                    Column(modifier = Modifier
+                        .wrapContentSize()
+                    ) {
+                        buttons.InteractionButtons()
                     }
                 }
             }
-        )
+        }
     }
 
     @Composable

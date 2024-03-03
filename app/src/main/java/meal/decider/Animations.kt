@@ -37,6 +37,7 @@ fun AnimatedTransitionDialog(
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val animateTrigger = remember { mutableStateOf(false) }
 
+    //This delays our animateTrigger value, meaning our Dialog box (the faded grey background) launches, but its children composables do not until the delay is over.
     LaunchedEffect(key1 = Unit) {
         launch {
             delay(1000)
@@ -50,7 +51,7 @@ fun AnimatedTransitionDialog(
         }
     }
     ) {
-        //TODO: This does not affect the white background surface in our Filters Dialog. It occurs from the execution of the above Dialog.
+        //This does not affect the white background surface in our Filters Dialog. It occurs from the execution of the above Dialog.
         Box(
             modifier = modifier
         ) {
