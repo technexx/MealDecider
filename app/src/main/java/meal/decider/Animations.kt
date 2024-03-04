@@ -43,7 +43,7 @@ fun AnimatedTransitionDialog(
     //This delays our animateTrigger value, meaning our Dialog box (the faded grey background) launches, but its children composables do not until the delay is over.
     LaunchedEffect(key1 = Unit) {
         launch {
-            delay(300)
+            delay(0)
             animateTrigger.value = true
         }
     }
@@ -63,24 +63,6 @@ fun AnimatedTransitionDialog(
             }
         }
     }
-
-//    //No delay because unlike stock Dialog, we have a Box launch right away.
-//    CustomDialog(
-//        onDismissRequest = {
-//            coroutineScope.launch {
-//                startDismissWithExitAnimation(animateTrigger, onDismissRequest)
-//            }
-//        },
-//        content = {
-//            Box(
-//                modifier = modifier
-//            ) {
-//                AnimatedScaleInTransition(time = 200, visible = animateTrigger.value) {
-//                    content()
-//                }
-//            }
-//        }
-//    )
 }
 
 @Composable
