@@ -59,6 +59,7 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
+//TODO: Query/delay issues w/ "Places" button. Multiple presses will cause crash.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
 //TODO: Include categories as a parent of cuisines: e.g. fast food, fine dining, etc.
 

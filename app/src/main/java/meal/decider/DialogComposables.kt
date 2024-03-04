@@ -488,10 +488,12 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 DialogTextUi(text = "Filters", size = 22, bold = true)
                             }
                             Spacer(modifier = Modifier.height(16.dp))
-                            Column {
+                            Column (){
                                 DialogTextUi(text = "Distance", size = 20 , bold = false)
                                 Spacer(modifier = Modifier.height(8.dp))
-                                Row () {
+                                Row (modifier = Modifier
+                                    .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween) {
                                     Slider(modifier = Modifier
                                         .fillMaxWidth(0.75f)
                                         .padding(start = 4.dp),
@@ -505,7 +507,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 Spacer(modifier = Modifier.height(16.dp))
                                 DialogTextUi(text = "Rating", size = 20 , bold = false)
                                 Spacer(modifier = Modifier.height(8.dp))
-                                Row () {
+                                Row (modifier = Modifier
+                                    .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween) {
                                     Slider(modifier = Modifier
                                         .fillMaxWidth(0.7f)
                                         .padding(start = 4.dp),
@@ -519,7 +523,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 Spacer(modifier = Modifier.height(16.dp))
                                 DialogTextUi(text = "Max Price", size = 20 , bold = false)
                                 Spacer(modifier = Modifier.height(8.dp))
-                                Row () {
+                                Row (modifier = Modifier
+                                    .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween) {
                                     Slider(modifier = Modifier
                                         .fillMaxWidth(0.7f)
                                         .padding(start = 4.dp),
@@ -530,7 +536,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     )
                                     priceString = ""
                                     for (i in 1..priceSliderPosition.toInt()) {
-                                        priceString += "$"
+                                        priceString += "$     "
                                     }
                                     DialogTextUi(text = priceString, size = 18, bold = false)
                                 }
