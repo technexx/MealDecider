@@ -43,7 +43,7 @@ fun AnimatedTransitionDialog(
     //This delays our animateTrigger value, meaning our Dialog box (the faded grey background) launches, but its children composables do not until the delay is over.
     LaunchedEffect(key1 = Unit) {
         launch {
-            delay(1000)
+            delay(300)
             animateTrigger.value = true
         }
     }

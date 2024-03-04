@@ -60,7 +60,6 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -253,7 +252,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     fun RestaurantDialog() {
         val showRestaurantSettings = appViewModel.showRestaurantSettings.collectAsStateWithLifecycle()
 
-        Dialog(onDismissRequest = {
+        if (showRestaurantSettings.value) {
+            RestaurantFilterDialog()
+        }
+
+        AnimatedTransitionDialog(modifier = Modifier.fillMaxSize(), onDismissRequest = {
             appViewModel.updateShowRestaurants(false)
         }) {
             Surface(
@@ -263,9 +266,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 Column(modifier = Modifier
                     .fillMaxSize()
                 ) {
-                    if (showRestaurantSettings.value) {
-                        RestaurantFilterDialog()
-                    }
                     Column(modifier = Modifier
                         .wrapContentSize()
                     ) {
@@ -433,7 +433,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             }
     }
 
-    //TODO: Should either remove animation from this or have Restaurants use same surface/box as Cuisines.
     @Composable
     fun RestaurantFilterDialog() {
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
@@ -453,10 +452,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var priceString: String
 
 
+        //Do not set a background on these! That is what was causing the sudden color backdrop.
         AnimatedTransitionDialog(
             modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(id = R.color.grey_50)),
+                .fillMaxSize(),
             onDismissRequest = {
                 appViewModel.updateShowRestaurantSettings(false)
                 coroutineScope.launch {
