@@ -480,7 +480,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     Box(modifier = Modifier
                         .fillMaxSize(),
                     ) {
-                        Column (horizontalAlignment = Alignment.CenterHorizontally)
+                        Column (modifier = Modifier
+                            .padding(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally)
                         {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 DialogTextUi(text = "Filters", size = 22, bold = true)
