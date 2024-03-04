@@ -534,11 +534,16 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         valueRange = 1f..4f,
                                         steps = 2
                                     )
-                                    priceString = ""
-                                    for (i in 1..priceSliderPosition.toInt()) {
-                                        priceString += "$     "
+                                    Column (modifier = Modifier
+                                        .fillMaxWidth(),
+                                        verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+                                        priceString = ""
+                                        for (i in 1..priceSliderPosition.toInt()) {
+                                            priceString += "$"
+                                        }
+                                        DialogTextUi(text = priceString, size = 18, bold = false)
                                     }
-                                    DialogTextUi(text = priceString, size = 18, bold = false)
+
                                 }
                             }
                         }
