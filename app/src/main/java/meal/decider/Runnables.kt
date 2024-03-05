@@ -12,27 +12,29 @@ class Runnables (val appViewModel: AppViewModel) {
     private var restaurantRollRunnable = Runnable {}
     private var cuisineBorderStrokeToggleRunnable = Runnable {}
     private var restaurantBorderStrokeToggleRunnable = Runnable {}
-    private var rollCountdown: Long = 1000
 
     fun rollCuisine() {
         appViewModel.updateRollEngaged(true)
         appViewModel.toggleSelectionOfSingleCuisineSquareColorAndBorder(appViewModel.rolledSquareIndex, defaultSquareColor, lightRestaurantSelectionBorderStroke)
         handler.removeCallbacks(cuisineRollRunnable)
 
-        var duration = rollDurationSettingToMillis(appViewModel.cuisineRollDurationSetting)
+        val durationSetting = appViewModel.cuisineRollDurationSetting
+        val delaySetting = appViewModel.cuisineRollDelaySetting
+        var delay = rollDelaySettingToMillis(durationSetting, delaySetting)
+        var duration = rollDurationSettingToMillis(durationSetting)
 
-        showLog("test", "At start, duration is $duration and delay is ${rollDelaySettingToMillis(duration, appViewModel.cuisineRollDelaySetting)}")
         cuisineRollRunnable = Runnable {
-            val delay = rollDelaySettingToMillis(duration, appViewModel.cuisineRollDelaySetting)
-
-//            showLog("test", "duration is $duration and delay is $delay")
-
             appViewModel.rolledSquareIndex = Random.nextInt(0, appViewModel.getSquareList.size)
             val newSquareList = squareListWithRandomColorChanged(appViewModel.rolledSquareIndex)
             appViewModel.updateSquareList(newSquareList)
 
+            duration = delayDecreaseIteration(duration)
+            delay = durationDecreaseIteration(delay)
+
+            showLog("test", "delay is $delay")
+            showLog("test", "duration is $duration")
+
             handler.postDelayed(cuisineRollRunnable, delay)
-            duration -= delay
 
             if (duration < 100) {
                 appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[appViewModel.rolledSquareIndex])
