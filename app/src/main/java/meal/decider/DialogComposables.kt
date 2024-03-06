@@ -66,7 +66,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
-import kotlin.math.floor
 
 class DialogComposables(private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase, private val mapInteractions: MapInteractions, private val runnables: Runnables){
     private val roomInteractions = RoomInteractions(appDatabase, appViewModel)
@@ -248,44 +247,49 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         )
     }
 
+    //TODO: On dismiss needs to also set showRestaurantSettings to false.
     @Composable
     fun RestaurantDialog() {
         val showRestaurantSettings = appViewModel.showRestaurantSettings.collectAsStateWithLifecycle()
 
-        if (showRestaurantSettings.value) {
-            RestaurantFilterDialog()
-        }
-
         AnimatedTransitionDialog(modifier = Modifier.fillMaxSize(), onDismissRequest = {
             appViewModel.updateShowRestaurants(false)
         }) {
-            Surface(
-                shape = RoundedCornerShape(16.dp),
-                color = colorResource(id = R.color.grey_300),
+            RestaurantDialogContent()
+            if (showRestaurantSettings.value) {
+                RestaurantFilterDialog()
+            }
+        }
+    }
+
+    @Composable
+    fun RestaurantDialogContent() {
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = colorResource(id = R.color.grey_300),
+        ) {
+            Column(modifier = Modifier
+                .fillMaxSize()
             ) {
                 Column(modifier = Modifier
-                    .fillMaxSize()
+                    .wrapContentSize()
                 ) {
-                    Column(modifier = Modifier
-                        .wrapContentSize()
-                    ) {
-                        Row (modifier = Modifier
-                            .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End) {
-                            RestaurantFilterIcon()
-                            RestaurantSortDropdownMenu()
-                        }
+                    Row (modifier = Modifier
+                        .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End) {
+                        RestaurantFilterIcon()
+                        RestaurantSortDropdownMenu()
                     }
-                    Column(modifier = Modifier
-                        .height(screenHeightPct(0.8).dp)
-                    ) {
-                        RestaurantLazyGrid()
-                    }
-                    Column(modifier = Modifier
-                        .wrapContentSize()
-                    ) {
-                        buttons.InteractionButtons()
-                    }
+                }
+                Column(modifier = Modifier
+                    .height(screenHeightPct(0.8).dp)
+                ) {
+                    RestaurantLazyGrid()
+                }
+                Column(modifier = Modifier
+                    .wrapContentSize()
+                ) {
+                    buttons.InteractionButtons()
                 }
             }
         }
@@ -451,106 +455,111 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         var priceString: String
 
-        //Do not set a background on these! That is what was causing the sudden color backdrop.
-        AnimatedTransitionDialog(
-            modifier = Modifier
-                .fillMaxSize(),
-            onDismissRequest = {
-                appViewModel.updateShowRestaurantSettings(false)
-                coroutineScope.launch {
-                    roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
-                }
-                //Having this in coroutineScope prevented its execution.
-                val maxDistance = milesToMeters(floor(distanceSliderPosition).toDouble())
-                val minRating = ratingSliderPosition.toDouble()
-                val maxPrice = floor(priceSliderPosition).toInt()
-                if (appViewModel.haveRestaurantFiltersChanged(maxDistance, minRating, maxPrice)) {
-                    appViewModel.setLocalRestaurantFilterValues(maxDistance, minRating, maxPrice)
-                    coroutineScope.launch {
-                        mapInteractions.mapsApiCall()
-//                        mapInteractions.testRestaurants()
-                    }
-                }
-            },
-            content = {
-                Surface(
-                    shape = RoundedCornerShape(16.dp),
-                    color = colorResource(id = R.color.grey_300),
+        AnimatedTransitionTest {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = colorResource(id = R.color.grey_300),
+            ) {
+                Box(modifier = Modifier
+                    .fillMaxSize(),
                 ) {
-                    Box(modifier = Modifier
-                        .fillMaxSize(),
-                    ) {
-                        Column (modifier = Modifier
-                            .padding(8.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally)
-                        {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                DialogTextUi(text = "Filters", size = 22, bold = true)
+                    Column (modifier = Modifier
+                        .padding(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally)
+                    {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            DialogTextUi(text = "Filters", size = 22, bold = true)
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Column (){
+                            DialogTextUi(text = "Distance", size = 20 , bold = false)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Row (modifier = Modifier
+                                .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween) {
+                                Slider(modifier = Modifier
+                                    .fillMaxWidth(0.75f)
+                                    .padding(start = 4.dp),
+                                    value = distanceSliderPosition,
+                                    onValueChange = { distanceSliderPosition = it
+                                    },
+                                    valueRange = 1f..10f
+                                )
+                                DialogTextUi(text = distanceSliderPosition.toInt().toString() + " mi", size = 18, bold = false)
                             }
                             Spacer(modifier = Modifier.height(16.dp))
-                            Column (){
-                                DialogTextUi(text = "Distance", size = 20 , bold = false)
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Row (modifier = Modifier
+                            DialogTextUi(text = "Rating", size = 20 , bold = false)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Row (modifier = Modifier
+                                .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween) {
+                                Slider(modifier = Modifier
+                                    .fillMaxWidth(0.7f)
+                                    .padding(start = 4.dp),
+                                    value = ratingSliderPosition,
+                                    onValueChange = { ratingSliderPosition = it },
+                                    valueRange = 3f..4.5f,
+                                    steps = 2
+                                )
+                                DialogTextUi(text = "$ratingSliderPosition stars", size = 18, bold = false)
+                            }
+                            Spacer(modifier = Modifier.height(16.dp))
+                            DialogTextUi(text = "Max Price", size = 20 , bold = false)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Row (modifier = Modifier
+                                .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween) {
+                                Slider(modifier = Modifier
+                                    .fillMaxWidth(0.7f)
+                                    .padding(start = 4.dp),
+                                    value = priceSliderPosition,
+                                    onValueChange = { priceSliderPosition = it },
+                                    valueRange = 1f..4f,
+                                    steps = 2
+                                )
+                                Column (modifier = Modifier
                                     .fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween) {
-                                    Slider(modifier = Modifier
-                                        .fillMaxWidth(0.75f)
-                                        .padding(start = 4.dp),
-                                        value = distanceSliderPosition,
-                                        onValueChange = { distanceSliderPosition = it
-                                        },
-                                        valueRange = 1f..10f
-                                    )
-                                    DialogTextUi(text = distanceSliderPosition.toInt().toString() + " mi", size = 18, bold = false)
-                                }
-                                Spacer(modifier = Modifier.height(16.dp))
-                                DialogTextUi(text = "Rating", size = 20 , bold = false)
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Row (modifier = Modifier
-                                    .fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween) {
-                                    Slider(modifier = Modifier
-                                        .fillMaxWidth(0.7f)
-                                        .padding(start = 4.dp),
-                                        value = ratingSliderPosition,
-                                        onValueChange = { ratingSliderPosition = it },
-                                        valueRange = 3f..4.5f,
-                                        steps = 2
-                                    )
-                                    DialogTextUi(text = "$ratingSliderPosition stars", size = 18, bold = false)
-                                }
-                                Spacer(modifier = Modifier.height(16.dp))
-                                DialogTextUi(text = "Max Price", size = 20 , bold = false)
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Row (modifier = Modifier
-                                    .fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween) {
-                                    Slider(modifier = Modifier
-                                        .fillMaxWidth(0.7f)
-                                        .padding(start = 4.dp),
-                                        value = priceSliderPosition,
-                                        onValueChange = { priceSliderPosition = it },
-                                        valueRange = 1f..4f,
-                                        steps = 2
-                                    )
-                                    Column (modifier = Modifier
-                                        .fillMaxWidth(),
-                                        verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
-                                        priceString = ""
-                                        for (i in 1..priceSliderPosition.toInt()) {
-                                            priceString += "$"
-                                        }
-                                        DialogTextUi(text = priceString, size = 18, bold = false)
+                                    verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+                                    priceString = ""
+                                    for (i in 1..priceSliderPosition.toInt()) {
+                                        priceString += "$"
                                     }
-
+                                    DialogTextUi(text = priceString, size = 18, bold = false)
                                 }
+
                             }
                         }
                     }
                 }
             }
-        )
+        }
+
+
+//        //Do not set a background on these! That is what was causing the sudden color backdrop.
+//        AnimatedTransitionDialog(
+//            modifier = Modifier
+//                .fillMaxSize(),
+//            onDismissRequest = {
+//                appViewModel.updateShowRestaurantSettings(false)
+//                coroutineScope.launch {
+//                    roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
+//                }
+//                //Having this in coroutineScope prevented its execution.
+//                val maxDistance = milesToMeters(floor(distanceSliderPosition).toDouble())
+//                val minRating = ratingSliderPosition.toDouble()
+//                val maxPrice = floor(priceSliderPosition).toInt()
+//                if (appViewModel.haveRestaurantFiltersChanged(maxDistance, minRating, maxPrice)) {
+//                    appViewModel.setLocalRestaurantFilterValues(maxDistance, minRating, maxPrice)
+//                    coroutineScope.launch {
+//                        mapInteractions.mapsApiCall()
+////                        mapInteractions.testRestaurants()
+//                    }
+//                }
+//            },
+//            content = {
+//
+//            }
+//        )
     }
 
     //If we don't use ? in front of variable, Kotlin won't let it be null (? == nullable)

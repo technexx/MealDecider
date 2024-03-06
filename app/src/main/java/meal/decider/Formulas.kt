@@ -61,10 +61,10 @@ fun rollDelaySettingToMillis(durationSetting: Long, delaySetting: Long): Long {
     val delaySettingDivided = delaySetting/5
     val valueToReturn = durationDivided * delaySettingDivided
 
-    showLog("test", "duration setting in millis is $durationSettingMillis")
-    showLog("test", "duration divided (formula) is $durationDivided")
-    showLog("test", "delay setting divided (formula) is $delaySettingDivided")
-    showLog("test", "value returned is $valueToReturn")
+//    showLog("test", "duration setting in millis is $durationSettingMillis")
+//    showLog("test", "duration divided (formula) is $durationDivided")
+//    showLog("test", "delay setting divided (formula) is $delaySettingDivided")
+//    showLog("test", "value returned is $valueToReturn")
 
     return valueToReturn.toLong()
 }

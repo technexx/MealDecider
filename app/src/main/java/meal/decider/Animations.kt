@@ -99,10 +99,21 @@ fun CustomDialog(
 
 @Composable
 fun AnimatedTransitionTest(
-    visibility: Boolean,
     content: @Composable () -> Unit,
 ) {
-    AnimatedScaleInTransition(time = 300, visible = visibility) {
-        content()
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val animateTrigger = remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = Unit) {
+        launch {
+            delay(0)
+            animateTrigger.value = true
+        }
+    }
+    Box(
+    ) {
+        AnimatedScaleInTransition(time = 200, visible = animateTrigger.value) {
+            content()
+        }
     }
 }

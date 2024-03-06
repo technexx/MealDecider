@@ -31,8 +31,8 @@ class Runnables (val appViewModel: AppViewModel) {
             duration = delayDecreaseIteration(duration)
             delay = durationDecreaseIteration(delay)
 
-            showLog("test", "delay is $delay")
-            showLog("test", "duration is $duration")
+//            showLog("test", "delay is $delay")
+//            showLog("test", "duration is $duration")
 
             handler.postDelayed(cuisineRollRunnable, delay)
 
