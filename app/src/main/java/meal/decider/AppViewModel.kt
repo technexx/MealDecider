@@ -71,6 +71,9 @@ class AppViewModel : ViewModel() {
     private val _selectedRestaurantSquare = MutableStateFlow(RestaurantValues())
     val selectedRestaurantSquare: StateFlow<RestaurantValues> = _selectedRestaurantSquare.asStateFlow()
 
+    private val _showRestaurantsDialog = MutableStateFlow(false)
+    val showRestaurantsDialog: StateFlow<Boolean> = _showRestaurantsDialog.asStateFlow()
+
     private val _showRestaurants = MutableStateFlow(false)
     val showRestaurants: StateFlow<Boolean> = _showRestaurants.asStateFlow()
 
@@ -158,6 +161,10 @@ class AppViewModel : ViewModel() {
 
     fun updateRestaurantsList(list: SnapshotStateList<RestaurantValues>) {
         _restaurantList.value = list
+    }
+
+    fun updateShowRestaurantsDialog(show: Boolean) {
+        _showRestaurantsDialog.value = show
     }
 
     fun updateShowRestaurants(show: Boolean) {

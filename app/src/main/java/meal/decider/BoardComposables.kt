@@ -311,10 +311,12 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     @Composable
     fun DialogCompositions() {
         val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
-        val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
         val restoreDefaults = appViewModel.restoreDefaults.collectAsStateWithLifecycle()
         val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
         val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
+
+        val showRestaurantsDialog = appViewModel.showRestaurantsDialog.collectAsStateWithLifecycle()
+        val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
         val showRestaurantSettings = appViewModel.showRestaurantSettings.collectAsStateWithLifecycle()
 
         if (addMode.value) {
@@ -333,13 +335,17 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             dialogComposables.SpeedSettingsDialog()
         }
 
-        if (showRestaurants.value) {
+        if (showRestaurantsDialog.value) {
             dialogComposables.RestaurantDialog()
         }
 
-        if (showRestaurantSettings.value) {
-            dialogComposables.RestaurantFilters()
-        }
+//        if (showRestaurants.value) {
+//            dialogComposables.RestaurantDialog()
+//        }
+
+//        if (showRestaurantSettings.value) {
+//            dialogComposables.RestaurantFilters()
+//        }
     }
 
     @Composable
@@ -400,7 +406,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 selected = true,
                                 onClick = {
                                     if (appViewModel.getEditMode) {
-                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(index)
+                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(
+                                            index
+                                        )
                                     }
                                     if (appViewModel.getCuisineSelectionMode) {
                                         appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[index])

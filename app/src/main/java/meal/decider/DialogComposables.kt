@@ -249,33 +249,30 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestaurantDialog() {
+        val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
         val showRestaurantSettings = appViewModel.showRestaurantSettings.collectAsStateWithLifecycle()
 
         AnimatedTransitionDialog(modifier = Modifier.fillMaxSize(), onDismissRequest = {
             //If filter settings are visible when dismissing, set their state to false, otherwise, only the restaurant contents are shown, so set their state to false.
             if (showRestaurantSettings.value) {
                 appViewModel.updateShowRestaurantSettings(false)
-                //TODO: Since value is not changing from true, this does not cause recomposition.
+                showLog("test", "showRestaurants is pre-update ${appViewModel.getShowRestaurants}")
                 appViewModel.updateShowRestaurants(true)
+                showLog("test", "showRestaurants is post-update ${appViewModel.getShowRestaurants}")
             } else {
+                appViewModel.updateShowRestaurantsDialog(false)
                 appViewModel.updateShowRestaurants(false)
             }
         }) {
             showLog("test", "dialog recomposing")
-            RestaurantDialogContent()
-
-            //TODO: Using this composable makes endless recomposition, but using RestaurantDialogContent() does not use it within this dialog composable.
-
-            if (showRestaurantSettings.value) {
-                RestaurantFilters()
-            } else {
-                RestaurantDialogContent()
-            }
+            if (showRestaurants.value) { RestaurantListContent() }
+            if (showRestaurantSettings.value) { RestaurantFilters() }
         }
     }
 
     @Composable
-    fun RestaurantDialogContent() {
+    fun RestaurantListContent() {
+        showLog("test", "rest. content recomposing")
         Surface(
             shape = RoundedCornerShape(16.dp),
             color = colorResource(id = R.color.grey_300),
@@ -439,7 +436,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun RestaurantFilterIcon() {
             IconButton(onClick = {
-                if (!appViewModel.getShowRestaurantSettings) appViewModel.updateShowRestaurantSettings(true)
+                appViewModel.updateShowRestaurantSettings(true)
             }) {
                 Icon(
                     imageVector = Icons.Filled.Settings,
