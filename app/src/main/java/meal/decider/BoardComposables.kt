@@ -59,6 +59,8 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
+//TODO: Increasing duration of roll also slows down delay. Formulas need to be changed.
+//TODO: General settings -> sub-menus should also be cleaner transitions
 //TODO: Query/delay issues w/ "Places" button. Multiple presses will cause crash.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
 //TODO: Include categories as a parent of cuisines: e.g. fast food, fine dining, etc.
@@ -83,7 +85,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         var expanded by remember { mutableStateOf(false) }
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
         val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
-        val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
         val cuisineSelectionMode = appViewModel.cuisineSelectionMode.collectAsStateWithLifecycle()
         val coroutineScope = rememberCoroutineScope()
 
@@ -224,7 +225,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         Column (modifier = Modifier
             .fillMaxWidth()
             .height(screenHeightPct(0.1).dp)
-            .background(colorResource(id = R.color.grey_50))
+            .background(colorResource(id = R.color.grey_100))
         ) {
             OptionsBarLayout()
             DialogCompositions()
@@ -240,7 +241,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 }
                 Column(modifier = Modifier
                     .height(screenHeightPct(0.2).dp)
-                    .background(colorResource(id = R.color.grey_100))
+                    .background(colorResource(id = R.color.grey_200))
                 )
                 {
                     buttons.InteractionButtons()
