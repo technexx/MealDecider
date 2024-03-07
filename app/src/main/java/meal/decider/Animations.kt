@@ -98,7 +98,7 @@ fun CustomDialog(
 }
 
 @Composable
-fun AnimatedTransitionTest(
+fun AnimatedTransitionVoid(
     content: @Composable () -> Unit,
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()

@@ -247,17 +247,26 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         )
     }
 
-    //TODO: On dismiss needs to also set showRestaurantSettings to false.
     @Composable
     fun RestaurantDialog() {
         val showRestaurantSettings = appViewModel.showRestaurantSettings.collectAsStateWithLifecycle()
 
         AnimatedTransitionDialog(modifier = Modifier.fillMaxSize(), onDismissRequest = {
-            appViewModel.updateShowRestaurants(false)
+            //If filter settings are visible when dismissing, set their state to false, otherwise, only the restaurant contents are shown, so set their state to false.
+            if (showRestaurantSettings.value) {
+                appViewModel.updateShowRestaurantSettings(false)
+            } else {
+                appViewModel.updateShowRestaurants(false)
+            }
         }) {
             RestaurantDialogContent()
+
+            //TODO: Does not recompose onDismiss.
+            showLog("test", "show settings are ${showRestaurantSettings.value}")
             if (showRestaurantSettings.value) {
-                RestaurantFilterDialog()
+                RestaurantFilters()
+            } else {
+                RestaurantDialogContent()
             }
         }
     }
@@ -438,7 +447,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     }
 
     @Composable
-    fun RestaurantFilterDialog() {
+    fun RestaurantFilters() {
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         var distanceSliderPosition by remember { mutableFloatStateOf(3f) }
         var ratingSliderPosition by remember { mutableFloatStateOf(3f) }
@@ -455,7 +464,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         var priceString: String
 
-        AnimatedTransitionTest {
+        AnimatedTransitionVoid {
             Surface(
                 shape = RoundedCornerShape(16.dp),
                 color = colorResource(id = R.color.grey_300),
