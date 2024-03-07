@@ -255,14 +255,17 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             //If filter settings are visible when dismissing, set their state to false, otherwise, only the restaurant contents are shown, so set their state to false.
             if (showRestaurantSettings.value) {
                 appViewModel.updateShowRestaurantSettings(false)
+                //TODO: Since value is not changing from true, this does not cause recomposition.
+                appViewModel.updateShowRestaurants(true)
             } else {
                 appViewModel.updateShowRestaurants(false)
             }
         }) {
+            showLog("test", "dialog recomposing")
             RestaurantDialogContent()
 
-            //TODO: Does not recompose onDismiss.
-            showLog("test", "show settings are ${showRestaurantSettings.value}")
+            //TODO: Using this composable makes endless recomposition, but using RestaurantDialogContent() does not use it within this dialog composable.
+
             if (showRestaurantSettings.value) {
                 RestaurantFilters()
             } else {
@@ -542,33 +545,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 }
             }
         }
-
-
-//        //Do not set a background on these! That is what was causing the sudden color backdrop.
-//        AnimatedTransitionDialog(
-//            modifier = Modifier
-//                .fillMaxSize(),
-//            onDismissRequest = {
-//                appViewModel.updateShowRestaurantSettings(false)
-//                coroutineScope.launch {
-//                    roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
-//                }
-//                //Having this in coroutineScope prevented its execution.
-//                val maxDistance = milesToMeters(floor(distanceSliderPosition).toDouble())
-//                val minRating = ratingSliderPosition.toDouble()
-//                val maxPrice = floor(priceSliderPosition).toInt()
-//                if (appViewModel.haveRestaurantFiltersChanged(maxDistance, minRating, maxPrice)) {
-//                    appViewModel.setLocalRestaurantFilterValues(maxDistance, minRating, maxPrice)
-//                    coroutineScope.launch {
-//                        mapInteractions.mapsApiCall()
-////                        mapInteractions.testRestaurants()
-//                    }
-//                }
-//            },
-//            content = {
-//
-//            }
-//        )
     }
 
     //If we don't use ? in front of variable, Kotlin won't let it be null (? == nullable)

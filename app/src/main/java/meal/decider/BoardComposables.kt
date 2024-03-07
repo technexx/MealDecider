@@ -337,9 +337,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             dialogComposables.RestaurantDialog()
         }
 
-//        if (showRestaurantSettings.value) {
-//            dialogComposables.RestaurantFilters()
-//        }
+        if (showRestaurantSettings.value) {
+            dialogComposables.RestaurantFilters()
+        }
     }
 
     @Composable
