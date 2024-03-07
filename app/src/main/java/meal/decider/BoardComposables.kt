@@ -96,7 +96,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             topBar = {
                 TopAppBar(
                     colors = TopAppBarDefaults.smallTopAppBarColors(
-                        containerColor = colorResource(id = R.color.blue_600),
+                        containerColor = colorResource(id = LightThemeColors().appBarLight),
                         titleContentColor = Color.White,
                     ),
                     title = {

@@ -5,17 +5,31 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 data class LightThemeColors(
-    val appBarLight: Int = R.color.blue_600,
-    val iconButtonsLight: Int = R.color.white
-    val restrictionRowLight: Int = R.color.grey_100,
-    val cuisineBoardLight: Int = R.color.grey_50,
-    val cuisineButtonsRowLight: Int = R.color.grey_200,
+    val appBar: Int = R.color.blue_600,
+    val iconButtons: Int = R.color.white,
+    val restrictionRow: Int = R.color.grey_100,
+    val cuisineBoard: Int = R.color.grey_50,
 
-    val restaurantsIconButtonsLight: Int = R.color.black,
-    val restaurantSquaresLight: Int = R.color.white,
+    val restaurantsIconButtons: Int = R.color.black,
+    val restaurantSquares: Int = R.color.white,
 
-    val interactionButtonsLight: Int = R.color.blue_400,
-    val interactionsSquaresLight: Int = R.color.white,
+    val interactionButtonsRow: Int = R.color.grey_700,
+    val interactionButtons: Int = R.color.blue_400,
+    val interactionSquares: Int = R.color.white,
+)
+
+data class DarkThemeColors(
+    val appBar: Int = R.color.blue_grey_900,
+    val iconButtons: Int = R.color.blue_grey_900,
+    val restrictionRow: Int = R.color.grey_700,
+    val cuisineBoard: Int = R.color.grey_800,
+
+    val restaurantsIconButtons: Int = R.color.white,
+    val restaurantSquares: Int = R.color.black,
+
+    val interactionButtonsRow: Int = R.color.grey_700,
+    val interactionButtons: Int = R.color.purple_700,
+    val interactionSquares: Int = R.color.black,
 )
 
 val defaultSquareColor = R.color.white

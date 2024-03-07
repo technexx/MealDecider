@@ -20,4 +20,8 @@
     <color name="blue_600">#1E88E5</color>
     <color name="blue_400">#64B5F6</color>
     <color name="red_200">#EF9A9A</color>
+
+    <color name="grey_800">#424242</color>
+    <color name="blue_grey_800">#37474F</color>
+    <color name="blue_grey_900">#263238</color>
 </resources>
