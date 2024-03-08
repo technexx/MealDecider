@@ -4,7 +4,10 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-data class LightThemeColors(
+object ColorTheme {
+}
+
+data class ThemeColors(
     val appBar: Int = R.color.blue_600,
     val iconButtons: Int = R.color.white,
     val restrictionRow: Int = R.color.grey_100,
@@ -17,6 +20,7 @@ data class LightThemeColors(
     val interactionButtons: Int = R.color.blue_400,
     val interactionSquares: Int = R.color.white,
 )
+
 
 data class DarkThemeColors(
     val appBar: Int = R.color.blue_grey_900,

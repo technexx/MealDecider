@@ -634,6 +634,60 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     }
 
     @Composable
+    fun ColorsSettingDialog() {
+        var cardColor = colorResource(id = R.color.white)
+
+        AnimatedTransitionDialog(
+            modifier = Modifier.fillMaxSize(),
+            onDismissRequest = {
+            /*TODO*/
+            }) {
+            SettingsCardUi(
+                color = cardColor,
+                onClick = { /*TODO*/ },
+                content = {
+
+                })
+        }
+    }
+
+    @Composable
+    fun SettingsCardUi(
+        color: Color,
+        onClick: () -> Unit,
+        content: () -> Unit
+        ) {
+        Card(
+            colors = CardDefaults.cardColors(containerColor = color),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 2.dp
+            ),
+            modifier = Modifier
+                .padding(4.dp)
+                .selectable(
+                    selected = true,
+                    onClick = {
+                        onClick()
+                    }
+                ),
+        ) {
+            content()
+        }
+    }
+
+    @Composable
+    fun SettingsCardText(text: String) {
+        Text(
+            text = text,
+            fontWeight = FontWeight.Medium,
+            fontSize = 20.sp,
+            color = Color.Black,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(6.dp)
+        )
+    }
+
+    @Composable
     fun SpeedSettingsDialog() {
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         var cuisineRollDurationSliderPosition by remember { mutableFloatStateOf(3f) }

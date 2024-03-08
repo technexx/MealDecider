@@ -90,10 +90,13 @@ class AppViewModel : ViewModel() {
     val cuisineSelectionMode: StateFlow<Boolean> = _cuisineSelectionMode.asStateFlow()
 
     private val _optionsMode = MutableStateFlow(false)
-    val optionsMode : StateFlow<Boolean> = _optionsMode
+    val optionsMode: StateFlow<Boolean> = _optionsMode
 
     private val _settingsDialogVisibility = MutableStateFlow(SettingsDialogVisibility())
-    val settingsDialogVisibility : StateFlow<SettingsDialogVisibility> = _settingsDialogVisibility.asStateFlow()
+    val settingsDialogVisibility: StateFlow<SettingsDialogVisibility> = _settingsDialogVisibility.asStateFlow()
+
+    private val _colorTheme = MutableStateFlow(emptyList<String>())
+    val colorTheme: StateFlow<List<String>> = _colorTheme.asStateFlow()
 
     fun updateOptionsMode(optionsMode: Boolean) {
         _optionsMode.value = optionsMode
