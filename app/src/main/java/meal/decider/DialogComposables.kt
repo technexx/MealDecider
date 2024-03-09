@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -641,21 +642,48 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             modifier = Modifier.fillMaxSize(),
             onDismissRequest = {
             /*TODO*/
-            }) {
-            SettingsCardUi(
-                color = cardColor,
-                onClick = { /*TODO*/ },
-                content = {
+            },
+            content = {
+                Surface (shape = RoundedCornerShape(16.dp),
+                    color = colorResource(id = R.color.grey_300),){
+                    Column (modifier = Modifier
+                        .fillMaxSize()
+                        .background(colorResource(id = R.color.grey_50)),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                        Spacer(modifier = Modifier.fillMaxHeight(0.05f))
+                        Text(fontWeight = FontWeight.Bold, fontSize = 28.sp, color = Color.Black, textAlign = TextAlign.Center,
+                            text = "Theme")
+                        Spacer(modifier = Modifier.height(30.dp))
+                        Row(modifier = Modifier
+                            .fillMaxSize(),
+                            horizontalArrangement = Arrangement.Center) {
+                            SettingsCardUi(
+                                color = cardColor,
+                                onClick = { /*TODO*/ },
+                                content = {
+                                    SettingsCardText(text = "Light")
+                                })
+                            Spacer(modifier = Modifier.width(30.dp))
+                            SettingsCardUi(
+                                color = cardColor,
+                                onClick = { /*TODO*/ },
+                                content = {
+                                    SettingsCardText(text = "Dark")
+                                })
+                        }
+   
+                    }
+                }
 
-                })
-        }
+            })
     }
 
     @Composable
     fun SettingsCardUi(
         color: Color,
         onClick: () -> Unit,
-        content: () -> Unit
+        content: @Composable () -> Unit
         ) {
         Card(
             colors = CardDefaults.cardColors(containerColor = color),
@@ -663,7 +691,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 defaultElevation = 2.dp
             ),
             modifier = Modifier
-                .padding(4.dp)
+                .padding(6.dp)
                 .selectable(
                     selected = true,
                     onClick = {
@@ -680,10 +708,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         Text(
             text = text,
             fontWeight = FontWeight.Medium,
-            fontSize = 20.sp,
+            fontSize = 26.sp,
             color = Color.Black,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(6.dp)
+            modifier = Modifier.padding(12.dp)
         )
     }
 

@@ -336,6 +336,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             dialogComposables.SpeedSettingsDialog()
         }
 
+        if (settingsDialogVisibility.value.colors) {
+            dialogComposables.ColorsSettingDialog()
+        }
+
         if (showRestaurantsDialog.value) {
             dialogComposables.RestaurantDialog()
         }
