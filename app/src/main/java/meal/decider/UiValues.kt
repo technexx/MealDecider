@@ -1,6 +1,8 @@
 package meal.decider
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
@@ -17,7 +19,7 @@ fun changeColorTheme(theme: String): ColorTheme {
 }
 
 object Theme {
-    val themeColorsList = mutableListOf(
+    val themeColorsList: SnapshotStateList<ColorTheme> = mutableStateListOf(
         ColorTheme(
             appBar = R.color.blue_400,
             iconButtons = R.color.white,
