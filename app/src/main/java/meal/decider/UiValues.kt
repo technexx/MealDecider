@@ -4,10 +4,53 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-object ColorTheme {
+object Theme {
+    val themeColorsList = mutableListOf(
+        ColorTheme(
+            appBar = R.color.blue_400,
+            iconButtons = R.color.white,
+            restrictionRow = R.color.grey_100,
+            cuisineBoard = R.color.grey_50,
+
+            restaurantsIconButtons = R.color.blue_400,
+            restaurantSquares = R.color.white,
+
+            interactionButtonsRow = R.color.grey_700,
+            interactionButtons = R.color.blue_400,
+            interactionSquares = R.color.white
+        ),
+
+        ColorTheme(
+            appBar = R.color.blue_grey_900,
+            iconButtons = R.color.blue_grey_900,
+            restrictionRow = R.color.grey_700,
+            cuisineBoard = R.color.grey_800,
+
+            restaurantsIconButtons = R.color.white,
+            restaurantSquares = R.color.black,
+
+            interactionButtonsRow = R.color.grey_700,
+            interactionButtons = R.color.purple_700,
+            interactionSquares = R.color.black
+        )
+    )
 }
 
-data class ThemeColors(
+data class ColorTheme(
+    val appBar: Int,
+    val iconButtons: Int,
+    val restrictionRow: Int,
+    val cuisineBoard: Int,
+
+    val restaurantsIconButtons: Int,
+    val restaurantSquares: Int,
+
+    val interactionButtonsRow: Int,
+    val interactionButtons: Int,
+    val interactionSquares: Int,
+)
+
+data class LightThemeColors(
     val appBar: Int = R.color.blue_600,
     val iconButtons: Int = R.color.white,
     val restrictionRow: Int = R.color.grey_100,
@@ -20,7 +63,6 @@ data class ThemeColors(
     val interactionButtons: Int = R.color.blue_400,
     val interactionSquares: Int = R.color.white,
 )
-
 
 data class DarkThemeColors(
     val appBar: Int = R.color.blue_grey_900,
