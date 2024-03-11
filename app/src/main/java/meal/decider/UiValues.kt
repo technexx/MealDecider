@@ -4,6 +4,18 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+//TODO: Return this to a state view list in view model.
+fun changeColorTheme(theme: String): ColorTheme {
+    var themeToReturn = Theme.themeColorsList[0]
+    if (theme == "light") {
+        themeToReturn = Theme.themeColorsList[0]
+    }
+    if (theme == "dark") {
+        themeToReturn = Theme.themeColorsList[1]
+    }
+    return themeToReturn
+}
+
 object Theme {
     val themeColorsList = mutableListOf(
         ColorTheme(
