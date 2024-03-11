@@ -160,10 +160,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             horizontalAlignment = Alignment.CenterHorizontally,
         ){
             items (list.value.size) { index ->
-                if (!listOfCuisinesToAdd.value.contains(list.value[index])) {
-                    backgroundColor = R.color.grey_300
+                backgroundColor = if (!listOfCuisinesToAdd.value.contains(list.value[index])) {
+                    R.color.grey_300
                 } else {
-                    backgroundColor = R.color.grey_500
+                    R.color.grey_500
                 }
                 Column (modifier = Modifier
                     .padding(4.dp)
@@ -257,9 +257,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             //If filter settings are visible when dismissing, set their state to false, otherwise, only the restaurant contents are shown, so set their state to false.
             if (showRestaurantSettings.value) {
                 appViewModel.updateShowRestaurantSettings(false)
-                showLog("test", "showRestaurants is pre-update ${appViewModel.getShowRestaurants}")
                 appViewModel.updateShowRestaurants(true)
-                showLog("test", "showRestaurants is post-update ${appViewModel.getShowRestaurants}")
             } else {
                 appViewModel.updateShowRestaurantsDialog(false)
                 appViewModel.updateShowRestaurants(false)
