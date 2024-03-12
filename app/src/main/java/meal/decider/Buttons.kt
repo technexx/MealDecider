@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 class Buttons (private val appViewModel: AppViewModel, private val mapInteractions: MapInteractions, private val runnables: Runnables){
 
     @Composable
-    fun IconButton(
+    fun MaterialIconButton(
         icon: ImageVector,
         description: String,
         onClick: () -> Unit) {
@@ -36,7 +36,24 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
             Icon(
                 imageVector = icon,
                 contentDescription = description,
+                //TODO: Change tint to state flow list item.
                 tint = Color.Black
+            )
+        }
+    }
+
+    @Composable
+    fun CustomIconButton(
+        image: Int,
+        size: Int,
+        description: String,
+        onClick: () -> Unit) {
+        IconButton(modifier = Modifier.size(size.dp),
+            onClick = { onClick() }) {
+            Icon(
+                painter = painterResource(image),
+                contentDescription = description,
+                tint = Color.Black,
             )
         }
     }
@@ -81,26 +98,17 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                         }
                     })
                 }
-                IconButton(modifier = Modifier
-                    .size(72.dp),
-                    onClick = {
-                        if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-                            if (!appViewModel.getShowRestaurants) {
-                                runnables.rollCuisine()
-                            } else {
-                                if (appViewModel.getRestaurantQueryFinished) {
-                                    runnables.rollRestaurant()
+                CustomIconButton(size = 72, image = R.drawable.dice, description = "dice") {
+                    if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
+                        if (!appViewModel.getShowRestaurants) {
+                            runnables.rollCuisine()
+                        } else {
+                            if (appViewModel.getRestaurantQueryFinished) {
+                                runnables.rollRestaurant()
 //                            appViewModel.testRestaurantRoll()
-                                }
                             }
                         }
-                    },
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.dice),
-                        contentDescription = "Dice Icon",
-                        tint = colorResource(id = R.color.blue_600)
-                    )
+                    }
                 }
                 ButtonUi(text = "Map", onClickAction = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {

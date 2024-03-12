@@ -33,7 +33,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -126,20 +125,16 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
-                        IconButton(onClick = {
+                        buttons.MaterialIconButton(icon = Icons.Filled.Close, description = "close") {
                             appViewModel.updateAddMode(false)
                             appViewModel.updateListOfCuisinesToAdd(emptyList())
-                        }) {
-                            DialogIcon(imageVector = Icons.Filled.Close, colorResource = android.R.color.holo_red_light)
                         }
-                        IconButton(onClick = {
+                        buttons.MaterialIconButton(icon = Icons.Filled.Check, description = "confirm") {
                             appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd)
                             coroutineScope.launch {
                                 roomInteractions.insertMultipleCuisines(appViewModel.getListOfCuisinesToAdd)
                             }
                             appViewModel.updateAddMode(false)
-                        }) {
-                            DialogIcon(imageVector = Icons.Filled.Check, colorResource = android.R.color.holo_green_light)
                         }
                     }
                 }
@@ -226,19 +221,15 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 .fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
-                                IconButton(onClick = {
+                                buttons.MaterialIconButton(icon = Icons.Default.Close, description = "close") {
                                     appViewModel.updateRestoreDefaults(false)
-                                }) {
-                                    DialogIcon(imageVector = Icons.Default.Close, colorResource = android.R.color.holo_red_light)
                                 }
-                                IconButton(onClick = {
+                                buttons.MaterialIconButton(icon = Icons.Filled.Check, description = "confirm") {
                                     roomInteractions.setSquareDatabaseToDefaultStartingValues()
                                     appViewModel.updateSquareList(appViewModel.starterSquareList())
                                     appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
                                     appViewModel.updateEditMode(false)
                                     appViewModel.updateRestoreDefaults(false)
-                                }) {
-                                    DialogIcon(imageVector = Icons.Default.Check, colorResource = android.R.color.holo_green_light)
                                 }
                             }
                         }
@@ -370,7 +361,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             modifier = Modifier
                 .wrapContentSize(Alignment.TopEnd)
         ) {
-            buttons.IconButton(icon = Icons.Filled.Menu, description = "menu") {
+            buttons.MaterialIconButton(icon = Icons.Filled.Menu, description = "menu") {
                 expanded = !expanded
             }
 
@@ -430,15 +421,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestaurantFilterIcon() {
-            IconButton(onClick = {
-                appViewModel.updateShowRestaurantSettings(true)
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.Settings,
-                    contentDescription = "More",
-                    tint = Color.Black
-                )
-            }
+        buttons.MaterialIconButton(icon = Icons.Filled.Settings, description = "settings") {
+            appViewModel.updateShowRestaurantSettings(true)
+        }
     }
 
     @Composable

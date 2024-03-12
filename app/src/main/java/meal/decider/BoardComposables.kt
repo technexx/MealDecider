@@ -28,8 +28,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -63,7 +61,7 @@ import meal.decider.Database.RoomInteractions
 //TODO: General settings -> sub-menus should also be cleaner transitions
 //TODO: Query/delay issues w/ "Places" button. Multiple presses will cause crash.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
-//TODO: Include categories as a parent of cuisines: e.g. fast food, fine dining, etc.
+//TODO: With color themes, will need to change way we toggle "select" pencil icon color.
 
 class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, private val roomInteractions: RoomInteractions, private val mapInteractions: MapInteractions, private val runnables: Runnables) {
 
@@ -106,51 +104,27 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     },
                     actions = {
                         if (listOfCuisineSquaresToEdit.value.isNotEmpty() && editMode.value) {
-                            buttons.DeleteButton {
-
-                            }
-                            IconButton(onClick = {
+                            buttons.MaterialIconButton(icon = Icons.Filled.Delete, description = "delete") {
                                 coroutineScope.launch {
                                     roomInteractions.deleteMultipleCuisines()
                                     appViewModel.deleteSelectedCuisines()
                                 }
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Delete,
-                                    contentDescription = "Delete"
-                                )
                             }
                         }
-                        IconButton(onClick = {
+                        buttons.MaterialIconButton(icon = Icons.Filled.Create, description = "select") {
                             appViewModel.updateCuisineSelectionMode(!appViewModel.getCuisineSelectionMode)
-                        }) {
-                            Icon(modifier = Modifier,
-                                imageVector = Icons.Filled.Create,
-                                contentDescription = "Select",
-                                tint = tint
-                            )
                         }
                         Box(
                             modifier = Modifier
                                 .wrapContentSize(Alignment.TopEnd)
                         ) {
                             Row() {
-                                IconButton(onClick = {
+                                buttons.MaterialIconButton(icon = Icons.Filled.Settings, description = "settings") {
                                     appViewModel.updateOptionsMode(true)
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Settings,
-                                        contentDescription = "Options",
-                                        tint = Color.White
-                                    )
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
-                                IconButton(onClick = { expanded = !expanded }) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Menu,
-                                        contentDescription = "More",
-                                        tint = Color.White
-                                    )
+                                buttons.MaterialIconButton(icon = Icons.Filled.Menu, description = "menu") {
+                                    expanded = !expanded
                                 }
                             }
 
