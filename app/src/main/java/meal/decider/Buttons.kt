@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -20,6 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -29,22 +28,14 @@ import kotlinx.coroutines.launch
 class Buttons (private val appViewModel: AppViewModel, private val mapInteractions: MapInteractions, private val runnables: Runnables){
 
     @Composable
-    fun SortButton(onClick: () -> Unit) {
+    fun IconButton(
+        icon: ImageVector,
+        description: String,
+        onClick: () -> Unit) {
         IconButton(onClick = { onClick() }) {
             Icon(
-                imageVector = Icons.Filled.Menu,
-                contentDescription = "More",
-                tint = Color.Black
-            )
-        }
-    }
-
-    @Composable
-    fun DeleteButton(onClick: () -> Unit) {
-        IconButton(onClick = { onClick() }) {
-            Icon(
-                imageVector = Icons.Filled.Menu,
-                contentDescription = "More",
+                imageVector = icon,
+                contentDescription = description,
                 tint = Color.Black
             )
         }
