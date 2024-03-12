@@ -190,6 +190,10 @@ class AppViewModel : ViewModel() {
         _cuisineSelectionMode.value = enabled
     }
 
+    fun updateTheme(theme: SnapshotStateList<ColorTheme>) {
+        _colorTheme.value = theme
+    }
+
     fun addMultipleSquaresToList(squares: List<String>) {
         val squareList = getSquareList
         for (i in squares) {

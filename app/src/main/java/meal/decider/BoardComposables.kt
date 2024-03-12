@@ -81,6 +81,8 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     @Composable
     //"Void" Composable input.
     fun TopBar(content: @Composable (() -> Unit)) {
+        val theme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         var expanded by remember { mutableStateOf(false) }
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
@@ -96,7 +98,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             topBar = {
                 TopAppBar(
                     colors = TopAppBarDefaults.smallTopAppBarColors(
-                        containerColor = colorResource(id = R.color.blue_600),
+                        containerColor = colorResource(id = theme.value[0].appBar),
                         titleContentColor = Color.White,
                     ),
                     title = {
@@ -104,6 +106,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     },
                     actions = {
                         if (listOfCuisineSquaresToEdit.value.isNotEmpty() && editMode.value) {
+                            buttons.DeleteButton {
+
+                            }
                             IconButton(onClick = {
                                 coroutineScope.launch {
                                     roomInteractions.deleteMultipleCuisines()

@@ -25,7 +25,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -370,12 +369,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             modifier = Modifier
                 .wrapContentSize(Alignment.TopEnd)
         ) {
-            IconButton(onClick = { expanded = !expanded }) {
-                Icon(
-                    imageVector = Icons.Filled.Menu,
-                    contentDescription = "More",
-                    tint = Color.Black
-                )
+            buttons.SortButton {
+                expanded = !expanded
             }
 
             //Order of modifiers matters. Background needs to be set BEFORE padding, otherwise background outside of padding will not be changed.

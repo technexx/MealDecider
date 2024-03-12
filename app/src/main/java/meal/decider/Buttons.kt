@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -25,6 +27,28 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 
 class Buttons (private val appViewModel: AppViewModel, private val mapInteractions: MapInteractions, private val runnables: Runnables){
+
+    @Composable
+    fun SortButton(onClick: () -> Unit) {
+        IconButton(onClick = { onClick() }) {
+            Icon(
+                imageVector = Icons.Filled.Menu,
+                contentDescription = "More",
+                tint = Color.Black
+            )
+        }
+    }
+
+    @Composable
+    fun DeleteButton(onClick: () -> Unit) {
+        IconButton(onClick = { onClick() }) {
+            Icon(
+                imageVector = Icons.Filled.Menu,
+                contentDescription = "More",
+                tint = Color.Black
+            )
+        }
+    }
 
     @SuppressLint("MissingPermission")
     @Composable
