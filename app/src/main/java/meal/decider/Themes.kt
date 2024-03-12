@@ -12,6 +12,9 @@ object ThemeObject {
     var interactionButtonsRow: Int = R.color.grey_700
     var interactionButtons: Int = R.color.blue_400
     var interactionSquares: Int = R.color.white
+
+    var cancelDialogButton: Int = android.R.color.holo_red_light
+    var confirmDialogButton: Int = android.R.color.holo_green_light
 }
 
 fun updateThemeObject(theme: String) {
@@ -27,6 +30,9 @@ fun updateThemeObject(theme: String) {
         ThemeObject.interactionButtonsRow = R.color.grey_700
         ThemeObject.interactionButtons = R.color.blue_400
         ThemeObject.interactionSquares = R.color.white
+
+        ThemeObject.cancelDialogButton = android.R.color.holo_red_light
+        ThemeObject.confirmDialogButton = android.R.color.holo_green_light
     }
 
     if (theme == "dark") {
@@ -41,5 +47,8 @@ fun updateThemeObject(theme: String) {
         ThemeObject.interactionButtonsRow = R.color.grey_700
         ThemeObject.interactionButtons = R.color.purple_700
         ThemeObject.interactionSquares = R.color.black
+
+        ThemeObject.cancelDialogButton = android.R.color.holo_red_light
+        ThemeObject.confirmDialogButton = android.R.color.holo_green_light
     }
 }
