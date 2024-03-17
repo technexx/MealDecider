@@ -11,6 +11,18 @@ data class SettingsDialogVisibility(
     var sounds: Boolean = false
 )
 
+data class SettingsToggle(
+    var name: String = "",
+    var selected: Boolean = false,
+)
+
+object ColorSettingsToggleObject {
+    var colorSettingsToggleList: SnapshotStateList<SettingsToggle> = mutableStateListOf(
+        SettingsToggle("Light", true),
+        SettingsToggle("Dark", false)
+    )
+}
+
 data class BoardValues(
     var squareList: SnapshotStateList<SquareValues> = mutableStateListOf(),
 )

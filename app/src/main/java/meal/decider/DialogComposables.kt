@@ -44,6 +44,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -615,7 +616,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun ColorsSettingDialog() {
-        var cardColor = colorResource(id = R.color.white)
+        val colorSettingsToggle = appViewModel.colorSettingsSelectionList.collectAsStateWithLifecycle()
+        val cardColor = colorResource(id = R.color.white)
 
         AnimatedTransitionDialog(
             modifier = Modifier.fillMaxSize(),
@@ -623,6 +625,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             /*TODO*/
             },
             content = {
+
                 Surface (shape = RoundedCornerShape(16.dp),
                     color = colorResource(id = R.color.grey_300),){
                     Column (modifier = Modifier
@@ -639,16 +642,27 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             horizontalArrangement = Arrangement.Center) {
                             SettingsCardUi(
                                 color = cardColor,
-                                onClick = { /*TODO*/ },
+                                onClick = {
+                                    val list = appViewModel.getColorSettingsSelectionList
+                                    list[0].selected = !list[0].selected
+                                    val updatedList = mutableStateListOf<SettingsToggle>()
+                                    updatedList.addAll(list)
+                                    appViewModel.updateColorSettingsToggleList(list)
+                                          },
                                 content = {
-                                    SettingsCardText(text = "Light")
+                                    SettingsCardText(text = colorSettingsToggle.value[0].name)
                                 })
                             Spacer(modifier = Modifier.width(30.dp))
                             SettingsCardUi(
                                 color = cardColor,
-                                onClick = { /*TODO*/ },
+                                onClick = {
+                                    val list = appViewModel.getColorSettingsSelectionList
+                                    list[1].selected = !list[1].selected
+                                    val updatedList = mutableStateListOf<SettingsToggle>()
+                                    updatedList.addAll(list)
+                                    appViewModel.updateColorSettingsToggleList(list) },
                                 content = {
-                                    SettingsCardText(text = "Dark")
+                                    SettingsCardText(text = colorSettingsToggle.value[1].name)
                                 })
                         }
    

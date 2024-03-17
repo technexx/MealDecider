@@ -95,7 +95,8 @@ class AppViewModel : ViewModel() {
     private val _settingsDialogVisibility = MutableStateFlow(SettingsDialogVisibility())
     val settingsDialogVisibility: StateFlow<SettingsDialogVisibility> = _settingsDialogVisibility.asStateFlow()
 
-    private val _settingsSelectionList = MutableStateFlow()
+    private val _colorSettingsSelectionList = MutableStateFlow(ColorSettingsToggleObject.colorSettingsToggleList)
+    val colorSettingsSelectionList: StateFlow<SnapshotStateList<SettingsToggle>> = _colorSettingsSelectionList.asStateFlow()
 
     private val _colorTheme = MutableStateFlow(Theme.themeColorsList)
     val colorTheme: StateFlow<SnapshotStateList<ColorTheme>> = _colorTheme.asStateFlow()
@@ -190,6 +191,10 @@ class AppViewModel : ViewModel() {
 
     fun updateCuisineSelectionMode(enabled: Boolean) {
         _cuisineSelectionMode.value = enabled
+    }
+
+    fun updateColorSettingsToggleList(list: SnapshotStateList<SettingsToggle>) {
+        _colorSettingsSelectionList.value = list
     }
 
     fun updateTheme(theme: SnapshotStateList<ColorTheme>) {
@@ -363,21 +368,21 @@ class AppViewModel : ViewModel() {
     }
 
     private fun addSquareToListOfCuisineSquaresToEdit(index: Int) {
-        val tempList = getlistOfCuisineSquaresToEdit.toMutableList()
+        val tempList = getListOfCuisineSquaresToEdit.toMutableList()
         val currentList = getSquareList
         tempList.add(currentList[index])
         updatelistOfCuisineSquaresToEdit(tempList)
     }
 
     private fun removeSquareFromListOfSquareIndicesToUpdate() {
-        val tempList = getlistOfCuisineSquaresToEdit.toMutableList()
+        val tempList = getListOfCuisineSquaresToEdit.toMutableList()
         tempList.removeLast()
         updatelistOfCuisineSquaresToEdit(tempList)
     }
 
     //With SnapShotStateLists, our contains() conditional is true, but not with regular Lists.
     fun deleteSelectedCuisines() {
-        val listOfCuisineSquaresToEdit = getlistOfCuisineSquaresToEdit
+        val listOfCuisineSquaresToEdit = getListOfCuisineSquaresToEdit
         val currentSquaresList = getSquareList
 
         for (i in listOfCuisineSquaresToEdit) {
@@ -460,7 +465,7 @@ class AppViewModel : ViewModel() {
     val getSquareList get() = boardUiState.value.squareList
     val getselectedCuisineSquare get() = selectedCuisineSquare.value
     val getDisplayedCuisineList get() = displayedCuisineList.value
-    val getlistOfCuisineSquaresToEdit get() = listOfCuisineSquaresToEdit.value
+    val getListOfCuisineSquaresToEdit get() = listOfCuisineSquaresToEdit.value
     val getListOfCuisinesToAdd get() = listOfCuisinesToAdd.value
     val getRestaurantList get() = _restaurantList.value
     val getShowRestaurants get() = _showRestaurants.value
@@ -480,4 +485,6 @@ class AppViewModel : ViewModel() {
     val getRestaurantQueryFinished get() = restaurantQueryFinished.value
 
     val getCuisineSelectionMode get() = cuisineSelectionMode.value
+
+    val getColorSettingsSelectionList get() = colorSettingsSelectionList.value
 }
