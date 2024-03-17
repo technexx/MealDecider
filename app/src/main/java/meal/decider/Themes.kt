@@ -2,7 +2,7 @@ package meal.decider
 
 object ThemeObject {
     var appBar: Int = R.color.blue_600
-    var iconButtons: Int = R.color.white
+    var appBarIconButtons: Int = R.color.white
     var restrictionRow: Int = R.color.grey_100
     var cuisineBoard: Int = R.color.grey_50
 
@@ -20,7 +20,7 @@ object ThemeObject {
 fun updateThemeObject(theme: String) {
     if (theme == "light") {
         ThemeObject.appBar = R.color.blue_600
-        ThemeObject.iconButtons = R.color.white
+        ThemeObject.appBarIconButtons = R.color.white
         ThemeObject.restrictionRow = R.color.grey_100
         ThemeObject.cuisineBoard = R.color.grey_50
 
@@ -37,7 +37,7 @@ fun updateThemeObject(theme: String) {
 
     if (theme == "dark") {
         ThemeObject.appBar = R.color.blue_grey_900
-        ThemeObject.iconButtons = R.color.blue_grey_900
+        ThemeObject.appBarIconButtons = R.color.blue_grey_900
         ThemeObject.restrictionRow = R.color.grey_700
         ThemeObject.cuisineBoard = R.color.grey_800
 

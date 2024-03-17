@@ -95,6 +95,8 @@ class AppViewModel : ViewModel() {
     private val _settingsDialogVisibility = MutableStateFlow(SettingsDialogVisibility())
     val settingsDialogVisibility: StateFlow<SettingsDialogVisibility> = _settingsDialogVisibility.asStateFlow()
 
+    private val _settingsSelectionList = MutableStateFlow()
+
     private val _colorTheme = MutableStateFlow(Theme.themeColorsList)
     val colorTheme: StateFlow<SnapshotStateList<ColorTheme>> = _colorTheme.asStateFlow()
 

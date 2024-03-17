@@ -31,13 +31,13 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
     fun MaterialIconButton(
         icon: ImageVector,
         description: String,
+        tint: Int,
         onClick: () -> Unit) {
         IconButton(onClick = { onClick() }) {
             Icon(
                 imageVector = icon,
                 contentDescription = description,
-                //TODO: Change tint to state flow list item.
-                tint = Color.Black
+                tint = colorResource(id = tint)
             )
         }
     }
@@ -47,13 +47,14 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
         image: Int,
         size: Int,
         description: String,
+        tint: Int,
         onClick: () -> Unit) {
         IconButton(modifier = Modifier.size(size.dp),
             onClick = { onClick() }) {
             Icon(
                 painter = painterResource(image),
                 contentDescription = description,
-                tint = Color.Black,
+                tint = colorResource(id = tint),
             )
         }
     }
@@ -98,7 +99,7 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                         }
                     })
                 }
-                CustomIconButton(size = 72, image = R.drawable.dice, description = "dice") {
+                CustomIconButton(size = 72, image = R.drawable.dice, description = "dice", tint = ThemeObject.interactionButtons) {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         if (!appViewModel.getShowRestaurants) {
                             runnables.rollCuisine()
