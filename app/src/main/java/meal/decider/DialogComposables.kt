@@ -600,7 +600,13 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 Column(modifier = Modifier
                     .fillMaxSize()
                     .background(colorResource(id = R.color.grey_50)),
+                    horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Row() {
+                        RegText(text = "Theme", fontSize = 28, color = Color.Black, fontWeight = FontWeight.Bold)
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
                     LazyVerticalGrid(
                         columns = GridCells.Adaptive(minSize = 128.dp),
                         contentPadding = PaddingValues(
