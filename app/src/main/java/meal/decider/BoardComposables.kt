@@ -46,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -204,7 +205,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             .height(screenHeightPct(0.1).dp)
             .background(colorResource(id = R.color.grey_100))
         ) {
-            OptionsBarLayout()
+            RestrictionsBarLayout()
             DialogCompositions()
         }
         Surface(
@@ -229,7 +230,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
 
 
     @Composable
-    fun OptionsBarLayout() {
+    fun RestrictionsBarLayout() {
         val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
         var cardColor: Color
 
@@ -274,6 +275,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                             RegText(text = restrictionsUi.value[index].name,
                                 fontSize = 14,
                                 color = Color.Black,
+                                fontWeight = FontWeight.Bold,
                                 modifier = Modifier.padding(6.dp))
                         }
                     }
@@ -408,6 +410,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                             text = boardUiState.value.squareList[index].name,
                             fontSize = 18,
                             color = Color.Black,
+                            fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(16.dp)
                         )
                     }

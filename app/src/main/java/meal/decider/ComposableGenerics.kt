@@ -19,6 +19,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+//TODO: Card composition.
+
 @Composable
 fun RegText(
     text: String,
@@ -30,6 +32,7 @@ fun RegText(
         text = text,
         fontSize = fontSize.sp,
         color = color,
+        fontWeight = fontWeight,
         modifier = modifier
     )
 }
@@ -45,12 +48,12 @@ fun RegTextButton(
         onClick = { onClick() }
     ) {
         Text(
-            modifier = Modifier
-                .padding(8.dp, 10.dp),
+            text = text.toString(),
             fontSize = fontSize.sp,
             color = color,
-            text = text.toString(),
-            fontWeight = fontWeight
+            fontWeight = fontWeight,
+            modifier = Modifier
+                .padding(8.dp, 10.dp),
         )
     }
 }
@@ -58,6 +61,7 @@ fun RegTextButton(
 @Composable
 fun ButtonUi(
     text: String,
+    fontSize: Int,
     onClick: () -> Unit) {
     Button(
         onClick = {
@@ -66,7 +70,7 @@ fun ButtonUi(
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
         colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
     ) {
-        RegText(text = text, fontSize = 18, color = Color.Black, fontWeight = FontWeight.Bold)
+        RegText(text = text, fontSize = fontSize, color = Color.Black, fontWeight = FontWeight.Bold)
     }
 }
 
