@@ -46,8 +46,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -273,14 +271,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                     }
                                 ),
                         ) {
-                            Text(
-                                text = restrictionsUi.value[index].name,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 14.sp,
+                            RegText(text = restrictionsUi.value[index].name,
+                                fontSize = 14,
                                 color = Color.Black,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(6.dp)
-                            )
+                                modifier = Modifier.padding(6.dp))
                         }
                     }
                 }
@@ -410,12 +404,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 }
                             ),
                     ) {
-                        Text(
+                        RegText(
                             text = boardUiState.value.squareList[index].name,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
+                            fontSize = 18,
                             color = Color.Black,
-                            textAlign = TextAlign.Center,
                             modifier = Modifier.padding(16.dp)
                         )
                     }

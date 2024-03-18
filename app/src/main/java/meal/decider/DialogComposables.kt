@@ -38,7 +38,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -60,7 +59,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -211,11 +209,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             Row(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
+                                RegText(
                                     text = "This will restore cuisine list to default!",
-                                    fontSize = 18.sp,
+                                    fontSize = 18,
                                     color = Color.Black,
-                                    textAlign = TextAlign.Center,
                                     modifier = Modifier.padding(12.dp)
                                 )
                             }
@@ -347,11 +344,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             }
                         ),
                 ) {
-                    RestaurantListTextUi(restaurantList.value[index].name.toString(), true)
+                    RegText(restaurantList.value[index].name.toString(), fontSize = 18, color = Color.Black)
                     val distanceInMeters = (restaurantList.value[index].distance)
-                    RestaurantListTextUi(doubleMetersToMiles(distanceInMeters!!).toString() + " miles", false)
+                    RegText(doubleMetersToMiles(distanceInMeters!!).toString() + " miles", fontSize = 18, color = Color.Black)
                     RatingStars(restaurantList.value[index].rating)
-                    RestaurantListTextUi(priceToDollarSigns(restaurantList.value[index].priceLevel), false)
+                    RegText(priceToDollarSigns(restaurantList.value[index].priceLevel), fontSize = 18, color = Color.Black)
                 }
             }
         }
@@ -403,22 +400,14 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun RestaurantDropDownUi(text: String, function: () -> Unit) {
         DropdownMenuItem(
-            text = { RestaurantSortTextUi(text = text) },
+            text = { RegText(
+                text = text,
+                fontSize = 18,
+                color = Color.Black,
+                modifier = Modifier.padding(12.dp)) },
             onClick = {
                 function()
             }
-        )
-    }
-
-    @Composable
-    fun RestaurantSortTextUi(text: String) {
-        Text(
-            text = text,
-            fontWeight = FontWeight.Medium,
-            fontSize = 14.sp,
-            color = Color.Black,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(6.dp)
         )
     }
 
@@ -460,11 +449,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         horizontalAlignment = Alignment.CenterHorizontally)
                     {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            DialogTextUi(text = "Filters", size = 22, bold = true)
+                            RegText(text = "Filters", fontSize = 22, color = Color.Black, fontWeight = FontWeight.Bold)
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                         Column (){
-                            DialogTextUi(text = "Distance", size = 20 , bold = false)
+                            RegText(text = "Distance", fontSize = 20, color = Color.Black)
                             Spacer(modifier = Modifier.height(8.dp))
                             Row (modifier = Modifier
                                 .fillMaxWidth(),
@@ -477,10 +466,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     },
                                     valueRange = 1f..10f
                                 )
-                                DialogTextUi(text = distanceSliderPosition.toInt().toString() + " mi", size = 18, bold = false)
+                                RegText(text = distanceSliderPosition.toInt().toString() + " mi", fontSize = 18, color = Color.Black)
                             }
                             Spacer(modifier = Modifier.height(16.dp))
-                            DialogTextUi(text = "Rating", size = 20 , bold = false)
+                            RegText(text = "Rating", fontSize = 20 , color = Color.Black)
                             Spacer(modifier = Modifier.height(8.dp))
                             Row (modifier = Modifier
                                 .fillMaxWidth(),
@@ -493,10 +482,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     valueRange = 3f..4.5f,
                                     steps = 2
                                 )
-                                DialogTextUi(text = "$ratingSliderPosition stars", size = 18, bold = false)
+                                RegText(text = "$ratingSliderPosition stars", fontSize = 18, color = Color.Black)
                             }
                             Spacer(modifier = Modifier.height(16.dp))
-                            DialogTextUi(text = "Max Price", size = 20 , bold = false)
+                            RegText(text = "Max Price", fontSize = 18, color = Color.Black)
                             Spacer(modifier = Modifier.height(8.dp))
                             Row (modifier = Modifier
                                 .fillMaxWidth(),
@@ -516,7 +505,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     for (i in 1..priceSliderPosition.toInt()) {
                                         priceString += "$"
                                     }
-                                    DialogTextUi(text = priceString, size = 18, bold = false)
+                                    RegText(text = priceString, fontSize = 18, color = Color.Black)
                                 }
 
                             }
@@ -524,23 +513,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     }
                 }
             }
-        }
-    }
-
-    //If we don't use ? in front of variable, Kotlin won't let it be null (? == nullable)
-    @Composable
-    fun RestaurantListTextUi(text: String?, bold: Boolean) {
-        var fontWeight: FontWeight = FontWeight.Normal
-        if (bold) fontWeight = FontWeight.Bold
-        if (text != null) {
-            Text(
-                modifier = Modifier
-                    .padding(8.dp, 4.dp),
-                fontSize = 14.sp,
-                color = Color.Black,
-                text = text,
-                fontWeight = fontWeight
-            )
         }
     }
 
@@ -593,21 +565,21 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,) {
             Column (horizontalAlignment = Alignment.CenterHorizontally){
-                DialogTextUi("Settings", size = 28, bold = true)
+                RegText("Settings", fontSize = 18, color = Color.Black)
                 Spacer(modifier = Modifier.height(20.dp))
-                DialogTextButtonUi(text = "Speeds", size = 24, bold = true,
+                RegTextButton(text = "Speeds", size = 24, bold = true,
                     onClick = {
                         appViewModel.updateOptionsMode(false)
                         appViewModel.updateSettingsDialogVisibility(speeds = true, sounds = false, colors = false)
                     })
                 Spacer(modifier = Modifier.height(10.dp))
-                DialogTextButtonUi(text = "Sounds", size = 24, bold = true,
+                RegTextButton(text = "Sounds", size = 24, bold = true,
                     onClick = {
                         appViewModel.updateOptionsMode(false)
                         appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = true, colors = false)
                     })
                 Spacer(modifier = Modifier.height(10.dp))
-                DialogTextButtonUi(text = "Colors", size = 24, bold = true,
+                RegTextButton(text = "Colors", size = 24, bold = true,
                     onClick = {
                         appViewModel.updateOptionsMode(false)
                         appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = false, colors = true)
@@ -657,7 +629,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                             appViewModel.updateColorSettingsToggleList(list)
                                         },
                                         content = {
-                                            SettingsCardText(text = colorSettingsToggle.value[index].name)
+                                            RegText(text = colorSettingsToggle.value[index].name, fontSize = 18, color = Color.Black)
                                         })
                                 }
                             }
@@ -689,18 +661,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         ) {
             content()
         }
-    }
-
-    @Composable
-    fun SettingsCardText(text: String) {
-        Text(
-            text = text,
-            fontWeight = FontWeight.Medium,
-            fontSize = 26.sp,
-            color = Color.Black,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(12.dp)
-        )
     }
 
     @Composable
@@ -738,7 +698,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         .background(colorResource(id = R.color.grey_50)),
                         horizontalAlignment = Alignment.CenterHorizontally) {
                         Column {
-                            DialogTextUi("Cuisine Selection Duration", size = 18, bold = false)
+                            RegText("Cuisine Selection Duration", fontSize = 18, color = Color.Black)
                             Row () {
                                 Slider(modifier = Modifier
                                     .fillMaxWidth(0.7f)
@@ -748,9 +708,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     valueRange = 1f..10f,
                                     steps = 9
                                 )
-                                DialogTextUi(text = "${cuisineRollDurationSliderPosition.toInt()}", size = 18, bold = false)
+                                RegText(text = "${cuisineRollDurationSliderPosition.toInt()}", fontSize = 18, color = Color.Black)
                             }
-                            DialogTextUi("Cuisine Selection Speed", size = 18, bold = false)
+                            RegText("Cuisine Selection Speed", fontSize = 18, color = Color.Black)
                             Row () {
                                 Slider(modifier = Modifier
                                     .fillMaxWidth(0.7f)
@@ -760,9 +720,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     valueRange = 1f..10f,
                                     steps = 9
                                 )
-                                DialogTextUi(text = "${cuisineRollDelaySliderPosition.toInt()}", size = 18, bold = false)
+                                RegText(text = "${cuisineRollDelaySliderPosition.toInt()}", fontSize = 18, color = Color.Black)
                             }
-                            DialogTextUi("Restaurant Selection Duration", size = 18, bold = false)
+                            RegText("Restaurant Selection Duration", fontSize = 18, color = Color.Black)
                             Row () {
                                 Slider(modifier = Modifier
                                     .fillMaxWidth(0.7f)
@@ -772,9 +732,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     valueRange = 1f..10f,
                                     steps = 9
                                 )
-                                DialogTextUi(text = "${restaurantRollDurationSliderPosition.toInt()}", size = 18, bold = false)
+                                RegText(text = "${restaurantRollDurationSliderPosition.toInt()}", fontSize = 18, color = Color.Black)
                             }
-                            DialogTextUi("Restaurant Selection Speed", size = 18, bold = false)
+                            RegText("Restaurant Selection Speed", fontSize = 18, color = Color.Black)
                             Row () {
                                 Slider(modifier = Modifier
                                     .fillMaxWidth(0.7f)
@@ -784,49 +744,12 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     valueRange = 1f..10f,
                                     steps = 9
                                 )
-                                DialogTextUi(text = "${restaurantRollDelaySliderPosition.toInt()}", size = 18, bold = false)
+                                RegText(text = "${restaurantRollDelaySliderPosition.toInt()}", fontSize = 18, color = Color.Black)
                             }
                         }
                     }
                 }
             })
-    }
-
-    @Composable
-    fun DialogTextUi(text: String?, size: Int, bold: Boolean) {
-        var fontWeight: FontWeight = FontWeight.Normal
-        if (bold) fontWeight = FontWeight.Bold
-        if (text != null) {
-            Text(
-                modifier = Modifier
-                    .padding(8.dp, 10.dp),
-                fontSize = size.sp,
-                color = Color.Black,
-                text = text,
-                fontWeight = fontWeight
-            )
-        }
-    }
-
-    @Composable
-    fun DialogTextButtonUi(text: String?, size: Int, bold: Boolean, onClick: () -> Unit) {
-        var fontWeight: FontWeight = FontWeight.Normal
-        if (bold) fontWeight = FontWeight.Bold
-        TextButton(
-            onClick = { onClick() }
-        ) {
-            if (text != null) {
-                Text(
-                    modifier = Modifier
-                        .padding(8.dp, 10.dp),
-                    fontSize = size.sp,
-                    color = Color.Black,
-                    text = text,
-                    fontWeight = fontWeight
-                )
-            }
-        }
-
     }
 
     @Composable
