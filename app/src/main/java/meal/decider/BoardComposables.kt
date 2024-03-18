@@ -335,9 +335,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     @Composable
     fun CuisineSelectionGrid() {
         val coroutineScope = rememberCoroutineScope()
+        val sectionGridState = rememberLazyGridState()
         val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
         val cuisineRollFinished = appViewModel.cuisineRollFinished.collectAsStateWithLifecycle()
-        val sectionGridState = rememberLazyGridState()
 
         val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
         val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()

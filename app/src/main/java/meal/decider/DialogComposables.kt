@@ -6,9 +6,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
@@ -617,7 +619,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun ColorsSettingDialog() {
         val colorSettingsToggle = appViewModel.colorSettingsSelectionList.collectAsStateWithLifecycle()
-        val cardColor = colorResource(id = R.color.white)
+        var cardColor: Color
 
         AnimatedTransitionDialog(
             modifier = Modifier.fillMaxSize(),
@@ -625,50 +627,43 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             /*TODO*/
             },
             content = {
-
-                Surface (shape = RoundedCornerShape(16.dp),
-                    color = colorResource(id = R.color.grey_300),){
-                    Column (modifier = Modifier
-                        .fillMaxSize()
-                        .background(colorResource(id = R.color.grey_50)),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                        Spacer(modifier = Modifier.fillMaxHeight(0.05f))
-                        Text(fontWeight = FontWeight.Bold, fontSize = 28.sp, color = Color.Black, textAlign = TextAlign.Center,
-                            text = "Theme")
-                        Spacer(modifier = Modifier.height(30.dp))
-                        Row(modifier = Modifier
-                            .fillMaxSize(),
-                            horizontalArrangement = Arrangement.Center) {
-                            SettingsCardUi(
-                                color = cardColor,
-                                onClick = {
-                                    val list = appViewModel.getColorSettingsSelectionList
-                                    list[0].selected = !list[0].selected
-                                    val updatedList = mutableStateListOf<SettingsToggle>()
-                                    updatedList.addAll(list)
-                                    appViewModel.updateColorSettingsToggleList(list)
-                                          },
-                                content = {
-                                    SettingsCardText(text = colorSettingsToggle.value[0].name)
-                                })
-                            Spacer(modifier = Modifier.width(30.dp))
-                            SettingsCardUi(
-                                color = cardColor,
-                                onClick = {
-                                    val list = appViewModel.getColorSettingsSelectionList
-                                    list[1].selected = !list[1].selected
-                                    val updatedList = mutableStateListOf<SettingsToggle>()
-                                    updatedList.addAll(list)
-                                    appViewModel.updateColorSettingsToggleList(list) },
-                                content = {
-                                    SettingsCardText(text = colorSettingsToggle.value[1].name)
-                                })
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .background(colorResource(id = R.color.grey_50)),
+                    ) {
+                    LazyVerticalGrid(
+                        columns = GridCells.Adaptive(minSize = 128.dp),
+                        contentPadding = PaddingValues(
+                            start = 24.dp,
+                            top = 16.dp,
+                            end = 24.dp,
+                            bottom = 16.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        content = {
+                            items(colorSettingsToggle.value.size) { index ->
+                                if (appViewModel.getColorSettingsSelectionList[index].selected) {
+                                    cardColor = colorResource(id = R.color.blue_grey_100)
+                                } else {
+                                    cardColor = Color.White
+                                }
+                                Box(contentAlignment = Alignment.Center) {
+                                    SettingsCardUi(
+                                        color = cardColor,
+                                        onClick = {
+                                            val list = appViewModel.getColorSettingsSelectionList
+                                            list[index].selected = !list[index].selected
+                                            val updatedList = mutableStateListOf<SettingsToggle>()
+                                            updatedList.addAll(list)
+                                            appViewModel.updateColorSettingsToggleList(list)
+                                        },
+                                        content = {
+                                            SettingsCardText(text = colorSettingsToggle.value[index].name)
+                                        })
+                                }
+                            }
                         }
-   
-                    }
+                    )
                 }
-
             })
     }
 
