@@ -567,19 +567,19 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             Column (horizontalAlignment = Alignment.CenterHorizontally){
                 RegText("Settings", fontSize = 18, color = Color.Black)
                 Spacer(modifier = Modifier.height(20.dp))
-                RegTextButton(text = "Speeds", size = 24, bold = true,
+                RegTextButton(text = "Speeds", fontSize = 24, color = Color.Black,
                     onClick = {
                         appViewModel.updateOptionsMode(false)
                         appViewModel.updateSettingsDialogVisibility(speeds = true, sounds = false, colors = false)
                     })
                 Spacer(modifier = Modifier.height(10.dp))
-                RegTextButton(text = "Sounds", size = 24, bold = true,
+                RegTextButton(text = "Sounds", fontSize = 24, color = Color.Black,
                     onClick = {
                         appViewModel.updateOptionsMode(false)
                         appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = true, colors = false)
                     })
                 Spacer(modifier = Modifier.height(10.dp))
-                RegTextButton(text = "Colors", size = 24, bold = true,
+                RegTextButton(text = "Colors",  fontSize = 24, color = Color.Black,
                     onClick = {
                         appViewModel.updateOptionsMode(false)
                         appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = false, colors = true)

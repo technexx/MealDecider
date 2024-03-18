@@ -7,15 +7,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 
@@ -43,7 +38,7 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (!appViewModel.getShowRestaurants) {
-                    ButtonUi(text = "Places", onClickAction =  {
+                    ButtonUi(text = "Places", onClick =  {
                         if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                             if (appViewModel.getRestaurantQueryFinished) {
                                 coroutineScope.launch {
@@ -75,7 +70,7 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                         }
                     }
                 }
-                ButtonUi(text = "Map", onClickAction = {
+                ButtonUi(text = "Map", onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         coroutineScope.launch {
                             if (!appViewModel.getShowRestaurants) {
@@ -89,19 +84,6 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                     }
                 })
             }
-        }
-    }
-
-    @Composable
-    fun ButtonUi(text: String, onClickAction: () -> Unit) {
-        Button(
-            onClick = {
-                onClickAction()
-            },
-            elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
-        ) {
-            RegText(text = text, fontSize = 18, color = Color.Black, fontWeight = FontWeight.Bold)
         }
     }
 }

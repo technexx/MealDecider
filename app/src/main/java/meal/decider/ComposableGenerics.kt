@@ -3,6 +3,8 @@ package meal.decider
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -33,22 +35,38 @@ fun RegText(
 }
 
 @Composable
-fun RegTextButton(text: String?, size: Int, bold: Boolean, onClick: () -> Unit) {
-    var fontWeight: FontWeight = FontWeight.Normal
-    if (bold) fontWeight = FontWeight.Bold
+fun RegTextButton(
+    text: String?,
+    fontSize: Int,
+    color: Color,
+    fontWeight: FontWeight = FontWeight.Normal,
+    onClick: () -> Unit) {
     TextButton(
         onClick = { onClick() }
     ) {
-        if (text != null) {
-            Text(
-                modifier = Modifier
-                    .padding(8.dp, 10.dp),
-                fontSize = size.sp,
-                color = Color.Black,
-                text = text,
-                fontWeight = fontWeight
-            )
-        }
+        Text(
+            modifier = Modifier
+                .padding(8.dp, 10.dp),
+            fontSize = fontSize.sp,
+            color = color,
+            text = text.toString(),
+            fontWeight = fontWeight
+        )
+    }
+}
+
+@Composable
+fun ButtonUi(
+    text: String,
+    onClick: () -> Unit) {
+    Button(
+        onClick = {
+            onClick()
+        },
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
+    ) {
+        RegText(text = text, fontSize = 18, color = Color.Black, fontWeight = FontWeight.Bold)
     }
 }
 
