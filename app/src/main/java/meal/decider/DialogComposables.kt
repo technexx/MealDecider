@@ -128,11 +128,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
-                        buttons.MaterialIconButton(icon = Icons.Filled.Close, description = "close", ThemeObject.cancelDialogButton) {
+                        MaterialIconButton(icon = Icons.Filled.Close, description = "close", ThemeObject.cancelDialogButton) {
                             appViewModel.updateAddMode(false)
                             appViewModel.updateListOfCuisinesToAdd(emptyList())
                         }
-                        buttons.MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", ThemeObject.confirmDialogButton) {
+                        MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", ThemeObject.confirmDialogButton) {
                             appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd)
                             coroutineScope.launch {
                                 roomInteractions.insertMultipleCuisines(appViewModel.getListOfCuisinesToAdd)
@@ -224,10 +224,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 .fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
-                                buttons.MaterialIconButton(icon = Icons.Default.Close, description = "close", ThemeObject.cancelDialogButton) {
+                                MaterialIconButton(icon = Icons.Default.Close, description = "close", ThemeObject.cancelDialogButton) {
                                     appViewModel.updateRestoreDefaults(false)
                                 }
-                                buttons.MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", ThemeObject.confirmDialogButton) {
+                                MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", ThemeObject.confirmDialogButton) {
                                     roomInteractions.setSquareDatabaseToDefaultStartingValues()
                                     appViewModel.updateSquareList(appViewModel.starterSquareList())
                                     appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
@@ -364,7 +364,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             modifier = Modifier
                 .wrapContentSize(Alignment.TopEnd)
         ) {
-            buttons.MaterialIconButton(icon = Icons.Filled.Menu, description = "menu", ThemeObject.restaurantsIconButtons) {
+            MaterialIconButton(icon = Icons.Filled.Menu, description = "menu", ThemeObject.restaurantsIconButtons) {
                 expanded = !expanded
             }
 
@@ -424,7 +424,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestaurantFilterIcon() {
-        buttons.MaterialIconButton(icon = Icons.Filled.Settings, description = "settings", ThemeObject.restaurantsIconButtons) {
+        MaterialIconButton(icon = Icons.Filled.Settings, description = "settings", ThemeObject.restaurantsIconButtons) {
             appViewModel.updateShowRestaurantSettings(true)
         }
     }

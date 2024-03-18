@@ -104,14 +104,14 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     },
                     actions = {
                         if (listOfCuisineSquaresToEdit.value.isNotEmpty() && editMode.value) {
-                            buttons.MaterialIconButton(icon = Icons.Filled.Delete, description = "delete", ThemeObject.appBarIconButtons) {
+                            MaterialIconButton(icon = Icons.Filled.Delete, description = "delete", ThemeObject.appBarIconButtons) {
                                 coroutineScope.launch {
                                     roomInteractions.deleteMultipleCuisines()
                                     appViewModel.deleteSelectedCuisines()
                                 }
                             }
                         }
-                        buttons.MaterialIconButton(icon = Icons.Filled.Create, description = "select", ThemeObject.appBarIconButtons) {
+                        MaterialIconButton(icon = Icons.Filled.Create, description = "select", ThemeObject.appBarIconButtons) {
                             appViewModel.updateCuisineSelectionMode(!appViewModel.getCuisineSelectionMode)
                         }
                         Box(
@@ -119,11 +119,11 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 .wrapContentSize(Alignment.TopEnd)
                         ) {
                             Row() {
-                                buttons.MaterialIconButton(icon = Icons.Filled.Settings, description = "settings", ThemeObject.appBarIconButtons) {
+                                MaterialIconButton(icon = Icons.Filled.Settings, description = "settings", ThemeObject.appBarIconButtons) {
                                     appViewModel.updateOptionsMode(true)
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
-                                buttons.MaterialIconButton(icon = Icons.Filled.Menu, description = "menu", ThemeObject.appBarIconButtons) {
+                                MaterialIconButton(icon = Icons.Filled.Menu, description = "menu", ThemeObject.appBarIconButtons) {
                                     expanded = !expanded
                                 }
                             }

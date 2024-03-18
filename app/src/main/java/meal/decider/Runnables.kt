@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlin.random.Random
 
-class Runnables (val appViewModel: AppViewModel) {
+class Runnables (private val appViewModel: AppViewModel) {
     private val handler = Handler(Looper.getMainLooper())
     private var cuisineRollRunnable = Runnable {}
     private var restaurantRollRunnable = Runnable {}
