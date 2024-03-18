@@ -3,8 +3,11 @@ package meal.decider
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -16,10 +19,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-//TODO: Card composition.
 
 @Composable
 fun RegText(
@@ -103,5 +105,29 @@ fun CustomIconButton(
             contentDescription = description,
             tint = colorResource(id = tint),
         )
+    }
+}
+
+@Composable
+fun CardUi(
+    color: Color,
+    onClick: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = color),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 2.dp
+        ),
+        modifier = Modifier
+            .padding(6.dp)
+            .selectable(
+                selected = true,
+                onClick = {
+                    onClick()
+                }
+            ),
+    ) {
+        content()
     }
 }

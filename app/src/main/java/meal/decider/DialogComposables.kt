@@ -34,7 +34,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -53,7 +52,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -619,7 +617,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     cardColor = Color.White
                                 }
                                 Box(contentAlignment = Alignment.Center) {
-                                    SettingsCardUi(
+                                    CardUi(
                                         color = cardColor,
                                         onClick = {
                                             val list = appViewModel.getColorSettingsSelectionList
@@ -629,7 +627,12 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                             appViewModel.updateColorSettingsToggleList(list)
                                         },
                                         content = {
-                                            RegText(text = colorSettingsToggle.value[index].name, fontSize = 18, color = Color.Black)
+                                            RegText(
+                                                text = colorSettingsToggle.value[index].name,
+                                                fontSize = 26,
+                                                color = Color.Black,
+                                                fontWeight = FontWeight.Bold,
+                                                modifier = Modifier.padding(12.dp))
                                         })
                                 }
                             }
@@ -637,30 +640,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     )
                 }
             })
-    }
-
-    @Composable
-    fun SettingsCardUi(
-        color: Color,
-        onClick: () -> Unit,
-        content: @Composable () -> Unit
-        ) {
-        Card(
-            colors = CardDefaults.cardColors(containerColor = color),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 2.dp
-            ),
-            modifier = Modifier
-                .padding(6.dp)
-                .selectable(
-                    selected = true,
-                    onClick = {
-                        onClick()
-                    }
-                ),
-        ) {
-            content()
-        }
     }
 
     @Composable
@@ -750,17 +729,5 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     }
                 }
             })
-    }
-
-    @Composable
-    fun DialogIcon(imageVector: ImageVector, colorResource: Int) {
-        Icon(
-            imageVector = imageVector,
-            contentDescription = "",
-            tint = colorResource(colorResource),
-            modifier = Modifier
-                .width(50.dp)
-                .height(50.dp)
-        )
     }
 }
