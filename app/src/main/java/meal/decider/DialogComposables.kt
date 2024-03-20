@@ -44,7 +44,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -617,7 +616,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         horizontalArrangement = Arrangement.Center,
                         content = {
                             items(colorSettingsToggle.value.size) { index ->
-                                showLog("test", "color recomp")
                                 if (appViewModel.getColorSettingsSelectionList[index].selected) {
                                     cardColor = colorResource(id = R.color.blue_grey_100)
                                 } else {
@@ -627,14 +625,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     CardUi(
                                         color = cardColor,
                                         onClick = {
-                                            //TODO: All else set to false.
-                                            val list = appViewModel.getColorSettingsSelectionList
-                                            list[index].selected = !list[index].selected
-                                            val updatedList = mutableStateListOf<SettingsToggle>()
-                                            updatedList.addAll(list)
-
-                                            appViewModel.updateColorSettingsToggleList(updatedList)
-                                            showLog("test", "color list is ${appViewModel.getColorSettingsSelectionList.toList()}")
+                                            appViewModel.switchColorSettings(index)
                                         },
                                         content = {
                                             RegText(

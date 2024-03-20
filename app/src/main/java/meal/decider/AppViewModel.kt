@@ -462,6 +462,16 @@ class AppViewModel : ViewModel() {
         cuisineRollDurationSetting = cuisineDuration; cuisineRollDelaySetting = cuisineDelay; restaurantRollDurationSetting = restaurantDuration; restaurantRollDelaySetting = restaurantDelay
     }
 
+    fun switchColorSettings(index: Int) {
+        val list = getColorSettingsSelectionList
+        for (i in list) { i.selected = false }
+        list[index].selected = true
+        val updatedList = mutableStateListOf<SettingsToggle>()
+        updatedList.addAll(list)
+
+        updateColorSettingsToggleList(updatedList)
+    }
+
     val getSquareList get() = boardUiState.value.squareList
     val getselectedCuisineSquare get() = selectedCuisineSquare.value
     val getDisplayedCuisineList get() = displayedCuisineList.value
