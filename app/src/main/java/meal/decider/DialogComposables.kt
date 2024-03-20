@@ -593,7 +593,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         AnimatedTransitionDialog(
             modifier = Modifier.fillMaxSize(),
             onDismissRequest = {
-            //TODO: Dialog dismissal.
+                appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
+                appViewModel.updateOptionsMode(true)
             },
             content = {
                 Column(modifier = Modifier
@@ -626,6 +627,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         color = cardColor,
                                         onClick = {
                                             appViewModel.switchColorSettings(index)
+                                            //TODO: Update theme objects.
                                         },
                                         content = {
                                             RegText(

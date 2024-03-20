@@ -462,6 +462,15 @@ class AppViewModel : ViewModel() {
         cuisineRollDurationSetting = cuisineDuration; cuisineRollDelaySetting = cuisineDelay; restaurantRollDurationSetting = restaurantDuration; restaurantRollDelaySetting = restaurantDelay
     }
 
+    fun toggleRestrictionListItems(index: Int) {
+        val list = getRestrictionsList
+        list[index].selected = !list[index].selected
+        val updatedList = mutableStateListOf<RestrictionsValues>()
+        updatedList.addAll(list)
+
+        updateRestrictionsList(updatedList)
+    }
+
     fun switchColorSettings(index: Int) {
         val list = getColorSettingsSelectionList
         for (i in list) { i.selected = false }
