@@ -589,12 +589,12 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun ColorsSettingDialog() {
         val colorSettingsToggle = appViewModel.colorSettingsSelectionList.collectAsStateWithLifecycle()
-        var cardColor: Color
+        var cardColor: Color = colorResource(id = R.color.white)
 
         AnimatedTransitionDialog(
             modifier = Modifier.fillMaxSize(),
             onDismissRequest = {
-            /*TODO*/
+            //TODO: Dialog dismissal.
             },
             content = {
                 Column(modifier = Modifier
@@ -603,7 +603,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                     Spacer(modifier = Modifier.height(12.dp))
-                    Row() {
+                    Row {
                         RegText(text = "Theme", fontSize = 28, color = Color.Black, fontWeight = FontWeight.Bold)
                     }
                     Spacer(modifier = Modifier.height(16.dp))
@@ -617,6 +617,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         horizontalArrangement = Arrangement.Center,
                         content = {
                             items(colorSettingsToggle.value.size) { index ->
+                                showLog("test", "color recomp")
                                 if (appViewModel.getColorSettingsSelectionList[index].selected) {
                                     cardColor = colorResource(id = R.color.blue_grey_100)
                                 } else {
@@ -626,11 +627,14 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     CardUi(
                                         color = cardColor,
                                         onClick = {
+                                            //TODO: All else set to false.
                                             val list = appViewModel.getColorSettingsSelectionList
                                             list[index].selected = !list[index].selected
                                             val updatedList = mutableStateListOf<SettingsToggle>()
                                             updatedList.addAll(list)
-                                            appViewModel.updateColorSettingsToggleList(list)
+
+                                            appViewModel.updateColorSettingsToggleList(updatedList)
+                                            showLog("test", "color list is ${appViewModel.getColorSettingsSelectionList.toList()}")
                                         },
                                         content = {
                                             RegText(

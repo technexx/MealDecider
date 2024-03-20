@@ -247,6 +247,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     bottom = 16.dp),
                 content = {
                     items(restrictionsUi.value.size) { index ->
+                        showLog("test", "restrictions recomp")
                         if (appViewModel.getRestrictionsList[index].selected) {
                             cardColor = colorResource(id = R.color.blue_grey_100)
                         } else  {
@@ -273,7 +274,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                     }
                                 ),
                         ) {
-                            RegText(text = restrictionsUi.value[index].name,
+                            RegText(text = appViewModel.getRestrictionsList[index].name,
                                 fontSize = 14,
                                 color = Color.Black,
                                 fontWeight = FontWeight.Bold,
