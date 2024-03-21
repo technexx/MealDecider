@@ -56,7 +56,7 @@ class Runnables (private val appViewModel: AppViewModel) {
         for (i in currentList) {
             newList.add(SquareValues(i.name, appViewModel.getColorTheme.cuisineSquares))
         }
-        newList[index].color = chosenSquareColor
+        newList[index].color = appViewModel.getColorTheme.selectedCuisineSquare
 
         return newList
     }
@@ -95,7 +95,7 @@ class Runnables (private val appViewModel: AppViewModel) {
         for (i in currentList) {
             newList.add(RestaurantValues(i.name, i.address, i.distance, i.priceLevel, i.rating, defaultRestaurantColor))
         }
-        newList[index].color = chosenSquareColor
+        newList[index].color = appViewModel.getColorTheme.selectedCuisineSquare
 
         return newList
     }

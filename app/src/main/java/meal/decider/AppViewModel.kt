@@ -330,7 +330,7 @@ class AppViewModel : ViewModel() {
     fun toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(index: Int) {
         val tempSquareList = getSquareList
 
-        if (tempSquareList[index].color == chosenSquareColor || tempSquareList[index].color == defaultSquareColor) {
+        if (tempSquareList[index].color == getColorTheme.selectedCuisineSquare || tempSquareList[index].color == getColorTheme.cuisineSquares) {
             tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
             addSquareToListOfCuisineSquaresToEdit(index)
         } else {
@@ -409,7 +409,7 @@ class AppViewModel : ViewModel() {
 
         //Set first square index to selected if previous one no longer exists.
         if (!doesSelectedCuisineSquareExist()) {
-            squareList[0].color = chosenSquareColor
+            squareList[0].color = getColorTheme.selectedCuisineSquare
             updateSelectedCuisineSquare(squareList[0])
         }
 
@@ -418,7 +418,7 @@ class AppViewModel : ViewModel() {
 
     fun setFirstSquareToDefaultColor() {
         val squareList = getSquareList
-        squareList[0].color = chosenSquareColor
+        squareList[0].color = getColorTheme.selectedCuisineSquare
         updateSquareList(squareList)
     }
 

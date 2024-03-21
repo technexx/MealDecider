@@ -385,7 +385,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                         )
                                         appViewModel.toggleSelectionOfSingleCuisineSquareColorAndBorder(
                                             index,
-                                            chosenSquareColor,
+                                            appViewModel.getColorTheme.selectedCuisineSquare,
                                             heavyCuisineSelectionBorderStroke
                                         )
                                     }
