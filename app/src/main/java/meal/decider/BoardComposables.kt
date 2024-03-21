@@ -67,27 +67,16 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     private val buttons = Buttons(appViewModel, mapInteractions, runnables)
     private val dialogComposables = DialogComposables(appViewModel, appDatabase, mapInteractions, runnables)
 
-    @Composable
-    fun BoardUi() {
-        TopBar {
-            Board()
-        }
-    }
-
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    //"Void" Composable input.
-    fun TopBar(content: @Composable (() -> Unit)) {
+    fun GlobalUi() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
 
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         var expanded by remember { mutableStateOf(false) }
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
         val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
-        val cuisineSelectionMode = appViewModel.cuisineSelectionMode.collectAsStateWithLifecycle()
         val coroutineScope = rememberCoroutineScope()
-
-        val tint: Color = if (cuisineSelectionMode.value) Color.Black; else Color.White
 
         Scaffold(
             modifier = Modifier
@@ -183,7 +172,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 modifier = Modifier
                     .padding(innerPadding),
             ) {
-                content()
+                Board()
             }
         }
     }

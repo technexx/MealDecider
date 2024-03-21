@@ -90,7 +90,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Column {
-                        boardComposables.BoardUi()
+                        boardComposables.GlobalUi()
                     }
                 }
             }
