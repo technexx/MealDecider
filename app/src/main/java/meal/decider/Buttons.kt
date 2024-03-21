@@ -38,7 +38,7 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (!appViewModel.getShowRestaurants) {
-                    ButtonUi(text = "Places", fontSize = 20, onClick =  {
+                    ButtonUi(text = "Places", fontSize = 20, color = colorTheme.value.iconButtons, onClick =  {
                         if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                             if (appViewModel.getRestaurantQueryFinished) {
                                 coroutineScope.launch {
@@ -58,7 +58,7 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                         }
                     })
                 }
-                CustomIconButton(size = 72, image = R.drawable.dice, description = "dice", tint = ThemeObject.interactionButtons) {
+                CustomIconButton(size = 72, image = R.drawable.dice, description = "dice", tint = colorTheme.value.interactionButtons) {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         if (!appViewModel.getShowRestaurants) {
                             runnables.rollCuisine()
@@ -70,7 +70,7 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                         }
                     }
                 }
-                ButtonUi(text = "Map", fontSize = 20, onClick = {
+                ButtonUi(text = "Map", fontSize = 20, color = colorTheme.value.iconButtons, onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         coroutineScope.launch {
                             if (!appViewModel.getShowRestaurants) {

@@ -1,55 +1,38 @@
 package meal.decider
 
-object ThemeObject {
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 
-    var appBar: Int = R.color.blue_600
-    var appBarIconButtons: Int = R.color.white
-    var restrictionRow: Int = R.color.grey_100
-    var cuisineBoard: Int = R.color.grey_50
+object Theme {
+    val themeColorsList: SnapshotStateList<ColorTheme> = mutableStateListOf(
+        //Light
+        ColorTheme(
+            appBar = R.color.blue_400,
+            iconButtons = R.color.blue_grey_900,
+            restrictionRow = R.color.grey_100,
+            cuisineBoard = R.color.grey_50,
 
-    var restaurantsIconButtons: Int = R.color.black
-    var restaurantSquares: Int = R.color.white
+            restaurantsIconButtons = R.color.blue_400,
+            restaurantSquares = R.color.white,
 
-    var interactionButtonsRow: Int = R.color.grey_700
-    var interactionButtons: Int = R.color.blue_400
-    var interactionSquares: Int = R.color.white
+            interactionButtonsRow = R.color.grey_700,
+            interactionButtons = R.color.blue_400,
+            interactionSquares = R.color.white
+        ),
 
-    var cancelDialogButton: Int = android.R.color.holo_red_light
-    var confirmDialogButton: Int = android.R.color.holo_green_light
-}
+        //Dark
+        ColorTheme(
+            appBar = R.color.blue_grey_900,
+            iconButtons = R.color.white,
+            restrictionRow = R.color.grey_700,
+            cuisineBoard = R.color.grey_800,
 
-fun updateThemeObject(theme: String) {
-    if (theme == "light") {
-        ThemeObject.appBar = R.color.blue_600
-        ThemeObject.appBarIconButtons = R.color.white
-        ThemeObject.restrictionRow = R.color.grey_100
-        ThemeObject.cuisineBoard = R.color.grey_50
+            restaurantsIconButtons = R.color.white,
+            restaurantSquares = R.color.black,
 
-        ThemeObject.restaurantsIconButtons = R.color.black
-        ThemeObject.restaurantSquares = R.color.white
-
-        ThemeObject.interactionButtonsRow = R.color.grey_700
-        ThemeObject.interactionButtons = R.color.blue_400
-        ThemeObject.interactionSquares = R.color.white
-
-        ThemeObject.cancelDialogButton = android.R.color.holo_red_light
-        ThemeObject.confirmDialogButton = android.R.color.holo_green_light
-    }
-
-    if (theme == "dark") {
-        ThemeObject.appBar = R.color.blue_grey_900
-        ThemeObject.appBarIconButtons = R.color.blue_grey_900
-        ThemeObject.restrictionRow = R.color.grey_700
-        ThemeObject.cuisineBoard = R.color.grey_800
-
-        ThemeObject.restaurantsIconButtons = R.color.white
-        ThemeObject.restaurantSquares = R.color.black
-
-        ThemeObject.interactionButtonsRow = R.color.grey_700
-        ThemeObject.interactionButtons = R.color.purple_700
-        ThemeObject.interactionSquares = R.color.black
-
-        ThemeObject.cancelDialogButton = android.R.color.holo_red_light
-        ThemeObject.confirmDialogButton = android.R.color.holo_green_light
-    }
+            interactionButtonsRow = R.color.grey_700,
+            interactionButtons = R.color.purple_700,
+            interactionSquares = R.color.black
+        )
+    )
 }

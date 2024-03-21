@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -64,13 +63,14 @@ fun RegTextButton(
 fun ButtonUi(
     text: String,
     fontSize: Int,
+    color: Int,
     onClick: () -> Unit) {
     Button(
         onClick = {
             onClick()
         },
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue_400)),
+        colors = ButtonDefaults.buttonColors(colorResource(color)),
     ) {
         RegText(text = text, fontSize = fontSize, color = Color.Black, fontWeight = FontWeight.Bold)
     }
