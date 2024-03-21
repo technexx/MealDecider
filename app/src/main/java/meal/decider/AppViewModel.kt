@@ -98,8 +98,8 @@ class AppViewModel : ViewModel() {
     private val _colorSettingsSelectionList = MutableStateFlow(ColorSettingsToggleObject.colorSettingsToggleList)
     val colorSettingsSelectionList: StateFlow<SnapshotStateList<SettingsToggle>> = _colorSettingsSelectionList.asStateFlow()
 
-    private val _colorTheme = MutableStateFlow(Theme.themeColorsList)
-    val colorTheme: StateFlow<SnapshotStateList<ColorTheme>> = _colorTheme.asStateFlow()
+    private val _colorTheme = MutableStateFlow(Theme.themeColorsList[0])
+    val colorTheme: StateFlow<ColorTheme> = _colorTheme.asStateFlow()
 
     fun updateOptionsMode(optionsMode: Boolean) {
         _optionsMode.value = optionsMode
@@ -197,7 +197,7 @@ class AppViewModel : ViewModel() {
         _colorSettingsSelectionList.value = list
     }
 
-    fun updateTheme(theme: SnapshotStateList<ColorTheme>) {
+    fun updateColorTheme(theme: ColorTheme) {
         _colorTheme.value = theme
     }
 
@@ -471,7 +471,7 @@ class AppViewModel : ViewModel() {
         updateRestrictionsList(updatedList)
     }
 
-    fun switchColorSettings(index: Int) {
+    fun switchColorSettingsUi(index: Int) {
         val list = getColorSettingsSelectionList
         for (i in list) { i.selected = false }
         list[index].selected = true
@@ -506,4 +506,5 @@ class AppViewModel : ViewModel() {
     val getCuisineSelectionMode get() = cuisineSelectionMode.value
 
     val getColorSettingsSelectionList get() = colorSettingsSelectionList.value
+    val getColorTheme get() = colorTheme.value
 }

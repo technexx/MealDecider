@@ -1,6 +1,7 @@
 package meal.decider
 
 object ThemeObject {
+
     var appBar: Int = R.color.blue_600
     var appBarIconButtons: Int = R.color.white
     var restrictionRow: Int = R.color.grey_100

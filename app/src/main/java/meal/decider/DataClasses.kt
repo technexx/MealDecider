@@ -18,8 +18,8 @@ data class SettingsToggle(
 
 object ColorSettingsToggleObject {
     var colorSettingsToggleList: SnapshotStateList<SettingsToggle> = mutableStateListOf(
-        SettingsToggle("Light", true),
-        SettingsToggle("Dark", false)
+        SettingsToggle("light", true),
+        SettingsToggle("dark", false)
     )
 }
 

@@ -78,7 +78,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     @Composable
     //"Void" Composable input.
     fun TopBar(content: @Composable (() -> Unit)) {
-        val theme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
 
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         var expanded by remember { mutableStateOf(false) }
@@ -95,7 +95,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             topBar = {
                 TopAppBar(
                     colors = TopAppBarDefaults.smallTopAppBarColors(
-                        containerColor = colorResource(id = theme.value[0].appBar),
+                        containerColor = colorResource(id = colorTheme.value.appBar),
                         titleContentColor = Color.White,
                     ),
                     title = {
@@ -246,7 +246,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     bottom = 16.dp),
                 content = {
                     items(restrictionsUi.value.size) { index ->
-                        showLog("test", "restrictions recomp")
                         if (appViewModel.getRestrictionsList[index].selected) {
                             cardColor = colorResource(id = R.color.blue_grey_100)
                         } else  {

@@ -251,7 +251,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 appViewModel.updateShowRestaurants(false)
             }
         }) {
-            showLog("test", "dialog recomposing")
             if (showRestaurants.value) { RestaurantListContent() }
             if (showRestaurantSettings.value) { RestaurantFilters() }
         }
@@ -259,7 +258,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestaurantListContent() {
-        showLog("test", "rest. content recomposing")
         Surface(
             shape = RoundedCornerShape(16.dp),
             color = colorResource(id = R.color.grey_300),
@@ -626,8 +624,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     CardUi(
                                         color = cardColor,
                                         onClick = {
-                                            appViewModel.switchColorSettings(index)
-                                            //TODO: Update theme objects.
+                                            appViewModel.switchColorSettingsUi(index)
+                                            appViewModel.updateColorTheme(Theme.themeColorsList[index])
+                                            showLog("test", "new theme is ${appViewModel.getColorTheme}")
                                         },
                                         content = {
                                             RegText(
