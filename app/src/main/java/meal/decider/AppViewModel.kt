@@ -204,7 +204,7 @@ class AppViewModel : ViewModel() {
     fun addMultipleSquaresToList(squares: List<String>) {
         val squareList = getSquareList
         for (i in squares) {
-            squareList.add(SquareValues(i, defaultSquareColor))
+            squareList.add(SquareValues(i, getColorTheme.cuisineSquares))
         }
         updateSquareList(squareList)
     }
@@ -221,9 +221,9 @@ class AppViewModel : ViewModel() {
     fun starterSquareList(): SnapshotStateList<SquareValues> {
         val list = mutableStateListOf<SquareValues>()
         for (i in starterCuisineList) {
-            list.add(SquareValues(i, defaultSquareColor))
+            list.add(SquareValues(i, getColorTheme.cuisineSquares))
         }
-        list[0] = SquareValues(list[0].name, chosenSquareColor)
+        list[0] = SquareValues(list[0].name, getColorTheme.selectedCuisineSquare)
         return list
     }
 
@@ -246,9 +246,9 @@ class AppViewModel : ViewModel() {
 
         for (i in 0 until newSquareList.size) {
             if (!newSquareList[i].name.equals(selectedCuisineSquareName, true)) {
-                newSquareList[i] = SquareValues(newSquareList[i].name, defaultSquareColor)
+                newSquareList[i] = SquareValues(newSquareList[i].name, getColorTheme.cuisineSquares)
             } else {
-                newSquareList[i] = SquareValues(newSquareList[i].name, chosenSquareColor)
+                newSquareList[i] = SquareValues(newSquareList[i].name, getColorTheme.selectedCuisineSquare)
                 rolledSquareIndex = i
             }
         }
@@ -335,9 +335,9 @@ class AppViewModel : ViewModel() {
             addSquareToListOfCuisineSquaresToEdit(index)
         } else {
             if (tempSquareList[index].name == selectedCuisineSquare.value.name) {
-                tempSquareList[index] = SquareValues(tempSquareList[index].name, chosenSquareColor)
+                tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.selectedCuisineSquare)
             } else {
-                tempSquareList[index] = SquareValues(tempSquareList[index].name, defaultSquareColor)
+                tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.cuisineSquares)
             }
             removeSquareFromListOfSquareIndicesToUpdate()
         }
@@ -349,7 +349,7 @@ class AppViewModel : ViewModel() {
         val newList = SnapshotStateList<SquareValues>()
 
         for (i in tempSquareList) {
-            newList.add(SquareValues(i.name, defaultSquareColor, defaultCuisineBorderStroke))
+            newList.add(SquareValues(i.name, getColorTheme.cuisineSquares, defaultCuisineBorderStroke))
         }
         newList[index].color = color
         newList[index].border = border
@@ -401,9 +401,9 @@ class AppViewModel : ViewModel() {
         val selectedCuisineSquare = getselectedCuisineSquare
 
         for (i in squareList) {
-            i.color = defaultSquareColor
+            i.color = getColorTheme.cuisineSquares
             if (i.name.equals(selectedCuisineSquare.name, true)) {
-                i.color = chosenSquareColor
+                i.color = getColorTheme.selectedCuisineSquare
             }
         }
 

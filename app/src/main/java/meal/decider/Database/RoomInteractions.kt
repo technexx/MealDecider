@@ -8,8 +8,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import meal.decider.AppViewModel
 import meal.decider.SquareValues
-import meal.decider.chosenSquareColor
-import meal.decider.defaultSquareColor
+import meal.decider.Theme
 
 class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel) {
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
@@ -26,8 +25,8 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
 
     private suspend fun populateDatabaseWithInitialCuisines() {
         for (i in appViewModel.starterSquareList().indices) {
-            if (i==0) insertCuisine(appViewModel.starterSquareList()[i].name, chosenSquareColor) else
-                insertCuisine(appViewModel.starterSquareList()[i].name, defaultSquareColor)
+            if (i==0) insertCuisine(appViewModel.starterSquareList()[i].name, Theme.themeColorsList[0].selectedCuisineSquare) else
+                insertCuisine(appViewModel.starterSquareList()[i].name, Theme.themeColorsList[0].cuisineSquares)
         }
     }
 
@@ -51,7 +50,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
     suspend fun insertMultipleCuisines(list: List<String>) {
         withContext(Dispatchers.IO) {
             for (i in list) {
-                cuisineDao.insertCuisine(Cuisines(null, i, defaultSquareColor))
+                cuisineDao.insertCuisine(Cuisines(null, i, appViewModel.getColorTheme.cuisineSquares))
             }
         }
     }

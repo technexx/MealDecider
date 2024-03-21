@@ -15,7 +15,7 @@ class Runnables (private val appViewModel: AppViewModel) {
 
     fun rollCuisine() {
         appViewModel.updateRollEngaged(true)
-        appViewModel.toggleSelectionOfSingleCuisineSquareColorAndBorder(appViewModel.rolledSquareIndex, defaultSquareColor, lightRestaurantSelectionBorderStroke)
+        appViewModel.toggleSelectionOfSingleCuisineSquareColorAndBorder(appViewModel.rolledSquareIndex, appViewModel.getColorTheme.cuisineSquares, lightRestaurantSelectionBorderStroke)
         handler.removeCallbacks(cuisineRollRunnable)
 
         val durationSetting = appViewModel.cuisineRollDurationSetting
@@ -54,7 +54,7 @@ class Runnables (private val appViewModel: AppViewModel) {
         val newList = SnapshotStateList<SquareValues>()
 
         for (i in currentList) {
-            newList.add(SquareValues(i.name, defaultSquareColor))
+            newList.add(SquareValues(i.name, appViewModel.getColorTheme.cuisineSquares))
         }
         newList[index].color = chosenSquareColor
 

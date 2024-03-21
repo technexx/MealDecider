@@ -189,10 +189,12 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
 
     @Composable
     fun Board() {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+
         Column (modifier = Modifier
             .fillMaxWidth()
             .height(screenHeightPct(0.1).dp)
-            .background(colorResource(id = R.color.grey_100))
+            .background(colorResource(id = colorTheme.value.cuisineBoard))
         ) {
             RestrictionsBarLayout()
             DialogCompositions()
@@ -217,15 +219,15 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         }
     }
 
-
     @Composable
     fun RestrictionsBarLayout() {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
         var cardColor: Color
 
         Column (modifier = Modifier
             .fillMaxWidth()
-            .background(colorResource(id = R.color.grey_50))
+            .background(colorResource(id = colorTheme.value.restrictionRow))
         ) {
             LazyHorizontalGrid(rows = GridCells.Adaptive(minSize = 32.dp),
                 contentPadding = PaddingValues(

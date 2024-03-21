@@ -23,23 +23,6 @@ object ColorSettingsToggleObject {
     )
 }
 
-data class ColorTheme(
-    val appBar: Int,
-    val iconButtons: Int,
-    val restrictionRow: Int,
-    val cuisineBoard: Int,
-
-    val restaurantsIconButtons: Int,
-    val restaurantSquares: Int,
-
-    val interactionButtonsRow: Int,
-    val interactionButtons: Int,
-    val interactionSquares: Int,
-
-    var cancelDialogButton: Int,
-    var confirmDialogButton: Int,
-)
-
 data class BoardValues(
     var squareList: SnapshotStateList<SquareValues> = mutableStateListOf(),
 )

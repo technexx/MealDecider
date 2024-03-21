@@ -1,11 +1,10 @@
 package meal.decider
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+//TODO: Replace instances of square colors w/ theme data object.
 val defaultSquareColor = R.color.white
 val chosenSquareColor = R.color.red_200
 val editSquareColor = R.color.light_blue_100

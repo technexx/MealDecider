@@ -3,6 +3,27 @@ package meal.decider
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 
+data class ColorTheme(
+    val appBar: Int,
+    val iconButtons: Int,
+    val restrictionRow: Int,
+    val cuisineBoard: Int,
+    val cuisineSquares: Int,
+    val selectedCuisineSquare: Int,
+
+    val restaurantBoard: Int,
+    val restaurantsIconButtons: Int,
+    val restaurantSquares: Int,
+    val selectedRestaurantSquare: Int,
+
+    val interactionButtonsRow: Int,
+    val interactionButtons: Int,
+    val interactionSquares: Int,
+
+    var cancelDialogButton: Int,
+    var confirmDialogButton: Int,
+)
+
 object Theme {
     val themeColorsList: SnapshotStateList<ColorTheme> = mutableStateListOf(
         //Light
@@ -11,9 +32,13 @@ object Theme {
             iconButtons = R.color.white,
             restrictionRow = R.color.grey_100,
             cuisineBoard = R.color.grey_50,
+            cuisineSquares = R.color.white,
+            selectedCuisineSquare = R.color.red_200,
 
+            restaurantBoard = R.color.grey_50,
             restaurantsIconButtons = R.color.blue_400,
             restaurantSquares = R.color.white,
+            selectedRestaurantSquare = R.color.red_200,
 
             interactionButtonsRow = R.color.grey_700,
             interactionButtons = R.color.blue_400,
@@ -29,9 +54,13 @@ object Theme {
             iconButtons = R.color.blue_grey_900,
             restrictionRow = R.color.grey_700,
             cuisineBoard = R.color.grey_800,
+            cuisineSquares = R.color.grey_800,
+            selectedCuisineSquare = R.color.red_200,
 
+            restaurantBoard = R.color.grey_800,
             restaurantsIconButtons = R.color.white,
             restaurantSquares = R.color.black,
+            selectedRestaurantSquare = R.color.red_200,
 
             interactionButtonsRow = R.color.grey_700,
             interactionButtons = R.color.purple_700,

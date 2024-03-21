@@ -265,7 +265,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         Surface(
             shape = RoundedCornerShape(16.dp),
-            color = colorResource(id = R.color.grey_300),
+            color = colorResource(id = colorTheme.value.restaurantBoard),
         ) {
             Column(modifier = Modifier
                 .fillMaxSize()
@@ -276,7 +276,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     Row (modifier = Modifier
                         .fillMaxWidth(),
                         horizontalArrangement = Arrangement.End) {
-                        MaterialIconButton(icon = Icons.Filled.Settings, description = "settings", colorTheme.value.iconButtons) {
+                        MaterialIconButton(icon = Icons.Filled.Settings, description = "settings", colorTheme.value.restaurantsIconButtons) {
                             appViewModel.updateShowRestaurantSettings(true)
                         }
                         RestaurantSortDropdownMenu()
@@ -298,6 +298,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestaurantLazyGrid() {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val coroutineScope = rememberCoroutineScope()
         val sectionGridState = rememberLazyStaggeredGridState()
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
