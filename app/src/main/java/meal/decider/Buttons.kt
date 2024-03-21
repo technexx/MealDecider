@@ -38,7 +38,7 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (!appViewModel.getShowRestaurants) {
-                    ButtonUi(text = "Places", fontSize = 20, color = colorTheme.value.iconButtons, onClick =  {
+                    ButtonUi(text = "Places", fontSize = 20, color = colorTheme.value.interactionButtons, onClick =  {
                         if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                             if (appViewModel.getRestaurantQueryFinished) {
                                 coroutineScope.launch {
@@ -70,7 +70,7 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                         }
                     }
                 }
-                ButtonUi(text = "Map", fontSize = 20, color = colorTheme.value.iconButtons, onClick = {
+                ButtonUi(text = "Map", fontSize = 20, color = colorTheme.value.interactionButtons, onClick = {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         coroutineScope.launch {
                             if (!appViewModel.getShowRestaurants) {

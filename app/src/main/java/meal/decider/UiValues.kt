@@ -6,20 +6,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-data class ColorTheme(
-    val appBar: Int,
-    val iconButtons: Int,
-    val restrictionRow: Int,
-    val cuisineBoard: Int,
-
-    val restaurantsIconButtons: Int,
-    val restaurantSquares: Int,
-
-    val interactionButtonsRow: Int,
-    val interactionButtons: Int,
-    val interactionSquares: Int,
-)
-
 val defaultSquareColor = R.color.white
 val chosenSquareColor = R.color.red_200
 val editSquareColor = R.color.light_blue_100

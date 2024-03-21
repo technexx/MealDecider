@@ -72,6 +72,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun AddDialogBox() {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val coroutineScope = rememberCoroutineScope()
         var txtField by remember { mutableStateOf("") }
         val displayedList = appViewModel.displayedCuisineList.collectAsStateWithLifecycle()
@@ -123,11 +124,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
-                        MaterialIconButton(icon = Icons.Filled.Close, description = "close", ThemeObject.cancelDialogButton) {
+                        MaterialIconButton(icon = Icons.Filled.Close, description = "close", colorTheme.value.cancelDialogButton) {
                             appViewModel.updateAddMode(false)
                             appViewModel.updateListOfCuisinesToAdd(emptyList())
                         }
-                        MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", ThemeObject.confirmDialogButton) {
+                        MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", colorTheme.value.confirmDialogButton) {
                             appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd)
                             coroutineScope.launch {
                                 roomInteractions.insertMultipleCuisines(appViewModel.getListOfCuisinesToAdd)
@@ -182,6 +183,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun ConfirmRestoreDefaultsDialog() {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+
         AnimatedTransitionDialog(
             modifier = Modifier
                 .height(200.dp)
@@ -218,10 +221,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 .fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
-                                MaterialIconButton(icon = Icons.Default.Close, description = "close", ThemeObject.cancelDialogButton) {
+                                MaterialIconButton(icon = Icons.Default.Close, description = "close", colorTheme.value.cancelDialogButton) {
                                     appViewModel.updateRestoreDefaults(false)
                                 }
-                                MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", ThemeObject.confirmDialogButton) {
+                                MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", colorTheme.value.confirmDialogButton) {
                                     roomInteractions.setSquareDatabaseToDefaultStartingValues()
                                     appViewModel.updateSquareList(appViewModel.starterSquareList())
                                     appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
@@ -258,6 +261,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestaurantListContent() {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+
         Surface(
             shape = RoundedCornerShape(16.dp),
             color = colorResource(id = R.color.grey_300),
@@ -271,7 +276,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     Row (modifier = Modifier
                         .fillMaxWidth(),
                         horizontalArrangement = Arrangement.End) {
-                        RestaurantFilterIcon()
+                        MaterialIconButton(icon = Icons.Filled.Settings, description = "settings", colorTheme.value.iconButtons) {
+                            appViewModel.updateShowRestaurantSettings(true)
+                        }
                         RestaurantSortDropdownMenu()
                     }
                 }
@@ -351,12 +358,14 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestaurantSortDropdownMenu() {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+
         var expanded by remember { mutableStateOf(false) }
         Box(
             modifier = Modifier
                 .wrapContentSize(Alignment.TopEnd)
         ) {
-            MaterialIconButton(icon = Icons.Filled.Menu, description = "menu", ThemeObject.restaurantsIconButtons) {
+            MaterialIconButton(icon = Icons.Filled.Menu, description = "menu", colorTheme.value.iconButtons) {
                 expanded = !expanded
             }
 
@@ -404,13 +413,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 function()
             }
         )
-    }
-
-    @Composable
-    fun RestaurantFilterIcon() {
-        MaterialIconButton(icon = Icons.Filled.Settings, description = "settings", ThemeObject.restaurantsIconButtons) {
-            appViewModel.updateShowRestaurantSettings(true)
-        }
     }
 
     @Composable
