@@ -53,7 +53,7 @@ object Theme {
             appBar = R.color.blue_grey_900,
             iconButtons = R.color.blue_grey_900,
             restrictionRow = R.color.grey_700,
-            cuisineBoard = R.color.grey_800,
+            cuisineBoard = R.color.grey_900,
             cuisineSquares = R.color.grey_800,
             selectedCuisineSquare = R.color.red_200,
 
@@ -63,7 +63,7 @@ object Theme {
             selectedRestaurantSquare = R.color.red_200,
 
             interactionButtonsRow = R.color.grey_700,
-            interactionButtons = R.color.purple_700,
+            interactionButtons = R.color.grey_200,
             interactionSquares = R.color.black,
 
             cancelDialogButton = android.R.color.holo_red_light,

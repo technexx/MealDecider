@@ -190,17 +190,17 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     @Composable
     fun Board() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        showLog("test", "board recomp")
 
         Column (modifier = Modifier
             .fillMaxWidth()
             .height(screenHeightPct(0.1).dp)
-            .background(colorResource(id = colorTheme.value.cuisineBoard))
         ) {
             RestrictionsBarLayout()
             DialogCompositions()
         }
         Surface(
-            color = colorResource(id = R.color.grey_50),
+            color = colorResource(id = colorTheme.value.cuisineBoard),
         ) {
             Column(
             ) {
