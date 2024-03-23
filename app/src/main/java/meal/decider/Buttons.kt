@@ -28,7 +28,6 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                 .wrapContentSize()
                 .padding(top = 12.dp, bottom = 12.dp),
             verticalArrangement = Arrangement.Bottom
-
         ) {
             Row (
                 modifier = Modifier

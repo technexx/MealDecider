@@ -304,8 +304,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
         val selectedRestaurantSquare = appViewModel.selectedRestaurantSquare.collectAsStateWithLifecycle()
         val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
-        val rolledRestaurantString = selectedRestaurantSquare.value.name.toString()
+        val restaurantSelectionMode = appViewModel.restaurantSelectionMode.collectAsStateWithLifecycle()
 
+        val rolledRestaurantString = selectedRestaurantSquare.value.name.toString()
         var borderStroke: BorderStroke
 
         if (restaurantRollFinished.value) {
@@ -344,6 +345,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         .selectable(
                             selected = true,
                             onClick = {
+                                if (appViewModel.getRestaurantSelectionMode) {
+                                    //TODO: If selection mode is activated...
+                                }
                             }
                         ),
                 ) {

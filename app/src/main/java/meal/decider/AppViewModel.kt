@@ -89,6 +89,9 @@ class AppViewModel : ViewModel() {
     private val _cuisineSelectionMode = MutableStateFlow(false)
     val cuisineSelectionMode: StateFlow<Boolean> = _cuisineSelectionMode.asStateFlow()
 
+    private val _restaurantSelectionMode = MutableStateFlow(false)
+    val restaurantSelectionMode: StateFlow<Boolean> = _restaurantSelectionMode.asStateFlow()
+
     private val _optionsMode = MutableStateFlow(false)
     val optionsMode: StateFlow<Boolean> = _optionsMode
 
@@ -491,8 +494,8 @@ class AppViewModel : ViewModel() {
     val getShowRestaurantSettings get() = _showRestaurantSettings.value
 
     val getRollEngaged get() = rollEngaged.value
-    val getCuisineRollFinished get() = _cuisineRollFinished.value
-    val getRestaurantRollFinished get() = _restaurantRollFinished.value
+    val getCuisineRollFinished get() = cuisineRollFinished.value
+    val getRestaurantRollFinished get() = restaurantRollFinished.value
 
     val getAddMode get() = addMode.value
     val getEditMode get() = editMode.value
@@ -504,6 +507,7 @@ class AppViewModel : ViewModel() {
     val getRestaurantQueryFinished get() = restaurantQueryFinished.value
 
     val getCuisineSelectionMode get() = cuisineSelectionMode.value
+    val getRestaurantSelectionMode get() = restaurantSelectionMode.value
 
     val getColorSettingsSelectionList get() = colorSettingsSelectionList.value
     val getColorTheme get() = colorTheme.value
