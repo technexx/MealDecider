@@ -19,6 +19,7 @@ data class ColorTheme(
     val interactionButtonsRow: Int,
     val interactionButtons: Int,
     val interactionSquares: Int,
+    val interactionIcons: Int,
 
     var cancelDialogButton: Int,
     var confirmDialogButton: Int,
@@ -43,6 +44,7 @@ object Theme {
             interactionButtonsRow = R.color.grey_700,
             interactionButtons = R.color.blue_400,
             interactionSquares = R.color.white,
+            interactionIcons = R.color.blue_400,
 
             cancelDialogButton = android.R.color.holo_red_light,
             confirmDialogButton = android.R.color.holo_green_light
@@ -53,7 +55,7 @@ object Theme {
             appBar = R.color.blue_grey_900,
             iconButtons = R.color.blue_grey_900,
             restrictionRow = R.color.grey_700,
-            cuisineBoard = R.color.grey_900,
+            cuisineBoard = R.color.black,
             cuisineSquares = R.color.grey_800,
             selectedCuisineSquare = R.color.red_200,
 
@@ -65,6 +67,7 @@ object Theme {
             interactionButtonsRow = R.color.grey_700,
             interactionButtons = R.color.grey_200,
             interactionSquares = R.color.black,
+            interactionIcons = R.color.black,
 
             cancelDialogButton = android.R.color.holo_red_light,
             confirmDialogButton = android.R.color.holo_green_light

@@ -58,7 +58,9 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                         }
                     })
                 }
-                CustomIconButton(size = 72, image = R.drawable.dice, description = "dice", tint = colorTheme.value.interactionButtons) {
+
+
+                CustomIconButton(size = 72, image = R.drawable.dice, description = "dice", tint = colorTheme.value.interactionIcons) {
                     if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                         if (!appViewModel.getShowRestaurants) {
                             runnables.rollCuisine()

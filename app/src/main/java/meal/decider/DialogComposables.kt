@@ -629,7 +629,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         onClick = {
                                             appViewModel.switchColorSettingsUi(index)
                                             appViewModel.updateColorTheme(Theme.themeColorsList[index])
-                                            showLog("test", "new theme is ${appViewModel.getColorTheme}")
                                         },
                                         content = {
                                             RegText(

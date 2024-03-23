@@ -190,7 +190,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     @Composable
     fun Board() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-        showLog("test", "board recomp")
 
         Column (modifier = Modifier
             .fillMaxWidth()
