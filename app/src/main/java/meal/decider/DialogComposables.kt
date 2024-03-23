@@ -347,11 +347,13 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             }
                         ),
                 ) {
-                    RegText(restaurantList.value[index].name.toString(), fontSize = 18, color = Color.Black)
-                    val distanceInMeters = (restaurantList.value[index].distance)
-                    RegText(doubleMetersToMiles(distanceInMeters!!).toString() + " miles", fontSize = 18, color = Color.Black)
-                    RatingStars(restaurantList.value[index].rating)
-                    RegText(priceToDollarSigns(restaurantList.value[index].priceLevel), fontSize = 18, color = Color.Black)
+                    Column (modifier = Modifier.padding(12.dp)){
+                        RegText(restaurantList.value[index].name.toString(), fontSize = 16, color = Color.Black)
+                        val distanceInMeters = (restaurantList.value[index].distance)
+                        RegText(doubleMetersToMiles(distanceInMeters!!).toString() + " miles", fontSize = 16, color = Color.Black)
+                        RatingStars(restaurantList.value[index].rating)
+                        RegText(priceToDollarSigns(restaurantList.value[index].priceLevel), fontSize = 16, color = Color.Black)
+                    }
                 }
             }
         }
@@ -520,7 +522,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             val roundedDown = rating.toInt()
             val remainder = rating - roundedDown
             Row (modifier = Modifier
-                .padding(8.dp, 4.dp)) {
+                .padding(0.dp, 0.dp)) {
                 for (i in 1..roundedDown) {
                     Image(painterResource(R.drawable.full_star_black,), "full star")
                 }
