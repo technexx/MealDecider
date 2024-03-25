@@ -196,6 +196,10 @@ class AppViewModel : ViewModel() {
         _cuisineSelectionMode.value = enabled
     }
 
+    fun updateRestaurantSelectionMode(enabled: Boolean) {
+        _restaurantSelectionMode.value = enabled
+    }
+
     fun updateColorSettingsToggleList(list: SnapshotStateList<SettingsToggle>) {
         _colorSettingsSelectionList.value = list
     }

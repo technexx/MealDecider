@@ -27,6 +27,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
@@ -276,6 +277,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     Row (modifier = Modifier
                         .fillMaxWidth(),
                         horizontalArrangement = Arrangement.End) {
+                        //TODO: Add pencil icon.
+                        MaterialIconButton(icon = Icons.Filled.Create, description = "select", tint = colorTheme.value.iconButtons) {
+                            appViewModel.updateRestaurantSelectionMode(!appViewModel.getRestaurantSelectionMode)
+                            showLog("test", "rest selection mode is ${appViewModel.getRestaurantSelectionMode}")
+                        }
                         MaterialIconButton(icon = Icons.Filled.Settings, description = "settings", colorTheme.value.restaurantsIconButtons) {
                             appViewModel.updateShowRestaurantSettings(true)
                         }
@@ -345,9 +351,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         .selectable(
                             selected = true,
                             onClick = {
-                                if (appViewModel.getRestaurantSelectionMode) {
-                                    //TODO: If selection mode is activated...
-                                }
                             }
                         ),
                 ) {
