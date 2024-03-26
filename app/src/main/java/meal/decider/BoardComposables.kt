@@ -72,11 +72,14 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     fun GlobalUi() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
 
+        val coroutineScope = rememberCoroutineScope()
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         var expanded by remember { mutableStateOf(false) }
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
         val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
-        val coroutineScope = rememberCoroutineScope()
+        val selectMode = appViewModel.cuisineSelectionMode.collectAsStateWithLifecycle()
+
+        var selectionColor = R.color.white
 
         Scaffold(
             modifier = Modifier
@@ -92,14 +95,25 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     },
                     actions = {
                         if (listOfCuisineSquaresToEdit.value.isNotEmpty() && editMode.value) {
-                            MaterialIconButton(icon = Icons.Filled.Delete, description = "delete", colorTheme.value.cuisineIconButtons) {
+                            MaterialIconButton(
+                                icon = Icons.Filled.Delete,
+                                description = "delete",
+                                tint = colorTheme.value.cuisineIconButtons) {
                                 coroutineScope.launch {
                                     roomInteractions.deleteMultipleCuisines()
                                     appViewModel.deleteSelectedCuisines()
                                 }
                             }
                         }
-                        MaterialIconButton(icon = Icons.Filled.Create, description = "select", colorTheme.value.cuisineIconButtons) {
+                        if (selectMode.value) {
+                            selectionColor = appViewModel.getColorTheme.selectedCuisineIcon
+                        } else {
+                            selectionColor = appViewModel.getColorTheme.cuisineIconButtons
+                        }
+                        MaterialIconButton(
+                            icon = Icons.Filled.Create,
+                            description = "select",
+                            tint = selectionColor) {
                             appViewModel.updateCuisineSelectionMode(!appViewModel.getCuisineSelectionMode)
                         }
                         Box(
@@ -107,11 +121,17 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 .wrapContentSize(Alignment.TopEnd)
                         ) {
                             Row() {
-                                MaterialIconButton(icon = Icons.Filled.Settings, description = "settings", colorTheme.value.cuisineIconButtons) {
+                                MaterialIconButton(
+                                    icon = Icons.Filled.Settings,
+                                    description = "settings",
+                                    tint = colorTheme.value.cuisineIconButtons) {
                                     appViewModel.updateOptionsMode(true)
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
-                                MaterialIconButton(icon = Icons.Filled.Menu, description = "menu", colorTheme.value.cuisineIconButtons) {
+                                MaterialIconButton(
+                                    icon = Icons.Filled.Menu,
+                                    description = "menu",
+                                    tint = colorTheme.value.cuisineIconButtons) {
                                     expanded = !expanded
                                 }
                             }
