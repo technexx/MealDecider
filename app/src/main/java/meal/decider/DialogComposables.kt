@@ -266,7 +266,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         Surface(
             shape = RoundedCornerShape(16.dp),
-            color = colorResource(id = colorTheme.value.restaurantBoard),
+//            color = colorResource(id = colorTheme.value.restaurantBoard),
         ) {
             Column(modifier = Modifier
                 .fillMaxSize()
@@ -275,10 +275,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     .wrapContentSize()
                 ) {
                     Row (modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .background(colorResource(id = colorTheme.value.restaurantTopRow)),
                         horizontalArrangement = Arrangement.End) {
-                        //TODO: Add pencil icon.
-                        MaterialIconButton(icon = Icons.Filled.Create, description = "select", tint = colorTheme.value.iconButtons) {
+                        MaterialIconButton(icon = Icons.Filled.Create, description = "select", tint = colorTheme.value.restaurantsIconButtons) {
                             appViewModel.updateRestaurantSelectionMode(!appViewModel.getRestaurantSelectionMode)
                             showLog("test", "rest selection mode is ${appViewModel.getRestaurantSelectionMode}")
                         }
@@ -290,11 +290,13 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 }
                 Column(modifier = Modifier
                     .height(screenHeightPct(0.8).dp)
+                    .background(colorResource(id = colorTheme.value.restaurantBoard))
                 ) {
                     RestaurantLazyGrid()
                 }
                 Column(modifier = Modifier
                     .wrapContentSize()
+                    .background(colorResource(id = colorTheme.value.restaurantInteractionButtonsRow))
                 ) {
                     buttons.InteractionButtons()
                 }
@@ -351,6 +353,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         .selectable(
                             selected = true,
                             onClick = {
+                                if (appViewModel.getRestaurantSelectionMode) {
+                                    showLog("test", "clicking restaurant $index")
+                                }
                             }
                         ),
                 ) {
@@ -375,7 +380,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             modifier = Modifier
                 .wrapContentSize(Alignment.TopEnd)
         ) {
-            MaterialIconButton(icon = Icons.Filled.Menu, description = "menu", colorTheme.value.iconButtons) {
+            MaterialIconButton(icon = Icons.Filled.Menu, description = "menu", colorTheme.value.restaurantsIconButtons) {
                 expanded = !expanded
             }
 

@@ -92,14 +92,14 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     },
                     actions = {
                         if (listOfCuisineSquaresToEdit.value.isNotEmpty() && editMode.value) {
-                            MaterialIconButton(icon = Icons.Filled.Delete, description = "delete", colorTheme.value.iconButtons) {
+                            MaterialIconButton(icon = Icons.Filled.Delete, description = "delete", colorTheme.value.cuisineIconButtons) {
                                 coroutineScope.launch {
                                     roomInteractions.deleteMultipleCuisines()
                                     appViewModel.deleteSelectedCuisines()
                                 }
                             }
                         }
-                        MaterialIconButton(icon = Icons.Filled.Create, description = "select", colorTheme.value.iconButtons) {
+                        MaterialIconButton(icon = Icons.Filled.Create, description = "select", colorTheme.value.cuisineIconButtons) {
                             appViewModel.updateCuisineSelectionMode(!appViewModel.getCuisineSelectionMode)
                         }
                         Box(
@@ -107,11 +107,11 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 .wrapContentSize(Alignment.TopEnd)
                         ) {
                             Row() {
-                                MaterialIconButton(icon = Icons.Filled.Settings, description = "settings", colorTheme.value.iconButtons) {
+                                MaterialIconButton(icon = Icons.Filled.Settings, description = "settings", colorTheme.value.cuisineIconButtons) {
                                     appViewModel.updateOptionsMode(true)
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
-                                MaterialIconButton(icon = Icons.Filled.Menu, description = "menu", colorTheme.value.iconButtons) {
+                                MaterialIconButton(icon = Icons.Filled.Menu, description = "menu", colorTheme.value.cuisineIconButtons) {
                                     expanded = !expanded
                                 }
                             }
@@ -209,7 +209,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 }
                 Column(modifier = Modifier
                     .height(screenHeightPct(0.2).dp)
-                    .background(colorResource(id = R.color.grey_200))
+                    .background(colorResource(id = colorTheme.value.cuisineInteractionButtonsRow))
                 )
                 {
                     buttons.InteractionButtons()

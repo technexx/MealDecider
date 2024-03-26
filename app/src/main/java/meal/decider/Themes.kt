@@ -5,18 +5,20 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 
 data class ColorTheme(
     val appBar: Int,
-    val iconButtons: Int,
+    val cuisineIconButtons: Int,
     val restrictionRow: Int,
     val cuisineBoard: Int,
     val cuisineSquares: Int,
     val selectedCuisineSquare: Int,
 
+    val restaurantTopRow: Int,
     val restaurantBoard: Int,
     val restaurantsIconButtons: Int,
     val restaurantSquares: Int,
     val selectedRestaurantSquare: Int,
 
-    val interactionButtonsRow: Int,
+    val cuisineInteractionButtonsRow: Int,
+    val restaurantInteractionButtonsRow: Int,
     val interactionButtons: Int,
     val interactionSquares: Int,
     val interactionIcons: Int,
@@ -30,18 +32,20 @@ object Theme {
         //Light
         ColorTheme(
             appBar = R.color.blue_400,
-            iconButtons = R.color.white,
+            cuisineIconButtons = R.color.white,
             restrictionRow = R.color.grey_100,
             cuisineBoard = R.color.grey_50,
             cuisineSquares = R.color.white,
             selectedCuisineSquare = R.color.red_200,
 
+            restaurantTopRow = R.color.grey_200,
             restaurantBoard = R.color.grey_50,
             restaurantsIconButtons = R.color.blue_400,
             restaurantSquares = R.color.white,
             selectedRestaurantSquare = R.color.red_200,
 
-            interactionButtonsRow = R.color.grey_700,
+            cuisineInteractionButtonsRow = R.color.grey_200,
+            restaurantInteractionButtonsRow = R.color.grey_200,
             interactionButtons = R.color.blue_400,
             interactionSquares = R.color.white,
             interactionIcons = R.color.blue_400,
@@ -53,18 +57,20 @@ object Theme {
         //Dark
         ColorTheme(
             appBar = R.color.blue_grey_900,
-            iconButtons = R.color.blue_grey_900,
+            cuisineIconButtons = R.color.blue_grey_900,
             restrictionRow = R.color.grey_700,
             cuisineBoard = R.color.black,
             cuisineSquares = R.color.grey_800,
             selectedCuisineSquare = R.color.red_200,
 
+            restaurantTopRow = R.color.grey_200,
             restaurantBoard = R.color.grey_800,
             restaurantsIconButtons = R.color.white,
             restaurantSquares = R.color.black,
             selectedRestaurantSquare = R.color.red_200,
 
-            interactionButtonsRow = R.color.grey_700,
+            cuisineInteractionButtonsRow = R.color.grey_700,
+            restaurantInteractionButtonsRow = R.color.grey_200,
             interactionButtons = R.color.grey_200,
             interactionSquares = R.color.black,
             interactionIcons = R.color.black,
