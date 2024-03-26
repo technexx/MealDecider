@@ -10,12 +10,14 @@ data class ColorTheme(
     val cuisineBoard: Int,
     val cuisineSquares: Int,
     val selectedCuisineSquare: Int,
+    val selectedCuisineIcon: Int,
 
     val restaurantTopRow: Int,
     val restaurantBoard: Int,
     val restaurantsIconButtons: Int,
     val restaurantSquares: Int,
     val selectedRestaurantSquare: Int,
+    val selectedRestaurantIcon: Int,
 
     val cuisineInteractionButtonsRow: Int,
     val restaurantInteractionButtonsRow: Int,
@@ -37,12 +39,14 @@ object Theme {
             cuisineBoard = R.color.grey_50,
             cuisineSquares = R.color.white,
             selectedCuisineSquare = R.color.red_200,
+            selectedCuisineIcon = R.color.red_a700,
 
-            restaurantTopRow = R.color.grey_200,
+            restaurantTopRow = R.color.blue_400,
             restaurantBoard = R.color.grey_50,
-            restaurantsIconButtons = R.color.blue_400,
+            restaurantsIconButtons = R.color.white,
             restaurantSquares = R.color.white,
             selectedRestaurantSquare = R.color.red_200,
+            selectedRestaurantIcon = R.color.red_a700,
 
             cuisineInteractionButtonsRow = R.color.grey_200,
             restaurantInteractionButtonsRow = R.color.grey_200,
@@ -62,12 +66,14 @@ object Theme {
             cuisineBoard = R.color.black,
             cuisineSquares = R.color.grey_800,
             selectedCuisineSquare = R.color.red_200,
+            selectedCuisineIcon = R.color.red_a700,
 
             restaurantTopRow = R.color.grey_200,
             restaurantBoard = R.color.grey_800,
             restaurantsIconButtons = R.color.white,
             restaurantSquares = R.color.black,
             selectedRestaurantSquare = R.color.red_200,
+            selectedRestaurantIcon = R.color.red_a700,
 
             cuisineInteractionButtonsRow = R.color.grey_700,
             restaurantInteractionButtonsRow = R.color.grey_200,

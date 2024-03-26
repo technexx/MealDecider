@@ -263,10 +263,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun RestaurantListContent() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        val selectMode = appViewModel.restaurantSelectionMode.collectAsStateWithLifecycle()
+        var selectIconColor = R.color.white
 
         Surface(
             shape = RoundedCornerShape(16.dp),
-//            color = colorResource(id = colorTheme.value.restaurantBoard),
         ) {
             Column(modifier = Modifier
                 .fillMaxSize()
@@ -278,11 +279,21 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         .fillMaxWidth()
                         .background(colorResource(id = colorTheme.value.restaurantTopRow)),
                         horizontalArrangement = Arrangement.End) {
-                        MaterialIconButton(icon = Icons.Filled.Create, description = "select", tint = colorTheme.value.restaurantsIconButtons) {
-                            appViewModel.updateRestaurantSelectionMode(!appViewModel.getRestaurantSelectionMode)
-                            showLog("test", "rest selection mode is ${appViewModel.getRestaurantSelectionMode}")
+                        if (selectMode.value) {
+                            selectIconColor = appViewModel.getColorTheme.selectedRestaurantIcon
+                        } else {
+                            selectIconColor = appViewModel.getColorTheme.restaurantsIconButtons
                         }
-                        MaterialIconButton(icon = Icons.Filled.Settings, description = "settings", colorTheme.value.restaurantsIconButtons) {
+                        MaterialIconButton(
+                            icon = Icons.Filled.Create,
+                            description = "select",
+                            tint = selectIconColor) {
+                            appViewModel.updateRestaurantSelectionMode(!appViewModel.getRestaurantSelectionMode)
+                        }
+                        MaterialIconButton(
+                            icon = Icons.Filled.Settings,
+                            description = "settings",
+                            tint = colorTheme.value.restaurantsIconButtons) {
                             appViewModel.updateShowRestaurantSettings(true)
                         }
                         RestaurantSortDropdownMenu()

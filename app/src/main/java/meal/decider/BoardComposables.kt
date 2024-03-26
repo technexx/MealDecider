@@ -201,8 +201,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         Surface(
             color = colorResource(id = colorTheme.value.cuisineBoard),
         ) {
-            Column(
-            ) {
+            Column {
                 Column(modifier = Modifier
                     .height(screenHeightPct(0.7).dp)) {
                     CuisineSelectionGrid()
