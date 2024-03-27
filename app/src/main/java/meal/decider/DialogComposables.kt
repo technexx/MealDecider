@@ -323,7 +323,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
         val selectedRestaurantSquare = appViewModel.selectedRestaurantSquare.collectAsStateWithLifecycle()
         val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
-        val restaurantSelectionMode = appViewModel.restaurantSelectionMode.collectAsStateWithLifecycle()
+
 
         val rolledRestaurantString = selectedRestaurantSquare.value.name.toString()
         var borderStroke: BorderStroke
@@ -365,7 +365,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             selected = true,
                             onClick = {
                                 if (appViewModel.getRestaurantSelectionMode) {
-                                    showLog("test", "clicking restaurant $index")
+                                    //TODO: Have selected in list.
+                                    appViewModel.restaurantStringUri = appViewModel.getRestaurantList[index].name.toString()
+                                    appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[index])
+                                    appViewModel.toggleSelectionOfSingleRestaurantSquareColorAndBorder(index, appViewModel.getColorTheme.selectedRestaurantSquare, heavyRestaurantSelectionBorderStroke)
                                 }
                             }
                         ),

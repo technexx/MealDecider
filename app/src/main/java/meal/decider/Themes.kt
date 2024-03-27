@@ -44,7 +44,7 @@ object Theme {
             restaurantTopRow = R.color.blue_400,
             restaurantBoard = R.color.grey_50,
             restaurantsIconButtons = R.color.white,
-            restaurantSquares = R.color.white,
+            restaurantSquares = R.color.grey_100,
             selectedRestaurantSquare = R.color.red_200,
             selectedRestaurantIcon = R.color.red_a700,
 

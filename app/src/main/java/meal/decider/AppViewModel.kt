@@ -364,6 +364,20 @@ class AppViewModel : ViewModel() {
         updateSquareList(newList)
     }
 
+    fun toggleSelectionOfSingleRestaurantSquareColorAndBorder(index: Int, color: Int, border: BorderStroke) {
+        val tempRestaurantList = getRestaurantList
+        val newList = SnapshotStateList<RestaurantValues>()
+
+        for (i in tempRestaurantList) {
+            newList.add(RestaurantValues(i.name, i.address, i.distance, i.priceLevel, i.rating, getColorTheme.restaurantSquares, defaultRestaurantBorderStroke))
+        }
+
+        newList[index].color = color
+        newList[index].border = border
+
+        updateRestaurantsList(newList)
+    }
+
     fun updateAllCuisineBorders(border: BorderStroke) {
         val tempSquareList = getSquareList
         val newList = SnapshotStateList<SquareValues>()
