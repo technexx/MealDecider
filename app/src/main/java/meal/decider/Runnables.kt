@@ -19,8 +19,8 @@ class Runnables (private val appViewModel: AppViewModel) {
         handler.removeCallbacks(cuisineRollRunnable)
 
         val durationSetting = appViewModel.cuisineRollDurationSetting
-        val delaySetting = appViewModel.cuisineRollDelaySetting
-        var delay = rollDelaySettingToMillis(durationSetting, delaySetting)
+        val speedSetting = appViewModel.cuisineRollSpeedSetting
+        var delay = rollSpeedSettingToMillis(durationSetting, speedSetting)
         var duration = rollDurationSettingToMillis(durationSetting)
 
         cuisineRollRunnable = Runnable {
@@ -29,7 +29,7 @@ class Runnables (private val appViewModel: AppViewModel) {
             appViewModel.updateSquareList(newSquareList)
 
             duration = durationDecreaseIteration(duration)
-            delay = rollDelaySettingToMillis(duration, delaySetting)
+            delay = rollSpeedSettingToMillis(duration, speedSetting)
 
             showLog("test", "delay is $delay")
             showLog("test", "duration is $duration")
@@ -68,7 +68,7 @@ class Runnables (private val appViewModel: AppViewModel) {
 
         var duration = rollDurationSettingToMillis(appViewModel.restaurantRollDurationSetting)
         restaurantRollRunnable = Runnable {
-            val delay = rollDelaySettingToMillis(duration, appViewModel.restaurantRollDelaySetting)
+            val delay = rollSpeedSettingToMillis(duration, appViewModel.restaurantRollDelaySetting)
 
             appViewModel.rolledRestaurantIndex = Random.nextInt(0, appViewModel.getRestaurantList.size)
             val newRestaurantList = restaurantListWithRandomColorChanged(appViewModel.rolledRestaurantIndex)

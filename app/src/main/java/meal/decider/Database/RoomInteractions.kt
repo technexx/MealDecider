@@ -123,7 +123,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         withContext(Dispatchers.IO) {
             val rollOptions = getRollOptions()
             appViewModel.cuisineRollDurationSetting = rollOptions[0].cuisineRollDurationSetting
-            appViewModel.cuisineRollDelaySetting = rollOptions[0].cuisineRollDelaySetting
+            appViewModel.cuisineRollSpeedSetting = rollOptions[0].cuisineRollDelaySetting
             appViewModel.restaurantRollDurationSetting = rollOptions[0].restaurantRollDurationSetting
             appViewModel.restaurantRollDelaySetting = rollOptions[0].restaurantRollDelaySetting
         }

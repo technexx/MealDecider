@@ -24,7 +24,7 @@ class AppViewModel : ViewModel() {
     var minRestaurantRating = 3.0
     var maxRestaurantPrice = 1
 
-    var cuisineRollDelaySetting : Long = 0
+    var cuisineRollSpeedSetting : Long = 0
     var cuisineRollDurationSetting : Long = 0
     var restaurantRollDelaySetting : Long = 0
     var restaurantRollDurationSetting : Long= 0
@@ -480,7 +480,7 @@ class AppViewModel : ViewModel() {
     }
 
     fun updateRollOptions(cuisineDuration: Long, cuisineDelay: Long, restaurantDuration: Long, restaurantDelay: Long) {
-        cuisineRollDurationSetting = cuisineDuration; cuisineRollDelaySetting = cuisineDelay; restaurantRollDurationSetting = restaurantDuration; restaurantRollDelaySetting = restaurantDelay
+        cuisineRollDurationSetting = cuisineDuration; cuisineRollSpeedSetting = cuisineDelay; restaurantRollDurationSetting = restaurantDuration; restaurantRollDelaySetting = restaurantDelay
     }
 
     fun toggleRestrictionListItems(index: Int) {

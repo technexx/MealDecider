@@ -687,7 +687,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         LaunchedEffect(Unit) {
             cuisineRollDurationSliderPosition = appViewModel.cuisineRollDurationSetting.toFloat()
-            cuisineRollDelaySliderPosition = appViewModel.cuisineRollDelaySetting.toFloat()
+            cuisineRollDelaySliderPosition = appViewModel.cuisineRollSpeedSetting.toFloat()
             restaurantRollDurationSliderPosition = appViewModel.restaurantRollDurationSetting.toFloat()
             restaurantRollDelaySliderPosition = appViewModel.restaurantRollDelaySetting.toFloat()
         }
