@@ -57,17 +57,14 @@ fun rollDurationSettingToMillis(durationSetting: Long): Long {
 
 fun rollSpeedSettingToMillis(duration: Long, speedSetting: Long): Long {
     val delaySettingDivisor = 6 + (speedSetting * 4)
-    val valueToReturn = duration / delaySettingDivisor
+    val additionalDelayBuffer = (100 - (10 * speedSetting))
+    val valueToReturn = (duration / delaySettingDivisor) + additionalDelayBuffer
 
     return valueToReturn
 }
 
-fun delayDecreaseIteration(delay: Long): Long {
-    return (delay.toDouble() * 0.95).toLong()
-}
-
 fun durationDecreaseIteration(duration: Long): Long {
-    return (duration.toDouble() * 0.95).toLong()
+    return (duration.toDouble() * 0.9).toLong()
 }
 
 @Composable
