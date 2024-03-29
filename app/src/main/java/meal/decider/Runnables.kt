@@ -28,15 +28,15 @@ class Runnables (private val appViewModel: AppViewModel) {
             val newSquareList = squareListWithRandomColorChanged(appViewModel.rolledSquareIndex)
             appViewModel.updateSquareList(newSquareList)
 
-            duration = delayDecreaseIteration(duration)
-            delay = durationDecreaseIteration(delay)
+            duration = durationDecreaseIteration(duration)
+            delay = rollDelaySettingToMillis(duration, delaySetting)
 
-//            showLog("test", "delay is $delay")
-//            showLog("test", "duration is $duration")
+            showLog("test", "delay is $delay")
+            showLog("test", "duration is $duration")
 
             handler.postDelayed(cuisineRollRunnable, delay)
 
-            if (duration < 100) {
+            if (duration < 200) {
                 appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[appViewModel.rolledSquareIndex])
 
                 appViewModel.updateCuisineRollFinished(true)

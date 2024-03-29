@@ -54,6 +54,7 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
+//TODO: Save theme in database.
 //TODO: Increasing duration of roll also slows down delay. Formulas need to be changed.
 //TODO: General settings -> sub-menus should also be cleaner transitions
 //TODO: Query/delay issues w/ "Places" button. Multiple presses will cause crash.
