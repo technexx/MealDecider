@@ -56,7 +56,7 @@ import meal.decider.Database.RoomInteractions
 
 //TODO: Save theme in database.
 //TODO: Disable app bar buttons during rolls.
-//TODO: Increasing duration of roll also slows down delay. Formulas need to be changed.
+//TODO: Formula duration too reliant on delay. Should be independent.
 //TODO: General settings -> sub-menus should also be cleaner transitions
 //TODO: Query/delay issues w/ "Places" button. Multiple presses will cause crash.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
@@ -78,8 +78,11 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
         val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
         val selectMode = appViewModel.cuisineSelectionMode.collectAsStateWithLifecycle()
+        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
 
-        var selectionColor = R.color.white
+        var selectionColor: Int
+        var buttonsEnabled = !rollEngaged.value
+
 
         Scaffold(
             modifier = Modifier
@@ -113,7 +116,8 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         MaterialIconButton(
                             icon = Icons.Filled.Create,
                             description = "select",
-                            tint = selectionColor) {
+                            tint = selectionColor,
+                            enabled = buttonsEnabled) {
                             appViewModel.updateCuisineSelectionMode(!appViewModel.getCuisineSelectionMode)
                         }
                         Box(
@@ -124,14 +128,16 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 MaterialIconButton(
                                     icon = Icons.Filled.Settings,
                                     description = "settings",
-                                    tint = colorTheme.value.cuisineIconButtons) {
+                                    tint = colorTheme.value.cuisineIconButtons,
+                                    enabled = buttonsEnabled) {
                                     appViewModel.updateOptionsMode(true)
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
                                 MaterialIconButton(
                                     icon = Icons.Filled.Menu,
                                     description = "menu",
-                                    tint = colorTheme.value.cuisineIconButtons) {
+                                    tint = colorTheme.value.cuisineIconButtons,
+                                    enabled = buttonsEnabled) {
                                     expanded = !expanded
                                 }
                             }
@@ -373,7 +379,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 bottom = 16.dp
             ),
             content = {
-                //TODO: Updated cuisine square does not trigger in runnable until it ends.
                 items(boardUiState.value.squareList.size) { index ->
                     borderStroke = appViewModel.getSquareList[index].border
                     val elevation = if (index == appViewModel.rolledSquareIndex) 12.dp else 4.dp

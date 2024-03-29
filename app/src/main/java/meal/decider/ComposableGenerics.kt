@@ -81,8 +81,9 @@ fun MaterialIconButton(
     icon: ImageVector,
     description: String,
     tint: Int,
+    enabled: Boolean = true,
     onClick: () -> Unit) {
-    IconButton(onClick = { onClick() }) {
+    IconButton(onClick = { if (enabled) onClick() }) {
         Icon(
             imageVector = icon,
             contentDescription = description,
