@@ -264,7 +264,13 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     fun RestaurantListContent() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val selectMode = appViewModel.restaurantSelectionMode.collectAsStateWithLifecycle()
+        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
+
         var selectIconColor = R.color.white
+
+        val buttonsEnabled = !rollEngaged.value
+        var expanded by remember { mutableStateOf(false) }
+        if (rollEngaged.value) expanded = false
 
         Surface(
             shape = RoundedCornerShape(16.dp),
@@ -287,13 +293,15 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         MaterialIconButton(
                             icon = Icons.Filled.Create,
                             description = "select",
-                            tint = selectIconColor) {
+                            tint = selectIconColor,
+                            enabled = buttonsEnabled) {
                             appViewModel.updateRestaurantSelectionMode(!appViewModel.getRestaurantSelectionMode)
                         }
                         MaterialIconButton(
                             icon = Icons.Filled.Settings,
                             description = "settings",
-                            tint = colorTheme.value.restaurantsIconButtons) {
+                            tint = colorTheme.value.restaurantsIconButtons,
+                            enabled = buttonsEnabled) {
                             appViewModel.updateShowRestaurantSettings(true)
                         }
                         RestaurantSortDropdownMenu()
@@ -392,8 +400,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun RestaurantSortDropdownMenu() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-
+        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
         var expanded by remember { mutableStateOf(false) }
+        if (rollEngaged.value) expanded = false
+
         Box(
             modifier = Modifier
                 .wrapContentSize(Alignment.TopEnd)
