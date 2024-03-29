@@ -46,7 +46,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -147,7 +146,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 }
                                 DropDownMenuItemUi(text = "Edit Cuisines") {
                                     //Resets list of squares to edit.
-                                    appViewModel.updatelistOfCuisineSquaresToEdit(listOf())
+                                    appViewModel.updateListOfCuisineSquaresToEdit(listOf())
                                     if (!appViewModel.getEditMode) {
                                         appViewModel.updateEditMode(true)
                                         appViewModel.updateAllCuisineBorders(cuisineEditModeBorderStroke)
@@ -345,6 +344,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val restrictionsString = foodRestrictionsString(restrictionsUi.value)
 
         val rolledCuisineString = selectedCuisineSquare.value.name + " Food " + restrictionsString
+//        var squareColor = colorTheme.value.cuisineSquares
         var borderStroke: BorderStroke
 
         if (cuisineRollFinished.value) {
@@ -371,13 +371,16 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 bottom = 16.dp
             ),
             content = {
+                //TODO: Updated cuisine square does not trigger in runnable until it ends.
                 items(boardUiState.value.squareList.size) { index ->
-                    val elevation: Dp = if (index == appViewModel.rolledSquareIndex) 12.dp else 4.dp
                     borderStroke = appViewModel.getSquareList[index].border
+                    val elevation = if (index == appViewModel.rolledSquareIndex) 12.dp else 4.dp
+                    val squareColor = if (index == appViewModel.rolledSquareIndex) appViewModel.getColorTheme.selectedCuisineSquare else appViewModel.getColorTheme.cuisineSquares
 
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = colorResource(id = appViewModel.getSquareList[index].color),
+                            containerColor = colorResource(id = squareColor),
+//                            containerColor = colorResource(id = appViewModel.getSquareList[index].color),
                         ),
                         border = borderStroke,
                         elevation = CardDefaults.cardElevation(

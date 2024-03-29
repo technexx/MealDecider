@@ -152,7 +152,7 @@ class AppViewModel : ViewModel() {
         _listOfCuisinesToAdd.value = list
     }
 
-    fun updatelistOfCuisineSquaresToEdit(list: List<SquareValues>) {
+    fun updateListOfCuisineSquaresToEdit(list: List<SquareValues>) {
         _listOfCuisineSquaresToEdit.value = list
     }
 
@@ -392,13 +392,13 @@ class AppViewModel : ViewModel() {
         val tempList = getListOfCuisineSquaresToEdit.toMutableList()
         val currentList = getSquareList
         tempList.add(currentList[index])
-        updatelistOfCuisineSquaresToEdit(tempList)
+        updateListOfCuisineSquaresToEdit(tempList)
     }
 
     private fun removeSquareFromListOfSquareIndicesToUpdate() {
         val tempList = getListOfCuisineSquaresToEdit.toMutableList()
         tempList.removeLast()
-        updatelistOfCuisineSquaresToEdit(tempList)
+        updateListOfCuisineSquaresToEdit(tempList)
     }
 
     //With SnapShotStateLists, our contains() conditional is true, but not with regular Lists.
