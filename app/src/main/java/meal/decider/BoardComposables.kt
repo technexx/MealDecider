@@ -74,15 +74,15 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
 
         val coroutineScope = rememberCoroutineScope()
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-        var expanded by remember { mutableStateOf(false) }
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
         val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
         val selectMode = appViewModel.cuisineSelectionMode.collectAsStateWithLifecycle()
         val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
 
         var selectionColor: Int
-        var buttonsEnabled = !rollEngaged.value
-
+        val buttonsEnabled = !rollEngaged.value
+        var expanded by remember { mutableStateOf(false) }
+        if (rollEngaged.value) expanded = false
 
         Scaffold(
             modifier = Modifier
