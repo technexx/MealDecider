@@ -60,9 +60,9 @@ import meal.decider.Database.RoomInteractions
 //TODO: Query/delay issues w/ "Places" button. Multiple presses will cause crash.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
 //TODO: With color themes, will need to change way we toggle "select" pencil icon color.
+//TODO: For restaurants with multiple locations, we may want to plug in the address, otherwise all of them will show up.
 
 class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, private val roomInteractions: RoomInteractions, private val mapInteractions: MapInteractions, private val runnables: Runnables) {
-
     private val buttons = Buttons(appViewModel, mapInteractions, runnables)
     private val dialogComposables = DialogComposables(appViewModel, appDatabase, mapInteractions, runnables)
 
@@ -333,6 +333,8 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
 
     @Composable
     fun CuisineSelectionGrid() {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+
         val coroutineScope = rememberCoroutineScope()
         val sectionGridState = rememberLazyGridState()
         val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
@@ -410,7 +412,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         RegText(
                             text = boardUiState.value.squareList[index].name,
                             fontSize = 18,
-                            color = Color.Black,
+                            color = colorResource(id = colorTheme.value.cuisineSquaresText),
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(16.dp)
                         )

@@ -365,20 +365,24 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             selected = true,
                             onClick = {
                                 if (appViewModel.getRestaurantSelectionMode) {
-                                    //TODO: Have selected in list.
-                                    appViewModel.restaurantStringUri = appViewModel.getRestaurantList[index].name.toString()
+                                    appViewModel.restaurantStringUri =
+                                        appViewModel.getRestaurantList[index].name.toString()
                                     appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[index])
-                                    appViewModel.toggleSelectionOfSingleRestaurantSquareColorAndBorder(index, appViewModel.getColorTheme.selectedRestaurantSquare, heavyRestaurantSelectionBorderStroke)
+                                    appViewModel.toggleSelectionOfSingleRestaurantSquareColorAndBorder(
+                                        index,
+                                        appViewModel.getColorTheme.selectedRestaurantSquare,
+                                        heavyRestaurantSelectionBorderStroke
+                                    )
                                 }
                             }
                         ),
                 ) {
                     Column (modifier = Modifier.padding(12.dp)){
-                        RegText(restaurantList.value[index].name.toString(), fontSize = 16, color = Color.Black)
+                        RegText(restaurantList.value[index].name.toString(), fontSize = 16, color = colorResource( id = colorTheme.value.restaurantSquaresText))
                         val distanceInMeters = (restaurantList.value[index].distance)
-                        RegText(doubleMetersToMiles(distanceInMeters!!).toString() + " miles", fontSize = 16, color = Color.Black)
+                        RegText(doubleMetersToMiles(distanceInMeters!!).toString() + " miles", fontSize = 16, color = colorResource( id = colorTheme.value.restaurantSquaresText))
                         RatingStars(restaurantList.value[index].rating)
-                        RegText(priceToDollarSigns(restaurantList.value[index].priceLevel), fontSize = 16, color = Color.Black)
+                        RegText(priceToDollarSigns(restaurantList.value[index].priceLevel), fontSize = 16, color = colorResource( id = colorTheme.value.restaurantSquaresText))
                     }
                 }
             }

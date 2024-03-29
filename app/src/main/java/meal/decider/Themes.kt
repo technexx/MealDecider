@@ -9,6 +9,7 @@ data class ColorTheme(
     val restrictionRow: Int,
     val cuisineBoard: Int,
     val cuisineSquares: Int,
+    val cuisineSquaresText: Int,
     val selectedCuisineSquare: Int,
     val selectedCuisineIcon: Int,
 
@@ -16,13 +17,13 @@ data class ColorTheme(
     val restaurantBoard: Int,
     val restaurantsIconButtons: Int,
     val restaurantSquares: Int,
+    val restaurantSquaresText: Int,
     val selectedRestaurantSquare: Int,
     val selectedRestaurantIcon: Int,
 
     val cuisineInteractionButtonsRow: Int,
     val restaurantInteractionButtonsRow: Int,
     val interactionButtons: Int,
-    val interactionSquares: Int,
     val interactionIcons: Int,
 
     var cancelDialogButton: Int,
@@ -38,6 +39,7 @@ object Theme {
             restrictionRow = R.color.grey_100,
             cuisineBoard = R.color.grey_50,
             cuisineSquares = R.color.white,
+            cuisineSquaresText = R.color.black,
             selectedCuisineSquare = R.color.red_200,
             selectedCuisineIcon = R.color.red_a700,
 
@@ -45,13 +47,13 @@ object Theme {
             restaurantBoard = R.color.grey_50,
             restaurantsIconButtons = R.color.white,
             restaurantSquares = R.color.grey_100,
+            restaurantSquaresText = R.color.black,
             selectedRestaurantSquare = R.color.red_200,
             selectedRestaurantIcon = R.color.red_a700,
 
             cuisineInteractionButtonsRow = R.color.grey_200,
             restaurantInteractionButtonsRow = R.color.grey_200,
             interactionButtons = R.color.blue_400,
-            interactionSquares = R.color.white,
             interactionIcons = R.color.blue_400,
 
             cancelDialogButton = android.R.color.holo_red_light,
@@ -65,6 +67,7 @@ object Theme {
             restrictionRow = R.color.grey_700,
             cuisineBoard = R.color.black,
             cuisineSquares = R.color.grey_800,
+            cuisineSquaresText = R.color.white,
             selectedCuisineSquare = R.color.red_200,
             selectedCuisineIcon = R.color.red_a700,
 
@@ -72,14 +75,14 @@ object Theme {
             restaurantBoard = R.color.grey_800,
             restaurantsIconButtons = R.color.white,
             restaurantSquares = R.color.black,
+            restaurantSquaresText = R.color.white,
             selectedRestaurantSquare = R.color.red_200,
             selectedRestaurantIcon = R.color.red_a700,
 
             cuisineInteractionButtonsRow = R.color.grey_700,
             restaurantInteractionButtonsRow = R.color.grey_200,
             interactionButtons = R.color.grey_200,
-            interactionSquares = R.color.black,
-            interactionIcons = R.color.black,
+            interactionIcons = R.color.white,
 
             cancelDialogButton = android.R.color.holo_red_light,
             confirmDialogButton = android.R.color.holo_green_light
