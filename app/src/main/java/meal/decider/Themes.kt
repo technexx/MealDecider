@@ -71,7 +71,7 @@ object Theme {
             selectedCuisineSquare = R.color.red_200,
             selectedCuisineIcon = R.color.red_a700,
 
-            restaurantTopRow = R.color.grey_200,
+            restaurantTopRow = R.color.grey_700,
             restaurantBoard = R.color.grey_800,
             restaurantsIconButtons = R.color.white,
             restaurantSquares = R.color.black,
@@ -80,7 +80,7 @@ object Theme {
             selectedRestaurantIcon = R.color.red_a700,
 
             cuisineInteractionButtonsRow = R.color.grey_700,
-            restaurantInteractionButtonsRow = R.color.grey_200,
+            restaurantInteractionButtonsRow = R.color.grey_700,
             interactionButtons = R.color.grey_200,
             interactionIcons = R.color.white,
 

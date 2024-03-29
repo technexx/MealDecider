@@ -588,7 +588,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             )
     }
 
-
     @Composable
     fun OptionsDialogUi() {
         Column (modifier = Modifier
