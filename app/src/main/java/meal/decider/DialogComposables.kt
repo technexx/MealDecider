@@ -82,6 +82,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         AnimatedTransitionDialog(
             modifier = Modifier
+                .background(colorResource(id = colorTheme.value.dialogBackground))
                 .height(400.dp)
                 .width(500.dp),
             onDismissRequest = {
@@ -90,7 +91,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             },
             content = {
                 Column(modifier = Modifier
-                    .background(colorResource(id = R.color.grey_300))
+                    .background(colorResource(id = colorTheme.value.dialogBackground))
                     .fillMaxSize()
                     .padding(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -189,6 +190,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         AnimatedTransitionDialog(
             modifier = Modifier
+                .background(colorResource(id = colorTheme.value.dialogBackground))
                 .height(200.dp)
                 .width(300.dp),
             onDismissRequest = {
@@ -197,7 +199,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             content = {
                 Surface(
                     shape = RoundedCornerShape(16.dp),
-                    color = colorResource(id = R.color.grey_300)
+                    color = colorResource(colorTheme.value.dialogBackground)
                 ) {
                     Box(modifier = Modifier
                     ) {
@@ -415,7 +417,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
             //Order of modifiers matters. Background needs to be set BEFORE padding, otherwise background outside of padding will not be changed.
             DropdownMenu(modifier = Modifier
-                .background(colorResource(id = R.color.white))
+                .background(colorResource(id = colorTheme.value.dialogBackground))
                 .padding(0.dp)
                 .wrapContentSize(),
                 expanded = expanded,
@@ -461,6 +463,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestaurantFilters() {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         var distanceSliderPosition by remember { mutableFloatStateOf(3f) }
         var ratingSliderPosition by remember { mutableFloatStateOf(3f) }
@@ -480,7 +483,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         AnimatedTransitionVoid {
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = colorResource(id = R.color.grey_300),
+                color = colorResource(id = colorTheme.value.dialogBackground),
             ) {
                 Box(modifier = Modifier
                     .fillMaxSize(),
@@ -581,14 +584,16 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     fun OptionsDialog() {
 //         val windowProvider = LocalView.current.parent as DialogWindowProvider
 //            windowProvider.window.setGravity(Gravity.END)
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
             AnimatedTransitionDialog(
                 modifier = Modifier
+                    .background(colorResource(id = colorTheme.value.dialogBackground))
                     .fillMaxSize(),
                 onDismissRequest = {
                     appViewModel.updateOptionsMode(false) },
                 content = {
                     Column(modifier = Modifier
-                        .background(colorResource(id = R.color.grey_300))
+                        .background(colorResource(id = colorTheme.value.dialogBackground))
                         .fillMaxSize()
                         .padding(20.dp)
                         )
@@ -601,9 +606,14 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun OptionsDialogUi() {
-        Column (modifier = Modifier
-            .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,) {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(colorResource(id = colorTheme.value.dialogBackground)),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             Column (horizontalAlignment = Alignment.CenterHorizontally){
                 RegText("Settings", fontSize = 28, color = Color.Black, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(20.dp))
@@ -631,9 +641,12 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun ColorsSettingDialog() {
         val colorSettingsToggle = appViewModel.colorSettingsSelectionList.collectAsStateWithLifecycle()
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
 
         AnimatedTransitionDialog(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .background(colorResource(id = colorTheme.value.dialogBackground))
+                .fillMaxSize(),
             onDismissRequest = {
                 appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
                 appViewModel.updateOptionsMode(true)
@@ -687,6 +700,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun SpeedSettingsDialog() {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         var cuisineRollDurationSliderPosition by remember { mutableFloatStateOf(3f) }
         var cuisineRollDelaySliderPosition by remember { mutableFloatStateOf(3f) }
@@ -701,7 +715,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         }
 
         AnimatedTransitionDialog(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .background(colorResource(id = colorTheme.value.dialogBackground))
+                .fillMaxSize(),
             onDismissRequest = {
                 appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
                 appViewModel.updateOptionsMode(true)

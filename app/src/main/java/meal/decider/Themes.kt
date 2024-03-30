@@ -5,6 +5,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 
 data class ColorTheme(
     val appBar: Int,
+    val dialogBackground: Int,
     val cuisineIconButtons: Int,
     val restrictionRow: Int,
     val cuisineBoard: Int,
@@ -35,6 +36,7 @@ object Theme {
         //Light
         ColorTheme(
             appBar = R.color.blue_400,
+            dialogBackground = R.color.grey_50,
             cuisineIconButtons = R.color.white,
             restrictionRow = R.color.grey_100,
             cuisineBoard = R.color.grey_50,
@@ -63,7 +65,8 @@ object Theme {
         //Dark
         ColorTheme(
             appBar = R.color.blue_grey_900,
-            cuisineIconButtons = R.color.blue_grey_900,
+            dialogBackground = R.color.grey_700,
+            cuisineIconButtons = R.color.white,
             restrictionRow = R.color.grey_700,
             cuisineBoard = R.color.black,
             cuisineSquares = R.color.grey_800,

@@ -55,7 +55,7 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
-//TODO: Save theme in database. Can also just used sharedPref.
+//TODO: Settings dialogs should also change color w/ theme.
 //TODO: Formula duration too reliant on delay. Should be independent.
 //TODO: General settings -> sub-menus should also be cleaner transitions
 //TODO: Query/delay issues w/ "Places" button. Multiple presses will cause crash.
