@@ -55,7 +55,7 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
-//TODO: Settings dialogs should also change color w/ theme.
+//TODO: Dismissing restaurant filters blanks our dialog transition.
 //TODO: Formula duration too reliant on delay. Should be independent.
 //TODO: General settings -> sub-menus should also be cleaner transitions
 //TODO: Query/delay issues w/ "Places" button. Multiple presses will cause crash.
@@ -71,7 +71,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     @Composable
     fun GlobalUi() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-
         val coroutineScope = rememberCoroutineScope()
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
@@ -143,7 +142,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                             }
 
                             DropdownMenu(modifier = Modifier
-                                .background(colorResource(id = R.color.white)),
+                                .background(colorResource(colorTheme.value.dropDownMenuBackground)),
                                 expanded = expanded,
                                 onDismissRequest = { expanded = false }
                             ) {

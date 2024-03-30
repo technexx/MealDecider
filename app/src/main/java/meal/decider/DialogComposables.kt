@@ -417,7 +417,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
             //Order of modifiers matters. Background needs to be set BEFORE padding, otherwise background outside of padding will not be changed.
             DropdownMenu(modifier = Modifier
-                .background(colorResource(id = colorTheme.value.dialogBackground))
+                .background(colorResource(id = colorTheme.value.dropDownMenuBackground))
                 .padding(0.dp)
                 .wrapContentSize(),
                 expanded = expanded,
@@ -435,7 +435,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     appViewModel.sortAndUpdateRestaurantList("rating")
                     expanded = false
                 }
-                RestaurantDropDownUi("Sort by Price") {
+                RestaurantDropDownUi("" +
+                        "Sort by Price") {
                     appViewModel.sortAndUpdateRestaurantList("price")
                     expanded = false
                 }
