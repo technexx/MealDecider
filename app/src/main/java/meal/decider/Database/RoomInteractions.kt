@@ -12,6 +12,7 @@ import meal.decider.AppViewModel
 import meal.decider.ColorTheme
 import meal.decider.SquareValues
 import meal.decider.Theme
+import meal.decider.showLog
 
 class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel, private val activity: Activity) {
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
@@ -134,10 +135,10 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         }
     }
 
-    fun saveColorThemeToSharedPref() {
+    fun saveColorThemeToSharedPref(colorTheme: ColorTheme) {
         var colorThemeString = ""
-        if (appViewModel.getColorTheme == Theme.themeColorsList[0]) colorThemeString = "light"
-        if (appViewModel.getColorTheme == Theme.themeColorsList[1]) colorThemeString = "dark"
+        if (colorTheme == Theme.themeColorsList[0]) colorThemeString = "light"
+        if (colorTheme == Theme.themeColorsList[1]) colorThemeString = "dark"
 
         sharedPref.edit().putString("theme", colorThemeString).apply()
     }
@@ -148,6 +149,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         if (colorThemeString == "light") colorTheme = Theme.themeColorsList[0]
         if (colorThemeString == "dark") colorTheme = Theme.themeColorsList[1]
 
+        showLog("test", "colorThemeString retrieved is $colorThemeString")
         return colorTheme
     }
 }

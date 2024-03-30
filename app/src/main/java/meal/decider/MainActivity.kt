@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
         mapInteractions.fusedLocationListener()
 
         runnables = Runnables(appViewModel)
-        dialogComposables = DialogComposables(appViewModel, cuisineDatabase, mapInteractions, runnables)
+        dialogComposables = DialogComposables(appViewModel, cuisineDatabase, activity, mapInteractions, runnables)
 
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
         ioScope.launch {
@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
             appViewModel.updateCuisineStringUriAndHasChangedBoolean(appViewModel.getselectedCuisineSquare.name + " Food ")
         }
 
-        val boardComposables = BoardComposables(appViewModel, cuisineDatabase, roomInteractions, mapInteractions, runnables)
+        val boardComposables = BoardComposables(appViewModel, cuisineDatabase, activity, roomInteractions, mapInteractions, runnables)
 
         setContent {
             MealDeciderTheme {

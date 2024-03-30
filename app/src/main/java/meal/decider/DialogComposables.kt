@@ -1,5 +1,6 @@
 package meal.decider
 
+import android.app.Activity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -66,8 +67,8 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
-class DialogComposables(private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase, private val mapInteractions: MapInteractions, private val runnables: Runnables){
-    private val roomInteractions = RoomInteractions(appDatabase, appViewModel)
+class DialogComposables(private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase, private val activity: Activity, private val mapInteractions: MapInteractions, private val runnables: Runnables){
+    private val roomInteractions = RoomInteractions(appDatabase, appViewModel, activity)
     private val buttons = Buttons(appViewModel, mapInteractions, runnables)
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -630,7 +631,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun ColorsSettingDialog() {
         val colorSettingsToggle = appViewModel.colorSettingsSelectionList.collectAsStateWithLifecycle()
-        var cardColor: Color = colorResource(id = R.color.white)
+        var cardColor: Color
 
         AnimatedTransitionDialog(
             modifier = Modifier.fillMaxSize(),
@@ -670,6 +671,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         onClick = {
                                             appViewModel.switchColorSettingsUi(index)
                                             appViewModel.updateColorTheme(Theme.themeColorsList[index])
+                                            roomInteractions.saveColorThemeToSharedPref(Theme.themeColorsList[index])
+                                            roomInteractions.retrieveColorThemeFromSharedPref()
                                         },
                                         content = {
                                             RegText(

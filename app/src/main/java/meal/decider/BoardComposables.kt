@@ -1,5 +1,6 @@
 package meal.decider
 
+import android.app.Activity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -62,9 +63,9 @@ import meal.decider.Database.RoomInteractions
 //TODO: With color themes, will need to change way we toggle "select" pencil icon color.
 //TODO: For restaurants with multiple locations, we may want to plug in the address, otherwise all of them will show up.
 
-class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, private val roomInteractions: RoomInteractions, private val mapInteractions: MapInteractions, private val runnables: Runnables) {
+class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, private val activity: Activity, private val roomInteractions: RoomInteractions, private val mapInteractions: MapInteractions, private val runnables: Runnables) {
     private val buttons = Buttons(appViewModel, mapInteractions, runnables)
-    private val dialogComposables = DialogComposables(appViewModel, appDatabase, mapInteractions, runnables)
+    private val dialogComposables = DialogComposables(appViewModel, appDatabase, activity, mapInteractions, runnables)
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
