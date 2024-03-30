@@ -1,5 +1,7 @@
 package meal.decider.Database
 
+import android.app.Activity
+import android.content.Context
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -7,14 +9,17 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import meal.decider.AppViewModel
+import meal.decider.ColorTheme
 import meal.decider.SquareValues
 import meal.decider.Theme
 
-class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel) {
+class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel, private val activity: Activity) {
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
     val cuisineDao = cuisineDatabase.cuisineDao()
     val restaurantFiltersDao = cuisineDatabase.restaurantFiltersDao()
     val optionsDao = cuisineDatabase.optionsDao()
+
+    private val sharedPref = activity.getPreferences(Context.MODE_PRIVATE)
 
     fun setSquareDatabaseToDefaultStartingValues() {
         ioScope.launch {
@@ -127,5 +132,22 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             appViewModel.restaurantRollDurationSetting = rollOptions[0].restaurantRollDurationSetting
             appViewModel.restaurantRollDelaySetting = rollOptions[0].restaurantRollDelaySetting
         }
+    }
+
+    fun saveColorThemeToSharedPref() {
+        var colorThemeString = ""
+        if (appViewModel.getColorTheme == Theme.themeColorsList[0]) colorThemeString = "light"
+        if (appViewModel.getColorTheme == Theme.themeColorsList[1]) colorThemeString = "dark"
+
+        sharedPref.edit().putString("theme", colorThemeString).apply()
+    }
+
+    fun retrieveColorThemeFromSharedPref(): ColorTheme {
+        val colorThemeString = sharedPref.getString("theme", "light")
+        var colorTheme = Theme.themeColorsList[0]
+        if (colorThemeString == "light") colorTheme = Theme.themeColorsList[0]
+        if (colorThemeString == "dark") colorTheme = Theme.themeColorsList[1]
+
+        return colorTheme
     }
 }

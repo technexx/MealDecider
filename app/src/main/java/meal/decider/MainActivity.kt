@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
 
         appViewModel = AppViewModel()
         cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
-        roomInteractions = RoomInteractions(cuisineDatabase, appViewModel)
+        roomInteractions = RoomInteractions(cuisineDatabase, appViewModel, activity)
 
         mapInteractions = MapInteractions(activity, activityContext, appViewModel)
         mapInteractions.fusedLocationListener()
