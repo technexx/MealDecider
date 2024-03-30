@@ -247,7 +247,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     fun RestrictionsBarLayout() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
-        var cardColor: Color
 
         Column (modifier = Modifier
             .fillMaxWidth()
@@ -261,11 +260,8 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     bottom = 16.dp),
                 content = {
                     items(restrictionsUi.value.size) { index ->
-                        if (appViewModel.getRestrictionsList[index].selected) {
-                            cardColor = colorResource(id = R.color.blue_grey_100)
-                        } else  {
-                            cardColor = Color.White
-                        }
+                        val cardColor = if (appViewModel.getRestrictionsList[index].selected) colorResource(id = R.color.blue_grey_100) else Color.White
+
                         Card(
                             colors = CardDefaults.cardColors(
                                 containerColor = cardColor,

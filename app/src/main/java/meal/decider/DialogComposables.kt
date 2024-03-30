@@ -631,7 +631,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun ColorsSettingDialog() {
         val colorSettingsToggle = appViewModel.colorSettingsSelectionList.collectAsStateWithLifecycle()
-        var cardColor: Color
 
         AnimatedTransitionDialog(
             modifier = Modifier.fillMaxSize(),
@@ -660,11 +659,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         horizontalArrangement = Arrangement.Center,
                         content = {
                             items(colorSettingsToggle.value.size) { index ->
-                                if (appViewModel.getColorSettingsSelectionList[index].selected) {
-                                    cardColor = colorResource(id = R.color.blue_grey_100)
-                                } else {
-                                    cardColor = Color.White
-                                }
+                                val cardColor = if (appViewModel.getColorSettingsSelectionList[index].selected) colorResource(id = R.color.blue_grey_100) else Color.White
+
                                 Box(contentAlignment = Alignment.Center) {
                                     CardUi(
                                         color = cardColor,
@@ -672,7 +668,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                             appViewModel.switchColorSettingsUi(index)
                                             appViewModel.updateColorTheme(Theme.themeColorsList[index])
                                             roomInteractions.saveColorThemeToSharedPref(Theme.themeColorsList[index])
-                                            roomInteractions.retrieveColorThemeFromSharedPref()
                                         },
                                         content = {
                                             RegText(

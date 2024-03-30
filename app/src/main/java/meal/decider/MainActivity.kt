@@ -79,6 +79,8 @@ class MainActivity : ComponentActivity() {
 
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
             appViewModel.updateCuisineStringUriAndHasChangedBoolean(appViewModel.getselectedCuisineSquare.name + " Food ")
+
+            appViewModel.updateColorTheme(roomInteractions.retrieveColorThemeFromSharedPref())
         }
 
         val boardComposables = BoardComposables(appViewModel, cuisineDatabase, activity, roomInteractions, mapInteractions, runnables)
