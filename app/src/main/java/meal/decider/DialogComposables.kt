@@ -654,8 +654,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             content = {
                 Column(modifier = Modifier
                     .fillMaxSize()
-                    .background(colorResource(id = R.color.grey_50)),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    .background(colorResource(id = colorTheme.value.dialogBackground)), horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                     Spacer(modifier = Modifier.height(12.dp))
                     Row {
@@ -729,11 +728,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             content = {
                 Surface(
                     shape = RoundedCornerShape(16.dp),
-                    color = colorResource(id = R.color.grey_300),
                 ) {
                     Column(modifier = Modifier
                         .fillMaxSize()
-                        .background(colorResource(id = R.color.grey_50)),
+                        .background(colorResource(id = colorTheme.value.dialogBackground)),
                         horizontalAlignment = Alignment.CenterHorizontally) {
                         Column {
                             RegText("Cuisine Selection Duration", fontSize = 18, color = Color.Black)
