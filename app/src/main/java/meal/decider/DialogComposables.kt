@@ -247,17 +247,26 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
         val showRestaurantSettings = appViewModel.showRestaurantSettings.collectAsStateWithLifecycle()
 
-        AnimatedTransitionDialog(modifier = Modifier.fillMaxSize(), onDismissRequest = {
+        AnimatedTransitionDialog(
+            modifier = Modifier.fillMaxSize(),
+            onDismissRequest = {
             //If filter settings are visible when dismissing, set their state to false, otherwise, only the restaurant contents are shown, so set their state to false.
+
             if (showRestaurantSettings.value) {
+                //TODO: What is likely happening: showRestaurants being set to true is not changing its value (already true), so our state flow below does not update, and instead just dismisses.
                 appViewModel.updateShowRestaurantSettings(false)
                 appViewModel.updateShowRestaurants(true)
+                showLog("test", "restaurant dialog dismissal with visible settings and showRestaurants is now ${appViewModel.getShowRestaurants}")
             } else {
                 appViewModel.updateShowRestaurantsDialog(false)
                 appViewModel.updateShowRestaurants(false)
             }
-        }) {
-            if (showRestaurants.value) { RestaurantListContent() }
+        }){
+            //Dialog contents.
+            if (showRestaurants.value) {
+                showLog("test", "showRestaurants state flow change (to true)")
+                RestaurantListContent()
+            }
             if (showRestaurantSettings.value) { RestaurantFilters() }
         }
     }
@@ -268,7 +277,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val selectMode = appViewModel.restaurantSelectionMode.collectAsStateWithLifecycle()
         val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
 
-        var selectIconColor = R.color.white
+        var selectIconColor: Int
 
         val buttonsEnabled = !rollEngaged.value
         var expanded by remember { mutableStateOf(false) }

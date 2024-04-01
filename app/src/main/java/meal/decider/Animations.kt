@@ -66,6 +66,27 @@ fun AnimatedTransitionDialog(
 }
 
 @Composable
+fun AnimatedTransitionVoid(
+    content: @Composable () -> Unit,
+) {
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val animateTrigger = remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = Unit) {
+        launch {
+            delay(0)
+            animateTrigger.value = true
+        }
+    }
+    Box(
+    ) {
+        AnimatedScaleInTransition(time = 200, visible = animateTrigger.value) {
+            content()
+        }
+    }
+}
+
+@Composable
 fun AnimatedScaleInTransition(
     time: Int,
     visible: Boolean,
@@ -92,27 +113,6 @@ fun CustomDialog(
         Box(modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.grey_50))) {
-            content()
-        }
-    }
-}
-
-@Composable
-fun AnimatedTransitionVoid(
-    content: @Composable () -> Unit,
-) {
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val animateTrigger = remember { mutableStateOf(false) }
-
-    LaunchedEffect(key1 = Unit) {
-        launch {
-            delay(0)
-            animateTrigger.value = true
-        }
-    }
-    Box(
-    ) {
-        AnimatedScaleInTransition(time = 200, visible = animateTrigger.value) {
             content()
         }
     }
