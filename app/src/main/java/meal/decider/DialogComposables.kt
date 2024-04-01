@@ -478,6 +478,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             }
         }
 
+        val textColor = colorResource(id = colorTheme.value.dialogTextColor)
         var priceString: String
 
         AnimatedTransitionVoid {
@@ -493,11 +494,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         horizontalAlignment = Alignment.CenterHorizontally)
                     {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            RegText(text = "Filters", fontSize = 22, color = Color.Black, fontWeight = FontWeight.Bold)
+                            RegText(text = "Filters", fontSize = 22, color = textColor, fontWeight = FontWeight.Bold)
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                         Column (){
-                            RegText(text = "Distance", fontSize = 20, color = Color.Black)
+                            RegText(text = "Distance", fontSize = 20, color = textColor)
                             Spacer(modifier = Modifier.height(8.dp))
                             Row (modifier = Modifier
                                 .fillMaxWidth(),
@@ -510,10 +511,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     },
                                     valueRange = 1f..10f
                                 )
-                                RegText(text = distanceSliderPosition.toInt().toString() + " mi", fontSize = 18, color = Color.Black)
+                                RegText(text = distanceSliderPosition.toInt().toString() + " mi", fontSize = 18, color = textColor)
                             }
                             Spacer(modifier = Modifier.height(16.dp))
-                            RegText(text = "Rating", fontSize = 20 , color = Color.Black)
+                            RegText(text = "Rating", fontSize = 20 , color = textColor)
                             Spacer(modifier = Modifier.height(8.dp))
                             Row (modifier = Modifier
                                 .fillMaxWidth(),
@@ -526,10 +527,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     valueRange = 3f..4.5f,
                                     steps = 2
                                 )
-                                RegText(text = "$ratingSliderPosition stars", fontSize = 18, color = Color.Black)
+                                RegText(text = "$ratingSliderPosition stars", fontSize = 18, color = textColor)
                             }
                             Spacer(modifier = Modifier.height(16.dp))
-                            RegText(text = "Max Price", fontSize = 18, color = Color.Black)
+                            RegText(text = "Max Price", fontSize = 18, color = textColor)
                             Spacer(modifier = Modifier.height(8.dp))
                             Row (modifier = Modifier
                                 .fillMaxWidth(),
@@ -549,7 +550,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     for (i in 1..priceSliderPosition.toInt()) {
                                         priceString += "$"
                                     }
-                                    RegText(text = priceString, fontSize = 18, color = Color.Black)
+                                    RegText(text = priceString, fontSize = 18, color = textColor)
                                 }
 
                             }
@@ -585,28 +586,30 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 //         val windowProvider = LocalView.current.parent as DialogWindowProvider
 //            windowProvider.window.setGravity(Gravity.END)
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-            AnimatedTransitionDialog(
-                modifier = Modifier
+
+        AnimatedTransitionDialog(
+            modifier = Modifier
+                .background(colorResource(id = colorTheme.value.dialogBackground))
+                .fillMaxSize(),
+            onDismissRequest = {
+                appViewModel.updateOptionsMode(false) },
+            content = {
+                Column(modifier = Modifier
                     .background(colorResource(id = colorTheme.value.dialogBackground))
-                    .fillMaxSize(),
-                onDismissRequest = {
-                    appViewModel.updateOptionsMode(false) },
-                content = {
-                    Column(modifier = Modifier
-                        .background(colorResource(id = colorTheme.value.dialogBackground))
-                        .fillMaxSize()
-                        .padding(20.dp)
-                        )
-                    {
-                        OptionsDialogUi()
-                    }
+                    .fillMaxSize()
+                    .padding(20.dp)
+                )
+                {
+                    OptionsDialogUi()
                 }
-            )
+            }
+        )
     }
 
     @Composable
     fun OptionsDialogUi() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        val textColor = colorResource(id = colorTheme.value.dialogTextColor)
 
         Column(
             modifier = Modifier
@@ -615,21 +618,21 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Column (horizontalAlignment = Alignment.CenterHorizontally){
-                RegText("Settings", fontSize = 28, color = colorResource(id = colorTheme.value.dialogTextColor), fontWeight = FontWeight.Bold)
+                RegText("Settings", fontSize = 28, color = textColor)
                 Spacer(modifier = Modifier.height(20.dp))
-                RegTextButton(text = "Speeds", fontSize = 26, color = colorResource(id = colorTheme.value.dialogTextColor),
+                RegTextButton(text = "Speeds", fontSize = 26, color = textColor,
                     onClick = {
                         appViewModel.updateOptionsMode(false)
                         appViewModel.updateSettingsDialogVisibility(speeds = true, sounds = false, colors = false)
                     })
                 Spacer(modifier = Modifier.height(10.dp))
-                RegTextButton(text = "Sounds", fontSize = 26, color = colorResource(id = colorTheme.value.dialogTextColor),
+                RegTextButton(text = "Sounds", fontSize = 26, color = textColor,
                     onClick = {
                         appViewModel.updateOptionsMode(false)
                         appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = true, colors = false)
                     })
                 Spacer(modifier = Modifier.height(10.dp))
-                RegTextButton(text = "Colors",  fontSize = 26, color = colorResource(id = colorTheme.value.dialogTextColor),
+                RegTextButton(text = "Colors",  fontSize = 26, color = textColor,
                     onClick = {
                         appViewModel.updateOptionsMode(false)
                         appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = false, colors = true)
