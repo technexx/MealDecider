@@ -83,6 +83,9 @@ class AppViewModel : ViewModel() {
     private val _showRestaurantSettings = MutableStateFlow(false)
     val showRestaurantSettings: StateFlow<Boolean> = _showRestaurantSettings.asStateFlow()
 
+    private val _restaurantDialogVisibility = MutableStateFlow(0)
+    val restaurantDialogVisibility: StateFlow<Int> = _restaurantDialogVisibility.asStateFlow()
+
     private val _restaurantQueryFinished = MutableStateFlow(true)
     val restaurantQueryFinished: StateFlow<Boolean> = _restaurantQueryFinished.asStateFlow()
 
@@ -182,6 +185,10 @@ class AppViewModel : ViewModel() {
 
     fun updateShowRestaurantSettings(show: Boolean) {
         _showRestaurantSettings.value = show
+    }
+
+    fun updateRestaurantDialogVisibility(value: Int) {
+        _restaurantDialogVisibility.value = value
     }
 
     fun updateSelectedRestaurantSquare(selectedSquare: RestaurantValues) {

@@ -49,7 +49,8 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                                             appViewModel.updateSingleRestaurantColorAndBorder(0, appViewModel.getColorTheme.selectedRestaurantSquare, defaultRestaurantBorderStroke)
                                             appViewModel.restaurantStringUri = appViewModel.getRestaurantList[0].name.toString()
                                         }
-                                        appViewModel.updateShowRestaurantsDialog(true)
+//                                        appViewModel.updateShowRestaurantsDialog(true)
+                                        appViewModel.updateRestaurantDialogVisibility(1)
                                         appViewModel.updateShowRestaurants(true)
                                     }
                                 }

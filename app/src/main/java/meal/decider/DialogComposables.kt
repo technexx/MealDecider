@@ -246,28 +246,25 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     fun RestaurantDialog() {
         val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
         val showRestaurantSettings = appViewModel.showRestaurantSettings.collectAsStateWithLifecycle()
+        val restaurantDialogVisibility = appViewModel.restaurantDialogVisibility.collectAsStateWithLifecycle()
 
         AnimatedTransitionDialog(
             modifier = Modifier.fillMaxSize(),
             onDismissRequest = {
-            //If filter settings are visible when dismissing, set their state to false, otherwise, only the restaurant contents are shown, so set their state to false.
-
-            if (showRestaurantSettings.value) {
-                //TODO: What is likely happening: showRestaurants being set to true is not changing its value (already true), so our state flow below does not update, and instead just dismisses.
-                appViewModel.updateShowRestaurantSettings(false)
-                appViewModel.updateShowRestaurants(true)
-                showLog("test", "restaurant dialog dismissal with visible settings and showRestaurants is now ${appViewModel.getShowRestaurants}")
-            } else {
-                appViewModel.updateShowRestaurantsDialog(false)
-                appViewModel.updateShowRestaurants(false)
-            }
+                if (restaurantDialogVisibility.value == 1) {
+                    appViewModel.updateRestaurantDialogVisibility(0)
+                }
+                if (restaurantDialogVisibility.value == 2) {
+                    appViewModel.updateRestaurantDialogVisibility(1)
+                }
         }){
             //Dialog contents.
-            if (showRestaurants.value) {
-                showLog("test", "showRestaurants state flow change (to true)")
+            if (restaurantDialogVisibility.value == 1) {
                 RestaurantListContent()
             }
-            if (showRestaurantSettings.value) { RestaurantFilters() }
+            if (restaurantDialogVisibility.value == 2) {
+                RestaurantFilters()
+            }
         }
     }
 
@@ -313,7 +310,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             description = "settings",
                             tint = colorTheme.value.restaurantsIconButtons,
                             enabled = buttonsEnabled) {
-                            appViewModel.updateShowRestaurantSettings(true)
+                            appViewModel.updateRestaurantDialogVisibility(2)
+//                            appViewModel.updateShowRestaurantSettings(true)
                         }
                         RestaurantSortDropdownMenu()
                     }

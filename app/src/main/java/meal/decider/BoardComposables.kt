@@ -301,6 +301,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val showRestaurantsDialog = appViewModel.showRestaurantsDialog.collectAsStateWithLifecycle()
         val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
         val showRestaurantSettings = appViewModel.showRestaurantSettings.collectAsStateWithLifecycle()
+        val restaurantDialogVisibility = appViewModel.restaurantDialogVisibility.collectAsStateWithLifecycle()
 
         if (addMode.value) {
             dialogComposables.AddDialogBox()
@@ -322,9 +323,13 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             dialogComposables.ColorsSettingDialog()
         }
 
-        if (showRestaurantsDialog.value) {
+        if (restaurantDialogVisibility.value != 0) {
             dialogComposables.RestaurantDialog()
         }
+
+//        if (showRestaurantsDialog.value) {
+//            dialogComposables.RestaurantDialog()
+//        }
 
 //        if (showRestaurants.value) {
 //            dialogComposables.RestaurantDialog()
