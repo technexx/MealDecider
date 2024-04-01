@@ -34,7 +34,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
@@ -423,43 +422,43 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                RestaurantDropDownUi("Sort A-Z") {
+                DropDownItemUi(
+                    text = "Sort A-Z",
+                    fontSize = 18,
+                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
                     appViewModel.sortAndUpdateRestaurantList("name")
                     expanded = false
                 }
-                RestaurantDropDownUi("Sort by Distance") {
+                DropDownItemUi(
+                    text = "Sort by Distance",
+                    fontSize = 18,
+                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
                     appViewModel.sortAndUpdateRestaurantList("distance")
                     expanded = false
                 }
-                RestaurantDropDownUi("Sort by Rating") {
+                DropDownItemUi(
+                    text = "Sort by Rating",
+                    fontSize = 18,
+                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
                     appViewModel.sortAndUpdateRestaurantList("rating")
                     expanded = false
                 }
-                RestaurantDropDownUi("" +
-                        "Sort by Price") {
+                DropDownItemUi(
+                    text = "Sort by Price",
+                    fontSize = 18,
+                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
                     appViewModel.sortAndUpdateRestaurantList("price")
                     expanded = false
                 }
-                RestaurantDropDownUi("Sort Randomly") {
+                DropDownItemUi(
+                    text = "Sort Randomly",
+                    fontSize = 18,
+                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
                     appViewModel.sortAndUpdateRestaurantList("random")
                     expanded = false
                 }
             }
         }
-    }
-
-    @Composable
-    fun RestaurantDropDownUi(text: String, function: () -> Unit) {
-        DropdownMenuItem(
-            text = { RegText(
-                text = text,
-                fontSize = 18,
-                color = Color.Black,
-                modifier = Modifier.padding(12.dp)) },
-            onClick = {
-                function()
-            }
-        )
     }
 
     @Composable
@@ -616,21 +615,21 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Column (horizontalAlignment = Alignment.CenterHorizontally){
-                RegText("Settings", fontSize = 28, color = Color.Black, fontWeight = FontWeight.Bold)
+                RegText("Settings", fontSize = 28, color = colorResource(id = colorTheme.value.dialogTextColor), fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(20.dp))
-                RegTextButton(text = "Speeds", fontSize = 26, color = Color.Black,
+                RegTextButton(text = "Speeds", fontSize = 26, color = colorResource(id = colorTheme.value.dialogTextColor),
                     onClick = {
                         appViewModel.updateOptionsMode(false)
                         appViewModel.updateSettingsDialogVisibility(speeds = true, sounds = false, colors = false)
                     })
                 Spacer(modifier = Modifier.height(10.dp))
-                RegTextButton(text = "Sounds", fontSize = 26, color = Color.Black,
+                RegTextButton(text = "Sounds", fontSize = 26, color = colorResource(id = colorTheme.value.dialogTextColor),
                     onClick = {
                         appViewModel.updateOptionsMode(false)
                         appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = true, colors = false)
                     })
                 Spacer(modifier = Modifier.height(10.dp))
-                RegTextButton(text = "Colors",  fontSize = 26, color = Color.Black,
+                RegTextButton(text = "Colors",  fontSize = 26, color = colorResource(id = colorTheme.value.dialogTextColor),
                     onClick = {
                         appViewModel.updateOptionsMode(false)
                         appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = false, colors = true)

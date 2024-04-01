@@ -5,8 +5,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 
 data class ColorTheme(
     val appBar: Int,
-    val dialogBackground: Int,
-    val dropDownMenuBackground: Int,
     val cuisineIconButtons: Int,
     val restrictionRow: Int,
     val cuisineBoard: Int,
@@ -28,6 +26,9 @@ data class ColorTheme(
     val interactionButtons: Int,
     val interactionIcons: Int,
 
+    val dialogBackground: Int,
+    val dropDownMenuBackground: Int,
+    val dialogTextColor: Int,
     var cancelDialogButton: Int,
     var confirmDialogButton: Int,
 )
@@ -37,8 +38,6 @@ object Theme {
         //Light
         ColorTheme(
             appBar = R.color.blue_400,
-            dialogBackground = R.color.grey_50,
-            dropDownMenuBackground = R.color.grey_50,
             cuisineIconButtons = R.color.white,
             restrictionRow = R.color.grey_100,
             cuisineBoard = R.color.grey_50,
@@ -60,6 +59,9 @@ object Theme {
             interactionButtons = R.color.blue_400,
             interactionIcons = R.color.blue_400,
 
+            dialogBackground = R.color.grey_50,
+            dropDownMenuBackground = R.color.grey_50,
+            dialogTextColor = R.color.black,
             cancelDialogButton = android.R.color.holo_red_light,
             confirmDialogButton = android.R.color.holo_green_light
         ),
@@ -67,8 +69,6 @@ object Theme {
         //Dark
         ColorTheme(
             appBar = R.color.blue_grey_900,
-            dialogBackground = R.color.grey_700,
-            dropDownMenuBackground = R.color.grey_300,
             cuisineIconButtons = R.color.white,
             restrictionRow = R.color.grey_700,
             cuisineBoard = R.color.black,
@@ -90,6 +90,9 @@ object Theme {
             interactionButtons = R.color.grey_200,
             interactionIcons = R.color.white,
 
+            dialogBackground = R.color.grey_700,
+            dropDownMenuBackground = R.color.grey_700,
+            dialogTextColor = R.color.white,
             cancelDialogButton = android.R.color.holo_red_light,
             confirmDialogButton = android.R.color.holo_green_light
         )

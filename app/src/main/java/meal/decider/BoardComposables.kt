@@ -27,7 +27,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -48,7 +47,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -140,18 +138,23 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                     expanded = !expanded
                                 }
                             }
-
                             DropdownMenu(modifier = Modifier
                                 .background(colorResource(colorTheme.value.dropDownMenuBackground)),
                                 expanded = expanded,
                                 onDismissRequest = { expanded = false }
                             ) {
-                                DropDownMenuItemUi(text = "Add Cuisine") {
+                                DropDownItemUi(
+                                    text = "Add Cuisine",
+                                    fontSize = 18,
+                                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
                                     appViewModel.updateAddMode(true)
                                     appViewModel.updateEditMode(false)
                                     expanded = false
                                 }
-                                DropDownMenuItemUi(text = "Edit Cuisines") {
+                                DropDownItemUi(
+                                    text = "Edit Cuisines",
+                                    fontSize = 18,
+                                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
                                     //Resets list of squares to edit.
                                     appViewModel.updateListOfCuisineSquaresToEdit(listOf())
                                     if (!appViewModel.getEditMode) {
@@ -163,7 +166,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                     }
                                     expanded = false
                                 }
-                                DropDownMenuItemUi(text = "Sort Alphabetically") {
+                                DropDownItemUi(
+                                    text = "Sort by Alphabetically",
+                                    fontSize = 18,
+                                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
                                     appViewModel.sortAndUpdateCuisineList("alphabetical")
                                     coroutineScope.launch {
 //                                    roomInteractions.updateCuisines(appViewModel.getSquareList)
@@ -173,7 +179,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                     appViewModel.updateEditMode(false)
                                     expanded = false
                                 }
-                                DropDownMenuItemUi(text = "Sort Randomly") {
+                                DropDownItemUi(
+                                    text = "Sort Randomly",
+                                    fontSize = 18,
+                                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
                                     appViewModel.sortAndUpdateCuisineList("random")
                                     coroutineScope.launch {
                                         roomInteractions.deleteAllCuisines()
@@ -182,7 +191,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                     appViewModel.updateEditMode(false)
                                     expanded = false
                                 }
-                                DropDownMenuItemUi(text = "Restore Defaults") {
+                                DropDownItemUi(
+                                    text = "Restore Defaults",
+                                    fontSize = 18,
+                                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
                                     appViewModel.updateRestoreDefaults(true)
                                     expanded = false
                                 }
@@ -200,16 +212,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 Board()
             }
         }
-    }
-
-    @Composable
-    fun DropDownMenuItemUi(text: String, function: () -> Unit) {
-        DropdownMenuItem(
-            text = { Text(text = text, color = Color.Black, fontSize = 14.sp) },
-            onClick = {
-                function()
-            }
-        )
     }
 
     @Composable
