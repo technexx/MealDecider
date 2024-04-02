@@ -248,9 +248,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val showRestaurantSettings = appViewModel.showRestaurantSettings.collectAsStateWithLifecycle()
         val restaurantDialogVisibility = appViewModel.restaurantDialogVisibility.collectAsStateWithLifecycle()
 
-        if (restaurantDialogVisibility.value == 1) {
-            showLog("test", "value changed to 1 (list content) in dialog composable")
-        }
+        showLog("test", "rest. dialog recomp")
+
 
         AnimatedTransitionDialog(
             modifier = Modifier.fillMaxSize(),
@@ -258,6 +257,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 if (appViewModel.getRestaurantDialogVisibility == 1) {
                     showLog("test", "value changed from 1 to 0")
                     appViewModel.updateRestaurantDialogVisibility(0)
+                    appViewModel.updateShowRestaurants(false)
                 }
                 if (appViewModel.getRestaurantDialogVisibility == 2) {
                     showLog("test", "value changed from 2 to 1")
@@ -265,8 +265,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 }
         }){
             //Dialog contents.
-            //TODO: Dismissal of Dialog likely not allowing next lines to execute.
-            //TODO: Since Dialog is already present, this may be why our state within the Dialog (here) does not execute.
+            //TODO: Recomp occurs if we change value from settings button, but not internally from dismissal.
+            //
             showLog("test", "recomp restaurant dialog contents")
             if (restaurantDialogVisibility.value == 1) {
                 showLog("test", "value changed to 1 (list content)")
