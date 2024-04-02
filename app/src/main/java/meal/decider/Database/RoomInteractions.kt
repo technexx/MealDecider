@@ -149,7 +149,6 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         if (colorThemeString == "light") colorTheme = Theme.themeColorsList[0]
         if (colorThemeString == "dark") colorTheme = Theme.themeColorsList[1]
 
-        showLog("test", "colorThemeString retrieved is $colorThemeString")
         return colorTheme
     }
 }
