@@ -242,11 +242,13 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         )
     }
 
+    //TODO: Try removing Dialog and just using another composable on top.
     @Composable
     fun RestaurantDialog() {
         val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
         val showRestaurantSettings = appViewModel.showRestaurantSettings.collectAsStateWithLifecycle()
         val restaurantDialogVisibility = appViewModel.restaurantDialogVisibility.collectAsStateWithLifecycle()
+        val coroutineScope: CoroutineScope = rememberCoroutineScope()
 
         showLog("test", "rest. dialog recomp")
 
@@ -265,7 +267,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 }
         }){
             //Dialog contents.
-            //TODO: Recomp occurs if we change value from settings button, but not internally from dismissal.
+            //TODO: Recomp occurs if we change value from settings button, but not internally from dismissal, likely because this Dialog is already showing.
             //
             showLog("test", "recomp restaurant dialog contents")
             if (restaurantDialogVisibility.value == 1) {

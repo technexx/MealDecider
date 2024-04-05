@@ -29,7 +29,7 @@ class Runnables (private val appViewModel: AppViewModel) {
             appViewModel.updateSquareList(newSquareList)
 
             duration = durationDecreaseIteration(duration)
-            delay = rollSpeedSettingToMillis(duration, speedSetting)
+            delay = testRollSpeedSettingToMilling(duration, speedSetting)
 
             showLog("test", "delay is $delay")
             showLog("test", "duration is $duration")
@@ -45,7 +45,6 @@ class Runnables (private val appViewModel: AppViewModel) {
                 handler.removeCallbacks(cuisineRollRunnable)
             }
         }
-
         handler.post((cuisineRollRunnable))
     }
 

@@ -55,7 +55,15 @@ fun rollDurationSettingToMillis(durationSetting: Long): Long {
     return durationSetting * 1000
 }
 
+//TODO: Same issue though more manageable - that shorter delays reduce duration quicker. Alternative is to tie duration purely to duration setting.
+fun testRollSpeedSettingToMilling(duration: Long, speedSetting: Long): Long {
+    val speedModifier = speedSetting + 4
+    val speed = duration / speedModifier
+    return speed
+}
+
 fun rollSpeedSettingToMillis(duration: Long, speedSetting: Long): Long {
+
     val delaySettingDivisor = 6 + (speedSetting * 4)
     val additionalDelayBuffer = (100 - (10 * speedSetting))
     val valueToReturn = (duration / delaySettingDivisor) + additionalDelayBuffer

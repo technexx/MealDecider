@@ -53,8 +53,7 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
-//TODO: Dismissing restaurant filters blanks our dialog transition.
-//TODO: Formula duration too reliant on delay. Should be independent.
+//TODO: Formula duration too reliant on delay, since duration doesn't iterate down until delay finishes.
 //TODO: General settings -> sub-menus should also be cleaner transitions
 //TODO: Query/delay issues w/ "Places" button. Multiple presses will cause crash.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
