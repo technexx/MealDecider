@@ -59,6 +59,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -242,40 +243,43 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         )
     }
 
-    //TODO: Try removing Dialog and just using another composable on top.
     @Composable
     fun RestaurantDialog() {
-        val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
-        val showRestaurantSettings = appViewModel.showRestaurantSettings.collectAsStateWithLifecycle()
         val restaurantDialogVisibility = appViewModel.restaurantDialogVisibility.collectAsStateWithLifecycle()
-        val coroutineScope: CoroutineScope = rememberCoroutineScope()
 
-        showLog("test", "rest. dialog recomp")
-
+        //TODO: Works like this, without animation function.
+        Dialog(onDismissRequest = {
+            if (appViewModel.getRestaurantDialogVisibility == 1) {
+                appViewModel.updateRestaurantDialogVisibility(0)
+                appViewModel.updateShowRestaurants(false)
+            }
+            if (appViewModel.getRestaurantDialogVisibility == 2) {
+                appViewModel.updateRestaurantDialogVisibility(1)
+            }
+        }) {
+            if (restaurantDialogVisibility.value == 1) {
+                RestaurantListContent()
+            }
+            if (restaurantDialogVisibility.value == 2) {
+                RestaurantFilters()
+            }
+        }
 
         AnimatedTransitionDialog(
             modifier = Modifier.fillMaxSize(),
             onDismissRequest = {
                 if (appViewModel.getRestaurantDialogVisibility == 1) {
-                    showLog("test", "value changed from 1 to 0")
                     appViewModel.updateRestaurantDialogVisibility(0)
                     appViewModel.updateShowRestaurants(false)
                 }
                 if (appViewModel.getRestaurantDialogVisibility == 2) {
-                    showLog("test", "value changed from 2 to 1")
                     appViewModel.updateRestaurantDialogVisibility(1)
                 }
         }){
-            //Dialog contents.
-            //TODO: Recomp occurs if we change value from settings button, but not internally from dismissal, likely because this Dialog is already showing.
-            //
-            showLog("test", "recomp restaurant dialog contents")
             if (restaurantDialogVisibility.value == 1) {
-                showLog("test", "value changed to 1 (list content)")
                 RestaurantListContent()
             }
             if (restaurantDialogVisibility.value == 2) {
-                showLog("test", "value changed to 2 (filters)")
                 RestaurantFilters()
             }
         }
