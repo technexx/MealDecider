@@ -59,7 +59,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -247,23 +246,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     fun RestaurantDialog() {
         val restaurantDialogVisibility = appViewModel.restaurantDialogVisibility.collectAsStateWithLifecycle()
 
-        //TODO: Works like this, without animation function.
-        Dialog(onDismissRequest = {
-            if (appViewModel.getRestaurantDialogVisibility == 1) {
-                appViewModel.updateRestaurantDialogVisibility(0)
-                appViewModel.updateShowRestaurants(false)
-            }
-            if (appViewModel.getRestaurantDialogVisibility == 2) {
-                appViewModel.updateRestaurantDialogVisibility(1)
-            }
-        }) {
-            if (restaurantDialogVisibility.value == 1) {
-                RestaurantListContent()
-            }
-            if (restaurantDialogVisibility.value == 2) {
-                RestaurantFilters()
-            }
-        }
+        //TODO: Works with standard Dialog, without animation function.
 
         AnimatedTransitionDialog(
             modifier = Modifier.fillMaxSize(),
@@ -275,7 +258,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 if (appViewModel.getRestaurantDialogVisibility == 2) {
                     appViewModel.updateRestaurantDialogVisibility(1)
                 }
-        }){
+        }) {
             if (restaurantDialogVisibility.value == 1) {
                 RestaurantListContent()
             }
