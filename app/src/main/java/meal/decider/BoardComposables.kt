@@ -57,7 +57,7 @@ import meal.decider.Database.RoomInteractions
 //TODO: General settings -> sub-menus should also be cleaner transitions
 //TODO: Query/delay issues w/ "Places" button. Multiple presses will cause crash.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
-//TODO: With color themes, will need to change way we toggle "select" pencil icon color.
+//TODO: "Places" crashes w/ 0 size restaurant list on initial app install.
 //TODO: For restaurants with multiple locations, we may want to plug in the address, otherwise all of them will show up.
 
 class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, private val activity: Activity, private val roomInteractions: RoomInteractions, private val mapInteractions: MapInteractions, private val runnables: Runnables) {

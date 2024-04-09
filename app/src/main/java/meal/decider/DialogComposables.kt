@@ -246,9 +246,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     fun RestaurantDialog() {
         val restaurantDialogVisibility = appViewModel.restaurantDialogVisibility.collectAsStateWithLifecycle()
 
-        //TODO: Works with standard Dialog, without animation function.
-
         AnimatedTransitionDialog(
+            any = appViewModel.getRestaurantDialogVisibility,
             modifier = Modifier.fillMaxSize(),
             onDismissRequest = {
                 if (appViewModel.getRestaurantDialogVisibility == 1) {

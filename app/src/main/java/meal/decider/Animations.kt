@@ -26,14 +26,14 @@ private suspend fun startDismissWithExitAnimation(
     onDismissRequest: () -> Unit
 ) {
     animateTrigger.value = false
-//    delay(300)
+    delay(300)
     onDismissRequest()
-    showLog("test", "animate trigger set to ${animateTrigger.value} in dismissal")
 }
 
 //Background color must be set in whichever columns/rows are being used in the content input, otherwise background will be the same as the Box here.
 @Composable
 fun AnimatedTransitionDialog(
+    any: Any? = Unit,
     modifier: Modifier,
     onDismissRequest: () -> Unit,
     content: @Composable () -> Unit,
@@ -41,19 +41,14 @@ fun AnimatedTransitionDialog(
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val animateTrigger = remember { mutableStateOf(false) }
 
-    //TODO: This is what's causing our transition issues.
     //This delays our animateTrigger value, meaning our Dialog box (the faded grey background) launches, but its children composables do not until the delay is over.
-    //TODO: May be key issue since we're re-using the same one.
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(key1 = any) {
         launch {
             delay(0)
+            //Was not being set to true when re-using this composable. Solved by using unique key.
             animateTrigger.value = true
-            showLog("test", "animate trigger set to ${animateTrigger.value} in LaunchedEffect")
         }
     }
-
-    //TODO: Getting set to false here when dismissing the Filter composable, so our RestaurantContent is not showing.
-    showLog("test", "animate trigger set to ${animateTrigger.value} in transition")
 
     Dialog(onDismissRequest = {
         coroutineScope.launch {
