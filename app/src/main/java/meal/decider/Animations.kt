@@ -34,7 +34,7 @@ private suspend fun startDismissWithExitAnimation(
 @Composable
 fun AnimatedTransitionDialog(
     any: Any? = Unit,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
     content: @Composable () -> Unit,
 ) {

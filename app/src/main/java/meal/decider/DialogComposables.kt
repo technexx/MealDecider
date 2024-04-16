@@ -59,6 +59,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -242,27 +243,32 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         )
     }
 
+    //TODO: Overarching Box within Dialog, switching windows.
+    //TODO: Get transition working first, then add animation.
     @Composable
     fun RestaurantDialog() {
         val restaurantDialogVisibility = appViewModel.restaurantDialogVisibility.collectAsStateWithLifecycle()
 
-        AnimatedTransitionDialog(
-            any = appViewModel.getRestaurantDialogVisibility,
-            modifier = Modifier.fillMaxSize(),
-            onDismissRequest = {
-                if (appViewModel.getRestaurantDialogVisibility == 1) {
-                    appViewModel.updateRestaurantDialogVisibility(0)
-                    appViewModel.updateShowRestaurants(false)
+        Box() {
+            if (restaurantDialogVisibility.value != 0) {
+                Dialog(
+                    onDismissRequest = {
+                        if (restaurantDialogVisibility.value == 1) {
+                            appViewModel.updateRestaurantDialogVisibility(0)
+                            appViewModel.updateShowRestaurants(false)
+
+                        }
+                        if (restaurantDialogVisibility.value == 2) {
+                            appViewModel.updateRestaurantDialogVisibility(1)
+                        }
+                    }) {
+                    if (restaurantDialogVisibility.value == 1) {
+                        RestaurantListContent()
+                    }
+                    if (restaurantDialogVisibility.value == 2) {
+                        RestaurantFilters()
+                    }
                 }
-                if (appViewModel.getRestaurantDialogVisibility == 2) {
-                    appViewModel.updateRestaurantDialogVisibility(1)
-                }
-        }) {
-            if (restaurantDialogVisibility.value == 1) {
-                RestaurantListContent()
-            }
-            if (restaurantDialogVisibility.value == 2) {
-                RestaurantFilters()
             }
         }
     }
@@ -326,6 +332,104 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     .background(colorResource(id = colorTheme.value.restaurantInteractionButtonsRow))
                 ) {
                     buttons.InteractionButtons()
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun RestaurantFilters() {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        val coroutineScope: CoroutineScope = rememberCoroutineScope()
+        var distanceSliderPosition by remember { mutableFloatStateOf(3f) }
+        var ratingSliderPosition by remember { mutableFloatStateOf(3f) }
+        var priceSliderPosition by remember { mutableFloatStateOf(1f) }
+
+        LaunchedEffect(Unit) {
+            coroutineScope.launch {
+                val restaurantFilters = roomInteractions.getRestaurantFilters()
+                distanceSliderPosition = restaurantFilters[0].distance.toFloat()
+                ratingSliderPosition = restaurantFilters[0].rating.toFloat()
+                priceSliderPosition = restaurantFilters[0].price.toFloat()
+            }
+        }
+
+        val textColor = colorResource(id = colorTheme.value.dialogTextColor)
+        var priceString: String
+
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = colorResource(id = colorTheme.value.dialogBackground),
+        ) {
+            Box(modifier = Modifier
+                .fillMaxSize(),
+            ) {
+                Column (modifier = Modifier
+                    .padding(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally)
+                {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        RegText(text = "Filters", fontSize = 22, color = textColor, fontWeight = FontWeight.Bold)
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Column (){
+                        RegText(text = "Distance", fontSize = 20, color = textColor)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row (modifier = Modifier
+                            .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween) {
+                            Slider(modifier = Modifier
+                                .fillMaxWidth(0.75f)
+                                .padding(start = 4.dp),
+                                value = distanceSliderPosition,
+                                onValueChange = { distanceSliderPosition = it
+                                },
+                                valueRange = 1f..10f
+                            )
+                            RegText(text = distanceSliderPosition.toInt().toString() + " mi", fontSize = 18, color = textColor)
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        RegText(text = "Rating", fontSize = 20 , color = textColor)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row (modifier = Modifier
+                            .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween) {
+                            Slider(modifier = Modifier
+                                .fillMaxWidth(0.7f)
+                                .padding(start = 4.dp),
+                                value = ratingSliderPosition,
+                                onValueChange = { ratingSliderPosition = it },
+                                valueRange = 3f..4.5f,
+                                steps = 2
+                            )
+                            RegText(text = "$ratingSliderPosition stars", fontSize = 18, color = textColor)
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        RegText(text = "Max Price", fontSize = 18, color = textColor)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row (modifier = Modifier
+                            .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween) {
+                            Slider(modifier = Modifier
+                                .fillMaxWidth(0.7f)
+                                .padding(start = 4.dp),
+                                value = priceSliderPosition,
+                                onValueChange = { priceSliderPosition = it },
+                                valueRange = 1f..4f,
+                                steps = 2
+                            )
+                            Column (modifier = Modifier
+                                .fillMaxWidth(),
+                                verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+                                priceString = ""
+                                for (i in 1..priceSliderPosition.toInt()) {
+                                    priceString += "$"
+                                }
+                                RegText(text = priceString, fontSize = 18, color = textColor)
+                            }
+
+                        }
+                    }
                 }
             }
         }
@@ -462,106 +566,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     color = colorResource(id = colorTheme.value.dialogTextColor)) {
                     appViewModel.sortAndUpdateRestaurantList("random")
                     expanded = false
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun RestaurantFilters() {
-        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-        val coroutineScope: CoroutineScope = rememberCoroutineScope()
-        var distanceSliderPosition by remember { mutableFloatStateOf(3f) }
-        var ratingSliderPosition by remember { mutableFloatStateOf(3f) }
-        var priceSliderPosition by remember { mutableFloatStateOf(1f) }
-
-        LaunchedEffect(Unit) {
-            coroutineScope.launch {
-                val restaurantFilters = roomInteractions.getRestaurantFilters()
-                distanceSliderPosition = restaurantFilters[0].distance.toFloat()
-                ratingSliderPosition = restaurantFilters[0].rating.toFloat()
-                priceSliderPosition = restaurantFilters[0].price.toFloat()
-            }
-        }
-
-        val textColor = colorResource(id = colorTheme.value.dialogTextColor)
-        var priceString: String
-
-        AnimatedTransitionVoid {
-            Surface(
-                shape = RoundedCornerShape(16.dp),
-                color = colorResource(id = colorTheme.value.dialogBackground),
-            ) {
-                Box(modifier = Modifier
-                    .fillMaxSize(),
-                ) {
-                    Column (modifier = Modifier
-                        .padding(8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally)
-                    {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            RegText(text = "Filters", fontSize = 22, color = textColor, fontWeight = FontWeight.Bold)
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Column (){
-                            RegText(text = "Distance", fontSize = 20, color = textColor)
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Row (modifier = Modifier
-                                .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween) {
-                                Slider(modifier = Modifier
-                                    .fillMaxWidth(0.75f)
-                                    .padding(start = 4.dp),
-                                    value = distanceSliderPosition,
-                                    onValueChange = { distanceSliderPosition = it
-                                    },
-                                    valueRange = 1f..10f
-                                )
-                                RegText(text = distanceSliderPosition.toInt().toString() + " mi", fontSize = 18, color = textColor)
-                            }
-                            Spacer(modifier = Modifier.height(16.dp))
-                            RegText(text = "Rating", fontSize = 20 , color = textColor)
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Row (modifier = Modifier
-                                .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween) {
-                                Slider(modifier = Modifier
-                                    .fillMaxWidth(0.7f)
-                                    .padding(start = 4.dp),
-                                    value = ratingSliderPosition,
-                                    onValueChange = { ratingSliderPosition = it },
-                                    valueRange = 3f..4.5f,
-                                    steps = 2
-                                )
-                                RegText(text = "$ratingSliderPosition stars", fontSize = 18, color = textColor)
-                            }
-                            Spacer(modifier = Modifier.height(16.dp))
-                            RegText(text = "Max Price", fontSize = 18, color = textColor)
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Row (modifier = Modifier
-                                .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween) {
-                                Slider(modifier = Modifier
-                                    .fillMaxWidth(0.7f)
-                                    .padding(start = 4.dp),
-                                    value = priceSliderPosition,
-                                    onValueChange = { priceSliderPosition = it },
-                                    valueRange = 1f..4f,
-                                    steps = 2
-                                )
-                                Column (modifier = Modifier
-                                    .fillMaxWidth(),
-                                    verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
-                                    priceString = ""
-                                    for (i in 1..priceSliderPosition.toInt()) {
-                                        priceString += "$"
-                                    }
-                                    RegText(text = priceString, fontSize = 18, color = textColor)
-                                }
-
-                            }
-                        }
-                    }
                 }
             }
         }
