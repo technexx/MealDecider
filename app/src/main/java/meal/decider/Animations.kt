@@ -68,6 +68,7 @@ fun AnimatedTransitionDialog(
 
 @Composable
 fun AnimatedTransitionVoid(
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
@@ -79,7 +80,7 @@ fun AnimatedTransitionVoid(
             animateTrigger.value = true
         }
     }
-    Box(
+    Box(modifier = modifier,
     ) {
         AnimatedScaleInTransition(time = 200, visible = animateTrigger.value) {
             content()

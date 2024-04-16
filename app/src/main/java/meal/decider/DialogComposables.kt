@@ -262,11 +262,14 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             appViewModel.updateRestaurantDialogVisibility(1)
                         }
                     }) {
-                    if (restaurantDialogVisibility.value == 1) {
-                        RestaurantListContent()
-                    }
-                    if (restaurantDialogVisibility.value == 2) {
-                        RestaurantFilters()
+                    AnimatedTransitionVoid (modifier = Modifier.fillMaxSize()) {
+                        showLog("test", "anim void w/ value of ${appViewModel.getRestaurantDialogVisibility}")
+                        if (restaurantDialogVisibility.value == 1) {
+                            RestaurantListContent()
+                        }
+                        if (restaurantDialogVisibility.value == 2) {
+                            RestaurantFilters()
+                        }
                     }
                 }
             }
