@@ -69,19 +69,23 @@ fun AnimatedTransitionDialog(
 @Composable
 fun AnimatedTransitionVoid(
     modifier: Modifier = Modifier,
+    any: Any? = Unit,
     content: @Composable () -> Unit,
 ) {
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    //TODO: Prolly needs to be reset to false so it can be animated in again.
     val animateTrigger = remember { mutableStateOf(false) }
 
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(key1 = any) {
         launch {
             delay(0)
             animateTrigger.value = true
+            showLog("test", "launched effect")
         }
     }
     Box(modifier = modifier,
     ) {
+        showLog("test", "anim transition with visibility of ${animateTrigger.value}")
+
         AnimatedScaleInTransition(time = 200, visible = animateTrigger.value) {
             content()
         }

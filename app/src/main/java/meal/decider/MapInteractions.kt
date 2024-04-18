@@ -50,7 +50,6 @@ class MapInteractions(private val activity: Activity, private val activityContex
             var restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
             restaurantList = filteredDistanceAndRatingRestaurantList(restaurantList, distance, rating)
 
-            showLog("test", "rest list size is ${restaurantList.size}")
             appViewModel.updateRestaurantsList(restaurantList)
             appViewModel.updateSingleRestaurantColorAndBorder(0, appViewModel.getColorTheme.selectedRestaurantSquare, lightRestaurantSelectionBorderStroke)
             appViewModel.updateRestaurantQueryFinished(true)

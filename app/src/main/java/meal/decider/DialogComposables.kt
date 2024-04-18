@@ -245,6 +245,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     //TODO: Overarching Box within Dialog, switching windows.
     //TODO: Get transition working first, then add animation.
+    //TODO: Not a big fan of the Dialog window preceding animation slide. Another reason to just use composables.
     @Composable
     fun RestaurantDialog() {
         val restaurantDialogVisibility = appViewModel.restaurantDialogVisibility.collectAsStateWithLifecycle()
@@ -262,8 +263,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             appViewModel.updateRestaurantDialogVisibility(1)
                         }
                     }) {
-                    AnimatedTransitionVoid (modifier = Modifier.fillMaxSize()) {
-                        showLog("test", "anim void w/ value of ${appViewModel.getRestaurantDialogVisibility}")
+                    AnimatedTransitionVoid (
+                        modifier = Modifier.fillMaxSize(),
+                        any = appViewModel.getRestaurantDialogVisibility) {
                         if (restaurantDialogVisibility.value == 1) {
                             RestaurantListContent()
                         }
