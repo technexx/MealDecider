@@ -1,8 +1,10 @@
 package meal.decider
 
 import android.app.Activity
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -53,16 +55,18 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
+//TODO: Choppy animations / content slides in after box/dialog
 //TODO: Formula duration too reliant on delay, since duration doesn't iterate down until delay finishes.
-//TODO: General settings -> sub-menus should also be cleaner transitions
 //TODO: Query/delay issues w/ "Places" button. Multiple presses will cause crash.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
 //TODO: "Places" crashes w/ 0 size restaurant list on initial app install.
-//TODO: For restaurants with multiple locations, we may want to plug in the address, otherwise all of them will show up.
+//TODO: For restaurants with multiple locations, we may want to plug in the address, otherwise all of them will show up.ama
 
-class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, private val activity: Activity, private val roomInteractions: RoomInteractions, private val mapInteractions: MapInteractions, private val runnables: Runnables) {
+class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, activity: Activity, private val roomInteractions: RoomInteractions, mapInteractions: MapInteractions, private val runnables: Runnables) {
+
     private val buttons = Buttons(appViewModel, mapInteractions, runnables)
     private val dialogComposables = DialogComposables(appViewModel, appDatabase, activity, mapInteractions, runnables)
+    private val settings = Settings(appViewModel, roomInteractions)
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -216,28 +220,50 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     @Composable
     fun Board() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        val restaurantDialogVisibility = appViewModel.restaurantDialogVisibility.collectAsStateWithLifecycle()
 
-        Column (modifier = Modifier
-            .fillMaxWidth()
-            .height(screenHeightPct(0.1).dp)
-        ) {
-            RestrictionsBarLayout()
-            DialogCompositions()
-        }
-        Surface(
-            color = colorResource(id = colorTheme.value.cuisineBoard),
-        ) {
-            Column {
-                Column(modifier = Modifier
-                    .height(screenHeightPct(0.7).dp)) {
-                    CuisineSelectionGrid()
+        Box(modifier = Modifier.fillMaxSize()) {
+            Surface(
+                color = colorResource(id = colorTheme.value.cuisineBoard),
+            ) {
+                Column {
+                    Column (modifier = Modifier
+                        .fillMaxWidth()
+                        .height(screenHeightPct(0.1).dp)
+                    ) {
+                        RestrictionsBarLayout()
+                        DialogCompositions()
+                    }
+                    Column(modifier = Modifier
+                        .height(screenHeightPct(0.7).dp)) {
+                        CuisineSelectionGrid()
+                    }
+                    Column(modifier = Modifier
+                        .height(screenHeightPct(0.1).dp)
+                        .background(colorResource(id = colorTheme.value.cuisineInteractionButtonsRow))
+                    ) {
+                        buttons.InteractionButtons(0)
+                    }
                 }
-                Column(modifier = Modifier
-                    .height(screenHeightPct(0.2).dp)
-                    .background(colorResource(id = colorTheme.value.cuisineInteractionButtonsRow))
-                )
-                {
-                    buttons.InteractionButtons()
+            }
+
+            if (restaurantDialogVisibility.value == 1) {
+                AnimatedComposable(
+                    modifier = Modifier.fillMaxSize(),
+                    backHandler = {
+                        appViewModel.updateRestaurantDialogVisibility(0)
+                    }) {
+                    dialogComposables.RestaurantListContent()
+                }
+            }
+
+            if (restaurantDialogVisibility.value == 2) {
+                AnimatedComposable(
+                    modifier = Modifier.fillMaxSize(),
+                    backHandler = {
+                        appViewModel.updateRestaurantDialogVisibility(1)
+                    }) {
+                    dialogComposables.RestaurantFilters()
                 }
             }
         }
@@ -297,11 +323,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
         val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
 
-        val showRestaurantsDialog = appViewModel.showRestaurantsDialog.collectAsStateWithLifecycle()
-        val showRestaurants = appViewModel.showRestaurants.collectAsStateWithLifecycle()
-        val showRestaurantSettings = appViewModel.showRestaurantSettings.collectAsStateWithLifecycle()
-        val restaurantDialogVisibility = appViewModel.restaurantDialogVisibility.collectAsStateWithLifecycle()
-
         if (addMode.value) {
             dialogComposables.AddDialogBox()
         }
@@ -311,50 +332,32 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         }
 
         if (optionsMode.value) {
-            dialogComposables.OptionsDialog()
+            settings.OptionsDialog()
         }
 
         if (settingsDialogVisibility.value.speeds) {
-            dialogComposables.SpeedSettingsDialog()
+            settings.SpeedSettingsDialog()
         }
 
         if (settingsDialogVisibility.value.colors) {
-            dialogComposables.ColorsSettingDialog()
+            settings.ColorsSettingDialog()
         }
 
-        if (restaurantDialogVisibility.value != 0) {
-            dialogComposables.RestaurantDialog()
-        }
-
-//        if (showRestaurantsDialog.value) {
-//            dialogComposables.RestaurantDialog()
-//        }
-
-//        if (showRestaurants.value) {
-//            dialogComposables.RestaurantDialog()
-//        }
-
-//        if (showRestaurantSettings.value) {
-//            dialogComposables.RestaurantFilters()
-//        }
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun CuisineSelectionGrid() {
-        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-
         val coroutineScope = rememberCoroutineScope()
         val sectionGridState = rememberLazyGridState()
+
         val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
         val cuisineRollFinished = appViewModel.cuisineRollFinished.collectAsStateWithLifecycle()
-
         val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
         val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()
-        val restrictionsString = foodRestrictionsString(restrictionsUi.value)
 
+        val restrictionsString = foodRestrictionsString(restrictionsUi.value)
         val rolledCuisineString = selectedCuisineSquare.value.name + " Food " + restrictionsString
-//        var squareColor = colorTheme.value.cuisineSquares
-        var borderStroke: BorderStroke
 
         if (cuisineRollFinished.value) {
             LaunchedEffect(Unit) {
@@ -370,8 +373,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             }
         }
 
+        var sizeMod: Float
+
         LazyVerticalGrid(state = sectionGridState,
-            modifier = Modifier,
             columns = GridCells.Adaptive(minSize = 128.dp),
             contentPadding = PaddingValues(
                 start = 12.dp,
@@ -381,28 +385,24 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             ),
             content = {
                 items(boardUiState.value.squareList.size) { index ->
-                    borderStroke = appViewModel.getSquareList[index].border
-                    val elevation = if (index == appViewModel.rolledSquareIndex) 12.dp else 4.dp
-                    val squareColor = if (index == appViewModel.rolledSquareIndex) appViewModel.getColorTheme.selectedCuisineSquare else appViewModel.getColorTheme.cuisineSquares
+                    if (appViewModel.rolledSquareIndex == index) sizeMod = 1.0f else sizeMod = 0.95f
 
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = colorResource(id = squareColor),
-//                            containerColor = colorResource(id = appViewModel.getSquareList[index].color),
-                        ),
-                        border = borderStroke,
-                        elevation = CardDefaults.cardElevation(
-                            defaultElevation = elevation
-                        ),
-                        modifier = Modifier
+                    Row(modifier = Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically) {
+                        //Size remains at 11 here.
+                        CuisineCard(modifier = Modifier
+//                            .animateItemPlacement()
+//                            .fillMaxSize()
+                            .fillMaxSize(sizeMod)
+                            .animateContentSize()
                             .padding(6.dp)
                             .selectable(
                                 selected = true,
                                 onClick = {
                                     if (appViewModel.getEditMode) {
                                         appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(
-                                            index
-                                        )
+                                            index)
                                     }
                                     if (appViewModel.getCuisineSelectionMode) {
                                         appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[index])
@@ -411,7 +411,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                                 appViewModel.getRestrictionsList
                                             )
                                         )
-                                        appViewModel.toggleSelectionOfSingleCuisineSquareColorAndBorder(
+                                        appViewModel.updateSingleCuisineSquareColorAndBorder(
                                             index,
                                             appViewModel.getColorTheme.selectedCuisineSquare,
                                             heavyCuisineSelectionBorderStroke
@@ -419,17 +419,39 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                     }
                                 }
                             ),
-                    ) {
-                        RegText(
-                            text = boardUiState.value.squareList[index].name,
-                            fontSize = 18,
-                            color = colorResource(id = colorTheme.value.cuisineSquaresText),
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(16.dp)
-                        )
+                            index = index)
                     }
                 }
             }
         )
+    }
+
+    @Composable
+    fun CuisineCard(modifier: Modifier, index: Int) {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
+        val elevation = if (index == appViewModel.rolledSquareIndex) 12.dp else 4.dp
+        val squareColor = boardUiState.value.squareList[index].color
+
+        val borderStroke = appViewModel.getSquareList[index].border
+
+        Card(
+            modifier = modifier,
+            colors = CardDefaults.cardColors(
+                containerColor = colorResource(id = squareColor),
+            ),
+            border = borderStroke,
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = elevation
+            ),
+        ) {
+            RegText(
+                text = boardUiState.value.squareList[index].name,
+                fontSize = 18,
+                color = colorResource(id = colorTheme.value.cuisineSquaresText),
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
     }
 }

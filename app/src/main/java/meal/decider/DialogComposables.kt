@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,8 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
@@ -28,9 +25,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -70,6 +65,7 @@ import meal.decider.Database.RoomInteractions
 class DialogComposables(private val appViewModel: AppViewModel, appDatabase: CuisineDatabase.AppDatabase, private val activity: Activity, private val mapInteractions: MapInteractions, private val runnables: Runnables){
     private val roomInteractions = RoomInteractions(appDatabase, appViewModel, activity)
     private val buttons = Buttons(appViewModel, mapInteractions, runnables)
+    private val settings = Settings(appViewModel, roomInteractions)
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -243,50 +239,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         )
     }
 
-    //TODO: Overarching Box within Dialog, switching windows.
-    //TODO: Get transition working first, then add animation.
-    //TODO: Not a big fan of the Dialog window preceding animation slide. Another reason to just use composables.
-    @Composable
-    fun RestaurantDialog() {
-        val restaurantDialogVisibility = appViewModel.restaurantDialogVisibility.collectAsStateWithLifecycle()
-
-        Box() {
-            if (restaurantDialogVisibility.value != 0) {
-                Dialog(
-                    onDismissRequest = {
-                        if (restaurantDialogVisibility.value == 1) {
-                            appViewModel.updateRestaurantDialogVisibility(0)
-                            appViewModel.updateShowRestaurants(false)
-
-                        }
-                        if (restaurantDialogVisibility.value == 2) {
-                            appViewModel.updateRestaurantDialogVisibility(1)
-                        }
-                    }) {
-                    AnimatedTransitionVoid (
-                        modifier = Modifier.fillMaxSize(),
-                        any = appViewModel.getRestaurantDialogVisibility) {
-                        if (restaurantDialogVisibility.value == 1) {
-                            RestaurantListContent()
-                        }
-                        if (restaurantDialogVisibility.value == 2) {
-                            RestaurantFilters()
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     @Composable
     fun RestaurantListContent() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-        val selectMode = appViewModel.restaurantSelectionMode.collectAsStateWithLifecycle()
         val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
-
-        var selectIconColor: Int
-
-        val buttonsEnabled = !rollEngaged.value
         var expanded by remember { mutableStateOf(false) }
         if (rollEngaged.value) expanded = false
 
@@ -297,36 +253,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 .fillMaxSize()
             ) {
                 Column(modifier = Modifier
-                    .wrapContentSize()
-                ) {
-                    Row (modifier = Modifier
-                        .fillMaxWidth()
-                        .background(colorResource(id = colorTheme.value.restaurantTopRow)),
-                        horizontalArrangement = Arrangement.End) {
-                        if (selectMode.value) {
-                            selectIconColor = appViewModel.getColorTheme.selectedRestaurantIcon
-                        } else {
-                            selectIconColor = appViewModel.getColorTheme.restaurantsIconButtons
-                        }
-                        MaterialIconButton(
-                            icon = Icons.Filled.Create,
-                            description = "select",
-                            tint = selectIconColor,
-                            enabled = buttonsEnabled) {
-                            appViewModel.updateRestaurantSelectionMode(!appViewModel.getRestaurantSelectionMode)
-                        }
-                        MaterialIconButton(
-                            icon = Icons.Filled.Settings,
-                            description = "settings",
-                            tint = colorTheme.value.restaurantsIconButtons,
-                            enabled = buttonsEnabled) {
-                            appViewModel.updateRestaurantDialogVisibility(2)
-//                            appViewModel.updateShowRestaurantSettings(true)
-                        }
-                        RestaurantSortDropdownMenu()
-                    }
-                }
-                Column(modifier = Modifier
                     .height(screenHeightPct(0.8).dp)
                     .background(colorResource(id = colorTheme.value.restaurantBoard))
                 ) {
@@ -336,7 +262,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     .wrapContentSize()
                     .background(colorResource(id = colorTheme.value.restaurantInteractionButtonsRow))
                 ) {
-                    buttons.InteractionButtons()
+                    buttons.InteractionButtons(1)
                 }
             }
         }
@@ -449,7 +375,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val selectedRestaurantSquare = appViewModel.selectedRestaurantSquare.collectAsStateWithLifecycle()
         val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
 
-
         val rolledRestaurantString = selectedRestaurantSquare.value.name.toString()
         var borderStroke: BorderStroke
 
@@ -493,11 +418,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     appViewModel.restaurantStringUri =
                                         appViewModel.getRestaurantList[index].name.toString()
                                     appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[index])
-                                    appViewModel.toggleSelectionOfSingleRestaurantSquareColorAndBorder(
-                                        index,
+                                    appViewModel.updateSingleRestaurantColorAndBorder(index,
                                         appViewModel.getColorTheme.selectedRestaurantSquare,
-                                        heavyRestaurantSelectionBorderStroke
-                                    )
+                                        heavyRestaurantSelectionBorderStroke)
                                 }
                             }
                         ),
@@ -596,213 +519,5 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         }
     }
 
-    @Composable
-    fun OptionsDialog() {
-//         val windowProvider = LocalView.current.parent as DialogWindowProvider
-//            windowProvider.window.setGravity(Gravity.END)
-        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
 
-        AnimatedTransitionDialog(
-            modifier = Modifier
-                .background(colorResource(id = colorTheme.value.dialogBackground))
-                .fillMaxSize(),
-            onDismissRequest = {
-                appViewModel.updateOptionsMode(false) },
-            content = {
-                Column(modifier = Modifier
-                    .background(colorResource(id = colorTheme.value.dialogBackground))
-                    .fillMaxSize()
-                    .padding(20.dp)
-                )
-                {
-                    OptionsDialogUi()
-                }
-            }
-        )
-    }
-
-    @Composable
-    fun OptionsDialogUi() {
-        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-        val textColor = colorResource(id = colorTheme.value.dialogTextColor)
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(id = colorTheme.value.dialogBackground)),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Column (horizontalAlignment = Alignment.CenterHorizontally){
-                RegText("Settings", fontSize = 28, color = textColor)
-                Spacer(modifier = Modifier.height(20.dp))
-                RegTextButton(text = "Speeds", fontSize = 26, color = textColor,
-                    onClick = {
-                        appViewModel.updateOptionsMode(false)
-                        appViewModel.updateSettingsDialogVisibility(speeds = true, sounds = false, colors = false)
-                    })
-                Spacer(modifier = Modifier.height(10.dp))
-                RegTextButton(text = "Sounds", fontSize = 26, color = textColor,
-                    onClick = {
-                        appViewModel.updateOptionsMode(false)
-                        appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = true, colors = false)
-                    })
-                Spacer(modifier = Modifier.height(10.dp))
-                RegTextButton(text = "Colors",  fontSize = 26, color = textColor,
-                    onClick = {
-                        appViewModel.updateOptionsMode(false)
-                        appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = false, colors = true)
-                    })
-            }
-        }
-    }
-
-    @Composable
-    fun ColorsSettingDialog() {
-        val colorSettingsToggle = appViewModel.colorSettingsSelectionList.collectAsStateWithLifecycle()
-        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-
-        AnimatedTransitionDialog(
-            modifier = Modifier
-                .background(colorResource(id = colorTheme.value.dialogBackground))
-                .fillMaxSize(),
-            onDismissRequest = {
-                appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
-                appViewModel.updateOptionsMode(true)
-            },
-            content = {
-                Column(modifier = Modifier
-                    .fillMaxSize()
-                    .background(colorResource(id = colorTheme.value.dialogBackground)), horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Row {
-                        RegText(text = "Theme", fontSize = 28, color = Color.Black, fontWeight = FontWeight.Bold)
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    LazyVerticalGrid(
-                        columns = GridCells.Adaptive(minSize = 128.dp),
-                        contentPadding = PaddingValues(
-                            start = 24.dp,
-                            top = 16.dp,
-                            end = 24.dp,
-                            bottom = 16.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        content = {
-                            items(colorSettingsToggle.value.size) { index ->
-                                val cardColor = if (appViewModel.getColorSettingsSelectionList[index].selected) colorResource(id = R.color.blue_grey_100) else Color.White
-
-                                Box(contentAlignment = Alignment.Center) {
-                                    CardUi(
-                                        color = cardColor,
-                                        onClick = {
-                                            appViewModel.switchColorSettingsUi(index)
-                                            appViewModel.updateColorTheme(Theme.themeColorsList[index])
-                                            roomInteractions.saveColorThemeToSharedPref(Theme.themeColorsList[index])
-                                        },
-                                        content = {
-                                            RegText(
-                                                text = colorSettingsToggle.value[index].name,
-                                                fontSize = 26,
-                                                color = Color.Black,
-                                                fontWeight = FontWeight.Bold,
-                                                modifier = Modifier.padding(12.dp))
-                                        })
-                                }
-                            }
-                        }
-                    )
-                }
-            })
-    }
-
-    @Composable
-    fun SpeedSettingsDialog() {
-        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-        val coroutineScope: CoroutineScope = rememberCoroutineScope()
-        var cuisineRollDurationSliderPosition by remember { mutableFloatStateOf(3f) }
-        var cuisineRollDelaySliderPosition by remember { mutableFloatStateOf(3f) }
-        var restaurantRollDurationSliderPosition by remember { mutableFloatStateOf(3f) }
-        var restaurantRollDelaySliderPosition by remember { mutableFloatStateOf(3f) }
-
-        LaunchedEffect(Unit) {
-            cuisineRollDurationSliderPosition = appViewModel.cuisineRollDurationSetting.toFloat()
-            cuisineRollDelaySliderPosition = appViewModel.cuisineRollSpeedSetting.toFloat()
-            restaurantRollDurationSliderPosition = appViewModel.restaurantRollDurationSetting.toFloat()
-            restaurantRollDelaySliderPosition = appViewModel.restaurantRollDelaySetting.toFloat()
-        }
-
-        AnimatedTransitionDialog(
-            modifier = Modifier
-                .background(colorResource(id = colorTheme.value.dialogBackground))
-                .fillMaxSize(),
-            onDismissRequest = {
-                appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
-                appViewModel.updateOptionsMode(true)
-                coroutineScope.launch {
-                    roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
-                }
-                appViewModel.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
-            },
-            content = {
-                Surface(
-                    shape = RoundedCornerShape(16.dp),
-                ) {
-                    Column(modifier = Modifier
-                        .fillMaxSize()
-                        .background(colorResource(id = colorTheme.value.dialogBackground)),
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                        Column {
-                            RegText("Cuisine Selection Duration", fontSize = 18, color = Color.Black)
-                            Row () {
-                                Slider(modifier = Modifier
-                                    .fillMaxWidth(0.7f)
-                                    .padding(start = 4.dp),
-                                    value = cuisineRollDurationSliderPosition,
-                                    onValueChange = { cuisineRollDurationSliderPosition = it },
-                                    valueRange = 1f..10f,
-                                    steps = 9
-                                )
-                                RegText(text = "${cuisineRollDurationSliderPosition.toInt()}", fontSize = 18, color = Color.Black)
-                            }
-                            RegText("Cuisine Selection Speed", fontSize = 18, color = Color.Black)
-                            Row () {
-                                Slider(modifier = Modifier
-                                    .fillMaxWidth(0.7f)
-                                    .padding(start = 4.dp),
-                                    value = cuisineRollDelaySliderPosition,
-                                    onValueChange = { cuisineRollDelaySliderPosition = it },
-                                    valueRange = 1f..10f,
-                                    steps = 9
-                                )
-                                RegText(text = "${cuisineRollDelaySliderPosition.toInt()}", fontSize = 18, color = Color.Black)
-                            }
-                            RegText("Restaurant Selection Duration", fontSize = 18, color = Color.Black)
-                            Row () {
-                                Slider(modifier = Modifier
-                                    .fillMaxWidth(0.7f)
-                                    .padding(start = 4.dp),
-                                    value = restaurantRollDurationSliderPosition,
-                                    onValueChange = { restaurantRollDurationSliderPosition = it },
-                                    valueRange = 1f..10f,
-                                    steps = 9
-                                )
-                                RegText(text = "${restaurantRollDurationSliderPosition.toInt()}", fontSize = 18, color = Color.Black)
-                            }
-                            RegText("Restaurant Selection Speed", fontSize = 18, color = Color.Black)
-                            Row () {
-                                Slider(modifier = Modifier
-                                    .fillMaxWidth(0.7f)
-                                    .padding(start = 4.dp),
-                                    value = restaurantRollDelaySliderPosition,
-                                    onValueChange = { restaurantRollDelaySliderPosition = it },
-                                    valueRange = 1f..10f,
-                                    steps = 9
-                                )
-                                RegText(text = "${restaurantRollDelaySliderPosition.toInt()}", fontSize = 18, color = Color.Black)
-                            }
-                        }
-                    }
-                }
-            })
-    }
 }

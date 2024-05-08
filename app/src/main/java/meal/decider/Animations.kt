@@ -1,13 +1,15 @@
 package meal.decider
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.foundation.background
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -15,7 +17,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -26,8 +27,49 @@ private suspend fun startDismissWithExitAnimation(
     onDismissRequest: () -> Unit
 ) {
     animateTrigger.value = false
-    delay(300)
+    delay(200)
     onDismissRequest()
+}
+
+@Composable
+fun AnimatedComposable(
+    any: Any? = Unit,
+    modifier: Modifier = Modifier,
+    backHandler: () -> Unit,
+    contentAnimated: @Composable () -> Unit = { },
+    contentStatic: @Composable () -> Unit,
+){
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val animateTrigger = remember { mutableStateOf(false) }
+
+    BackHandler {
+        coroutineScope.launch {
+            startDismissWithExitAnimation(animateTrigger, backHandler)
+        }
+    }
+
+    LaunchedEffect(key1 = any) {
+        launch {
+            delay(0)
+            animateTrigger.value = true
+        }
+    }
+
+    Box(
+        modifier = modifier
+    ) {
+        AnimatedScaleInTransition(
+            animationEnter = slideInHorizontally (
+                animationSpec = tween(200)
+            ),
+            animationExit = slideOutHorizontally(
+                animationSpec = tween(200),
+            ),
+            visible = animateTrigger.value) {
+            contentAnimated()
+            contentStatic()
+        }
+    }
 }
 
 //Background color must be set in whichever columns/rows are being used in the content input, otherwise background will be the same as the Box here.
@@ -45,7 +87,6 @@ fun AnimatedTransitionDialog(
     LaunchedEffect(key1 = any) {
         launch {
             delay(0)
-            //Was not being set to true when re-using this composable. Solved by using unique key.
             animateTrigger.value = true
         }
     }
@@ -59,67 +100,33 @@ fun AnimatedTransitionDialog(
         Box(
             modifier = modifier
         ) {
-            AnimatedScaleInTransition(time = 100, visible = animateTrigger.value) {
-                content()
+            AnimatedScaleInTransition(
+                animationEnter = slideInHorizontally (
+                    animationSpec = tween(200)
+                ),
+                animationExit = slideOutHorizontally(
+                    animationSpec = tween(200),
+                ),
+                visible = animateTrigger.value) {
+                Row() {
+                    content()
+                }
             }
         }
     }
 }
 
 @Composable
-fun AnimatedTransitionVoid(
-    modifier: Modifier = Modifier,
-    any: Any? = Unit,
-    content: @Composable () -> Unit,
-) {
-    //TODO: Prolly needs to be reset to false so it can be animated in again.
-    val animateTrigger = remember { mutableStateOf(false) }
-
-    LaunchedEffect(key1 = any) {
-        launch {
-            delay(0)
-            animateTrigger.value = true
-            showLog("test", "launched effect")
-        }
-    }
-    Box(modifier = modifier,
-    ) {
-        showLog("test", "anim transition with visibility of ${animateTrigger.value}")
-
-        AnimatedScaleInTransition(time = 200, visible = animateTrigger.value) {
-            content()
-        }
-    }
-}
-
-@Composable
 fun AnimatedScaleInTransition(
-    time: Int,
+    animationEnter: EnterTransition,
+    animationExit: ExitTransition,
     visible: Boolean,
     content: @Composable AnimatedVisibilityScope.() -> Unit
 ) {
     AnimatedVisibility(
+        enter = animationEnter,
+        exit = animationExit,
         visible = visible,
-        enter = expandHorizontally(
-            animationSpec = tween(time)
-        ),
-        exit = shrinkHorizontally(
-            animationSpec = tween(time)
-        ),
         content = content
     )
-}
-
-
-@Composable
-fun CustomDialog(
-    onDismissRequest: () -> Unit,
-    content: @Composable () -> Unit) {
-    Dialog(onDismissRequest = { onDismissRequest() }) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.grey_50))) {
-            content()
-        }
-    }
 }

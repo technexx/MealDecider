@@ -19,9 +19,8 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
 
     @SuppressLint("MissingPermission")
     @Composable
-    fun InteractionButtons() {
+    fun InteractionButtons(restaurantVisibility: Int) {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-        val coroutineScope = rememberCoroutineScope()
 
         Column (
             modifier = Modifier
@@ -36,55 +35,72 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (!appViewModel.getShowRestaurants) {
-                    ButtonUi(text = "Places", fontSize = 20, color = colorTheme.value.interactionButtons, onClick =  {
-                        if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-                            if (appViewModel.getRestaurantQueryFinished) {
-                                coroutineScope.launch {
-                                    if (!appViewModel.getShowRestaurants) {
-                                        if (appViewModel.hasCuisineStringUriChanged) {
-                                            mapInteractions.mapsApiCall()
-                                            //Sets first entry to string for maps launch.
-                                            appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[0])
-                                            appViewModel.updateSingleRestaurantColorAndBorder(0, appViewModel.getColorTheme.selectedRestaurantSquare, defaultRestaurantBorderStroke)
-                                            appViewModel.restaurantStringUri = appViewModel.getRestaurantList[0].name.toString()
-                                        }
-//                                        appViewModel.updateShowRestaurantsDialog(true)
-                                        appViewModel.updateRestaurantDialogVisibility(1)
-                                        appViewModel.updateShowRestaurants(true)
-                                    }
-                                }
-                            }
-                        }
-                    })
-                }
+                if (restaurantVisibility == 0) { PlacesButton(color = colorTheme.value.interactionButtons) }
+                DiceButton(color = colorTheme.value.interactionButtons)
+                MapButton(color = colorTheme.value.interactionButtons)
+            }
+        }
+    }
 
+    @Composable
+    fun PlacesButton(color: Int) {
+        val coroutineScope = rememberCoroutineScope()
 
-                CustomIconButton(size = 72, image = R.drawable.dice, description = "dice", tint = colorTheme.value.interactionIcons) {
-                    if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-                        if (!appViewModel.getShowRestaurants) {
-                            runnables.rollCuisine()
-                        } else {
-                            if (appViewModel.getRestaurantQueryFinished) {
-                                runnables.rollRestaurant()
-//                            appViewModel.testRestaurantRoll()
-                            }
-                        }
-                    }
-                }
-                ButtonUi(text = "Map", fontSize = 20, color = colorTheme.value.interactionButtons, onClick = {
-                    if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
+        ButtonUi(
+            text = "Places",
+            fontSize = 20,
+            color = color,
+            onClick =  {
+                if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
+                    if (appViewModel.getRestaurantQueryFinished) {
                         coroutineScope.launch {
-                            if (!appViewModel.getShowRestaurants) {
-                                mapInteractions.mapIntent(appViewModel.cuisineStringUri)
-                            } else {
-                                if (appViewModel.getRestaurantQueryFinished) {
-                                    mapInteractions.mapIntent(appViewModel.restaurantStringUri)
-                                }
+                            if (appViewModel.hasCuisineStringUriChanged) {
+                                mapInteractions.mapsApiCall()
+                                //Sets first entry to string for maps launch.
+                                appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[0])
+                                appViewModel.updateSingleRestaurantColorAndBorder(0, appViewModel.getColorTheme.selectedRestaurantSquare, defaultRestaurantBorderStroke)
+                                appViewModel.restaurantStringUri = appViewModel.getRestaurantList[0].name.toString()
                             }
+                            appViewModel.updateRestaurantDialogVisibility(1)
+                            appViewModel.updateShowRestaurants(true)
                         }
                     }
-                })
+                }
+            })
+    }
+
+    @Composable
+    fun MapButton(color: Int) {
+        val coroutineScope = rememberCoroutineScope()
+
+        ButtonUi(text = "Map", fontSize = 20, color = color, onClick = {
+            if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
+                coroutineScope.launch {
+                    if (appViewModel.getRestaurantDialogVisibility == 0) {
+                        mapInteractions.mapIntent(appViewModel.cuisineStringUri)
+                    } else {
+                        if (appViewModel.getRestaurantQueryFinished) {
+                            mapInteractions.mapIntent(appViewModel.restaurantStringUri)
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    @Composable
+    fun DiceButton(color: Int) {
+        CustomIconButton(size = 72, image = R.drawable.dice, description = "dice", tint = color) {
+            if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
+                if (appViewModel.getRestaurantDialogVisibility == 0) {
+                    runnables.rollCuisine()
+                    runnables.timer()
+                } else {
+                    if (appViewModel.getRestaurantQueryFinished) {
+                        runnables.rollRestaurant()
+//                            appViewModel.testRestaurantRoll()
+                    }
+                }
             }
         }
     }

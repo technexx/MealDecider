@@ -51,28 +51,17 @@ fun foodRestrictionsString(list: SnapshotStateList<RestrictionsValues>): String 
     return stringList
 }
 
+fun modifierDelay(duration: Long, speedSetting: Long): Long {
+    showLog("test", "duration is $duration")
+    //Longest delay. Will range from 300 (duration 1) to 1000 (duration 10). 10 ticks each roll.
+    var modifiedDelay = duration / 10
+    //Reduces delay based on speed setting, with 1 not changing it at all from longest.
+    modifiedDelay /= (speedSetting - (speedSetting * 0.5).toLong())
+    return modifiedDelay
+}
+
 fun rollDurationSettingToMillis(durationSetting: Long): Long {
-    return durationSetting * 1000
-}
-
-//TODO: Same issue though more manageable - that shorter delays reduce duration quicker. Alternative is to tie duration purely to duration setting.
-fun testRollSpeedSettingToMilling(duration: Long, speedSetting: Long): Long {
-    val speedModifier = speedSetting + 4
-    val speed = duration / speedModifier
-    return speed
-}
-
-fun rollSpeedSettingToMillis(duration: Long, speedSetting: Long): Long {
-
-    val delaySettingDivisor = 6 + (speedSetting * 4)
-    val additionalDelayBuffer = (100 - (10 * speedSetting))
-    val valueToReturn = (duration / delaySettingDivisor) + additionalDelayBuffer
-
-    return valueToReturn
-}
-
-fun durationDecreaseIteration(duration: Long): Long {
-    return (duration.toDouble() * 0.9).toLong()
+    return 3000 + (durationSetting * 1000 * 0.7).toLong()
 }
 
 @Composable

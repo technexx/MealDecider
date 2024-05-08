@@ -12,7 +12,6 @@ import meal.decider.AppViewModel
 import meal.decider.ColorTheme
 import meal.decider.SquareValues
 import meal.decider.Theme
-import meal.decider.showLog
 
 class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel, private val activity: Activity) {
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
@@ -131,7 +130,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             appViewModel.cuisineRollDurationSetting = rollOptions[0].cuisineRollDurationSetting
             appViewModel.cuisineRollSpeedSetting = rollOptions[0].cuisineRollDelaySetting
             appViewModel.restaurantRollDurationSetting = rollOptions[0].restaurantRollDurationSetting
-            appViewModel.restaurantRollDelaySetting = rollOptions[0].restaurantRollDelaySetting
+            appViewModel.restaurantRollSpeedSetting = rollOptions[0].restaurantRollDelaySetting
         }
     }
 

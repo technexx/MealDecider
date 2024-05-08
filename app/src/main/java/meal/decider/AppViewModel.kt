@@ -26,7 +26,7 @@ class AppViewModel : ViewModel() {
 
     var cuisineRollSpeedSetting : Long = 0
     var cuisineRollDurationSetting : Long = 0
-    var restaurantRollDelaySetting : Long = 0
+    var restaurantRollSpeedSetting : Long = 0
     var restaurantRollDurationSetting : Long= 0
 
     private val _boardUiState = MutableStateFlow(BoardValues())
@@ -237,7 +237,7 @@ class AppViewModel : ViewModel() {
         for (i in starterCuisineList) {
             list.add(SquareValues(i, getColorTheme.cuisineSquares))
         }
-        list[0] = SquareValues(list[0].name, getColorTheme.selectedCuisineSquare)
+        list[0] = SquareValues(list[0].name, getColorTheme.selectedCuisineSquare, heavyCuisineSelectionBorderStroke)
         return list
     }
 
@@ -358,31 +358,18 @@ class AppViewModel : ViewModel() {
         updateSquareList(tempSquareList)
     }
 
-    fun toggleSelectionOfSingleCuisineSquareColorAndBorder(index: Int, color: Int, border: BorderStroke) {
+    fun updateSingleCuisineSquareColorAndBorder(index: Int, color: Int, border: BorderStroke) {
         val tempSquareList = getSquareList
         val newList = SnapshotStateList<SquareValues>()
 
         for (i in tempSquareList) {
             newList.add(SquareValues(i.name, getColorTheme.cuisineSquares, defaultCuisineBorderStroke))
         }
+
         newList[index].color = color
         newList[index].border = border
 
         updateSquareList(newList)
-    }
-
-    fun toggleSelectionOfSingleRestaurantSquareColorAndBorder(index: Int, color: Int, border: BorderStroke) {
-        val tempRestaurantList = getRestaurantList
-        val newList = SnapshotStateList<RestaurantValues>()
-
-        for (i in tempRestaurantList) {
-            newList.add(RestaurantValues(i.name, i.address, i.distance, i.priceLevel, i.rating, getColorTheme.restaurantSquares, defaultRestaurantBorderStroke))
-        }
-
-        newList[index].color = color
-        newList[index].border = border
-
-        updateRestaurantsList(newList)
     }
 
     fun updateAllCuisineBorders(border: BorderStroke) {
@@ -444,9 +431,10 @@ class AppViewModel : ViewModel() {
         updateSquareList(squareList)
     }
 
-    fun setFirstSquareToDefaultColor() {
+    fun setFirstSquareToDefaultColorAndBorder() {
         val squareList = getSquareList
         squareList[0].color = getColorTheme.selectedCuisineSquare
+        squareList[0].border = heavyCuisineSelectionBorderStroke
         updateSquareList(squareList)
     }
 
@@ -487,7 +475,7 @@ class AppViewModel : ViewModel() {
     }
 
     fun updateRollOptions(cuisineDuration: Long, cuisineDelay: Long, restaurantDuration: Long, restaurantDelay: Long) {
-        cuisineRollDurationSetting = cuisineDuration; cuisineRollSpeedSetting = cuisineDelay; restaurantRollDurationSetting = restaurantDuration; restaurantRollDelaySetting = restaurantDelay
+        cuisineRollDurationSetting = cuisineDuration; cuisineRollSpeedSetting = cuisineDelay; restaurantRollDurationSetting = restaurantDuration; restaurantRollSpeedSetting = restaurantDelay
     }
 
     fun toggleRestrictionListItems(index: Int) {

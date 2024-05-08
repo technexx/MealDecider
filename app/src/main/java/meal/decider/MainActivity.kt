@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
                 appViewModel.updateSquareList(appViewModel.starterSquareList())
             } else {
                 roomInteractions.populateSquareValuesWithDatabaseValues()
-                appViewModel.setFirstSquareToDefaultColor()
+                appViewModel.setFirstSquareToDefaultColorAndBorder()
             }
             if (roomInteractions.restaurantFiltersDao.getAllRestaurantFilters().isEmpty()) {
                 roomInteractions.populateRestaurantFiltersWithInitialValues()
