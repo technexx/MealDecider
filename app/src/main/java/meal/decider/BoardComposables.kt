@@ -55,12 +55,10 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
-//TODO: Choppy animations / content slides in after box/dialog
-//TODO: Formula duration too reliant on delay, since duration doesn't iterate down until delay finishes.
 //TODO: Query/delay issues w/ "Places" button. Multiple presses will cause crash.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
 //TODO: "Places" crashes w/ 0 size restaurant list on initial app install.
-//TODO: For restaurants with multiple locations, we may want to plug in the address, otherwise all of them will show up.ama
+//TODO: For restaurants with multiple locations, we may want to plug in the address, otherwise all of them will show up.
 
 class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, activity: Activity, private val roomInteractions: RoomInteractions, mapInteractions: MapInteractions, private val runnables: Runnables) {
 
@@ -334,14 +332,14 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         if (optionsMode.value) {
             settings.OptionsDialog()
         }
-
-        if (settingsDialogVisibility.value.speeds) {
-            settings.SpeedSettingsDialog()
-        }
-
-        if (settingsDialogVisibility.value.colors) {
-            settings.ColorsSettingDialog()
-        }
+//
+//        if (settingsDialogVisibility.value.speeds) {
+//            settings.SpeedSettingsDialog()
+//        }
+//
+//        if (settingsDialogVisibility.value.colors) {
+//            settings.ColorsSettingDialog()
+//        }
 
     }
 
@@ -390,10 +388,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     Row(modifier = Modifier.fillMaxSize(),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically) {
-                        //Size remains at 11 here.
                         CuisineCard(modifier = Modifier
-//                            .animateItemPlacement()
-//                            .fillMaxSize()
                             .fillMaxSize(sizeMod)
                             .animateContentSize()
                             .padding(6.dp)

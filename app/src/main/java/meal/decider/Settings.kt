@@ -35,9 +35,12 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.RoomInteractions
 
 class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInteractions) {
+    //TODO: This should appear along w/ its children settings in a single Dialog.
     @Composable
     fun OptionsDialog() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
+        val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
 
         AnimatedTransitionDialog(
             modifier = Modifier
@@ -47,6 +50,12 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                 appViewModel.updateOptionsMode(false) },
             content = {
                 OptionsDialogUi()
+                if (settingsDialogVisibility.value.speeds) {
+                    SpeedSettingsDialog()
+                }
+                if (settingsDialogVisibility.value.colors) {
+                    ColorsSettingDialog()
+                }
             }
         )
     }
@@ -67,19 +76,19 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
             Spacer(modifier = Modifier.height(20.dp))
             RegTextButton(text = "Speeds", fontSize = 26, color = textColor,
                 onClick = {
-                    appViewModel.updateOptionsMode(false)
+//                    appViewModel.updateOptionsMode(false)
                     appViewModel.updateSettingsDialogVisibility(speeds = true, sounds = false, colors = false)
                 })
             Spacer(modifier = Modifier.height(10.dp))
             RegTextButton(text = "Sounds", fontSize = 26, color = textColor,
                 onClick = {
-                    appViewModel.updateOptionsMode(false)
+//                    appViewModel.updateOptionsMode(false)
                     appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = true, colors = false)
                 })
             Spacer(modifier = Modifier.height(10.dp))
             RegTextButton(text = "Colors",  fontSize = 26, color = textColor,
                 onClick = {
-                    appViewModel.updateOptionsMode(false)
+//                    appViewModel.updateOptionsMode(false)
                     appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = false, colors = true)
                 })
         }

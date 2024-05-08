@@ -59,7 +59,7 @@ class Runnables (private val appViewModel: AppViewModel) {
 
             handler.postDelayed(cuisineRollRunnable, delay)
 
-            if (duration < 200 || delay < 50) {
+            if (duration < 50 || delay < 50) {
                 val endTime = System.currentTimeMillis() - startTime
 
                 showLog("test", "elapsed time within roll is $elapsedTime")
