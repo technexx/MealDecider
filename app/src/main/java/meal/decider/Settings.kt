@@ -29,35 +29,43 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import meal.decider.Database.RoomInteractions
 
 class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInteractions) {
-    //TODO: This should appear along w/ its children settings in a single Dialog.
     @Composable
     fun OptionsDialog() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
         val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
 
-        AnimatedTransitionDialog(
-            modifier = Modifier
-                .background(colorResource(id = colorTheme.value.dialogBackground))
-                .fillMaxSize(),
-            onDismissRequest = {
-                appViewModel.updateOptionsMode(false) },
-            content = {
-                OptionsDialogUi()
-                if (settingsDialogVisibility.value.speeds) {
-                    SpeedSettingsDialog()
-                }
-                if (settingsDialogVisibility.value.colors) {
-                    ColorsSettingDialog()
+        //TODO: Entire Dialog is recomp'ing, which is causing the tearing.
+        showLog("test", "options dialog recomp")
+        Dialog(onDismissRequest = {
+            appViewModel.updateOptionsMode(false)
+        }) {
+            AnimatedTransitionVoid (
+                modifier = Modifier
+                    .background(colorResource(id = colorTheme.value.dialogBackground))
+                    .fillMaxSize()
+            ) {
+                //TODO: Instead of separate content, we should put all settings under a single surface/column to avoid tearing.
+                if (appViewModel.getOptionsMode) {
+                    OptionsDialogUi()
+                    if (settingsDialogVisibility.value.speeds) {
+                        showLog("test", "speeds drawing in Dialog")
+                        SpeedSettingsDialog()
+                    }
+                    if (settingsDialogVisibility.value.colors) {
+                        showLog("test", "colors drawing in Dialog")
+                        ColorsSettingDialog()
+                    }
                 }
             }
-        )
+        }
     }
 
     @Composable
@@ -76,19 +84,16 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
             Spacer(modifier = Modifier.height(20.dp))
             RegTextButton(text = "Speeds", fontSize = 26, color = textColor,
                 onClick = {
-//                    appViewModel.updateOptionsMode(false)
                     appViewModel.updateSettingsDialogVisibility(speeds = true, sounds = false, colors = false)
                 })
             Spacer(modifier = Modifier.height(10.dp))
             RegTextButton(text = "Sounds", fontSize = 26, color = textColor,
                 onClick = {
-//                    appViewModel.updateOptionsMode(false)
                     appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = true, colors = false)
                 })
             Spacer(modifier = Modifier.height(10.dp))
             RegTextButton(text = "Colors",  fontSize = 26, color = textColor,
                 onClick = {
-//                    appViewModel.updateOptionsMode(false)
                     appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = false, colors = true)
                 })
         }
@@ -105,7 +110,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                 .fillMaxSize(),
             onDismissRequest = {
                 appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
-                appViewModel.updateOptionsMode(true)
+//                appViewModel.updateOptionsMode(true)
             },
             content = {
                 Column(modifier = Modifier
@@ -174,7 +179,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                 .fillMaxSize(),
             onDismissRequest = {
                 appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
-                appViewModel.updateOptionsMode(true)
+//                appViewModel.updateOptionsMode(true)
                 coroutineScope.launch {
                     roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
                 }

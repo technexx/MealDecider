@@ -515,7 +515,7 @@ class AppViewModel : ViewModel() {
     val getAddMode get() = addMode.value
     val getEditMode get() = editMode.value
     val getActiveEdit get() = activeEdit.value
-    val getOptionsMode get() = settingsDialogVisibility.value
+    val getOptionsMode get() = optionsMode.value
     val getRestoreDefaults get() = restoreDefaults.value
 
     val getRestrictionsList get() = restrictionsList.value

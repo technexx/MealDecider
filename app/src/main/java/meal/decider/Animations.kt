@@ -97,6 +97,7 @@ fun AnimatedTransitionDialog(
         }
     }
     ) {
+//        showLog("test", "dialog recomp")
         Box(
             modifier = modifier
         ) {
@@ -111,6 +112,39 @@ fun AnimatedTransitionDialog(
                 Row() {
                     content()
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun AnimatedTransitionVoid(
+    modifier: Modifier = Modifier,
+    any: Any? = Unit,
+    content: @Composable () -> Unit,
+) {
+    val animateTrigger = remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = any) {
+        launch {
+            delay(0)
+            animateTrigger.value = true
+        }
+    }
+
+    Box(
+        modifier = modifier
+    ) {
+        AnimatedScaleInTransition(
+            animationEnter = slideInHorizontally (
+                animationSpec = tween(200)
+            ),
+            animationExit = slideOutHorizontally(
+                animationSpec = tween(200),
+            ),
+            visible = animateTrigger.value) {
+            Row() {
+                content()
             }
         }
     }
