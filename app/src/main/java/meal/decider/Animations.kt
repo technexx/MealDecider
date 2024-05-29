@@ -1,6 +1,7 @@
 package meal.decider
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.Animatable
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
@@ -10,14 +11,19 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Dialog
+import androidx.wear.compose.material.ContentAlpha
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -163,4 +169,57 @@ fun AnimatedScaleInTransition(
         visible = visible,
         content = content
     )
+}
+
+@Composable
+fun AnimatingDialog(
+    isOpen: Boolean,
+    content: @Composable () -> Unit,
+    onDismissRequest: () -> Unit,
+    enterDuration: Int = 300, // milliseconds
+    exitDuration: Int = 200, // milliseconds
+) {
+    var animatedVisibility by remember { mutableStateOf(false) }
+    val enterAnim = remember {
+        androidx.compose.animation.core.Animatable(
+            initialValue = 1f,
+            if (animatedVisibility) 1f else 0f
+        )
+    }
+
+    LaunchedEffect(isOpen) {
+        if (isOpen) {
+            enterAnim.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(durationMillis = enterDuration)
+            )
+        } else {
+            enterAnim.animateTo(
+                targetValue = 0f,
+                animationSpec = tween(durationMillis = exitDuration)
+            )
+        }
+        animatedVisibility = isOpen
+    }
+
+    Dialog(
+        onDismissRequest = onDismissRequest,
+        content = {
+            AnimatedContent(
+                alpha = enterAnim.value,
+                content = content
+            )
+        }
+    )
+}
+
+
+@Composable
+private fun AnimatedContent(
+    alpha: Float,
+    content: @Composable () -> Unit,
+) {
+    ContentAlpha(alpha = alpha) {
+        content()
+    }
 }
