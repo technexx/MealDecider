@@ -1,7 +1,6 @@
 package meal.decider
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.Animatable
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
@@ -11,8 +10,11 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -21,9 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Dialog
-import androidx.wear.compose.material.ContentAlpha
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -202,15 +202,18 @@ fun AnimatingDialog(
         animatedVisibility = isOpen
     }
 
-    Dialog(
-        onDismissRequest = onDismissRequest,
-        content = {
-            AnimatedContent(
-                alpha = enterAnim.value,
-                content = content
-            )
-        }
-    )
+    Box(modifier = Modifier.fillMaxSize()) {
+        Dialog(
+            onDismissRequest = onDismissRequest,
+            content = {
+                showLog("test", "content showing")
+                AnimatedContent(
+                    alpha = enterAnim.value,
+                    content = content
+                )
+            }
+        )
+    }
 }
 
 
@@ -219,7 +222,7 @@ private fun AnimatedContent(
     alpha: Float,
     content: @Composable () -> Unit,
 ) {
-    ContentAlpha(alpha = alpha) {
-        content()
+    CompositionLocalProvider(LocalContentAlpha provides alpha) {
+        Text("Fading in/out")
     }
 }

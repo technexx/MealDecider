@@ -29,12 +29,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import meal.decider.Database.RoomInteractions
 
+//TODO: Use separate parent composable for settings.
 class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInteractions) {
     @Composable
     fun OptionsDialog() {
@@ -42,30 +42,6 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
         val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
         val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
 
-        //TODO: Entire Dialog is recomp'ing, which is causing the tearing.
-        showLog("test", "options dialog recomp")
-        Dialog(onDismissRequest = {
-            appViewModel.updateOptionsMode(false)
-        }) {
-            AnimatedTransitionVoid (
-                modifier = Modifier
-                    .background(colorResource(id = colorTheme.value.dialogBackground))
-                    .fillMaxSize()
-            ) {
-                //TODO: Instead of separate content, we should put all settings under a single surface/column to avoid tearing.
-                if (appViewModel.getOptionsMode) {
-                    OptionsDialogUi()
-                    if (settingsDialogVisibility.value.speeds) {
-                        showLog("test", "speeds drawing in Dialog")
-                        SpeedSettingsDialog()
-                    }
-                    if (settingsDialogVisibility.value.colors) {
-                        showLog("test", "colors drawing in Dialog")
-                        ColorsSettingDialog()
-                    }
-                }
-            }
-        }
     }
 
     @Composable

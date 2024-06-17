@@ -12,7 +12,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.Room
 import kotlinx.coroutines.*
 import meal.decider.Database.CuisineDatabase
@@ -35,6 +38,7 @@ private lateinit var roomInteractions: RoomInteractions
 @SuppressLint("StaticFieldLeak")
 private lateinit var mapInteractions: MapInteractions
 private lateinit var runnables: Runnables
+private lateinit var settings: Settings
 
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
@@ -56,6 +60,8 @@ class MainActivity : ComponentActivity() {
 
         runnables = Runnables(appViewModel)
         dialogComposables = DialogComposables(appViewModel, cuisineDatabase, activity, mapInteractions, runnables)
+
+        settings = Settings(appViewModel, roomInteractions)
 
         //Populates SquareValues and DB with default only if empty (i.e. app launched for first time).
         ioScope.launch {
@@ -87,16 +93,40 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MealDeciderTheme {
-                Surface(
+                val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+
+                MainSurface (
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+                    color = colorResource(id = colorTheme.value.dialogBackground)
+                ){
                     Column {
-                        boardComposables.GlobalUi()
+                        val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
+
+                        if (optionsMode.value) {
+                            AnimatedTransitionVoid {
+                                settings.OptionsDialogUi()
+                            }
+                        } else {
+                            boardComposables.GlobalUi()
+                        }
                     }
                 }
             }
         }
+    }
+}
+
+//TODO: Set background to same color as transitioning-in (Options) composable.
+@Composable
+fun MainSurface(
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.background,
+    content: @Composable () -> Unit,
+) {
+    Surface (
+        modifier = modifier,
+        color = color) {
+        content()
     }
 }
 
