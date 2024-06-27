@@ -34,14 +34,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import meal.decider.Database.RoomInteractions
 
-//TODO: Use separate parent composable for settings.
 class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInteractions) {
     @Composable
     fun OptionsDialog() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
         val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
-
     }
 
     @Composable

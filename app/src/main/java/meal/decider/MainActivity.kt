@@ -5,15 +5,14 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.Room
@@ -97,17 +96,27 @@ class MainActivity : ComponentActivity() {
 
                 MainSurface (
                     modifier = Modifier.fillMaxSize(),
-                    color = colorResource(id = colorTheme.value.dialogBackground)
+                    color = Color.Black
                 ){
-                    Column {
-                        val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
+                    //Removed the encompassing Column here, so Box children can overlay.
+                    val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
 
+                    BackHandler {
                         if (optionsMode.value) {
-                            AnimatedTransitionVoid {
-                                settings.OptionsDialogUi()
-                            }
-                        } else {
-                            boardComposables.GlobalUi()
+                            appViewModel.updateOptionsMode(false)
+                        }
+                    }
+
+                    boardComposables.GlobalUi()
+
+                    //TODO: Currently trying to transition entirely new composable (options) over main board.
+
+                    if (optionsMode.value) {
+                        AnimatedTransitionVoid (
+                            modifier = Modifier
+                                .fillMaxSize()){
+                            showLog("test", "settings animating in")
+                            settings.OptionsDialogUi()
                         }
                     }
                 }
@@ -116,17 +125,18 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//TODO: Set background to same color as transitioning-in (Options) composable.
 @Composable
 fun MainSurface(
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.background,
+    color: Color,
     content: @Composable () -> Unit,
 ) {
     Surface (
         modifier = modifier,
         color = color) {
-        content()
+        Box(modifier = Modifier.fillMaxSize()) {
+            content()
+        }
     }
 }
 
