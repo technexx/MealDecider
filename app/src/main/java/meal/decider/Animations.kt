@@ -7,6 +7,7 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
+import androidx.compose.animation.shrinkOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
@@ -104,7 +105,6 @@ fun AnimatedTransitionDialog(
         }
     }
     ) {
-//        showLog("test", "dialog recomp")
         Box(
             modifier = modifier
         ) {
@@ -128,9 +128,17 @@ fun AnimatedTransitionDialog(
 fun AnimatedTransitionVoid(
     modifier: Modifier = Modifier,
     any: Any? = Unit,
+    backHandler: () -> Unit,
     content: @Composable () -> Unit,
 ) {
     val animateTrigger = remember { mutableStateOf(false) }
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+
+    BackHandler {
+        coroutineScope.launch {
+            startDismissWithExitAnimation(animateTrigger, backHandler)
+        }
+    }
 
     LaunchedEffect(key1 = any) {
         launch {
@@ -142,9 +150,12 @@ fun AnimatedTransitionVoid(
     Box(
         modifier = modifier
     ) {
-        AnimatedEntranceTest(
+        AnimatedScaleInTransition(
             animationEnter = expandIn (
-                animationSpec = tween(200)
+                animationSpec = tween(200),
+            ),
+            animationExit = shrinkOut(
+              animationSpec = tween(200),
             ),
             visible = animateTrigger.value) {
             Row() {

@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -101,21 +100,15 @@ class MainActivity : ComponentActivity() {
                     //Removed the encompassing Column here, so Box children can overlay.
                     val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
 
-                    BackHandler {
-                        if (optionsMode.value) {
-                            appViewModel.updateOptionsMode(false)
-                        }
-                    }
-
                     boardComposables.GlobalUi()
-
-                    //TODO: Currently trying to transition entirely new composable (options) over main board.
 
                     if (optionsMode.value) {
                         AnimatedTransitionVoid (
                             modifier = Modifier
-                                .fillMaxSize()){
-                            showLog("test", "settings animating in")
+                                .fillMaxSize(),
+                            backHandler = {
+                                appViewModel.updateOptionsMode(false)
+                            }){
                             settings.OptionsDialogUi()
                         }
                     }
