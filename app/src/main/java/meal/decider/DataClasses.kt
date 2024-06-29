@@ -6,6 +6,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlinx.serialization.Serializable
 
 data class SettingsDialogVisibility(
+    var parentSettings: Boolean = false,
     var speeds: Boolean = false,
     var colors: Boolean = false,
     var sounds: Boolean = false

@@ -92,24 +92,45 @@ class MainActivity : ComponentActivity() {
         setContent {
             MealDeciderTheme {
                 val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+                val settingsDialog = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
 
                 MainSurface (
                     modifier = Modifier.fillMaxSize(),
                     color = Color.Black
                 ){
                     //Removed the encompassing Column here, so Box children can overlay.
-                    val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
-
                     boardComposables.GlobalUi()
 
-                    if (optionsMode.value) {
+                    //TODO: May be wrong approach to have parent and children in same state flow.
+                    if (settingsDialog.value.parentSettings) {
+                        showLog("test", "parent settings")
                         AnimatedTransitionVoid (
                             modifier = Modifier
                                 .fillMaxSize(),
                             backHandler = {
-                                appViewModel.updateOptionsMode(false)
+                                //If any submenus are open, set all to false to dismiss and keep parent menu open.
+                                if (appViewModel.getSettingsDialogVisibility.colors || appViewModel.getSettingsDialogVisibility.speeds || appViewModel.getSettingsDialogVisibility.sounds) {
+                                    appViewModel.updateSettingsDialogVisibility(parentSettings = true, speeds = false, colors = false, sounds = false)
+                                } else {
+                                    //If only parent menu is open, dismiss it.
+                                    appViewModel.updateSettingsDialogVisibility(parentSettings = false, speeds = false, colors = false, sounds = false)
+                                }
                             }){
+
                             settings.OptionsDialogUi()
+
+                            //TODO: Recomps parent and then colors.
+                            if (settingsDialog.value.colors) {
+                                settings.ColorsSettingDialog()
+                                showLog("test", "color settings")
+
+                            }
+                            if (appViewModel.getSettingsDialogVisibility.speeds) {
+
+                            }
+                            if (appViewModel.getSettingsDialogVisibility.sounds) {
+
+                            }
                         }
                     }
                 }

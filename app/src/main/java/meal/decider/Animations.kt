@@ -6,8 +6,8 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandIn
-import androidx.compose.animation.shrinkOut
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
@@ -151,10 +151,10 @@ fun AnimatedTransitionVoid(
         modifier = modifier
     ) {
         AnimatedScaleInTransition(
-            animationEnter = expandIn (
+            animationEnter = expandHorizontally (
                 animationSpec = tween(200),
             ),
-            animationExit = shrinkOut(
+            animationExit = shrinkHorizontally (
               animationSpec = tween(200),
             ),
             visible = animateTrigger.value) {

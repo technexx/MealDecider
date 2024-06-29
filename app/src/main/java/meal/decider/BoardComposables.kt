@@ -129,7 +129,8 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                     description = "settings",
                                     tint = colorTheme.value.cuisineIconButtons,
                                     enabled = buttonsEnabled) {
-                                    appViewModel.updateOptionsMode(true)
+                                    appViewModel.updateSettingsDialogVisibility(parentSettings = true, speeds = false, colors = false, sounds = false)
+//                                    appViewModel.updateOptionsMode(true)
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
                                 MaterialIconButton(
@@ -330,10 +331,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             dialogComposables.ConfirmRestoreDefaultsDialog()
         }
 
-        if (optionsMode.value) {
-            settings.OptionsDialog()
-        }
-//
+//        if (optionsMode.value) {
+//            settings.OptionsDialogUi()
+//        }
+
 //        if (settingsDialogVisibility.value.speeds) {
 //            settings.SpeedSettingsDialog()
 //        }

@@ -117,9 +117,9 @@ class AppViewModel : ViewModel() {
         }
     }
 
-    fun updateSettingsDialogVisibility(speeds: Boolean, colors: Boolean, sounds: Boolean) {
+    fun updateSettingsDialogVisibility(parentSettings: Boolean, speeds: Boolean, colors: Boolean, sounds: Boolean) {
         _settingsDialogVisibility.update { currentState ->
-            currentState.copy(speeds = speeds, colors = colors, sounds = sounds)
+            currentState.copy(parentSettings = parentSettings, speeds = speeds, colors = colors, sounds = sounds)
         }
     }
 
@@ -499,24 +499,15 @@ class AppViewModel : ViewModel() {
 
     val getSquareList get() = boardUiState.value.squareList
     val getselectedCuisineSquare get() = selectedCuisineSquare.value
-    val getDisplayedCuisineList get() = displayedCuisineList.value
     val getListOfCuisineSquaresToEdit get() = listOfCuisineSquaresToEdit.value
     val getListOfCuisinesToAdd get() = listOfCuisinesToAdd.value
     val getRestaurantList get() = _restaurantList.value
-    val getShowRestaurants get() = _showRestaurants.value
-    val getShowRestaurantSettings get() = showRestaurantSettings.value
     val getRestaurantDialogVisibility get() = restaurantDialogVisibility.value
 
 
     val getRollEngaged get() = rollEngaged.value
-    val getCuisineRollFinished get() = cuisineRollFinished.value
-    val getRestaurantRollFinished get() = restaurantRollFinished.value
 
-    val getAddMode get() = addMode.value
     val getEditMode get() = editMode.value
-    val getActiveEdit get() = activeEdit.value
-    val getOptionsMode get() = optionsMode.value
-    val getRestoreDefaults get() = restoreDefaults.value
 
     val getRestrictionsList get() = restrictionsList.value
     val getRestaurantQueryFinished get() = restaurantQueryFinished.value
@@ -526,4 +517,6 @@ class AppViewModel : ViewModel() {
 
     val getColorSettingsSelectionList get() = colorSettingsSelectionList.value
     val getColorTheme get() = colorTheme.value
+
+    val getSettingsDialogVisibility get() = settingsDialogVisibility.value
 }

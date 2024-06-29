@@ -36,13 +36,6 @@ import meal.decider.Database.RoomInteractions
 
 class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInteractions) {
     @Composable
-    fun OptionsDialog() {
-        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-        val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
-        val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
-    }
-
-    @Composable
     fun OptionsDialogUi() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val textColor = colorResource(id = colorTheme.value.dialogTextColor)
@@ -58,17 +51,17 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
             Spacer(modifier = Modifier.height(20.dp))
             RegTextButton(text = "Speeds", fontSize = 26, color = textColor,
                 onClick = {
-                    appViewModel.updateSettingsDialogVisibility(speeds = true, sounds = false, colors = false)
+                    appViewModel.updateSettingsDialogVisibility(parentSettings = true, speeds = true, sounds = false, colors = false)
                 })
             Spacer(modifier = Modifier.height(10.dp))
             RegTextButton(text = "Sounds", fontSize = 26, color = textColor,
                 onClick = {
-                    appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = true, colors = false)
+                    appViewModel.updateSettingsDialogVisibility(parentSettings = true, speeds = false, sounds = true, colors = false)
                 })
             Spacer(modifier = Modifier.height(10.dp))
             RegTextButton(text = "Colors",  fontSize = 26, color = textColor,
                 onClick = {
-                    appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = false, colors = true)
+                    appViewModel.updateSettingsDialogVisibility(parentSettings = true, speeds = false, sounds = false, colors = true)
                 })
         }
     }
@@ -78,58 +71,48 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
         val colorSettingsToggle = appViewModel.colorSettingsSelectionList.collectAsStateWithLifecycle()
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
 
-        AnimatedTransitionDialog(
-            modifier = Modifier
-                .background(colorResource(id = colorTheme.value.dialogBackground))
-                .fillMaxSize(),
-            onDismissRequest = {
-                appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
-//                appViewModel.updateOptionsMode(true)
-            },
-            content = {
-                Column(modifier = Modifier
-                    .fillMaxSize()
-                    .background(colorResource(id = colorTheme.value.dialogBackground)), horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Row {
-                        RegText(text = "Theme", fontSize = 28, color = Color.Black, fontWeight = FontWeight.Bold)
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    LazyVerticalGrid(
-                        columns = GridCells.Adaptive(minSize = 128.dp),
-                        contentPadding = PaddingValues(
-                            start = 24.dp,
-                            top = 16.dp,
-                            end = 24.dp,
-                            bottom = 16.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        content = {
-                            items(colorSettingsToggle.value.size) { index ->
-                                val cardColor = if (appViewModel.getColorSettingsSelectionList[index].selected) colorResource(id = R.color.blue_grey_100) else Color.White
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = colorTheme.value.dialogBackground)), horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Row {
+                RegText(text = "Theme", fontSize = 28, color = Color.Black, fontWeight = FontWeight.Bold)
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 128.dp),
+                contentPadding = PaddingValues(
+                    start = 24.dp,
+                    top = 16.dp,
+                    end = 24.dp,
+                    bottom = 16.dp),
+                horizontalArrangement = Arrangement.Center,
+                content = {
+                    items(colorSettingsToggle.value.size) { index ->
+                        val cardColor = if (appViewModel.getColorSettingsSelectionList[index].selected) colorResource(id = R.color.blue_grey_100) else Color.White
 
-                                Box(contentAlignment = Alignment.Center) {
-                                    CardUi(
-                                        color = cardColor,
-                                        onClick = {
-                                            appViewModel.switchColorSettingsUi(index)
-                                            appViewModel.updateColorTheme(Theme.themeColorsList[index])
-                                            roomInteractions.saveColorThemeToSharedPref(Theme.themeColorsList[index])
-                                        },
-                                        content = {
-                                            RegText(
-                                                text = colorSettingsToggle.value[index].name,
-                                                fontSize = 26,
-                                                color = Color.Black,
-                                                fontWeight = FontWeight.Bold,
-                                                modifier = Modifier.padding(12.dp))
-                                        })
-                                }
-                            }
+                        Box(contentAlignment = Alignment.Center) {
+                            CardUi(
+                                color = cardColor,
+                                onClick = {
+                                    appViewModel.switchColorSettingsUi(index)
+                                    appViewModel.updateColorTheme(Theme.themeColorsList[index])
+                                    roomInteractions.saveColorThemeToSharedPref(Theme.themeColorsList[index])
+                                },
+                                content = {
+                                    RegText(
+                                        text = colorSettingsToggle.value[index].name,
+                                        fontSize = 26,
+                                        color = Color.Black,
+                                        fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.padding(12.dp))
+                                })
                         }
-                    )
+                    }
                 }
-            })
+            )
+        }
     }
     @Composable
     fun SpeedSettingsDialog() {
@@ -152,7 +135,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                 .background(colorResource(id = colorTheme.value.dialogBackground))
                 .fillMaxSize(),
             onDismissRequest = {
-                appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
+//                appViewModel.updateSettingsDialogVisibility(parentSettings = true, speeds = false, colors = false, sounds = false)
 //                appViewModel.updateOptionsMode(true)
                 coroutineScope.launch {
                     roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
