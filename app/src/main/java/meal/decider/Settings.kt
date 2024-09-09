@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,7 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import meal.decider.Database.RoomInteractions
 
 class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInteractions) {
@@ -130,78 +127,66 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
             restaurantRollDelaySliderPosition = appViewModel.restaurantRollSpeedSetting.toFloat()
         }
 
-        AnimatedTransitionDialog(
-            modifier = Modifier
-                .background(colorResource(id = colorTheme.value.dialogBackground))
-                .fillMaxSize(),
-            onDismissRequest = {
-//                appViewModel.updateSettingsDialogVisibility(parentSettings = true, speeds = false, colors = false, sounds = false)
-//                appViewModel.updateOptionsMode(true)
-                coroutineScope.launch {
-                    roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = colorTheme.value.dialogBackground)),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            Column {
+                RegText("Cuisine Selection Duration", fontSize = 18, color = Color.Black)
+                Row () {
+                    Slider(modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .padding(start = 4.dp),
+                        value = cuisineRollDurationSliderPosition,
+                        onValueChange = { cuisineRollDurationSliderPosition = it },
+                        valueRange = 1f..10f,
+                        steps = 9
+                    )
+                    RegText(text = "${cuisineRollDurationSliderPosition.toInt()}", fontSize = 18, color = Color.Black)
                 }
-                appViewModel.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
-            },
-            content = {
-                Surface(
-                    shape = RoundedCornerShape(16.dp),
-                ) {
-                    Column(modifier = Modifier
-                        .fillMaxSize()
-                        .background(colorResource(id = colorTheme.value.dialogBackground)),
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                        Column {
-                            RegText("Cuisine Selection Duration", fontSize = 18, color = Color.Black)
-                            Row () {
-                                Slider(modifier = Modifier
-                                    .fillMaxWidth(0.7f)
-                                    .padding(start = 4.dp),
-                                    value = cuisineRollDurationSliderPosition,
-                                    onValueChange = { cuisineRollDurationSliderPosition = it },
-                                    valueRange = 1f..10f,
-                                    steps = 9
-                                )
-                                RegText(text = "${cuisineRollDurationSliderPosition.toInt()}", fontSize = 18, color = Color.Black)
-                            }
-                            RegText("Cuisine Selection Speed", fontSize = 18, color = Color.Black)
-                            Row () {
-                                Slider(modifier = Modifier
-                                    .fillMaxWidth(0.7f)
-                                    .padding(start = 4.dp),
-                                    value = cuisineRollDelaySliderPosition,
-                                    onValueChange = { cuisineRollDelaySliderPosition = it },
-                                    valueRange = 1f..10f,
-                                    steps = 9
-                                )
-                                RegText(text = "${cuisineRollDelaySliderPosition.toInt()}", fontSize = 18, color = Color.Black)
-                            }
-                            RegText("Restaurant Selection Duration", fontSize = 18, color = Color.Black)
-                            Row () {
-                                Slider(modifier = Modifier
-                                    .fillMaxWidth(0.7f)
-                                    .padding(start = 4.dp),
-                                    value = restaurantRollDurationSliderPosition,
-                                    onValueChange = { restaurantRollDurationSliderPosition = it },
-                                    valueRange = 1f..10f,
-                                    steps = 9
-                                )
-                                RegText(text = "${restaurantRollDurationSliderPosition.toInt()}", fontSize = 18, color = Color.Black)
-                            }
-                            RegText("Restaurant Selection Speed", fontSize = 18, color = Color.Black)
-                            Row () {
-                                Slider(modifier = Modifier
-                                    .fillMaxWidth(0.7f)
-                                    .padding(start = 4.dp),
-                                    value = restaurantRollDelaySliderPosition,
-                                    onValueChange = { restaurantRollDelaySliderPosition = it },
-                                    valueRange = 1f..10f,
-                                    steps = 9
-                                )
-                                RegText(text = "${restaurantRollDelaySliderPosition.toInt()}", fontSize = 18, color = Color.Black)
-                            }
-                        }
-                    }
+                RegText("Cuisine Selection Speed", fontSize = 18, color = Color.Black)
+                Row () {
+                    Slider(modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .padding(start = 4.dp),
+                        value = cuisineRollDelaySliderPosition,
+                        onValueChange = { cuisineRollDelaySliderPosition = it },
+                        valueRange = 1f..10f,
+                        steps = 9
+                    )
+                    RegText(text = "${cuisineRollDelaySliderPosition.toInt()}", fontSize = 18, color = Color.Black)
                 }
-            })
+                RegText("Restaurant Selection Duration", fontSize = 18, color = Color.Black)
+                Row () {
+                    Slider(modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .padding(start = 4.dp),
+                        value = restaurantRollDurationSliderPosition,
+                        onValueChange = { restaurantRollDurationSliderPosition = it },
+                        valueRange = 1f..10f,
+                        steps = 9
+                    )
+                    RegText(text = "${restaurantRollDurationSliderPosition.toInt()}", fontSize = 18, color = Color.Black)
+                }
+                RegText("Restaurant Selection Speed", fontSize = 18, color = Color.Black)
+                Row () {
+                    Slider(modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .padding(start = 4.dp),
+                        value = restaurantRollDelaySliderPosition,
+                        onValueChange = { restaurantRollDelaySliderPosition = it },
+                        valueRange = 1f..10f,
+                        steps = 9
+                    )
+                    RegText(text = "${restaurantRollDelaySliderPosition.toInt()}", fontSize = 18, color = Color.Black)
+                }
+            }
+        }
+
+        //TODO: This needs to go into MainActivity's onBackPressed (formerly dismissed here) animation of this composable
+//        coroutineScope.launch {
+//            roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
+//        }
+//        appViewModel.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
     }
 }

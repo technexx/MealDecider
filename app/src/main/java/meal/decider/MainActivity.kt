@@ -120,22 +120,35 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                                 .fillMaxSize(),
                             backHandler = {
-                                //If any submenus are open, set all to false to dismiss and keep parent menu open
                                 appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
-                                appViewModel.updateOptionsMenuVisibility(true)
+//                                appViewModel.updateOptionsMenuVisibility(true)
                             }){
                             settings.ColorsSettingDialog()
-                            showLog("test", "color settings")
-
                         }
-
                     }
-                    if (appViewModel.getSettingsDialogVisibility.speeds) {
-                        showLog("test", "speeds")
+                    //TODO: Need to change sub menu composable
+                    if (settingsDialogVisibility.value.speeds) {
+                        AnimatedTransitionVoid (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            backHandler = {
+                                appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
+//                                appViewModel.updateOptionsMenuVisibility(true)
+                            }){
+                            settings.SpeedSettingsDialog()
+                        }
                     }
-                    if (appViewModel.getSettingsDialogVisibility.sounds) {
-
-                    }
+//                    if (settingsDialogVisibility.value.sounds) {
+//                        AnimatedTransitionVoid (
+//                            modifier = Modifier
+//                                .fillMaxSize(),
+//                            backHandler = {
+//                                appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
+//                                appViewModel.updateOptionsMenuVisibility(true)
+//                            }){
+//                            settings.ColorsSettingDialog()
+//                        }
+//                    }
 
                 }
             }
