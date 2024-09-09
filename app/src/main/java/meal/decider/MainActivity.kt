@@ -92,7 +92,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             MealDeciderTheme {
                 val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-                val settingsDialog = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
+                val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
+                //TODO: Our separate visibility for the global options menu.
+                val optionsMenuVisibility = appViewModel.optionsMenuVisibility.collectAsStateWithLifecycle()
 
                 MainSurface (
                     modifier = Modifier.fillMaxSize(),
@@ -101,38 +103,39 @@ class MainActivity : ComponentActivity() {
                     //Removed the encompassing Column here, so Box children can overlay.
                     boardComposables.GlobalUi()
 
-                    //TODO: May be wrong approach to have parent and children in same state flow.
-                    if (settingsDialog.value.parentSettings) {
+                    if (optionsMenuVisibility.value) {
                         showLog("test", "parent settings")
                         AnimatedTransitionVoid (
                             modifier = Modifier
                                 .fillMaxSize(),
                             backHandler = {
-                                //If any submenus are open, set all to false to dismiss and keep parent menu open.
-                                if (appViewModel.getSettingsDialogVisibility.colors || appViewModel.getSettingsDialogVisibility.speeds || appViewModel.getSettingsDialogVisibility.sounds) {
-                                    appViewModel.updateSettingsDialogVisibility(parentSettings = true, speeds = false, colors = false, sounds = false)
-                                } else {
-                                    //If only parent menu is open, dismiss it.
-                                    appViewModel.updateSettingsDialogVisibility(parentSettings = false, speeds = false, colors = false, sounds = false)
-                                }
                             }){
-
                             settings.OptionsDialogUi()
-
-                            //TODO: Recomps parent and then colors.
-                            if (settingsDialog.value.colors) {
-                                settings.ColorsSettingDialog()
-                                showLog("test", "color settings")
-
-                            }
-                            if (appViewModel.getSettingsDialogVisibility.speeds) {
-
-                            }
-                            if (appViewModel.getSettingsDialogVisibility.sounds) {
-
-                            }
-                        }
                     }
+                }
+
+                    if (settingsDialogVisibility.value.colors) {
+                        AnimatedTransitionVoid (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            backHandler = {
+                                //If any submenus are open, set all to false to dismiss and keep parent menu open
+                                appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
+                                appViewModel.updateOptionsMenuVisibility(true)
+                            }){
+                            settings.ColorsSettingDialog()
+                            showLog("test", "color settings")
+
+                        }
+
+                    }
+                    if (appViewModel.getSettingsDialogVisibility.speeds) {
+                        showLog("test", "speeds")
+                    }
+                    if (appViewModel.getSettingsDialogVisibility.sounds) {
+
+                    }
+
                 }
             }
         }

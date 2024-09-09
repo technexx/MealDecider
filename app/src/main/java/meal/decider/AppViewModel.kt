@@ -101,6 +101,9 @@ class AppViewModel : ViewModel() {
     private val _settingsDialogVisibility = MutableStateFlow(SettingsDialogVisibility())
     val settingsDialogVisibility: StateFlow<SettingsDialogVisibility> = _settingsDialogVisibility.asStateFlow()
 
+    private val _optionsMenuVisibility = MutableStateFlow(false)
+    val optionsMenuVisibility: StateFlow<Boolean> = _optionsMenuVisibility.asStateFlow()
+
     private val _colorSettingsSelectionList = MutableStateFlow(ColorSettingsToggleObject.colorSettingsToggleList)
     val colorSettingsSelectionList: StateFlow<SnapshotStateList<SettingsToggle>> = _colorSettingsSelectionList.asStateFlow()
 
@@ -117,10 +120,14 @@ class AppViewModel : ViewModel() {
         }
     }
 
-    fun updateSettingsDialogVisibility(parentSettings: Boolean, speeds: Boolean, colors: Boolean, sounds: Boolean) {
+    fun updateSettingsDialogVisibility(speeds: Boolean, colors: Boolean, sounds: Boolean) {
         _settingsDialogVisibility.update { currentState ->
-            currentState.copy(parentSettings = parentSettings, speeds = speeds, colors = colors, sounds = sounds)
+            currentState.copy(speeds = speeds, colors = colors, sounds = sounds)
         }
+    }
+
+    fun updateOptionsMenuVisibility(visible: Boolean) {
+        _optionsMenuVisibility.value = visible
     }
 
     fun updateRollEngaged(engaged: Boolean) {

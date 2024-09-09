@@ -51,17 +51,17 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
             Spacer(modifier = Modifier.height(20.dp))
             RegTextButton(text = "Speeds", fontSize = 26, color = textColor,
                 onClick = {
-                    appViewModel.updateSettingsDialogVisibility(parentSettings = true, speeds = true, sounds = false, colors = false)
+                    appViewModel.updateSettingsDialogVisibility(speeds = true, sounds = false, colors = false)
                 })
             Spacer(modifier = Modifier.height(10.dp))
             RegTextButton(text = "Sounds", fontSize = 26, color = textColor,
                 onClick = {
-                    appViewModel.updateSettingsDialogVisibility(parentSettings = true, speeds = false, sounds = true, colors = false)
+                    appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = true, colors = false)
                 })
             Spacer(modifier = Modifier.height(10.dp))
             RegTextButton(text = "Colors",  fontSize = 26, color = textColor,
                 onClick = {
-                    appViewModel.updateSettingsDialogVisibility(parentSettings = true, speeds = false, sounds = false, colors = true)
+                    appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = false, colors = true)
                 })
         }
     }
