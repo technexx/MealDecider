@@ -109,6 +109,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                                 .fillMaxSize(),
                             backHandler = {
+                                appViewModel.updateOptionsMenuVisibility(false)
                             }){
                             settings.OptionsDialogUi()
                     }
