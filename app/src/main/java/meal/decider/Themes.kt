@@ -75,7 +75,7 @@ object Theme {
             cuisineIconButtons = R.color.white,
             restrictionRow = R.color.grey_700,
             cuisineBoard = R.color.black,
-            cuisineSquares = R.color.grey_800,
+            cuisineSquares = R.color.grey_100,
             cuisineSquaresText = R.color.black,
             selectedCuisineSquare = R.color.red_200,
             selectedCuisineIcon = R.color.red_a700,
