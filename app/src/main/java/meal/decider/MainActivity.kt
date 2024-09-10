@@ -173,7 +173,6 @@ class MainActivity : ComponentActivity() {
                                 )
                                 appViewModel.updateOptionsMenuVisibility(true)
                             }) {
-                            settings.ColorsSettingDialog()
                         }
                     }
 
