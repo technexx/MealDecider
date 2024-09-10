@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import meal.decider.Database.RoomInteractions
 
 class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInteractions) {
@@ -111,6 +112,16 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
             )
         }
     }
+
+    fun updateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition: Float, cuisineRollDelaySliderPosition: Float, restaurantRollDurationSliderPosition:Float, restaurantRollDelaySliderPosition:Float) {
+        ioScope.launch {
+            //TODO: This needs to go into MainActivity's onBackPressed (formerly dismissed here) animation of this composable
+            roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
+
+            appViewModel.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
+        }
+    }
+
     @Composable
     fun SpeedSettingsDialog() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
@@ -138,7 +149,10 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                         .fillMaxWidth(0.7f)
                         .padding(start = 4.dp),
                         value = cuisineRollDurationSliderPosition,
-                        onValueChange = { cuisineRollDurationSliderPosition = it },
+                        onValueChange = {
+                            cuisineRollDurationSliderPosition = it
+                            updateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
+                                        },
                         valueRange = 1f..10f,
                         steps = 9
                     )
@@ -150,7 +164,9 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                         .fillMaxWidth(0.7f)
                         .padding(start = 4.dp),
                         value = cuisineRollDelaySliderPosition,
-                        onValueChange = { cuisineRollDelaySliderPosition = it },
+                        onValueChange = { cuisineRollDelaySliderPosition = it
+                            updateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
+                                        },
                         valueRange = 1f..10f,
                         steps = 9
                     )
@@ -162,7 +178,9 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                         .fillMaxWidth(0.7f)
                         .padding(start = 4.dp),
                         value = restaurantRollDurationSliderPosition,
-                        onValueChange = { restaurantRollDurationSliderPosition = it },
+                        onValueChange = { restaurantRollDurationSliderPosition = it
+                            updateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
+                                        },
                         valueRange = 1f..10f,
                         steps = 9
                     )
@@ -174,7 +192,9 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                         .fillMaxWidth(0.7f)
                         .padding(start = 4.dp),
                         value = restaurantRollDelaySliderPosition,
-                        onValueChange = { restaurantRollDelaySliderPosition = it },
+                        onValueChange = { restaurantRollDelaySliderPosition = it
+                            updateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
+                                        },
                         valueRange = 1f..10f,
                         steps = 9
                     )
@@ -183,10 +203,5 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
             }
         }
 
-        //TODO: This needs to go into MainActivity's onBackPressed (formerly dismissed here) animation of this composable
-//        coroutineScope.launch {
-//            roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
-//        }
-//        appViewModel.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
     }
 }

@@ -50,14 +50,19 @@ class MainActivity : ComponentActivity() {
         appContext = applicationContext
 
         appViewModel = AppViewModel()
-        cuisineDatabase = Room.databaseBuilder(appContext, CuisineDatabase.AppDatabase::class.java, "cuisine-database").build()
+        cuisineDatabase = Room.databaseBuilder(
+            appContext,
+            CuisineDatabase.AppDatabase::class.java,
+            "cuisine-database"
+        ).build()
         roomInteractions = RoomInteractions(cuisineDatabase, appViewModel, activity)
 
         mapInteractions = MapInteractions(activity, activityContext, appViewModel)
         mapInteractions.fusedLocationListener()
 
         runnables = Runnables(appViewModel)
-        dialogComposables = DialogComposables(appViewModel, cuisineDatabase, activity, mapInteractions, runnables)
+        dialogComposables =
+            DialogComposables(appViewModel, cuisineDatabase, activity, mapInteractions, runnables)
 
         settings = Settings(appViewModel, roomInteractions)
 
@@ -79,7 +84,11 @@ class MainActivity : ComponentActivity() {
             roomInteractions.setViewModelRollDelayVariablesFromDatabaseValues()
 
             val restaurantFilters = roomInteractions.getRestaurantFilters()[0]
-            appViewModel.setLocalRestaurantFilterValues(milesToMeters(restaurantFilters.distance), restaurantFilters.rating, restaurantFilters.price.toInt())
+            appViewModel.setLocalRestaurantFilterValues(
+                milesToMeters(restaurantFilters.distance),
+                restaurantFilters.rating,
+                restaurantFilters.price.toInt()
+            )
 
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
             appViewModel.updateCuisineStringUriAndHasChangedBoolean(appViewModel.getselectedCuisineSquare.name + " Food ")
@@ -87,93 +96,113 @@ class MainActivity : ComponentActivity() {
             appViewModel.updateColorTheme(roomInteractions.retrieveColorThemeFromSharedPref())
         }
 
-        val boardComposables = BoardComposables(appViewModel, cuisineDatabase, activity, roomInteractions, mapInteractions, runnables)
+        val boardComposables = BoardComposables(
+            appViewModel,
+            cuisineDatabase,
+            activity,
+            roomInteractions,
+            mapInteractions,
+            runnables
+        )
 
         setContent {
             MealDeciderTheme {
                 val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-                val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
-                //TODO: Our separate visibility for the global options menu.
-                val optionsMenuVisibility = appViewModel.optionsMenuVisibility.collectAsStateWithLifecycle()
+                val settingsDialogVisibility =
+                    appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
+                val optionsMenuVisibility =
+                    appViewModel.optionsMenuVisibility.collectAsStateWithLifecycle()
 
-                MainSurface (
+                MainSurface(
                     modifier = Modifier.fillMaxSize(),
                     color = Color.Black
-                ){
+                ) {
                     //Removed the encompassing Column here, so Box children can overlay.
                     boardComposables.GlobalUi()
 
                     if (optionsMenuVisibility.value) {
                         showLog("test", "parent settings")
-                        AnimatedTransitionVoid (
+                        AnimatedTransitionVoid(
                             modifier = Modifier
                                 .fillMaxSize(),
                             backHandler = {
                                 appViewModel.updateOptionsMenuVisibility(false)
-                            }){
+                            }) {
                             settings.OptionsDialogUi()
+                        }
                     }
-                }
 
                     if (settingsDialogVisibility.value.colors) {
-                        AnimatedTransitionVoid (
+                        AnimatedTransitionVoid(
                             modifier = Modifier
                                 .fillMaxSize(),
                             backHandler = {
-                                appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
-//                                appViewModel.updateOptionsMenuVisibility(true)
-                            }){
+                                appViewModel.updateSettingsDialogVisibility(
+                                    speeds = false,
+                                    colors = false,
+                                    sounds = false
+                                )
+                            }) {
                             settings.ColorsSettingDialog()
                         }
                     }
-                    //TODO: Need to change sub menu composable
                     if (settingsDialogVisibility.value.speeds) {
-                        AnimatedTransitionVoid (
+                        AnimatedTransitionVoid(
                             modifier = Modifier
                                 .fillMaxSize(),
                             backHandler = {
-                                appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
-//                                appViewModel.updateOptionsMenuVisibility(true)
-                            }){
+                                appViewModel.updateSettingsDialogVisibility(
+                                    speeds = false,
+                                    colors = false,
+                                    sounds = false
+                                )
+
+                            }) {
                             settings.SpeedSettingsDialog()
                         }
                     }
-//                    if (settingsDialogVisibility.value.sounds) {
-//                        AnimatedTransitionVoid (
-//                            modifier = Modifier
-//                                .fillMaxSize(),
-//                            backHandler = {
-//                                appViewModel.updateSettingsDialogVisibility(speeds = false, colors = false, sounds = false)
-//                                appViewModel.updateOptionsMenuVisibility(true)
-//                            }){
-//                            settings.ColorsSettingDialog()
-//                        }
-//                    }
+                    if (settingsDialogVisibility.value.sounds) {
+                        AnimatedTransitionVoid(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            backHandler = {
+                                appViewModel.updateSettingsDialogVisibility(
+                                    speeds = false,
+                                    colors = false,
+                                    sounds = false
+                                )
+                                appViewModel.updateOptionsMenuVisibility(true)
+                            }) {
+                            settings.ColorsSettingDialog()
+                        }
+                    }
 
                 }
             }
+//        }
         }
     }
-}
 
-@Composable
-fun MainSurface(
-    modifier: Modifier = Modifier,
-    color: Color,
-    content: @Composable () -> Unit,
-) {
-    Surface (
-        modifier = modifier,
-        color = color) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            content()
+    @Composable
+    fun MainSurface(
+        modifier: Modifier = Modifier,
+        color: Color,
+        content: @Composable () -> Unit,
+    ) {
+        Surface(
+            modifier = modifier,
+            color = color
+        ) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                content()
+            }
         }
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MealDeciderTheme {
+    @Preview(showBackground = true)
+    @Composable
+    fun GreetingPreview() {
+        MealDeciderTheme {
+        }
     }
 }
