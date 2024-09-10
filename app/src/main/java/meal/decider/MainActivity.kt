@@ -32,6 +32,7 @@ private lateinit var appViewModel : AppViewModel
 private lateinit var cuisineDatabase: CuisineDatabase.AppDatabase
 @SuppressLint("StaticFieldLeak")
 private lateinit var dialogComposables : DialogComposables
+@SuppressLint("StaticFieldLeak")
 private lateinit var roomInteractions: RoomInteractions
 @SuppressLint("StaticFieldLeak")
 private lateinit var mapInteractions: MapInteractions
