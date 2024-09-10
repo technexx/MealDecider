@@ -54,13 +54,13 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                 if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                     if (appViewModel.getRestaurantQueryFinished) {
                         coroutineScope.launch {
-                            if (appViewModel.hasCuisineStringUriChanged) {
-                                mapInteractions.mapsApiCall()
-                                //Sets first entry to string for maps launch.
-                                appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[0])
-                                appViewModel.updateSingleRestaurantColorAndBorder(0, appViewModel.getColorTheme.selectedRestaurantSquare, defaultRestaurantBorderStroke)
-                                appViewModel.restaurantStringUri = appViewModel.getRestaurantList[0].name.toString()
-                            }
+                            showLog("test", "has cuisine changed is ${appViewModel.hasCuisineStringUriChanged}")
+                            mapInteractions.mapsApiCall()
+                            //Sets first entry to string for maps launch.
+                            appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[0])
+                            appViewModel.updateSingleRestaurantColorAndBorder(0, appViewModel.getColorTheme.selectedRestaurantSquare, defaultRestaurantBorderStroke)
+                            appViewModel.restaurantStringUri = appViewModel.getRestaurantList[0].name.toString()
+
                             appViewModel.updateRestaurantDialogVisibility(1)
                             appViewModel.updateShowRestaurants(true)
                         }

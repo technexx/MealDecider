@@ -54,7 +54,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -398,6 +397,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 .padding(12.dp),
             columns = StaggeredGridCells.Adaptive(128.dp),
         ) {
+            showLog("test", "list is ${restaurantList.value.toList()}")
             items(restaurantList.value.size) { index ->
 //            items(dummyList.size) { index ->
                 borderStroke = appViewModel.getRestaurantList[index].border

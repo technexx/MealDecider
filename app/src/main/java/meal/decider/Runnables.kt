@@ -54,16 +54,16 @@ class Runnables (private val appViewModel: AppViewModel) {
             delay = modifierDelay(duration, speedSetting)
             duration -= delay
 
-            showLog("test", "delay is $delay")
-            showLog("test", "duration is $duration")
+//            showLog("test", "delay is $delay")
+//            showLog("test", "duration is $duration")
 
             handler.postDelayed(cuisineRollRunnable, delay)
 
             if (duration < 50 || delay < 50) {
                 val endTime = System.currentTimeMillis() - startTime
 
-                showLog("test", "elapsed time within roll is $elapsedTime")
-                showLog("test", "true elapsed time is $endTime")
+//                showLog("test", "elapsed time within roll is $elapsedTime")
+//                showLog("test", "true elapsed time is $endTime")
                 val index = appViewModel.rolledSquareIndex
 
                 appViewModel.updateSingleCuisineSquareColorAndBorder(index, appViewModel.getSquareList[index].color, heavyCuisineSelectionBorderStroke)
