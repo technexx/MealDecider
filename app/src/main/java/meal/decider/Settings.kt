@@ -113,7 +113,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
         }
     }
 
-    fun UpdateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition: Float, cuisineRollDelaySliderPosition: Float, restaurantRollDurationSliderPosition:Float, restaurantRollDelaySliderPosition:Float) {
+    private fun UpdateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition: Float, cuisineRollDelaySliderPosition: Float, restaurantRollDurationSliderPosition:Float, restaurantRollDelaySliderPosition:Float) {
         ioScope.launch {
             //TODO: This needs to go into MainActivity's onBackPressed (formerly dismissed here) animation of this composable
             roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
@@ -125,11 +125,13 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
     @Composable
     fun SpeedSettingsDialog() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        var textColor = colorResource(id = colorTheme.value.settingsText)
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         var cuisineRollDurationSliderPosition by remember { mutableFloatStateOf(3f) }
         var cuisineRollDelaySliderPosition by remember { mutableFloatStateOf(3f) }
         var restaurantRollDurationSliderPosition by remember { mutableFloatStateOf(3f) }
         var restaurantRollDelaySliderPosition by remember { mutableFloatStateOf(3f) }
+
 
         LaunchedEffect(Unit) {
             cuisineRollDurationSliderPosition = appViewModel.cuisineRollDurationSetting.toFloat()
@@ -143,7 +145,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
             .background(colorResource(id = colorTheme.value.dialogBackground)),
             horizontalAlignment = Alignment.CenterHorizontally) {
             Column {
-                RegText("Cuisine Selection Duration", fontSize = 18, color = Color.Black)
+                RegText("Cuisine Selection Duration", fontSize = 18, color = textColor)
                 Row () {
                     Slider(modifier = Modifier
                         .fillMaxWidth(0.7f)
@@ -156,9 +158,9 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                         valueRange = 1f..10f,
                         steps = 9
                     )
-                    RegText(text = "${cuisineRollDurationSliderPosition.toInt()}", fontSize = 18, color = Color.Black)
+                    RegText(text = "${cuisineRollDurationSliderPosition.toInt()}", fontSize = 18, color = textColor)
                 }
-                RegText("Cuisine Selection Speed", fontSize = 18, color = Color.Black)
+                RegText("Cuisine Selection Speed", fontSize = 18, color = textColor)
                 Row () {
                     Slider(modifier = Modifier
                         .fillMaxWidth(0.7f)
@@ -170,9 +172,9 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                         valueRange = 1f..10f,
                         steps = 9
                     )
-                    RegText(text = "${cuisineRollDelaySliderPosition.toInt()}", fontSize = 18, color = Color.Black)
+                    RegText(text = "${cuisineRollDelaySliderPosition.toInt()}", fontSize = 18, color = textColor)
                 }
-                RegText("Restaurant Selection Duration", fontSize = 18, color = Color.Black)
+                RegText("Restaurant Selection Duration", fontSize = 18, color = textColor)
                 Row () {
                     Slider(modifier = Modifier
                         .fillMaxWidth(0.7f)
@@ -184,9 +186,9 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                         valueRange = 1f..10f,
                         steps = 9
                     )
-                    RegText(text = "${restaurantRollDurationSliderPosition.toInt()}", fontSize = 18, color = Color.Black)
+                    RegText(text = "${restaurantRollDurationSliderPosition.toInt()}", fontSize = 18, color = textColor)
                 }
-                RegText("Restaurant Selection Speed", fontSize = 18, color = Color.Black)
+                RegText("Restaurant Selection Speed", fontSize = 18, color = textColor)
                 Row () {
                     Slider(modifier = Modifier
                         .fillMaxWidth(0.7f)
@@ -198,7 +200,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                         valueRange = 1f..10f,
                         steps = 9
                     )
-                    RegText(text = "${restaurantRollDelaySliderPosition.toInt()}", fontSize = 18, color = Color.Black)
+                    RegText(text = "${restaurantRollDelaySliderPosition.toInt()}", fontSize = 18, color = textColor)
                 }
             }
         }

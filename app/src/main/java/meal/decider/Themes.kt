@@ -31,6 +31,8 @@ data class ColorTheme(
     val dialogTextColor: Int,
     var cancelDialogButton: Int,
     var confirmDialogButton: Int,
+
+    var settingsText: Int
 )
 
 object Theme {
@@ -63,7 +65,8 @@ object Theme {
             dropDownMenuBackground = R.color.grey_50,
             dialogTextColor = R.color.black,
             cancelDialogButton = android.R.color.holo_red_light,
-            confirmDialogButton = android.R.color.holo_green_light
+            confirmDialogButton = android.R.color.holo_green_light,
+            settingsText = R.color.black
         ),
 
         //Dark
@@ -94,7 +97,9 @@ object Theme {
             dropDownMenuBackground = R.color.grey_700,
             dialogTextColor = R.color.white,
             cancelDialogButton = android.R.color.holo_red_light,
-            confirmDialogButton = android.R.color.holo_green_light
+            confirmDialogButton = android.R.color.holo_green_light,
+
+            settingsText = R.color.white
         )
     )
 }
