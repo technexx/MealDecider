@@ -54,7 +54,6 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                 if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                     if (appViewModel.getRestaurantQueryFinished) {
                         coroutineScope.launch {
-                            showLog("test", "has cuisine changed is ${appViewModel.hasCuisineStringUriChanged}")
                             mapInteractions.mapsApiCall()
                             //Sets first entry to string for maps launch.
                             appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[0])

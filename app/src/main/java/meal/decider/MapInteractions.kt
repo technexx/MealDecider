@@ -53,8 +53,6 @@ class MapInteractions(private val activity: Activity, private val activityContex
             appViewModel.updateRestaurantsList(restaurantList)
             appViewModel.updateSingleRestaurantColorAndBorder(0, appViewModel.getColorTheme.selectedRestaurantSquare, lightRestaurantSelectionBorderStroke)
             appViewModel.updateRestaurantQueryFinished(true)
-
-            showLog("test", "list from maps api call is ${restaurantList.toList()}")
         }
     }
 

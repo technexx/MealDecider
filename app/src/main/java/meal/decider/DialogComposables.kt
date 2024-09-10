@@ -397,7 +397,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 .padding(12.dp),
             columns = StaggeredGridCells.Adaptive(128.dp),
         ) {
-            showLog("test", "list is ${restaurantList.value.toList()}")
             items(restaurantList.value.size) { index ->
 //            items(dummyList.size) { index ->
                 borderStroke = appViewModel.getRestaurantList[index].border

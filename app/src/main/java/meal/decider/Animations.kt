@@ -228,7 +228,6 @@ fun AnimatingDialog(
         Dialog(
             onDismissRequest = onDismissRequest,
             content = {
-                showLog("test", "content showing")
                 AnimatedContent(
                     alpha = enterAnim.value,
                     content = content

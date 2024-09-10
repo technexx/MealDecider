@@ -122,7 +122,6 @@ class MainActivity : ComponentActivity() {
                     boardComposables.GlobalUi()
 
                     if (optionsMenuVisibility.value) {
-                        showLog("test", "parent settings")
                         AnimatedTransitionVoid(
                             modifier = Modifier
                                 .fillMaxSize(),
