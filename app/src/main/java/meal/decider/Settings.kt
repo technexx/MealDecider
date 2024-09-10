@@ -125,7 +125,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
     @Composable
     fun SpeedSettingsDialog() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-        var textColor = colorResource(id = colorTheme.value.settingsText)
+        val textColor = colorResource(id = colorTheme.value.settingsText)
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         var cuisineRollDurationSliderPosition by remember { mutableFloatStateOf(3f) }
         var cuisineRollDelaySliderPosition by remember { mutableFloatStateOf(3f) }
@@ -145,6 +145,8 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
             .background(colorResource(id = colorTheme.value.dialogBackground)),
             horizontalAlignment = Alignment.CenterHorizontally) {
             Column {
+                Spacer(modifier = Modifier.height(10.dp))
+
                 RegText("Cuisine Selection Duration", fontSize = 18, color = textColor)
                 Row () {
                     Slider(modifier = Modifier
