@@ -55,7 +55,6 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
-//TODO: Query/delay issues w/ "Places" button. Multiple presses will cause crash.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
 //TODO: "Places" crashes w/ 0 size restaurant list on initial app install.
 //TODO: For restaurants with multiple locations, we may want to plug in the address, otherwise all of them will show up.
@@ -285,7 +284,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     bottom = 16.dp),
                 content = {
                     items(restrictionsUi.value.size) { index ->
-                        val cardColor = if (appViewModel.getRestrictionsList[index].selected) colorResource(id = R.color.blue_grey_100) else Color.White
+                        val cardColor = if (appViewModel.getRestrictionsList[index].selected) colorResource(id = R.color.grey_500) else Color.White
 
                         Card(
                             colors = CardDefaults.cardColors(

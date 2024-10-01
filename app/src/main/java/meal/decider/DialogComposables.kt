@@ -374,7 +374,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val selectedRestaurantSquare = appViewModel.selectedRestaurantSquare.collectAsStateWithLifecycle()
         val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
 
-        val rolledRestaurantString = selectedRestaurantSquare.value.name.toString()
+        val rolledRestaurantString = selectedRestaurantSquare.value.name.toString() + " " + selectedRestaurantSquare.value.address
         var borderStroke: BorderStroke
 
         if (restaurantRollFinished.value) {

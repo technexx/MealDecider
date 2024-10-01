@@ -29,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -112,7 +111,7 @@ fun DietaryRestrictions(appViewModel: AppViewModel) {
         content = {
             items(restrictionsUi.value.size) { index ->
                 if (appViewModel.getRestrictionsList[index].selected) {
-                    cardColor = colorResource(id = R.color.blue_grey_100)
+                    cardColor = colorResource(id = R.color.blue_grey_800)
                 } else  {
                     cardColor = Color.White
                 }
