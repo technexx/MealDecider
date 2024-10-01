@@ -36,9 +36,9 @@ class Runnables (private val appViewModel: AppViewModel) {
         appViewModel.updateSingleCuisineSquareColorAndBorder(appViewModel.rolledSquareIndex, appViewModel.getColorTheme.cuisineSquares, lightRestaurantSelectionBorderStroke)
         handler.removeCallbacks(cuisineRollRunnable)
 
+        var delay: Long
         val durationSetting = appViewModel.cuisineRollDurationSetting
         val speedSetting = appViewModel.cuisineRollSpeedSetting
-        var delay: Long
         var duration = rollDurationSettingToMillis(durationSetting)
 
         cuisineRollRunnable = Runnable {
@@ -49,14 +49,9 @@ class Runnables (private val appViewModel: AppViewModel) {
             delay = modifierDelay(duration, speedSetting)
             duration -= delay
 
-//            showLog("test", "delay is $delay")
-//            showLog("test", "duration is $duration")
-
             handler.postDelayed(cuisineRollRunnable, delay)
 
             if (duration < 50 || delay < 50) {
-//                showLog("test", "elapsed time within roll is $elapsedTime")
-//                showLog("test", "true elapsed time is $endTime")
                 val index = appViewModel.rolledSquareIndex
 
                 appViewModel.updateSingleCuisineSquareColorAndBorder(index, appViewModel.getSquareList[index].color, heavyCuisineSelectionBorderStroke)
@@ -93,24 +88,22 @@ class Runnables (private val appViewModel: AppViewModel) {
         appViewModel.updateSingleRestaurantColorAndBorder(appViewModel.rolledRestaurantIndex, appViewModel.getColorTheme.selectedRestaurantSquare, lightRestaurantSelectionBorderStroke)
         handler.removeCallbacks(restaurantRollRunnable)
 
-        val durationSetting = appViewModel.restaurantRollDurationSetting
-
         var delay: Long
+        val durationSetting = appViewModel.restaurantRollDurationSetting
         var speedSetting = appViewModel.restaurantRollSpeedSetting
         var duration = rollDurationSettingToMillis(durationSetting)
 
         restaurantRollRunnable = Runnable {
-            delay = modifierDelay(duration, speedSetting)
-            duration -= delay
-
             appViewModel.rolledRestaurantIndex = Random.nextInt(0, appViewModel.getRestaurantList.size)
             val newRestaurantList = restaurantListWithRandomColorChanged(appViewModel.rolledRestaurantIndex)
             appViewModel.updateRestaurantsList(newRestaurantList)
 
-            handler.postDelayed(restaurantRollRunnable, delay)
+            delay = modifierDelay(duration, speedSetting)
             duration -= delay
 
-            if (duration < 100) {
+            handler.postDelayed(restaurantRollRunnable, delay)
+
+            if (duration < 50 || delay < 50) {
                 appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[appViewModel.rolledRestaurantIndex])
                 appViewModel.updateRestaurantRollFinished(true)
                 appViewModel.updateRollEngaged(false)
