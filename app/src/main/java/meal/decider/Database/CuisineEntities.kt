@@ -28,3 +28,9 @@ data class RollOptions(
     @ColumnInfo(name="restaurant_roll_duration_setting") val restaurantRollDurationSetting: Long,
     @ColumnInfo(name="restaurant_roll_delay_setting") val restaurantRollDelaySetting: Long,
     )
+
+@Entity (tableName = "options_two")
+data class MiscOptions(
+    @PrimaryKey (autoGenerate = false) val uid: Int? = 0,
+    @ColumnInfo(name="restaurant_auto_scroll") val restaurantAutoScroll: Boolean
+)

@@ -377,6 +377,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val rolledRestaurantString = selectedRestaurantSquare.value.name.toString() + " " + selectedRestaurantSquare.value.address
         var borderStroke: BorderStroke
 
+
         if (restaurantRollFinished.value) {
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
@@ -398,6 +399,12 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             columns = StaggeredGridCells.Adaptive(128.dp),
         ) {
             items(restaurantList.value.size) { index ->
+                if (appViewModel.restaurantAutoScroll) {
+                    coroutineScope.launch {
+                        sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
+                    }
+                }
+
 //            items(dummyList.size) { index ->
                 borderStroke = appViewModel.getRestaurantList[index].border
                 Card(

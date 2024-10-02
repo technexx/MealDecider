@@ -59,4 +59,8 @@ interface OptionsDao {
 
     @Query("UPDATE options SET cuisine_roll_duration_setting = :cuisineRollDurationSetting, cuisine_roll_delay_setting = :cuisineRollDelaySetting, restaurant_roll_duration_setting = :restaurantRollDurationSetting, restaurant_roll_delay_setting = :restaurantRollDelaySetting")
     fun updateRollOptions(cuisineRollDurationSetting: Long, cuisineRollDelaySetting: Long, restaurantRollDurationSetting: Long, restaurantRollDelaySetting: Long)
+
+
+    @Query("UPDATE options_two SET restaurant_auto_scroll = :restaurantAutoScroll")
+    fun updateRestaurantAutoScroll(restaurantAutoScroll: Boolean)
 }

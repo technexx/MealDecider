@@ -113,7 +113,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
         }
     }
 
-    private fun UpdateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition: Float, cuisineRollDelaySliderPosition: Float, restaurantRollDurationSliderPosition:Float, restaurantRollDelaySliderPosition:Float) {
+    private fun updateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition: Float, cuisineRollDelaySliderPosition: Float, restaurantRollDurationSliderPosition:Float, restaurantRollDelaySliderPosition:Float) {
         ioScope.launch {
             //TODO: This needs to go into MainActivity's onBackPressed (formerly dismissed here) animation of this composable
             roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
@@ -158,7 +158,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                         value = cuisineRollDurationSliderPosition,
                         onValueChange = {
                             cuisineRollDurationSliderPosition = it
-                            UpdateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
+                            updateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
                                         },
                         valueRange = 1f..10f,
                         steps = 9
@@ -175,7 +175,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                         .padding(start = 4.dp),
                         value = cuisineRollDelaySliderPosition,
                         onValueChange = { cuisineRollDelaySliderPosition = it
-                            UpdateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
+                            updateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
                                         },
                         valueRange = 1f..10f,
                         steps = 9
@@ -193,7 +193,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                         .padding(start = 4.dp),
                         value = restaurantRollDurationSliderPosition,
                         onValueChange = { restaurantRollDurationSliderPosition = it
-                            UpdateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
+                            updateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
                                         },
                         valueRange = 1f..10f,
                         steps = 9
@@ -211,7 +211,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                         .padding(start = 4.dp),
                         value = restaurantRollDelaySliderPosition,
                         onValueChange = { restaurantRollDelaySliderPosition = it
-                            UpdateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
+                            updateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
                                         },
                         valueRange = 1f..10f,
                         steps = 9
