@@ -55,8 +55,7 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
-//TODO: Restaurant roll should scroll to current selection.
-//TODO: First restaurant selection (before roll) doesn't include address.
+//TODO: Some Cuisines (e.g. Italian) only show a few results.
 //TODO: Star rating should use 5 stars for all but only shade in score.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
 //TODO: "Places" crashes w/ 0 size restaurant list on initial app install.
