@@ -78,6 +78,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                     checked = checked,
                     onCheckedChange = {
                         checked = it
+                        appViewModel.restaurantAutoScroll = checked
                         updateAutoScrollSettingInDatabase(checked)
                     }
                 )

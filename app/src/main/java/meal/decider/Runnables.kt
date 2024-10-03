@@ -62,8 +62,6 @@ class Runnables (private val appViewModel: AppViewModel) {
 
                 appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[appViewModel.rolledSquareIndex])
 
-                showLog("test", "cuisine index is ${appViewModel.rolledSquareIndex} and square object is ${appViewModel.getSquareList[appViewModel.rolledSquareIndex]}")
-
                 handler.removeCallbacks(cuisineRollRunnable)
             }
         }

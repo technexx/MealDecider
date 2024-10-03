@@ -146,7 +146,6 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
     suspend fun setMiscOptionsFromDatabaseValues() {
         withContext(Dispatchers.IO) {
             val miscOptions = getMiscOptions()
-            showLog("test", "val is ${miscOptions[0]}")
             appViewModel.restaurantAutoScroll = miscOptions[0].restaurantAutoScroll
         }
     }
