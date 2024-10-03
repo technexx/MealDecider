@@ -29,7 +29,7 @@ class AppViewModel : ViewModel() {
     var restaurantRollSpeedSetting : Long = 0
     var restaurantRollDurationSetting : Long = 0
 
-    var restaurantAutoScroll = false
+    var restaurantAutoScroll: Boolean = false
 
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()

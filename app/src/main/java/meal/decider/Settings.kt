@@ -11,13 +11,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Slider
+import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -52,15 +55,40 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                     appViewModel.updateSettingsDialogVisibility(speeds = true, sounds = false, colors = false)
                 })
             Spacer(modifier = Modifier.height(10.dp))
-//            RegTextButton(text = "Sounds", fontSize = 26, color = textColor,
-//                onClick = {
-//                    appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = true, colors = false)
-//                })
-//            Spacer(modifier = Modifier.height(10.dp))
             RegTextButton(text = "Colors",  fontSize = 26, color = textColor,
                 onClick = {
                     appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = false, colors = true)
                 })
+            Row {
+                RegTextButton(text = "Auto Scroll",  fontSize = 26, color = textColor,
+                    onClick = {
+                        appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = false, colors = true)
+                    })
+                Spacer(modifier = Modifier.width(8.dp))
+
+                var checked by remember { mutableStateOf(false) }
+
+                LaunchedEffect(Unit) {
+                    checked = appViewModel.restaurantAutoScroll
+                    updateAutoScrollSettingInDatabase(checked)
+                }
+
+                Switch(modifier = Modifier
+                    .padding(top = 10.dp),
+                    checked = checked,
+                    onCheckedChange = {
+                        checked = it
+                        updateAutoScrollSettingInDatabase(checked)
+                    }
+                )
+            }
+
+        }
+    }
+
+    private fun updateAutoScrollSettingInDatabase(isOn: Boolean) {
+        ioScope.launch {
+            roomInteractions.updateAutoScroll(isOn)
         }
     }
 

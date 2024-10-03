@@ -12,12 +12,14 @@ import meal.decider.AppViewModel
 import meal.decider.ColorTheme
 import meal.decider.SquareValues
 import meal.decider.Theme
+import meal.decider.showLog
 
 class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel, private val activity: Activity) {
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
     val cuisineDao = cuisineDatabase.cuisineDao()
     val restaurantFiltersDao = cuisineDatabase.restaurantFiltersDao()
     val optionsDao = cuisineDatabase.optionsDao()
+    val miscOptionsDao = cuisineDatabase.miscOptions()
 
     private val sharedPref = activity.getPreferences(Context.MODE_PRIVATE)
 
@@ -110,6 +112,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         optionsDao.insertRollOptions(rollOptions)
     }
 
+
     suspend fun getRollOptions(): List<RollOptions> {
         val rollOptions: List<RollOptions>
         withContext(Dispatchers.IO) {
@@ -124,6 +127,12 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         }
     }
 
+    suspend fun updateAutoScroll(isOn: Boolean) {
+        withContext(Dispatchers.IO) {
+            miscOptionsDao.updateRestaurantAutoScroll(isOn)
+        }
+    }
+
     suspend fun setViewModelRollDelayVariablesFromDatabaseValues() {
         withContext(Dispatchers.IO) {
             val rollOptions = getRollOptions()
@@ -132,6 +141,27 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             appViewModel.restaurantRollDurationSetting = rollOptions[0].restaurantRollDurationSetting
             appViewModel.restaurantRollSpeedSetting = rollOptions[0].restaurantRollDelaySetting
         }
+    }
+
+    suspend fun setMiscOptionsFromDatabaseValues() {
+        withContext(Dispatchers.IO) {
+            val miscOptions = getMiscOptions()
+            showLog("test", "val is ${miscOptions[0]}")
+            appViewModel.restaurantAutoScroll = miscOptions[0].restaurantAutoScroll
+        }
+    }
+
+    suspend fun getMiscOptions(): List<MiscOptions> {
+        val miscOptions: List<MiscOptions>
+        withContext(Dispatchers.IO) {
+            miscOptions = miscOptionsDao.getMiscOptions()
+        }
+        return miscOptions
+    }
+
+    fun populateMiscOptionsWithInitialValues() {
+        val miscOptions = MiscOptions(null, true)
+        miscOptionsDao.insertMiscSettings(miscOptions)
     }
 
     fun saveColorThemeToSharedPref(colorTheme: ColorTheme) {

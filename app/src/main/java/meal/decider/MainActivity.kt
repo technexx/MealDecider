@@ -82,7 +82,11 @@ class MainActivity : ComponentActivity() {
             if (roomInteractions.optionsDao.getRollOptions().isEmpty()) {
                 roomInteractions.populateRollOptionsWithInitialValues()
             }
+            if (roomInteractions.miscOptionsDao.getMiscOptions().isEmpty()) {
+                roomInteractions.populateMiscOptionsWithInitialValues()
+            }
             roomInteractions.setViewModelRollDelayVariablesFromDatabaseValues()
+            roomInteractions.setMiscOptionsFromDatabaseValues()
 
             val restaurantFilters = roomInteractions.getRestaurantFilters()[0]
             appViewModel.setLocalRestaurantFilterValues(
