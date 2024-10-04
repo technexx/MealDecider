@@ -108,7 +108,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             singleLine = true,
                             textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
                             colors = TextFieldDefaults.outlinedTextFieldColors(
-                                containerColor = colorResource(id = R.color.grey_50),
+                                containerColor = colorResource(colorTheme.value.textBoxBackground),
                             ),
                         )
                     }
@@ -142,6 +142,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun DisplayedCuisineList(list: State<List<String>>) {
         val listOfCuisinesToAdd = appViewModel.listOfCuisinesToAdd.collectAsStateWithLifecycle()
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         var backgroundColor: Int
 
         LazyColumn (
@@ -153,9 +154,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         ){
             items (list.value.size) { index ->
                 backgroundColor = if (!listOfCuisinesToAdd.value.contains(list.value[index])) {
-                    R.color.grey_300
+                    colorTheme.value.dialogBackground
                 } else {
-                    R.color.grey_500
+                    colorTheme.value.dialogTextHighlight
                 }
                 Column (modifier = Modifier
                     .padding(4.dp)
@@ -172,7 +173,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         )
                         .padding(8.dp),
                         fontSize = 20.sp,
-                        color = Color.Black,
+                        color = colorResource(id = colorTheme.value.dialogTextColor),
                         text = list.value[index])
                 }
             }
@@ -391,8 +392,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     appViewModel.updateRestaurantRollFinished(false)
                 }
             }
-        } else {
-
         }
 
         LazyVerticalStaggeredGrid(state = sectionGridState,

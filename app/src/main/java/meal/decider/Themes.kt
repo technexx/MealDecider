@@ -29,6 +29,8 @@ data class ColorTheme(
     val dialogBackground: Int,
     val dropDownMenuBackground: Int,
     val dialogTextColor: Int,
+    val dialogTextHighlight: Int,
+    val textBoxBackground: Int,
     var cancelDialogButton: Int,
     var confirmDialogButton: Int,
 
@@ -64,6 +66,8 @@ object Theme {
             dialogBackground = R.color.grey_50,
             dropDownMenuBackground = R.color.grey_50,
             dialogTextColor = R.color.black,
+            dialogTextHighlight = R.color.grey_400,
+            textBoxBackground = R.color.grey_300,
             cancelDialogButton = android.R.color.holo_red_light,
             confirmDialogButton = android.R.color.holo_green_light,
             settingsText = R.color.black
@@ -93,9 +97,11 @@ object Theme {
             interactionButtons = R.color.grey_200,
             interactionIcons = R.color.white,
 
-            dialogBackground = R.color.grey_700,
+            dialogBackground = R.color.grey_800,
             dropDownMenuBackground = R.color.grey_700,
             dialogTextColor = R.color.white,
+            dialogTextHighlight = R.color.grey_500,
+            textBoxBackground = R.color.grey_50,
             cancelDialogButton = android.R.color.holo_red_light,
             confirmDialogButton = android.R.color.holo_green_light,
 
