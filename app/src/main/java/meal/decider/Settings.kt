@@ -97,6 +97,8 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
     fun ColorsSettingDialog() {
         val colorSettingsToggle = appViewModel.colorSettingsSelectionList.collectAsStateWithLifecycle()
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        //Sets color setting to correct button highlight (for first open of settings)
+        appViewModel.switchColorSettingsUi(roomInteractions.retrieveColorThemeIndexFromSharedPref())
 
         Column(modifier = Modifier
             .fillMaxSize()

@@ -179,4 +179,14 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
 
         return colorTheme
     }
+
+    fun retrieveColorThemeIndexFromSharedPref(): Int {
+        var index = 0
+        val colorThemeString = sharedPref.getString("theme", "light")
+        if (colorThemeString == "light") index = 0
+        if (colorThemeString == "dark") index = 1
+        showLog("test", "var is $index")
+
+        return index
+    }
 }

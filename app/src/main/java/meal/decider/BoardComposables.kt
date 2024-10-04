@@ -56,11 +56,7 @@ import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
 //TODO: Some Cuisines (e.g. Italian) only show a few results.
-//TODO: Star rating should use 5 stars for all but only shade in score.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
-//TODO: "Places" crashes w/ 0 size restaurant list on initial app install.
-//TODO: For restaurants with multiple locations, we may want to plug in the address, otherwise all of them will show up.
-//TODO: Theme color shows "light" highlighted on app start even if dark theme.
 
 class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, activity: Activity, private val roomInteractions: RoomInteractions, mapInteractions: MapInteractions, private val runnables: Runnables) {
 

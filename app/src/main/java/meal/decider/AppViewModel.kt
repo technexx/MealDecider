@@ -496,14 +496,18 @@ class AppViewModel : ViewModel() {
         updateRestrictionsList(updatedList)
     }
 
-    fun switchColorSettingsUi(index: Int) {
+    fun colorSettingsList(index: Int): SnapshotStateList<SettingsToggle> {
         val list = getColorSettingsSelectionList
         for (i in list) { i.selected = false }
         list[index].selected = true
         val updatedList = mutableStateListOf<SettingsToggle>()
         updatedList.addAll(list)
 
-        updateColorSettingsToggleList(updatedList)
+        return updatedList
+    }
+
+    fun switchColorSettingsUi(index: Int) {
+        updateColorSettingsToggleList(colorSettingsList(index))
     }
 
     val getSquareList get() = boardUiState.value.squareList
