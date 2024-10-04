@@ -81,6 +81,7 @@ fun ButtonUi(
 fun MaterialIconButton(
     icon: ImageVector,
     description: String,
+    modifier: Modifier = Modifier,
     tint: Int,
     enabled: Boolean = true,
     onClick: () -> Unit) {
@@ -88,8 +89,9 @@ fun MaterialIconButton(
         Icon(
             imageVector = icon,
             contentDescription = description,
-            tint = colorResource(id = tint)
-        )
+            tint = colorResource(id = tint),
+            modifier = modifier
+            )
     }
 }
 

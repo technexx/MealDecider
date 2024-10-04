@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -122,11 +123,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
-                        MaterialIconButton(icon = Icons.Filled.Close, description = "close", colorTheme.value.cancelDialogButton) {
+                        MaterialIconButton(icon = Icons.Filled.Close, description = "close", tint = colorTheme.value.cancelDialogButton, modifier = Modifier.size(64.dp)) {
                             appViewModel.updateAddMode(false)
                             appViewModel.updateListOfCuisinesToAdd(emptyList())
                         }
-                        MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", colorTheme.value.confirmDialogButton) {
+                        MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(64.dp)) {
                             appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd)
                             coroutineScope.launch {
                                 roomInteractions.insertMultipleCuisines(appViewModel.getListOfCuisinesToAdd)
@@ -138,6 +139,13 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             }
         )
     }
+
+//    @Composable
+//    fun testIcon() {
+//        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+//
+//        Icon(Icons.Filled.Close, "close",  modifier = Modifier.size(64.dp), colorResource(id = (colorTheme.value.cancelDialogButton)))
+//    }
 
     @Composable
     fun DisplayedCuisineList(list: State<List<String>>) {
@@ -221,10 +229,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 .fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
-                                MaterialIconButton(icon = Icons.Default.Close, description = "close", colorTheme.value.cancelDialogButton) {
+                                MaterialIconButton(icon = Icons.Default.Close, description = "close", tint = colorTheme.value.cancelDialogButton, modifier = Modifier.size(64.dp)) {
                                     appViewModel.updateRestoreDefaults(false)
                                 }
-                                MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", colorTheme.value.confirmDialogButton) {
+                                MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(64.dp)) {
                                     roomInteractions.setSquareDatabaseToDefaultStartingValues()
                                     appViewModel.updateSquareList(appViewModel.starterSquareList())
                                     appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
@@ -460,7 +468,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             modifier = Modifier
                 .wrapContentSize(Alignment.TopEnd)
         ) {
-            MaterialIconButton(icon = Icons.Filled.Menu, description = "menu", colorTheme.value.restaurantsIconButtons) {
+            MaterialIconButton(icon = Icons.Filled.Menu, description = "menu", tint = colorTheme.value.restaurantsIconButtons) {
                 expanded = !expanded
             }
 
