@@ -510,17 +510,35 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         if (rating != null) {
             val roundedDown = rating.toInt()
             val remainder = rating - roundedDown
+            var iterator = 5
             Row (modifier = Modifier
                 .padding(0.dp, 0.dp)) {
-                for (i in 1..roundedDown) {
-                    Image(painterResource(R.drawable.full_star_black,), "full star")
+                for (i in 1..5) {
+                    if (roundedDown >= i) {
+                        Image(painterResource(R.drawable.full_star_black,), "full star")
+                    } else {
+                        if (i < 5) {
+                            Image(painterResource(R.drawable.empty_star,), "empty star")
+                        } else {
+                            if (remainder >.2 && remainder <.8) {
+                                Image(painterResource(R.drawable.half_empty_star_black,), "half star")
+                            } else {
+                                Image(painterResource(R.drawable.empty_star,), "empty star")
+                            }
+                        }
+                    }
                 }
-                if (remainder >.2 && remainder <.8) {
-                    Image(painterResource(R.drawable.half_empty_star_black,), "half star")
-                }
-                if (remainder >= .8) {
-                    Image(painterResource(R.drawable.full_star_black,), "full star")
-                }
+
+
+//                for (i in 1..roundedDown) {
+//                    Image(painterResource(R.drawable.full_star_black,), "full star")
+//                }
+//                if (remainder >.2 && remainder <.8) {
+//                    Image(painterResource(R.drawable.half_empty_star_black,), "half star")
+//                }
+//                if (remainder >= .8) {
+//                    Image(painterResource(R.drawable.full_star_black,), "full star")
+//                }
             }
         }
     }
