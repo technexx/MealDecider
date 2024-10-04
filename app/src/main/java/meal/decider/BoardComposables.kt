@@ -55,7 +55,6 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
-//TODO: Cuisine should also have autoscroll because we can add more.
 //TODO: Some Cuisines (e.g. Italian) only show a few results.
 //TODO: Star rating should use 5 stars for all but only shade in score.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
@@ -356,6 +355,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val cuisineRollFinished = appViewModel.cuisineRollFinished.collectAsStateWithLifecycle()
         val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
         val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()
+        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
 
         val restrictionsString = foodRestrictionsString(restrictionsUi.value)
         //TODO: selectedCuisineSquare.value.name not updating
@@ -388,6 +388,14 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             content = {
                 items(boardUiState.value.squareList.size) { index ->
                     if (appViewModel.rolledSquareIndex == index) sizeMod = 1.0f else sizeMod = 0.95f
+
+                    if (rollEngaged.value) {
+                        if (appViewModel.restaurantAutoScroll) {
+                            coroutineScope.launch {
+                                sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
+                            }
+                        }
+                    }
 
                     Row(modifier = Modifier.fillMaxSize(),
                         horizontalArrangement = Arrangement.Center,

@@ -372,7 +372,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val sectionGridState = rememberLazyStaggeredGridState()
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
         val selectedRestaurantSquare = appViewModel.selectedRestaurantSquare.collectAsStateWithLifecycle()
-        val restaurantRollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
+        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
         val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
 
         val rolledRestaurantString = selectedRestaurantSquare.value.name.toString() + " " + selectedRestaurantSquare.value.address
@@ -402,7 +402,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             columns = StaggeredGridCells.Adaptive(128.dp),
         ) {
             items(restaurantList.value.size) { index ->
-                if (restaurantRollEngaged.value) {
+                if (rollEngaged.value) {
                     if (appViewModel.restaurantAutoScroll) {
                         coroutineScope.launch {
                             sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
