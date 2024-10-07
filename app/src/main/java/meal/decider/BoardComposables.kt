@@ -52,8 +52,7 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
-//TODO: Restaurant Filters don't show up - see Board() - value of restaurantDialogVisibility needs to be 2.
-//TODO: May want to simply remove the "select" pencil icon, or apply it to restaurants as well.
+//TODO: Options Menu (top right) recomposes when switching between cuisines/restaurants.
 //TODO: Some Cuisines (e.g. Italian) only show a few results.
 //TODO: "Restory defaults" dialog box too dark in dark mode.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
@@ -129,9 +128,21 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                     enabled = buttonsEnabled) {
                                     appViewModel.updateOptionsMenuVisibility(true)
                                 }
-//                                Spacer(modifier = Modifier.width(8.dp))
-
-                                CuisineBoardOptions()
+                                if (restaurantDialogVisibility.value == 0) {
+                                    AnimatedComposable(
+                                        backHandler = {
+                                        }) {
+                                        CuisineBoardOptions()
+                                    }
+                                }
+                                if (restaurantDialogVisibility.value == 1) {
+                                    AnimatedComposable(
+                                        backHandler = {
+                                            appViewModel.updateRestaurantDialogVisibility(0)
+                                        }) {
+                                        RestaurantBoardOptions()
+                                    }
+                                }
                             }
                         }
                     },
@@ -225,13 +236,37 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 expanded = false
             }
         }
-
-
     }
 
     @Composable
     fun RestaurantBoardOptions() {
+        val coroutineScope = rememberCoroutineScope()
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        var expanded by remember { mutableStateOf(false) }
+        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
+        val buttonsEnabled = !rollEngaged.value
 
+        MaterialIconButton(
+            icon = Icons.Filled.Menu,
+            description = "menu",
+            tint = colorTheme.value.cuisineIconButtons,
+            enabled = buttonsEnabled) {
+            expanded = !expanded
+        }
+
+        DropdownMenu(modifier = Modifier
+            .background(colorResource(colorTheme.value.dropDownMenuBackground)),
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropDownItemUi(
+                text = "Filters",
+                fontSize = 18,
+                color = colorResource(id = colorTheme.value.dialogTextColor)) {
+                appViewModel.updateRestaurantDialogVisibility(2)
+                expanded = false
+            }
+        }
     }
 
     @Composable
