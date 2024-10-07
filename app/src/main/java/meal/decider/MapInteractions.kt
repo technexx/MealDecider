@@ -48,6 +48,10 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val jsonSerialized = json.decodeFromString<Root>(prettyJson)
 
             var restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
+            for (i in restaurantList) {
+                showLog("test", "restaurant list is ${i.name + " " + i.distance}")
+
+            }
             restaurantList = filteredDistanceAndRatingRestaurantList(restaurantList, distance, rating)
 
             appViewModel.updateRestaurantsList(restaurantList)
