@@ -296,82 +296,94 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val textColor = colorResource(id = colorTheme.value.dialogTextColor)
         var priceString: String
 
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-            color = colorResource(id = colorTheme.value.dialogBackground),
-        ) {
-            Box(modifier = Modifier
-                .fillMaxSize(),
-            ) {
-                Column (modifier = Modifier
-                    .padding(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally)
-                {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        RegText(text = "Filters", fontSize = 22, color = textColor, fontWeight = FontWeight.Bold)
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Column (){
-                        RegText(text = "Distance", fontSize = 20, color = textColor)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row (modifier = Modifier
-                            .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween) {
-                            Slider(modifier = Modifier
-                                .fillMaxWidth(0.75f)
-                                .padding(start = 4.dp),
-                                value = distanceSliderPosition,
-                                onValueChange = { distanceSliderPosition = it
-                                },
-                                valueRange = 1f..10f
-                            )
-                            RegText(text = distanceSliderPosition.toInt().toString() + " mi", fontSize = 18, color = textColor)
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-                        RegText(text = "Rating", fontSize = 20 , color = textColor)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row (modifier = Modifier
-                            .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween) {
-                            Slider(modifier = Modifier
-                                .fillMaxWidth(0.7f)
-                                .padding(start = 4.dp),
-                                value = ratingSliderPosition,
-                                onValueChange = { ratingSliderPosition = it },
-                                valueRange = 3f..4.5f,
-                                steps = 2
-                            )
-                            RegText(text = "$ratingSliderPosition stars", fontSize = 18, color = textColor)
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-                        RegText(text = "Max Price", fontSize = 18, color = textColor)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row (modifier = Modifier
-                            .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween) {
-                            Slider(modifier = Modifier
-                                .fillMaxWidth(0.7f)
-                                .padding(start = 4.dp),
-                                value = priceSliderPosition,
-                                onValueChange = { priceSliderPosition = it },
-                                valueRange = 1f..4f,
-                                steps = 2
-                            )
-                            Column (modifier = Modifier
-                                .fillMaxWidth(),
-                                verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
-                                priceString = ""
-                                for (i in 1..priceSliderPosition.toInt()) {
-                                    priceString += "$"
-                                }
-                                RegText(text = priceString, fontSize = 18, color = textColor)
+        AnimatedTransitionDialog(
+            modifier = Modifier
+                .background(colorResource(id = colorTheme.value.dialogBackground))
+                .height(400.dp)
+                .width(500.dp),
+            onDismissRequest = {
+                appViewModel.updateShowRestaurantsDialog(false)
+            },
+            content = {
+                Surface(
+                    shape = RoundedCornerShape(16.dp),
+                    color = colorResource(id = colorTheme.value.dialogBackground),
+                ) {
+                    Box(modifier = Modifier
+                        .fillMaxSize(),
+                    ) {
+                        Column (modifier = Modifier
+                            .padding(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally)
+                        {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                RegText(text = "Filters", fontSize = 22, color = textColor, fontWeight = FontWeight.Bold)
                             }
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Column (){
+                                RegText(text = "Distance", fontSize = 20, color = textColor)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Row (modifier = Modifier
+                                    .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween) {
+                                    Slider(modifier = Modifier
+                                        .fillMaxWidth(0.75f)
+                                        .padding(start = 4.dp),
+                                        value = distanceSliderPosition,
+                                        onValueChange = { distanceSliderPosition = it
+                                        },
+                                        valueRange = 1f..10f
+                                    )
+                                    RegText(text = distanceSliderPosition.toInt().toString() + " mi", fontSize = 18, color = textColor)
+                                }
+                                Spacer(modifier = Modifier.height(16.dp))
+                                RegText(text = "Rating", fontSize = 20 , color = textColor)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Row (modifier = Modifier
+                                    .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween) {
+                                    Slider(modifier = Modifier
+                                        .fillMaxWidth(0.7f)
+                                        .padding(start = 4.dp),
+                                        value = ratingSliderPosition,
+                                        onValueChange = { ratingSliderPosition = it },
+                                        valueRange = 3f..4.5f,
+                                        steps = 2
+                                    )
+                                    RegText(text = "$ratingSliderPosition stars", fontSize = 18, color = textColor)
+                                }
+                                Spacer(modifier = Modifier.height(16.dp))
+                                RegText(text = "Max Price", fontSize = 18, color = textColor)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Row (modifier = Modifier
+                                    .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween) {
+                                    Slider(modifier = Modifier
+                                        .fillMaxWidth(0.7f)
+                                        .padding(start = 4.dp),
+                                        value = priceSliderPosition,
+                                        onValueChange = { priceSliderPosition = it },
+                                        valueRange = 1f..4f,
+                                        steps = 2
+                                    )
+                                    Column (modifier = Modifier
+                                        .fillMaxWidth(),
+                                        verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+                                        priceString = ""
+                                        for (i in 1..priceSliderPosition.toInt()) {
+                                            priceString += "$"
+                                        }
+                                        RegText(text = priceString, fontSize = 18, color = textColor)
+                                    }
 
+                                }
+                            }
                         }
                     }
                 }
+
             }
-        }
+        )
     }
 
     @Composable

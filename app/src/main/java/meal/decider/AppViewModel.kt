@@ -85,8 +85,8 @@ class AppViewModel : ViewModel() {
     private val _showRestaurantSettings = MutableStateFlow(false)
     val showRestaurantSettings: StateFlow<Boolean> = _showRestaurantSettings.asStateFlow()
 
-    private val _restaurantDialogVisibility = MutableStateFlow(0)
-    val restaurantDialogVisibility: StateFlow<Int> = _restaurantDialogVisibility.asStateFlow()
+    private val _restaurantVisibility = MutableStateFlow(0)
+    val restaurantVisibility: StateFlow<Int> = _restaurantVisibility.asStateFlow()
 
     private val _restaurantQueryFinished = MutableStateFlow(true)
     val restaurantQueryFinished: StateFlow<Boolean> = _restaurantQueryFinished.asStateFlow()
@@ -196,8 +196,8 @@ class AppViewModel : ViewModel() {
         _showRestaurantSettings.value = show
     }
 
-    fun updateRestaurantDialogVisibility(value: Int) {
-        _restaurantDialogVisibility.value = value
+    fun updateRestaurantVisibility(value: Int) {
+        _restaurantVisibility.value = value
     }
 
     fun updateSelectedRestaurantSquare(selectedSquare: RestaurantValues) {
@@ -515,7 +515,7 @@ class AppViewModel : ViewModel() {
     val getListOfCuisineSquaresToEdit get() = listOfCuisineSquaresToEdit.value
     val getListOfCuisinesToAdd get() = listOfCuisinesToAdd.value
     val getRestaurantList get() = _restaurantList.value
-    val getRestaurantDialogVisibility get() = restaurantDialogVisibility.value
+    val getRestaurantVisibility get() = restaurantVisibility.value
 
 
     val getRollEngaged get() = rollEngaged.value

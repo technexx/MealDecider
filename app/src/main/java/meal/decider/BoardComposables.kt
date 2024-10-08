@@ -73,7 +73,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
         val selectMode = appViewModel.cuisineSelectionMode.collectAsStateWithLifecycle()
         val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
-        val restaurantDialogVisibility = appViewModel.restaurantDialogVisibility.collectAsStateWithLifecycle()
+        val restaurantVisibility = appViewModel.restaurantVisibility.collectAsStateWithLifecycle()
 
         var selectionColor: Int
         val buttonsEnabled = !rollEngaged.value
@@ -128,17 +128,17 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                     enabled = buttonsEnabled) {
                                     appViewModel.updateOptionsMenuVisibility(true)
                                 }
-                                if (restaurantDialogVisibility.value == 0) {
+                                if (restaurantVisibility.value == 0) {
                                     AnimatedComposable(
                                         backHandler = {
                                         }) {
                                         CuisineBoardOptions()
                                     }
                                 }
-                                if (restaurantDialogVisibility.value == 1) {
+                                if (restaurantVisibility.value == 1) {
                                     AnimatedComposable(
                                         backHandler = {
-                                            appViewModel.updateRestaurantDialogVisibility(0)
+                                            appViewModel.updateRestaurantVisibility(0)
                                         }) {
                                         RestaurantBoardOptions()
                                     }
@@ -263,7 +263,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 text = "Filters",
                 fontSize = 18,
                 color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                appViewModel.updateRestaurantDialogVisibility(2)
+                appViewModel.updateShowRestaurantsDialog(true)
                 expanded = false
             }
         }
@@ -272,7 +272,8 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     @Composable
     fun Board() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-        val restaurantDialogVisibility = appViewModel.restaurantDialogVisibility.collectAsStateWithLifecycle()
+        val restaurantVisibility = appViewModel.restaurantVisibility.collectAsStateWithLifecycle()
+        val showRestaurantDialog = appViewModel.showRestaurantsDialog.collectAsStateWithLifecycle()
 
         Box(modifier = Modifier.fillMaxSize()) {
             Surface(
@@ -299,24 +300,22 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 }
             }
 
-            if (restaurantDialogVisibility.value == 1) {
-                AnimatedComposable(
-                    modifier = Modifier.fillMaxSize(),
-                    backHandler = {
-                        appViewModel.updateRestaurantDialogVisibility(0)
-                    }) {
-                    dialogComposables.RestaurantListContent()
-                }
-            }
+            if (restaurantVisibility.value == 1) {
+                dialogComposables.RestaurantListContent()
 
-            if (restaurantDialogVisibility.value == 2) {
-                AnimatedComposable(
-                    modifier = Modifier.fillMaxSize(),
-                    backHandler = {
-                        appViewModel.updateRestaurantDialogVisibility(1)
-                    }) {
-                    dialogComposables.RestaurantFilters()
+                //If value is set to 0 (as it is when we exit the Restaurant Board),
+                if (restaurantVisibility.value == 0) {
+                    AnimatedComposable(
+                        modifier = Modifier.fillMaxSize(),
+                        backHandler = {
+                            appViewModel.updateRestaurantVisibility(0)
+                        }) {
+                    }
                 }
+
+            }
+            if (showRestaurantDialog.value) {
+                dialogComposables.RestaurantFilters()
             }
         }
     }

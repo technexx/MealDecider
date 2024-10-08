@@ -60,7 +60,7 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                             appViewModel.updateSingleRestaurantColorAndBorder(0, appViewModel.getColorTheme.selectedRestaurantSquare, defaultRestaurantBorderStroke)
                             appViewModel.restaurantStringUri = appViewModel.getRestaurantList[0].name.toString() + " " + appViewModel.getRestaurantList[0].address
 
-                            appViewModel.updateRestaurantDialogVisibility(1)
+                            appViewModel.updateRestaurantVisibility(1)
                             appViewModel.updateShowRestaurants(true)
                         }
                     }
@@ -75,7 +75,7 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
         ButtonUi(text = "Map", fontSize = 20, color = color, onClick = {
             if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                 coroutineScope.launch {
-                    if (appViewModel.getRestaurantDialogVisibility == 0) {
+                    if (appViewModel.getRestaurantVisibility == 0) {
                         mapInteractions.mapIntent(appViewModel.cuisineStringUri)
                     } else {
                         if (appViewModel.getRestaurantQueryFinished) {
@@ -91,7 +91,7 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
     fun DiceButton(color: Int) {
         CustomIconButton(size = 72, image = R.drawable.dice, description = "dice", tint = color) {
             if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-                if (appViewModel.getRestaurantDialogVisibility == 0) {
+                if (appViewModel.getRestaurantVisibility == 0) {
                     runnables.rollCuisine()
                     runnables.timer()
                 } else {
