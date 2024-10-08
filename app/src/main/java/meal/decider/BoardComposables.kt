@@ -52,9 +52,9 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
-//TODO: Options Menu (top right) recomposes when switching between cuisines/restaurants.
+//TODO: onBackPressed in Restaurants minimizes app.
 //TODO: Some Cuisines (e.g. Italian) only show a few results.
-//TODO: "Restory defaults" dialog box too dark in dark mode.
+//TODO: "Restore defaults" dialog box too dark in dark mode.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
 
 class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, activity: Activity, private val roomInteractions: RoomInteractions, mapInteractions: MapInteractions, private val runnables: Runnables) {
@@ -244,37 +244,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         }
     }
 
-//    @Composable
-//    fun RestaurantBoardOptions() {
-//        val coroutineScope = rememberCoroutineScope()
-//        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-//        var expanded by remember { mutableStateOf(false) }
-//        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
-//        val buttonsEnabled = !rollEngaged.value
-//
-//        MaterialIconButton(
-//            icon = Icons.Filled.Menu,
-//            description = "menu",
-//            tint = colorTheme.value.cuisineIconButtons,
-//            enabled = buttonsEnabled) {
-//            expanded = !expanded
-//        }
-//
-//        DropdownMenu(modifier = Modifier
-//            .background(colorResource(colorTheme.value.dropDownMenuBackground)),
-//            expanded = expanded,
-//            onDismissRequest = { expanded = false }
-//        ) {
-//            DropDownItemUi(
-//                text = "Filters",
-//                fontSize = 18,
-//                color = colorResource(id = colorTheme.value.dialogTextColor)) {
-//                appViewModel.updateShowRestaurantsDialog(true)
-//                expanded = false
-//            }
-//        }
-//    }
-
     @Composable
     fun Board() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
@@ -308,16 +277,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
 
             if (restaurantVisibility.value == 1) {
                 dialogComposables.RestaurantListContent()
-
-                //If value is set to 0 (as it is when we exit the Restaurant Board),
-                if (restaurantVisibility.value == 0) {
-                    AnimatedComposable(
-                        modifier = Modifier.fillMaxSize(),
-                        backHandler = {
-                            appViewModel.updateRestaurantVisibility(0)
-                        }) {
-                    }
-                }
 
             }
             if (showRestaurantDialog.value) {
