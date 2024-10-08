@@ -276,9 +276,15 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             }
 
             if (restaurantVisibility.value == 1) {
-                dialogComposables.RestaurantListContent()
-
+                AnimatedComposable(
+                    modifier = Modifier.fillMaxSize(),
+                    backHandler = {
+                        appViewModel.updateRestaurantVisibility(0)
+                    }) {
+                    dialogComposables.RestaurantListContent()
+                }
             }
+
             if (showRestaurantDialog.value) {
                 dialogComposables.RestaurantFilters()
             }
