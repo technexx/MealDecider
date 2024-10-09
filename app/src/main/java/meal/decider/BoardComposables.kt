@@ -115,34 +115,15 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                             modifier = Modifier
                                 .wrapContentSize(Alignment.TopEnd)
                         ) {
-                            Row() {
-                                MaterialIconButton(
-                                    icon = Icons.Filled.Menu,
-                                    description = "menu",
-                                    tint = colorTheme.value.cuisineIconButtons,
-                                    enabled = buttonsEnabled) {
-                                    expanded = !expanded
-                                }
+                            Row {
+                                DropdownMenuSelections()
 
-                                DropdownMenu(modifier = Modifier
-                                    .background(colorResource(colorTheme.value.dropDownMenuBackground)),
-                                    expanded = expanded,
-                                    onDismissRequest = { expanded = false }
-                                ) {
-                                    if (restaurantVisibility.value == 0) {
-                                        CuisineDropdownMenuSelections(expanded)
-                                    }
-                                    if (restaurantVisibility.value == 1) {
-                                        RestaurantDropdownMenuSelections(expanded)
-                                    }
-                                }
                                 MaterialIconButton(
                                     icon = Icons.Filled.Settings,
                                     description = "settings",
                                     tint = colorTheme.value.cuisineIconButtons,
                                     enabled = buttonsEnabled) {
                                     appViewModel.updateOptionsMenuVisibility(true)
-                                    expanded = !expanded
                                 }
                             }
                         }
@@ -161,67 +142,98 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     }
 
     @Composable
-    fun CuisineDropdownMenuSelections(isExpanded: Boolean) {
+    fun DropdownMenuSelections() {
         val coroutineScope = rememberCoroutineScope()
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        val restaurantVisibility = appViewModel.restaurantVisibility.collectAsStateWithLifecycle()
+        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
+        val buttonsEnabled = !rollEngaged.value
         var expanded by remember { mutableStateOf(false) }
-        expanded = isExpanded
 
-        DropDownItemUi(
-            text = "Add Cuisine",
-            fontSize = 18,
-            color = colorResource(id = colorTheme.value.dialogTextColor)) {
-            appViewModel.updateAddMode(true)
-            appViewModel.updateEditMode(false)
-            expanded = false
+        MaterialIconButton(
+            icon = Icons.Filled.Menu,
+            description = "menu",
+            tint = colorTheme.value.cuisineIconButtons,
+            enabled = buttonsEnabled) {
+            expanded = !expanded
         }
-        DropDownItemUi(
-            text = "Edit Cuisines",
-            fontSize = 18,
-            color = colorResource(id = colorTheme.value.dialogTextColor)) {
-            //Resets list of squares to edit.
-            appViewModel.updateListOfCuisineSquaresToEdit(listOf())
-            if (!appViewModel.getEditMode) {
-                appViewModel.updateEditMode(true)
-                appViewModel.updateAllCuisineBorders(colorTheme.value.cuisineEditModeBorderStroke)
-            } else {
-                appViewModel.updateEditMode(false)
-                appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
-            }
-            expanded = false
-        }
-        DropDownItemUi(
-            text = "Sort by Alphabetically",
-            fontSize = 18,
-            color = colorResource(id = colorTheme.value.dialogTextColor)) {
-            appViewModel.sortAndUpdateCuisineList("alphabetical")
-            coroutineScope.launch {
+
+        DropdownMenu(modifier = Modifier
+            .background(colorResource(colorTheme.value.dropDownMenuBackground)),
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            if (restaurantVisibility.value == 0) {
+                DropDownItemUi(
+                    text = "Add Cuisine",
+                    fontSize = 18,
+                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
+                    appViewModel.updateAddMode(true)
+                    appViewModel.updateEditMode(false)
+                    expanded = false
+                }
+                DropDownItemUi(
+                    text = "Edit Cuisines",
+                    fontSize = 18,
+                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
+                    //Resets list of squares to edit.
+                    appViewModel.updateListOfCuisineSquaresToEdit(listOf())
+                    if (!appViewModel.getEditMode) {
+                        appViewModel.updateEditMode(true)
+                        appViewModel.updateAllCuisineBorders(colorTheme.value.cuisineEditModeBorderStroke)
+                    } else {
+                        appViewModel.updateEditMode(false)
+                        appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
+                    }
+                    expanded = false
+                }
+                DropDownItemUi(
+                    text = "Sort by Alphabetically",
+                    fontSize = 18,
+                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
+                    appViewModel.sortAndUpdateCuisineList("alphabetical")
+                    coroutineScope.launch {
 //                                    roomInteractions.updateCuisines(appViewModel.getSquareList)
-                roomInteractions.deleteAllCuisines()
-                roomInteractions.insertMultipleCuisines(appViewModel.getListOfSquareNames())
+                        roomInteractions.deleteAllCuisines()
+                        roomInteractions.insertMultipleCuisines(appViewModel.getListOfSquareNames())
+                    }
+                    appViewModel.updateEditMode(false)
+                    expanded = false
+                }
+                DropDownItemUi(
+                    text = "Sort Randomly",
+                    fontSize = 18,
+                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
+                    appViewModel.sortAndUpdateCuisineList("random")
+                    coroutineScope.launch {
+                        roomInteractions.deleteAllCuisines()
+                        roomInteractions.insertMultipleCuisines(appViewModel.getListOfSquareNames())
+                    }
+                    appViewModel.updateEditMode(false)
+                    expanded = false
+                }
+                DropDownItemUi(
+                    text = "Restore Defaults",
+                    fontSize = 18,
+                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
+                    appViewModel.updateRestoreDefaults(true)
+                    expanded = false
+                }
             }
-            appViewModel.updateEditMode(false)
-            expanded = false
-        }
-        DropDownItemUi(
-            text = "Sort Randomly",
-            fontSize = 18,
-            color = colorResource(id = colorTheme.value.dialogTextColor)) {
-            appViewModel.sortAndUpdateCuisineList("random")
-            coroutineScope.launch {
-                roomInteractions.deleteAllCuisines()
-                roomInteractions.insertMultipleCuisines(appViewModel.getListOfSquareNames())
+
+            if (restaurantVisibility.value == 1) {
+                DropDownItemUi(
+                    text = "Filters",
+                    fontSize = 18,
+                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
+                    appViewModel.updateShowRestaurantsDialog(true)
+                    expanded = false
+                }
             }
-            appViewModel.updateEditMode(false)
-            expanded = false
         }
-        DropDownItemUi(
-            text = "Restore Defaults",
-            fontSize = 18,
-            color = colorResource(id = colorTheme.value.dialogTextColor)) {
-            appViewModel.updateRestoreDefaults(true)
-            expanded = false
-        }
+
+
+
     }
 
     @Composable
@@ -424,7 +436,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 selected = true,
                                 onClick = {
                                     if (appViewModel.getEditMode) {
-                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(index)
+                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(
+                                            index
+                                        )
                                     }
                                     if (appViewModel.getCuisineSelectionMode) {
                                         appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[index])
