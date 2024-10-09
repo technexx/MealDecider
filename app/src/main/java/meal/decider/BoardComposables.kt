@@ -52,11 +52,6 @@ import kotlinx.coroutines.launch
 import meal.decider.Database.CuisineDatabase
 import meal.decider.Database.RoomInteractions
 
-//TODO: onBackPressed in Restaurants minimizes app.
-//TODO: Some Cuisines (e.g. Italian) only show a few results.
-//TODO: "Restore defaults" dialog box too dark in dark mode.
-//TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
-
 class BoardComposables (private val appViewModel: AppViewModel, private val appDatabase: CuisineDatabase.AppDatabase, activity: Activity, private val roomInteractions: RoomInteractions, mapInteractions: MapInteractions, private val runnables: Runnables) {
 
     private val buttons = Buttons(appViewModel, mapInteractions, runnables)
@@ -122,13 +117,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         ) {
                             Row() {
                                 MaterialIconButton(
-                                    icon = Icons.Filled.Settings,
-                                    description = "settings",
-                                    tint = colorTheme.value.cuisineIconButtons,
-                                    enabled = buttonsEnabled) {
-                                    appViewModel.updateOptionsMenuVisibility(true)
-                                }
-                                MaterialIconButton(
                                     icon = Icons.Filled.Menu,
                                     description = "menu",
                                     tint = colorTheme.value.cuisineIconButtons,
@@ -147,6 +135,14 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                     if (restaurantVisibility.value == 1) {
                                         RestaurantDropdownMenuSelections(expanded)
                                     }
+                                }
+                                MaterialIconButton(
+                                    icon = Icons.Filled.Settings,
+                                    description = "settings",
+                                    tint = colorTheme.value.cuisineIconButtons,
+                                    enabled = buttonsEnabled) {
+                                    appViewModel.updateOptionsMenuVisibility(true)
+                                    expanded = !expanded
                                 }
                             }
                         }
@@ -187,10 +183,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             appViewModel.updateListOfCuisineSquaresToEdit(listOf())
             if (!appViewModel.getEditMode) {
                 appViewModel.updateEditMode(true)
-                appViewModel.updateAllCuisineBorders(cuisineEditModeBorderStroke)
+                appViewModel.updateAllCuisineBorders(colorTheme.value.cuisineEditModeBorderStroke)
             } else {
                 appViewModel.updateEditMode(false)
-                appViewModel.updateAllCuisineBorders(defaultCuisineBorderStroke)
+                appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
             }
             expanded = false
         }
@@ -230,7 +226,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
 
     @Composable
     fun RestaurantDropdownMenuSelections(isExpanded: Boolean) {
-        val coroutineScope = rememberCoroutineScope()
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         var expanded by remember { mutableStateOf(false) }
         expanded = isExpanded
@@ -380,7 +375,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
 
         val restrictionsString = foodRestrictionsString(restrictionsUi.value)
-        //TODO: selectedCuisineSquare.value.name not updating
         val rolledCuisineString = selectedCuisineSquare.value.name + " Food " + restrictionsString
 
         if (cuisineRollFinished.value) {
@@ -430,9 +424,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 selected = true,
                                 onClick = {
                                     if (appViewModel.getEditMode) {
-                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(
-                                            index
-                                        )
+                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(index)
                                     }
                                     if (appViewModel.getCuisineSelectionMode) {
                                         appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[index])

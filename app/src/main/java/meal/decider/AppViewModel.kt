@@ -354,13 +354,13 @@ class AppViewModel : ViewModel() {
         val tempSquareList = getSquareList
 
         if (tempSquareList[index].color == getColorTheme.selectedCuisineSquare || tempSquareList[index].color == getColorTheme.cuisineSquares) {
-            tempSquareList[index] = SquareValues(tempSquareList[index].name, editSquareColor)
+            tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.selectedEditSquareColor)
             addSquareToListOfCuisineSquaresToEdit(index)
         } else {
             if (tempSquareList[index].name == selectedCuisineSquare.value.name) {
                 tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.selectedCuisineSquare)
             } else {
-                tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.cuisineSquares)
+                tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.cuisineSquares, getColorTheme.cuisineEditModeBorderStroke)
             }
             removeSquareFromListOfSquareIndicesToUpdate()
         }

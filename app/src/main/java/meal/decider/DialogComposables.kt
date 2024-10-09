@@ -220,7 +220,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 RegText(
                                     text = "This will restore cuisine list to default!",
                                     fontSize = 18,
-                                    color = Color.Black,
+                                    color = colorResource(id = colorTheme.value.dialogTextColor),
                                     modifier = Modifier.padding(12.dp)
                                 )
                             }

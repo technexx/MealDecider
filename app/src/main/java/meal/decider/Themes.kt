@@ -1,7 +1,10 @@
 package meal.decider
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 data class ColorTheme(
     val appBar: Int,
@@ -12,6 +15,9 @@ data class ColorTheme(
     val cuisineSquaresText: Int,
     val selectedCuisineSquare: Int,
     val selectedCuisineIcon: Int,
+    val selectedEditSquareColor: Int,
+    val defaultCuisineBorderStroke: BorderStroke,
+    val cuisineEditModeBorderStroke: BorderStroke,
 
     val restaurantTopRow: Int,
     val restaurantBoard: Int,
@@ -49,6 +55,9 @@ object Theme {
             cuisineSquaresText = R.color.black,
             selectedCuisineSquare = R.color.red_200,
             selectedCuisineIcon = R.color.red_a700,
+            selectedEditSquareColor = R.color.light_blue_100,
+            defaultCuisineBorderStroke = BorderStroke(1.dp, Color.Black),
+            cuisineEditModeBorderStroke = BorderStroke(3.dp, Color.Black),
 
             restaurantTopRow = R.color.blue_400,
             restaurantBoard = R.color.grey_50,
@@ -83,6 +92,9 @@ object Theme {
             cuisineSquaresText = R.color.black,
             selectedCuisineSquare = R.color.red_200,
             selectedCuisineIcon = R.color.red_a700,
+            selectedEditSquareColor = R.color.light_blue_100,
+            defaultCuisineBorderStroke = BorderStroke(1.dp, Color.White),
+            cuisineEditModeBorderStroke = BorderStroke(3.dp, Color(R.color.red_200)),
 
             restaurantTopRow = R.color.grey_700,
             restaurantBoard = R.color.grey_800,

@@ -39,6 +39,11 @@ private lateinit var mapInteractions: MapInteractions
 private lateinit var runnables: Runnables
 private lateinit var settings: Settings
 
+//TODO: Some Cuisines (e.g. Italian) only show a few results.
+//TODO: Clicking "edit cuisines" should dismiss dialog.
+    //TODO: This is due to separating drop down items from button functions.
+//TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away).
+
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
