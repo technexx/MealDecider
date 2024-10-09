@@ -158,6 +158,12 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             expanded = !expanded
         }
 
+        //All edit mode changes occur in this composable, so if it recomps and edit mode is turned off, return all cuisine squares to original colors and apply border to selected cuisine square.
+        if (!appViewModel.getEditMode) {
+            appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
+            appViewModel.updateSingleCuisineSquareColorAndBorder(appViewModel.rolledSquareIndex, appViewModel.getSquareList[appViewModel.rolledSquareIndex].color, heavyCuisineSelectionBorderStroke)
+        }
+
         DropdownMenu(modifier = Modifier
             .background(colorResource(colorTheme.value.dropDownMenuBackground)),
             expanded = expanded,
@@ -183,7 +189,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         appViewModel.updateAllCuisineBorders(colorTheme.value.cuisineEditModeBorderStroke)
                     } else {
                         appViewModel.updateEditMode(false)
-                        appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
                     }
                     expanded = false
                 }
