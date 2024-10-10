@@ -306,13 +306,65 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     fontSize = 18,
                                     color = colorResource(id = colorTheme.value.dialogTextColor),
                                 )
-//                                Spacer(modifier = Modifier.width(16.dp))
-
+                                SelectableCircle(selected = selected) {
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Row(modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceAround,
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                RegText(
+                                    text = "Distance",
+                                    fontSize = 18,
+                                    color = colorResource(id = colorTheme.value.dialogTextColor),
+                                )
                                 SelectableCircle(selected = selected) {
 
                                 }
                             }
                             Spacer(modifier = Modifier.height(10.dp))
+                            Row(modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceAround,
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                RegText(
+                                    text = "Rating",
+                                    fontSize = 18,
+                                    color = colorResource(id = colorTheme.value.dialogTextColor),
+                                )
+                                SelectableCircle(selected = selected) {
+
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Row(modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceAround,
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                RegText(
+                                    text = "Price",
+                                    fontSize = 18,
+                                    color = colorResource(id = colorTheme.value.dialogTextColor),
+                                )
+                                SelectableCircle(selected = selected) {
+
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Row(modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceAround,
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                RegText(
+                                    text = "Random",
+                                    fontSize = 18,
+                                    color = colorResource(id = colorTheme.value.dialogTextColor),
+                                )
+                                SelectableCircle(selected = selected) {
+
+                                }
+                            }
                         }
                     }
                 }
