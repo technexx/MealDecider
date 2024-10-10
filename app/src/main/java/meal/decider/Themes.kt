@@ -39,6 +39,7 @@ data class ColorTheme(
     val textBoxBackground: Int,
     var cancelDialogButton: Int,
     var confirmDialogButton: Int,
+    var circleSelectionColor: Int,
 
     var settingsText: Int
 )
@@ -79,6 +80,8 @@ object Theme {
             textBoxBackground = R.color.grey_300,
             cancelDialogButton = android.R.color.holo_red_light,
             confirmDialogButton = android.R.color.holo_green_light,
+            circleSelectionColor = R.color.black,
+
             settingsText = R.color.black
         ),
 
@@ -116,6 +119,7 @@ object Theme {
             textBoxBackground = R.color.grey_50,
             cancelDialogButton = android.R.color.holo_red_light,
             confirmDialogButton = android.R.color.holo_green_light,
+            circleSelectionColor = R.color.white,
 
             settingsText = R.color.white
         )

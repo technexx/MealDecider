@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,7 +49,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -274,6 +274,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun SortDialog() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        var selected by remember { mutableStateOf(false) }
 
         AnimatedTransitionDialog(
             modifier = Modifier
@@ -296,35 +297,50 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         )
                         {
                             Spacer(modifier = Modifier.height(10.dp))
-                            Row(
+                            Row(modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceAround,
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 RegText(
-                                    text = "Alphabetically",
+                                    text = "A to Z",
                                     fontSize = 18,
                                     color = colorResource(id = colorTheme.value.dialogTextColor),
-                                    modifier = Modifier.padding(12.dp)
                                 )
-                            }
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Row (modifier = Modifier
-                                .fillMaxWidth(),
-                            ) {
-                                Box(
+//                                Spacer(modifier = Modifier.width(16.dp))
 
-                                    modifier = Modifier
-                                        .size(30.dp) // Adjust size as needed
-                                        .clip(CircleShape),
-                                    contentAlignment = Alignment.Center,
-
-                                    ) {
+                                SelectableCircle(selected = selected) {
 
                                 }
                             }
+                            Spacer(modifier = Modifier.height(10.dp))
                         }
                     }
                 }
             }
         )
+    }
+
+    @Composable
+    fun SelectableCircle(
+        selected: Boolean,
+        onClick: () -> Unit
+    ) {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+
+        Card(
+            modifier = Modifier
+                .size(16.dp)
+                .clickable {
+                    onClick()
+                },
+            shape = CircleShape,
+            border = BorderStroke(2.dp, colorResource(id = colorTheme.value.circleSelectionColor)
+            ),
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                // Add any content you want inside the circle here
+            }
+        }
     }
 
     @Composable
