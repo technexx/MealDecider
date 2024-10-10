@@ -31,6 +31,10 @@ class AppViewModel : ViewModel() {
 
     var restaurantAutoScroll: Boolean = false
 
+    var NO_RESTAURANT_DIALOG = 0
+    var RESTAURANT_FILTERS = 1
+    var RESTAURANT_SORT = 2
+
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
 
@@ -73,8 +77,8 @@ class AppViewModel : ViewModel() {
     private val _selectedRestaurantSquare = MutableStateFlow(RestaurantValues())
     val selectedRestaurantSquare: StateFlow<RestaurantValues> = _selectedRestaurantSquare.asStateFlow()
 
-    private val _showRestaurantsDialog = MutableStateFlow(false)
-    val showRestaurantsDialog: StateFlow<Boolean> = _showRestaurantsDialog.asStateFlow()
+    private val _showRestaurantsDialog = MutableStateFlow(0)
+    val showRestaurantsDialog: StateFlow<Int> = _showRestaurantsDialog.asStateFlow()
 
     private val _showRestaurants = MutableStateFlow(false)
     val showRestaurants: StateFlow<Boolean> = _showRestaurants.asStateFlow()
@@ -184,8 +188,8 @@ class AppViewModel : ViewModel() {
         _restaurantList.value = list
     }
 
-    fun updateShowRestaurantsDialog(show: Boolean) {
-        _showRestaurantsDialog.value = show
+    fun updateShowRestaurantsDialog(dialog: Int) {
+        _showRestaurantsDialog.value = dialog
     }
 
     fun updateShowRestaurants(show: Boolean) {

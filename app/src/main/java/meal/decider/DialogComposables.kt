@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -47,6 +48,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -139,13 +141,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             }
         )
     }
-
-//    @Composable
-//    fun testIcon() {
-//        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-//
-//        Icon(Icons.Filled.Close, "close",  modifier = Modifier.size(64.dp), colorResource(id = (colorTheme.value.cancelDialogButton)))
-//    }
 
     @Composable
     fun DisplayedCuisineList(list: State<List<String>>) {
@@ -277,6 +272,62 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     }
 
     @Composable
+    fun SortDialog() {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+
+        AnimatedTransitionDialog(
+            modifier = Modifier
+                .background(colorResource(id = colorTheme.value.dialogBackground))
+                .height(200.dp)
+                .width(300.dp),
+            onDismissRequest = {
+                appViewModel.updateShowRestaurantsDialog(appViewModel.NO_RESTAURANT_DIALOG)
+            },
+            content = {
+                Surface(
+                    shape = RoundedCornerShape(16.dp),
+                    color = colorResource(colorTheme.value.dialogBackground)
+                ) {
+                    Box(modifier = Modifier
+                    ) {
+                        Column(modifier = Modifier
+                            .fillMaxSize()
+                            .padding(20.dp),
+                        )
+                        {
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Row(
+                            ) {
+                                RegText(
+                                    text = "Alphabetically",
+                                    fontSize = 18,
+                                    color = colorResource(id = colorTheme.value.dialogTextColor),
+                                    modifier = Modifier.padding(12.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Row (modifier = Modifier
+                                .fillMaxWidth(),
+                            ) {
+                                Box(
+
+                                    modifier = Modifier
+                                        .size(30.dp) // Adjust size as needed
+                                        .clip(CircleShape),
+                                    contentAlignment = Alignment.Center,
+
+                                    ) {
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        )
+    }
+
+    @Composable
     fun RestaurantFilters() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
@@ -302,7 +353,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 .height(400.dp)
                 .width(500.dp),
             onDismissRequest = {
-                appViewModel.updateShowRestaurantsDialog(false)
+                appViewModel.updateShowRestaurantsDialog(appViewModel.NO_RESTAURANT_DIALOG)
             },
             content = {
                 Surface(
@@ -554,17 +605,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         }
                     }
                 }
-
-
-//                for (i in 1..roundedDown) {
-//                    Image(painterResource(R.drawable.full_star_black,), "full star")
-//                }
-//                if (remainder >.2 && remainder <.8) {
-//                    Image(painterResource(R.drawable.half_empty_star_black,), "half star")
-//                }
-//                if (remainder >= .8) {
-//                    Image(painterResource(R.drawable.full_star_black,), "full star")
-//                }
             }
         }
     }
