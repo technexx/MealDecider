@@ -275,6 +275,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     fun SortDialog() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         var selected by remember { mutableStateOf(false) }
+        val selectedCircleIndex = remember { mutableStateOf(0) }
+
+        val circles = listOf("A-Z", "Distance", "Rating", "Price", "Random")
 
         AnimatedTransitionDialog(
             modifier = Modifier
@@ -296,76 +299,18 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             .padding(20.dp),
                         )
                         {
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Row(modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                RegText(
-                                    text = "A to Z",
-                                    fontSize = 18,
-                                    color = colorResource(id = colorTheme.value.dialogTextColor),
-                                )
-                                SelectableCircle(selected = selected) {
-                                    selected = !selected
-                                    showLog("test", "a-z clicked")
+                            circles.forEachIndexed { index, circleText ->
+                                Row(modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    SelectableCircle(
+                                        selected = index == selectedCircleIndex.value,
+                                        text = circleText,
+                                        onClick = { selectedCircleIndex.value = index }
+                                    )
                                 }
-                            }
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Row(modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                RegText(
-                                    text = "Distance",
-                                    fontSize = 18,
-                                    color = colorResource(id = colorTheme.value.dialogTextColor),
-                                )
-                                SelectableCircle(selected = selected) {
-
-                                }
-                            }
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Row(modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                RegText(
-                                    text = "Rating",
-                                    fontSize = 18,
-                                    color = colorResource(id = colorTheme.value.dialogTextColor),
-                                )
-                                SelectableCircle(selected = selected) {
-
-                                }
-                            }
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Row(modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                RegText(
-                                    text = "Price",
-                                    fontSize = 18,
-                                    color = colorResource(id = colorTheme.value.dialogTextColor),
-                                )
-                                SelectableCircle(selected = selected) {
-
-                                }
-                            }
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Row(modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                RegText(
-                                    text = "Random",
-                                    fontSize = 18,
-                                    color = colorResource(id = colorTheme.value.dialogTextColor),
-                                )
-                                SelectableCircle(selected = selected) {
-
-                                }
+                                Spacer(modifier = Modifier.height(10.dp))
                             }
                         }
                     }
@@ -376,11 +321,13 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun SelectableCircle(
+        text: String,
         selected: Boolean,
         onClick: () -> Unit
     ) {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
 
+        RegText(text = text, fontSize = 18, color = colorResource(id = colorTheme.value.dialogTextColor))
         Card(
             modifier = Modifier
                 .size(16.dp)
@@ -390,8 +337,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             shape = CircleShape,
             border = BorderStroke(2.dp, colorResource(id = colorTheme.value.circleSelectionColor),
             ),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.Transparent)
+            colors = if(!selected) CardDefaults.cardColors(
+                containerColor = Color.Transparent) else CardDefaults.cardColors(
+                containerColor = colorResource(id = colorTheme.value.dialogTextColor))
         ) {
             Box(contentAlignment = Alignment.Center) {
                 // Add any content you want inside the circle here
