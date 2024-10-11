@@ -287,19 +287,19 @@ class AppViewModel : ViewModel() {
         var sortedList = getRestaurantList.toList()
         val newSnapList = SnapshotStateList<RestaurantValues>()
 
-        if (typeOfSort == "name") {
+        if (typeOfSort == "A-Z") {
             sortedList = getRestaurantList.sortedWith(compareBy { it.name })
         }
-        if (typeOfSort == "distance"){
+        if (typeOfSort == "Distance"){
             sortedList = getRestaurantList.sortedWith(compareBy { it.distance })
         }
-        if (typeOfSort == "rating"){
+        if (typeOfSort == "Rating"){
             sortedList = getRestaurantList.sortedWith(compareByDescending { it.rating })
         }
-        if (typeOfSort == "price") {
+        if (typeOfSort == "Price") {
             sortedList = getRestaurantList.sortedWith(compareBy { it.priceLevel })
         }
-        if (typeOfSort == "random") {
+        if (typeOfSort == "Random") {
             var newNamesList = mutableListOf<String?>()
             for (i in sortedList.indices) {
                 newNamesList.add(sortedList[i].name)

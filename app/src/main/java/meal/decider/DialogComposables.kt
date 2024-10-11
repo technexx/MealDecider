@@ -274,10 +274,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun SortDialog() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-        var selected by remember { mutableStateOf(false) }
         val selectedCircleIndex = remember { mutableStateOf(0) }
 
         val circles = listOf("A-Z", "Distance", "Rating", "Price", "Random")
+        var sortText = "A-Z"
 
         AnimatedTransitionDialog(
             modifier = Modifier
@@ -307,7 +307,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     SelectableCircle(
                                         selected = index == selectedCircleIndex.value,
                                         text = circleText,
-                                        onClick = { selectedCircleIndex.value = index }
+                                        onClick = {
+                                            selectedCircleIndex.value = index
+                                            sortText = circleText
+                                        }
                                     )
                                 }
                                 Spacer(modifier = Modifier.height(10.dp))
@@ -317,8 +320,12 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 verticalAlignment = Alignment.Bottom,
                                 horizontalArrangement = Arrangement.SpaceBetween) {
                                 MaterialIconButton(icon = Icons.Filled.Close, description = "close", tint = colorTheme.value.cancelDialogButton, modifier = Modifier.size(64.dp)) {
+                                    appViewModel.updateShowRestaurantsDialog(appViewModel.NO_RESTAURANT_DIALOG)
                                 }
                                 MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(64.dp)) {
+                                    appViewModel.sortAndUpdateRestaurantList(sortText)
+                                    appViewModel.updateShowRestaurantsDialog(appViewModel.NO_RESTAURANT_DIALOG)
+                                    showLog("test","sort updated as $sortText")
                                 }
                             }
                         }
@@ -544,68 +551,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         RatingStars(restaurantList.value[index].rating)
                         RegText(priceToDollarSigns(restaurantList.value[index].priceLevel), fontSize = 16, color = colorResource( id = colorTheme.value.restaurantSquaresText))
                     }
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun RestaurantSortDropdownMenu() {
-        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
-        var expanded by remember { mutableStateOf(false) }
-        if (rollEngaged.value) expanded = false
-
-        Box(
-            modifier = Modifier
-                .wrapContentSize(Alignment.TopEnd)
-        ) {
-            MaterialIconButton(icon = Icons.Filled.Menu, description = "menu", tint = colorTheme.value.restaurantsIconButtons) {
-                expanded = !expanded
-            }
-
-            //Order of modifiers matters. Background needs to be set BEFORE padding, otherwise background outside of padding will not be changed.
-            DropdownMenu(modifier = Modifier
-                .background(colorResource(id = colorTheme.value.dropDownMenuBackground))
-                .padding(0.dp)
-                .wrapContentSize(),
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                DropDownItemUi(
-                    text = "Sort A-Z",
-                    fontSize = 18,
-                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    appViewModel.sortAndUpdateRestaurantList("name")
-                    expanded = false
-                }
-                DropDownItemUi(
-                    text = "Sort by Distance",
-                    fontSize = 18,
-                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    appViewModel.sortAndUpdateRestaurantList("distance")
-                    expanded = false
-                }
-                DropDownItemUi(
-                    text = "Sort by Rating",
-                    fontSize = 18,
-                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    appViewModel.sortAndUpdateRestaurantList("rating")
-                    expanded = false
-                }
-                DropDownItemUi(
-                    text = "Sort by Price",
-                    fontSize = 18,
-                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    appViewModel.sortAndUpdateRestaurantList("price")
-                    expanded = false
-                }
-                DropDownItemUi(
-                    text = "Sort Randomly",
-                    fontSize = 18,
-                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    appViewModel.sortAndUpdateRestaurantList("random")
-                    expanded = false
                 }
             }
         }
