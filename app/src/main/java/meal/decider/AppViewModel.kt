@@ -189,7 +189,7 @@ class AppViewModel : ViewModel() {
         _restaurantList.value = list
     }
 
-    fun updateShowRestaurantsDialog(dialog: Int) {
+    fun updateShowDialog(dialog: Int) {
         _showDialog.value = dialog
     }
 

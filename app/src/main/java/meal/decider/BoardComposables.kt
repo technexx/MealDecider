@@ -196,7 +196,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     text = "Sort",
                     fontSize = 18,
                     color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    appViewModel.updateShowRestaurantsDialog(appViewModel.CUISINE_SORT)
+                    appViewModel.updateShowDialog(appViewModel.CUISINE_SORT)
                     appViewModel.updateEditMode(false)
                     expanded = false
                 }
@@ -214,7 +214,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     text = "Filters",
                     fontSize = 18,
                     color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    appViewModel.updateShowRestaurantsDialog(appViewModel.RESTAURANT_FILTERS)
+                    appViewModel.updateShowDialog(appViewModel.RESTAURANT_FILTERS)
                     expanded = false
                 }
 
@@ -222,7 +222,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     text = "Sort",
                     fontSize = 18,
                     color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    appViewModel.updateShowRestaurantsDialog(appViewModel.RESTAURANT_SORT)
+                    appViewModel.updateShowDialog(appViewModel.RESTAURANT_SORT)
                     expanded = false
                 }
             }

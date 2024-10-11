@@ -295,7 +295,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 .height(300.dp)
                 .width(300.dp),
             onDismissRequest = {
-                appViewModel.updateShowRestaurantsDialog(appViewModel.NO_DIALOG)
+                appViewModel.updateShowDialog(appViewModel.NO_DIALOG)
             },
             content = {
                 Surface(
@@ -332,7 +332,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 horizontalArrangement = Arrangement.SpaceBetween) {
 
                                 MaterialIconButton(icon = Icons.Filled.Close, description = "close", tint = colorTheme.value.cancelDialogButton, modifier = Modifier.size(64.dp)) {
-                                    appViewModel.updateShowRestaurantsDialog(appViewModel.NO_DIALOG)
+                                    appViewModel.updateShowDialog(appViewModel.NO_DIALOG)
                                 }
 
                                 MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(64.dp)) {
@@ -347,7 +347,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     if (appViewModel.getShowDialog == appViewModel.RESTAURANT_SORT) {
                                         appViewModel.sortAndUpdateRestaurantList(sortText)
                                     }
-                                    appViewModel.updateShowRestaurantsDialog(appViewModel.NO_DIALOG)
+                                    appViewModel.updateShowDialog(appViewModel.NO_DIALOG)
                                 }
                             }
                         }
@@ -412,7 +412,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 .height(400.dp)
                 .width(500.dp),
             onDismissRequest = {
-                appViewModel.updateShowRestaurantsDialog(appViewModel.NO_DIALOG)
+                appViewModel.updateShowDialog(appViewModel.NO_DIALOG)
             },
             content = {
                 Surface(
@@ -493,9 +493,16 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 horizontalArrangement = Arrangement.SpaceBetween) {
 
                                 MaterialIconButton(icon = Icons.Filled.Close, description = "close", tint = colorTheme.value.cancelDialogButton, modifier = Modifier.size(64.dp)) {
+                                    appViewModel.updateShowDialog(appViewModel.NO_DIALOG)
                                 }
 
                                 MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(64.dp)) {
+                                    coroutineScope.launch {
+                                        roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
+                                        appViewModel.updateShowDialog(appViewModel.NO_DIALOG)
+
+                                        showLog("test", "filters are ${roomInteractions.getRestaurantFilters()}")
+                                    }
                                 }
                             }
                         }
