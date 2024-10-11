@@ -193,27 +193,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     expanded = false
                 }
                 DropDownItemUi(
-                    text = "Sort by Alphabetically",
+                    text = "Sort",
                     fontSize = 18,
                     color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    appViewModel.sortAndUpdateCuisineList("alphabetical")
-                    coroutineScope.launch {
-//                                    roomInteractions.updateCuisines(appViewModel.getSquareList)
-                        roomInteractions.deleteAllCuisines()
-                        roomInteractions.insertMultipleCuisines(appViewModel.getListOfSquareNames())
-                    }
-                    appViewModel.updateEditMode(false)
-                    expanded = false
-                }
-                DropDownItemUi(
-                    text = "Sort Randomly",
-                    fontSize = 18,
-                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    appViewModel.sortAndUpdateCuisineList("random")
-                    coroutineScope.launch {
-                        roomInteractions.deleteAllCuisines()
-                        roomInteractions.insertMultipleCuisines(appViewModel.getListOfSquareNames())
-                    }
+                    appViewModel.updateShowRestaurantsDialog(appViewModel.CUISINE_SORT)
                     appViewModel.updateEditMode(false)
                     expanded = false
                 }
@@ -234,14 +217,14 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     appViewModel.updateShowRestaurantsDialog(appViewModel.RESTAURANT_FILTERS)
                     expanded = false
                 }
-            }
 
-            DropDownItemUi(
-                text = "Sort",
-                fontSize = 18,
-                color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                appViewModel.updateShowRestaurantsDialog(appViewModel.RESTAURANT_SORT)
-                expanded = false
+                DropDownItemUi(
+                    text = "Sort",
+                    fontSize = 18,
+                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
+                    appViewModel.updateShowRestaurantsDialog(appViewModel.RESTAURANT_SORT)
+                    expanded = false
+                }
             }
         }
     }
@@ -250,7 +233,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     fun Board() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val restaurantVisibility = appViewModel.restaurantVisibility.collectAsStateWithLifecycle()
-        val showRestaurantDialog = appViewModel.showRestaurantsDialog.collectAsStateWithLifecycle()
+        val showDialog = appViewModel.showDialog.collectAsStateWithLifecycle()
 
         Box(modifier = Modifier.fillMaxSize()) {
             Surface(
@@ -287,11 +270,16 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 }
             }
 
-            if (showRestaurantDialog.value == appViewModel.RESTAURANT_FILTERS) {
-                dialogComposables.RestaurantFiltersDialog()
-            }
-            if (showRestaurantDialog.value == appViewModel.RESTAURANT_SORT) {
+            if (showDialog.value == appViewModel.CUISINE_SORT) {
                 dialogComposables.SortDialog()
+            }
+
+            if (showDialog.value == appViewModel.RESTAURANT_SORT) {
+                dialogComposables.SortDialog()
+            }
+
+            if (showDialog.value == appViewModel.RESTAURANT_FILTERS) {
+                dialogComposables.RestaurantFiltersDialog()
             }
         }
     }

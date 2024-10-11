@@ -28,10 +28,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
@@ -272,12 +270,33 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     }
 
     @Composable
-    fun SortDialog() {
+    fun CuisineSortDialog() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val selectedCircleIndex = remember { mutableStateOf(0) }
-
-        val circles = listOf("A-Z", "Distance", "Rating", "Price", "Random")
+        val circles = listOf("A-Z", "Random")
         var sortText = "A-Z"
+
+    }
+
+    @Composable
+    fun SortDialog() {
+        val coroutineScope = rememberCoroutineScope()
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        val showDialog = appViewModel.showDialog.collectAsStateWithLifecycle()
+        val selectedCircleIndex = remember { mutableStateOf(0) }
+        var circles = listOf<String>()
+        var sortText = "A-Z"
+        var textSize = 16
+
+        if (showDialog.value == appViewModel.CUISINE_SORT) {
+            circles = listOf("A-Z", "Random")
+            textSize = 22
+        }
+
+        if (showDialog.value == appViewModel.RESTAURANT_SORT) {
+            circles = listOf("A-Z", "Distance", "Rating", "Price", "Random")
+            textSize = 16
+        }
 
         AnimatedTransitionDialog(
             modifier = Modifier
@@ -285,7 +304,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 .height(300.dp)
                 .width(300.dp),
             onDismissRequest = {
-                appViewModel.updateShowRestaurantsDialog(appViewModel.NO_RESTAURANT_DIALOG)
+                appViewModel.updateShowRestaurantsDialog(appViewModel.NO_DIALOG)
             },
             content = {
                 Surface(
@@ -307,6 +326,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     SelectableCircle(
                                         selected = index == selectedCircleIndex.value,
                                         text = circleText,
+                                        textSize = textSize,
                                         onClick = {
                                             selectedCircleIndex.value = index
                                             sortText = circleText
@@ -320,12 +340,22 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 verticalAlignment = Alignment.Bottom,
                                 horizontalArrangement = Arrangement.SpaceBetween) {
                                 MaterialIconButton(icon = Icons.Filled.Close, description = "close", tint = colorTheme.value.cancelDialogButton, modifier = Modifier.size(64.dp)) {
-                                    appViewModel.updateShowRestaurantsDialog(appViewModel.NO_RESTAURANT_DIALOG)
+                                    appViewModel.updateShowRestaurantsDialog(appViewModel.NO_DIALOG)
                                 }
+
                                 MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(64.dp)) {
-                                    appViewModel.sortAndUpdateRestaurantList(sortText)
-                                    appViewModel.updateShowRestaurantsDialog(appViewModel.NO_RESTAURANT_DIALOG)
-                                    showLog("test","sort updated as $sortText")
+                                    if (appViewModel.getShowDialog == appViewModel.CUISINE_SORT) {
+                                    appViewModel.sortAndUpdateCuisineList(sortText)
+                                        coroutineScope.launch {
+                                            roomInteractions.updateCuisines(appViewModel.getSquareList)
+                                            roomInteractions.deleteAllCuisines()
+                                            roomInteractions.insertMultipleCuisines(appViewModel.getListOfSquareNames())
+                                        }
+                                    }
+                                    if (appViewModel.getShowDialog == appViewModel.RESTAURANT_SORT) {
+                                        appViewModel.sortAndUpdateRestaurantList(sortText)
+                                    }
+                                    appViewModel.updateShowRestaurantsDialog(appViewModel.NO_DIALOG)
                                 }
                             }
                         }
@@ -338,6 +368,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     @Composable
     fun SelectableCircle(
         text: String,
+        textSize: Int,
         selected: Boolean,
         onClick: () -> Unit
     ) {
@@ -346,7 +377,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         RegText(text = text, fontSize = 18, color = colorResource(id = colorTheme.value.dialogTextColor))
         Card(
             modifier = Modifier
-                .size(16.dp)
+                .size(textSize.dp)
                 .clickable {
                     onClick()
                 },
@@ -389,7 +420,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 .height(400.dp)
                 .width(500.dp),
             onDismissRequest = {
-                appViewModel.updateShowRestaurantsDialog(appViewModel.NO_RESTAURANT_DIALOG)
+                appViewModel.updateShowRestaurantsDialog(appViewModel.NO_DIALOG)
             },
             content = {
                 Surface(

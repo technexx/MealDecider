@@ -39,7 +39,7 @@ private lateinit var mapInteractions: MapInteractions
 private lateinit var runnables: Runnables
 private lateinit var settings: Settings
 
-//TODO: Add separate dialog for sort options.
+//TODO: Add separate dialog for sort options in cuisines.
 //TODO: Some Cuisines (e.g. Italian) only show a few results.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away). We should really re-query after applying new filters.
 

@@ -31,9 +31,10 @@ class AppViewModel : ViewModel() {
 
     var restaurantAutoScroll: Boolean = false
 
-    var NO_RESTAURANT_DIALOG = 0
-    var RESTAURANT_FILTERS = 1
-    var RESTAURANT_SORT = 2
+    var NO_DIALOG = 0
+    var CUISINE_SORT = 1
+    var RESTAURANT_FILTERS = 2
+    var RESTAURANT_SORT = 3
 
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
@@ -77,8 +78,8 @@ class AppViewModel : ViewModel() {
     private val _selectedRestaurantSquare = MutableStateFlow(RestaurantValues())
     val selectedRestaurantSquare: StateFlow<RestaurantValues> = _selectedRestaurantSquare.asStateFlow()
 
-    private val _showRestaurantsDialog = MutableStateFlow(0)
-    val showRestaurantsDialog: StateFlow<Int> = _showRestaurantsDialog.asStateFlow()
+    private val _showDialog = MutableStateFlow(0)
+    val showDialog: StateFlow<Int> = _showDialog.asStateFlow()
 
     private val _showRestaurants = MutableStateFlow(false)
     val showRestaurants: StateFlow<Boolean> = _showRestaurants.asStateFlow()
@@ -189,7 +190,7 @@ class AppViewModel : ViewModel() {
     }
 
     fun updateShowRestaurantsDialog(dialog: Int) {
-        _showRestaurantsDialog.value = dialog
+        _showDialog.value = dialog
     }
 
     fun updateShowRestaurants(show: Boolean) {
@@ -260,10 +261,10 @@ class AppViewModel : ViewModel() {
         val newSquareList: SnapshotStateList<SquareValues> = SnapshotStateList()
         val selectedCuisineSquareName = getselectedCuisineSquare.name
 
-        if (typeOfSort == "alphabetical") {
+        if (typeOfSort == "A-Z") {
             squareNames = squareNames.sorted().toMutableList()
         }
-        if (typeOfSort == "random") {
+        if (typeOfSort == "Random") {
             squareNames = squareNames.shuffled().toMutableList()
         }
 
@@ -520,8 +521,6 @@ class AppViewModel : ViewModel() {
     val getListOfCuisinesToAdd get() = listOfCuisinesToAdd.value
     val getRestaurantList get() = _restaurantList.value
     val getRestaurantVisibility get() = restaurantVisibility.value
-
-
     val getRollEngaged get() = rollEngaged.value
 
     val getEditMode get() = editMode.value
@@ -534,6 +533,8 @@ class AppViewModel : ViewModel() {
 
     val getColorSettingsSelectionList get() = colorSettingsSelectionList.value
     val getColorTheme get() = colorTheme.value
+
+    val getShowDialog get() = showDialog.value
 
     val getSettingsDialogVisibility get() = settingsDialogVisibility.value
 }
