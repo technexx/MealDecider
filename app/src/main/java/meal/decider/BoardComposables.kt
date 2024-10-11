@@ -288,7 +288,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             }
 
             if (showRestaurantDialog.value == appViewModel.RESTAURANT_FILTERS) {
-                dialogComposables.RestaurantFilters()
+                dialogComposables.RestaurantFiltersDialog()
             }
             if (showRestaurantDialog.value == appViewModel.RESTAURANT_SORT) {
                 dialogComposables.SortDialog()

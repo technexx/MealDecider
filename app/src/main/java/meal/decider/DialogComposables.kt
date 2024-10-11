@@ -312,6 +312,15 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 }
                                 Spacer(modifier = Modifier.height(10.dp))
                             }
+
+                            Row(modifier = Modifier.fillMaxSize(),
+                                verticalAlignment = Alignment.Bottom,
+                                horizontalArrangement = Arrangement.SpaceBetween) {
+                                MaterialIconButton(icon = Icons.Filled.Close, description = "close", tint = colorTheme.value.cancelDialogButton, modifier = Modifier.size(64.dp)) {
+                                }
+                                MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(64.dp)) {
+                                }
+                            }
                         }
                     }
                 }
@@ -348,7 +357,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     }
 
     @Composable
-    fun RestaurantFilters() {
+    fun RestaurantFiltersDialog() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         var distanceSliderPosition by remember { mutableFloatStateOf(3f) }
