@@ -12,7 +12,6 @@ import meal.decider.AppViewModel
 import meal.decider.ColorTheme
 import meal.decider.SquareValues
 import meal.decider.Theme
-import meal.decider.showLog
 
 class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel, private val activity: Activity) {
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
@@ -185,7 +184,6 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         val colorThemeString = sharedPref.getString("theme", "light")
         if (colorThemeString == "light") index = 0
         if (colorThemeString == "dark") index = 1
-        showLog("test", "var is $index")
 
         return index
     }

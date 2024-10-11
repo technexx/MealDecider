@@ -270,15 +270,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     }
 
     @Composable
-    fun CuisineSortDialog() {
-        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-        val selectedCircleIndex = remember { mutableStateOf(0) }
-        val circles = listOf("A-Z", "Random")
-        var sortText = "A-Z"
-
-    }
-
-    @Composable
     fun SortDialog() {
         val coroutineScope = rememberCoroutineScope()
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
@@ -339,6 +330,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             Row(modifier = Modifier.fillMaxSize(),
                                 verticalAlignment = Alignment.Bottom,
                                 horizontalArrangement = Arrangement.SpaceBetween) {
+
                                 MaterialIconButton(icon = Icons.Filled.Close, description = "close", tint = colorTheme.value.cancelDialogButton, modifier = Modifier.size(64.dp)) {
                                     appViewModel.updateShowRestaurantsDialog(appViewModel.NO_DIALOG)
                                 }
@@ -493,7 +485,17 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         }
                                         RegText(text = priceString, fontSize = 18, color = textColor)
                                     }
+                                }
+                            }
 
+                            Row(modifier = Modifier.fillMaxSize(),
+                                verticalAlignment = Alignment.Bottom,
+                                horizontalArrangement = Arrangement.SpaceBetween) {
+
+                                MaterialIconButton(icon = Icons.Filled.Close, description = "close", tint = colorTheme.value.cancelDialogButton, modifier = Modifier.size(64.dp)) {
+                                }
+
+                                MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(64.dp)) {
                                 }
                             }
                         }
