@@ -279,7 +279,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         AnimatedTransitionDialog(
             modifier = Modifier
                 .background(colorResource(id = colorTheme.value.dialogBackground))
-                .height(200.dp)
+                .height(300.dp)
                 .width(300.dp),
             onDismissRequest = {
                 appViewModel.updateShowRestaurantsDialog(appViewModel.NO_RESTAURANT_DIALOG)
@@ -298,7 +298,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         {
                             Spacer(modifier = Modifier.height(10.dp))
                             Row(modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceAround,
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 RegText(
@@ -307,11 +307,13 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     color = colorResource(id = colorTheme.value.dialogTextColor),
                                 )
                                 SelectableCircle(selected = selected) {
+                                    selected = !selected
+                                    showLog("test", "a-z clicked")
                                 }
                             }
                             Spacer(modifier = Modifier.height(10.dp))
                             Row(modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceAround,
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 RegText(
@@ -325,7 +327,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             }
                             Spacer(modifier = Modifier.height(10.dp))
                             Row(modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceAround,
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 RegText(
@@ -339,7 +341,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             }
                             Spacer(modifier = Modifier.height(10.dp))
                             Row(modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceAround,
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 RegText(
@@ -353,7 +355,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             }
                             Spacer(modifier = Modifier.height(10.dp))
                             Row(modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceAround,
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 RegText(
@@ -386,8 +388,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     onClick()
                 },
             shape = CircleShape,
-            border = BorderStroke(2.dp, colorResource(id = colorTheme.value.circleSelectionColor)
+            border = BorderStroke(2.dp, colorResource(id = colorTheme.value.circleSelectionColor),
             ),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.Transparent)
         ) {
             Box(contentAlignment = Alignment.Center) {
                 // Add any content you want inside the circle here
