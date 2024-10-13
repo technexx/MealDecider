@@ -499,8 +499,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
                                 MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(64.dp)) {
                                     coroutineScope.launch {
-                                        appViewModel.setLocalRestaurantFilterValues(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toInt())
-                                        roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
+                                        appViewModel.setLocalRestaurantFilterValues(milesToMeters(distanceSliderPosition.toDouble()), ratingSliderPosition.toDouble(), priceSliderPosition.toInt())
+                                        roomInteractions.updateRestaurantFilters(milesToMeters(distanceSliderPosition.toDouble()), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
 
                                         mapInteractions.mapsApiCall()
                                         appViewModel.updateShowDialog(appViewModel.NO_DIALOG)
@@ -556,10 +556,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
                         }
                     }
-                }
-
-                for (i in appViewModel.getRestaurantList) {
-                    showLog("test", "restaurant recomp - list of $i")
                 }
 
                 borderStroke = appViewModel.getRestaurantList[index].border

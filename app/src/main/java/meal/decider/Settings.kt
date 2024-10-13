@@ -146,9 +146,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
 
     private fun updateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition: Float, cuisineRollDelaySliderPosition: Float, restaurantRollDurationSliderPosition:Float, restaurantRollDelaySliderPosition:Float) {
         ioScope.launch {
-            //TODO: This needs to go into MainActivity's onBackPressed (formerly dismissed here) animation of this composable
             roomInteractions.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
-
             appViewModel.updateRollOptions(cuisineRollDurationSliderPosition.toLong(), cuisineRollDelaySliderPosition.toLong(), restaurantRollDurationSliderPosition.toLong(), restaurantRollDelaySliderPosition.toLong())
         }
     }

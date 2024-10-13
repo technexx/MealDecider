@@ -12,6 +12,7 @@ import meal.decider.AppViewModel
 import meal.decider.ColorTheme
 import meal.decider.SquareValues
 import meal.decider.Theme
+import meal.decider.milesToMeters
 
 class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel, private val activity: Activity) {
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
@@ -88,7 +89,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
     }
 
     fun populateRestaurantFiltersWithInitialValues() {
-        val restaurantFilters = RestaurantFilters(null,5.0, 3.0, 1.0)
+        val restaurantFilters = RestaurantFilters(null, milesToMeters(5.0), 3.0, 1.0)
         restaurantFiltersDao.insertRestaurantFilters(restaurantFilters)
     }
 

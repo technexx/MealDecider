@@ -53,7 +53,9 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val jsonSerialized = json.decodeFromString<Root>(prettyJson)
 
             var restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
+            showLog("test", "unfiltered list is ${restaurantList.toList()}")
 
+            //TODO: Empty when confirming filters. Unfiltered list is fine.
             restaurantList = filteredRestaurantList(restaurantList, distance, rating, price)
             showLog("test", "filtered list is ${restaurantList.toList()}")
 
@@ -67,17 +69,12 @@ class MapInteractions(private val activity: Activity, private val activityContex
     private fun filteredRestaurantList(list: SnapshotStateList<RestaurantValues>, distanceLimit: Double, minimumRating: Double, maxPrice: Int): SnapshotStateList<RestaurantValues> {
         val newList = SnapshotStateList<RestaurantValues>()
 
-        showLog("test", "maxPrice is $maxPrice")
-        showLog("test", "maxDistance is $distanceLimit")
-        showLog("test", "min rating is $minimumRating")
-
         for (i in list) {
             if (i.distance!! <= distanceLimit && i.rating!! >= minimumRating && i.priceLevel!! <= maxPrice){
                 newList.add(i)
             }
         }
 
-        showLog("test", "new list is ${newList.toList()}")
         return newList
     }
 
