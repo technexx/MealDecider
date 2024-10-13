@@ -89,7 +89,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
     }
 
     fun populateRestaurantFiltersWithInitialValues() {
-        val restaurantFilters = RestaurantFilters(null, milesToMeters(5.0), 3.0, 1.0)
+        val restaurantFilters = RestaurantFilters(null, milesToMeters(5.0), 3.0, 4.0)
         restaurantFiltersDao.insertRestaurantFilters(restaurantFilters)
     }
 

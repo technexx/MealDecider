@@ -52,14 +52,17 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val json = Json { ignoreUnknownKeys = true }
             val jsonSerialized = json.decodeFromString<Root>(prettyJson)
 
-            var restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
-            showLog("test", "unfiltered list is ${restaurantList.toList()}")
+            var restaurantList = SnapshotStateList<RestaurantValues>()
 
-            //TODO: Empty when confirming filters. Unfiltered list is fine.
-            restaurantList = filteredRestaurantList(restaurantList, distance, rating, price)
-            showLog("test", "filtered list is ${restaurantList.toList()}")
+//            var restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
+////            showLog("test", "unfiltered list is ${restaurantList.toList()}")
+//
+//            restaurantList = filteredRestaurantList(restaurantList, distance, rating, price)
+////            showLog("test", "filtered list is ${restaurantList.toList()}")
 
-            appViewModel.updateSingleRestaurantColorAndBorder(restaurantList, 0, appViewModel.getColorTheme.selectedRestaurantSquare, lightRestaurantSelectionBorderStroke)
+            if (!restaurantList.isEmpty()) {
+                appViewModel.updateSingleRestaurantColorAndBorder(restaurantList, 0, appViewModel.getColorTheme.selectedRestaurantSquare, lightRestaurantSelectionBorderStroke)
+            }
 
             appViewModel.updateRestaurantsList(restaurantList)
             appViewModel.updateRestaurantQueryFinished(true)

@@ -245,26 +245,145 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     fun RestaurantListContent() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
+        val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
         var expanded by remember { mutableStateOf(false) }
         if (rollEngaged.value) expanded = false
 
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-        ) {
+        Surface() {
             Column(modifier = Modifier
                 .fillMaxSize()
             ) {
                 Column(modifier = Modifier
+                    .fillMaxWidth()
                     .height(screenHeightPct(0.8).dp)
                     .background(colorResource(id = colorTheme.value.restaurantBoard))
                 ) {
-                    RestaurantLazyGrid()
+                    if (!restaurantList.value.isEmpty()) {
+                        RestaurantLazyGrid()
+                    } else {
+                        Row(modifier = Modifier.fillMaxSize(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            RegText(text = "No results! Try expanding filters.", fontSize = 24, color = colorResource(id = colorTheme.value.dialogTextColor))
+                        }
+                    }
                 }
                 Column(modifier = Modifier
                     .wrapContentSize()
                     .background(colorResource(id = colorTheme.value.restaurantInteractionButtonsRow))
                 ) {
                     buttons.InteractionButtons(1)
+                }
+            }
+        }
+    }
+
+
+    @Composable
+    fun RestaurantLazyGrid() {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        val coroutineScope = rememberCoroutineScope()
+        val sectionGridState = rememberLazyStaggeredGridState()
+        val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
+        val selectedRestaurantSquare = appViewModel.selectedRestaurantSquare.collectAsStateWithLifecycle()
+        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
+        val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
+
+        val rolledRestaurantString = selectedRestaurantSquare.value.name.toString() + " " + selectedRestaurantSquare.value.address
+        var borderStroke: BorderStroke
+
+        if (restaurantRollFinished.value) {
+            LaunchedEffect(Unit) {
+                coroutineScope.launch {
+                    sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
+                    appViewModel.restaurantStringUri = rolledRestaurantString
+                    runnables.restaurantBorderStrokeToggleAnimation(2000, 200)
+
+                    delay(2000)
+
+                    appViewModel.updateRestaurantRollFinished(false)
+                }
+            }
+        }
+
+        LazyVerticalStaggeredGrid(state = sectionGridState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            columns = StaggeredGridCells.Adaptive(128.dp),
+        ) {
+            items(restaurantList.value.size) { index ->
+                if (rollEngaged.value) {
+                    if (appViewModel.restaurantAutoScroll) {
+                        coroutineScope.launch {
+                            sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
+                        }
+                    }
+                }
+
+                borderStroke = appViewModel.getRestaurantList[index].border
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = colorResource(restaurantList.value[index].color!!),
+                    ),
+                    border = borderStroke,
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 6.dp
+                    ),
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .selectable(
+                            selected = true,
+                            onClick = {
+                                if (appViewModel.getRestaurantSelectionMode) {
+                                    appViewModel.restaurantStringUri =
+                                        appViewModel.getRestaurantList[index].name.toString()
+                                    appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[index])
+                                    appViewModel.updateSingleRestaurantColorAndBorder(
+                                        appViewModel.getRestaurantList,
+                                        index,
+                                        appViewModel.getColorTheme.selectedRestaurantSquare,
+                                        heavyRestaurantSelectionBorderStroke
+                                    )
+                                }
+                            }
+                        ),
+                ) {
+                    Column (modifier = Modifier.padding(12.dp)){
+                        RegText(restaurantList.value[index].name.toString(), fontSize = 16, color = colorResource( id = colorTheme.value.restaurantSquaresText))
+                        val distanceInMeters = (restaurantList.value[index].distance)
+                        RegText(doubleMetersToMiles(distanceInMeters!!).toString() + " miles", fontSize = 16, color = colorResource( id = colorTheme.value.restaurantSquaresText))
+                        RatingStars(restaurantList.value[index].rating)
+                        RegText(priceToDollarSigns(restaurantList.value[index].priceLevel), fontSize = 16, color = colorResource( id = colorTheme.value.restaurantSquaresText))
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun RatingStars(rating: Double?) {
+        if (rating != null) {
+            val roundedDown = rating.toInt()
+            val remainder = rating - roundedDown
+            var iterator = 5
+            Row (modifier = Modifier
+                .padding(0.dp, 0.dp)) {
+                for (i in 1..5) {
+                    if (roundedDown >= i) {
+                        Image(painterResource(R.drawable.full_star_black,), "full star")
+                    } else {
+                        if (i < 5) {
+                            Image(painterResource(R.drawable.empty_star,), "empty star")
+                        } else {
+                            if (remainder >.2 && remainder <.8) {
+                                Image(painterResource(R.drawable.half_empty_star_black,), "half star")
+                            } else {
+                                Image(painterResource(R.drawable.empty_star,), "empty star")
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -521,115 +640,5 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             }
         )
     }
-
-    @Composable
-    fun RestaurantLazyGrid() {
-        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-        val coroutineScope = rememberCoroutineScope()
-        val sectionGridState = rememberLazyStaggeredGridState()
-        val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
-        val selectedRestaurantSquare = appViewModel.selectedRestaurantSquare.collectAsStateWithLifecycle()
-        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
-        val restaurantRollFinished = appViewModel.restaurantRollFinished.collectAsStateWithLifecycle()
-
-        val rolledRestaurantString = selectedRestaurantSquare.value.name.toString() + " " + selectedRestaurantSquare.value.address
-        var borderStroke: BorderStroke
-
-
-        if (restaurantRollFinished.value) {
-            LaunchedEffect(Unit) {
-                coroutineScope.launch {
-                    sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
-                    appViewModel.restaurantStringUri = rolledRestaurantString
-                    runnables.restaurantBorderStrokeToggleAnimation(2000, 200)
-
-                    delay(2000)
-
-                    appViewModel.updateRestaurantRollFinished(false)
-                }
-            }
-        }
-
-        LazyVerticalStaggeredGrid(state = sectionGridState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            columns = StaggeredGridCells.Adaptive(128.dp),
-        ) {
-            items(restaurantList.value.size) { index ->
-                if (rollEngaged.value) {
-                    if (appViewModel.restaurantAutoScroll) {
-                        coroutineScope.launch {
-                            sectionGridState.animateScrollToItem(appViewModel.rolledRestaurantIndex)
-                        }
-                    }
-                }
-
-                borderStroke = appViewModel.getRestaurantList[index].border
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = colorResource(restaurantList.value[index].color!!),
-                    ),
-                    border = borderStroke,
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp
-                    ),
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .selectable(
-                            selected = true,
-                            onClick = {
-                                if (appViewModel.getRestaurantSelectionMode) {
-                                    appViewModel.restaurantStringUri =
-                                        appViewModel.getRestaurantList[index].name.toString()
-                                    appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[index])
-                                    appViewModel.updateSingleRestaurantColorAndBorder(appViewModel.getRestaurantList,
-                                        index,
-                                        appViewModel.getColorTheme.selectedRestaurantSquare,
-                                        heavyRestaurantSelectionBorderStroke
-                                    )
-                                }
-                            }
-                        ),
-                ) {
-                    Column (modifier = Modifier.padding(12.dp)){
-                        RegText(restaurantList.value[index].name.toString(), fontSize = 16, color = colorResource( id = colorTheme.value.restaurantSquaresText))
-                        val distanceInMeters = (restaurantList.value[index].distance)
-                        RegText(doubleMetersToMiles(distanceInMeters!!).toString() + " miles", fontSize = 16, color = colorResource( id = colorTheme.value.restaurantSquaresText))
-                        RatingStars(restaurantList.value[index].rating)
-                        RegText(priceToDollarSigns(restaurantList.value[index].priceLevel), fontSize = 16, color = colorResource( id = colorTheme.value.restaurantSquaresText))
-                    }
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun RatingStars(rating: Double?) {
-        if (rating != null) {
-            val roundedDown = rating.toInt()
-            val remainder = rating - roundedDown
-            var iterator = 5
-            Row (modifier = Modifier
-                .padding(0.dp, 0.dp)) {
-                for (i in 1..5) {
-                    if (roundedDown >= i) {
-                        Image(painterResource(R.drawable.full_star_black,), "full star")
-                    } else {
-                        if (i < 5) {
-                            Image(painterResource(R.drawable.empty_star,), "empty star")
-                        } else {
-                            if (remainder >.2 && remainder <.8) {
-                                Image(painterResource(R.drawable.half_empty_star_black,), "half star")
-                            } else {
-                                Image(painterResource(R.drawable.empty_star,), "empty star")
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 
 }
