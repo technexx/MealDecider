@@ -45,7 +45,7 @@ interface RestaurantFiltersDao {
     fun insertRestaurantFilters(vararg restaurantFilters: RestaurantFilters)
 
     @Query("UPDATE restaurant_filters SET distance = :newDistance, rating =:newRating, price = :newPrice")
-    fun updateFilters(newDistance: Double, newRating: Double, newPrice: Double)
+    fun updateFilters(newDistance: Double, newRating: Double, newPrice: Int)
 }
 
 //Test this. Getting everything from options entity but only returning from RollOptions data class.

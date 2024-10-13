@@ -398,7 +398,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         LaunchedEffect(Unit) {
             coroutineScope.launch {
                 val restaurantFilters = roomInteractions.getRestaurantFilters()
-                distanceSliderPosition = restaurantFilters[0].distance.toFloat()
+                distanceSliderPosition = metersToMiles(restaurantFilters[0].distance).toFloat()
                 ratingSliderPosition = restaurantFilters[0].rating.toFloat()
                 priceSliderPosition = restaurantFilters[0].price.toFloat()
             }
@@ -499,10 +499,17 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
                                 MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(64.dp)) {
                                     coroutineScope.launch {
-                                        appViewModel.setLocalRestaurantFilterValues(milesToMeters(distanceSliderPosition.toDouble()), ratingSliderPosition.toDouble(), priceSliderPosition.toInt())
-                                        roomInteractions.updateRestaurantFilters(milesToMeters(distanceSliderPosition.toDouble()), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
+                                        val distance = milesToMeters(distanceSliderPosition.toDouble())
+                                        val rating = ratingSliderPosition.toDouble()
+                                        val price = priceSliderPosition.toInt()
+                                        if (appViewModel.haveRestaurantFiltersChanged(distance, rating, price)) {
+                                            showLog("test", "filters changed")
+                                            appViewModel.setLocalRestaurantFilterValues(distance, rating, price)
+                                            roomInteractions.updateRestaurantFilters(distance, rating, price)
 
-                                        mapInteractions.mapsApiCall()
+                                            mapInteractions.mapsApiCall()
+                                        }
+
                                         appViewModel.updateShowDialog(appViewModel.NO_DIALOG)
                                     }
                                 }

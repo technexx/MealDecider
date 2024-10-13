@@ -101,7 +101,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         return restaurantFilters
     }
 
-    suspend fun updateRestaurantFilters(distance: Double, rating: Double, price: Double) {
+    suspend fun updateRestaurantFilters(distance: Double, rating: Double, price: Int) {
         withContext(Dispatchers.IO) {
             restaurantFiltersDao.updateFilters(distance, rating, price)
         }

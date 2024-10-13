@@ -39,7 +39,8 @@ private lateinit var mapInteractions: MapInteractions
 private lateinit var runnables: Runnables
 private lateinit var settings: Settings
 
-//TODO: Should not re-query restaurants during filter if nothing has changed.
+//TODO: Filters trigger change boolean even if not changed.
+//TODO: Distance prompt in filters is using meters.
 //TODO: Show suggestion message if low restaurant results (e.g. because filters too restrictive).
 //TODO: Remove rounded edges at top corner of restaurant composable.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away). We should really re-query after applying new filters.
@@ -95,7 +96,7 @@ class MainActivity : ComponentActivity() {
 
             val restaurantFilters = roomInteractions.getRestaurantFilters()[0]
             appViewModel.setLocalRestaurantFilterValues(
-                milesToMeters(restaurantFilters.distance),
+                restaurantFilters.distance,
                 restaurantFilters.rating,
                 restaurantFilters.price.toInt()
             )

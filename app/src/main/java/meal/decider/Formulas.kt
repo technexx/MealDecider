@@ -22,6 +22,8 @@ fun doubleMetersToMiles(meters: Double): Double {
 
 fun milesToMeters(miles: Double): Double { return miles*1609 }
 
+fun metersToMiles(meters: Double): Double {return meters/1609}
+
 fun priceToDollarSigns(price: Int?): String {
     var stringToReturn = ""
     if (price != null) {
