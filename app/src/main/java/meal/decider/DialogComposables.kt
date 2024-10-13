@@ -104,7 +104,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             placeholder = {Text( "e.g. Filipino") },
                             onValueChange = {
                                 txtField = it
-                                searchTerms = filterList(fullCuisineList, txtField)
+                                searchTerms = filterSearchString(fullCuisineList, txtField)
                                 appViewModel.updateDisplayedCuisineList(searchTerms)},
                             singleLine = true,
                             textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
@@ -229,6 +229,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     roomInteractions.setSquareDatabaseToDefaultStartingValues()
                                     appViewModel.updateSquareList(appViewModel.starterSquareList())
                                     appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
+
                                     appViewModel.updateEditMode(false)
                                     appViewModel.updateRestoreDefaults(false)
                                 }
@@ -498,10 +499,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
                                 MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(64.dp)) {
                                     coroutineScope.launch {
+                                        appViewModel.setLocalRestaurantFilterValues(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toInt())
                                         roomInteractions.updateRestaurantFilters(distanceSliderPosition.toDouble(), ratingSliderPosition.toDouble(), priceSliderPosition.toDouble())
-                                        appViewModel.updateShowDialog(appViewModel.NO_DIALOG)
 
-                                        showLog("test", "filters are ${roomInteractions.getRestaurantFilters()}")
+                                        mapInteractions.mapsApiCall()
+                                        appViewModel.updateShowDialog(appViewModel.NO_DIALOG)
                                     }
                                 }
                             }
@@ -556,7 +558,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     }
                 }
 
-//            items(dummyList.size) { index ->
+                for (i in appViewModel.getRestaurantList) {
+                    showLog("test", "restaurant recomp - list of $i")
+                }
+
                 borderStroke = appViewModel.getRestaurantList[index].border
                 Card(
                     colors = CardDefaults.cardColors(
@@ -575,7 +580,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     appViewModel.restaurantStringUri =
                                         appViewModel.getRestaurantList[index].name.toString()
                                     appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[index])
-                                    appViewModel.updateSingleRestaurantColorAndBorder(
+                                    appViewModel.updateSingleRestaurantColorAndBorder(appViewModel.getRestaurantList,
                                         index,
                                         appViewModel.getColorTheme.selectedRestaurantSquare,
                                         heavyRestaurantSelectionBorderStroke

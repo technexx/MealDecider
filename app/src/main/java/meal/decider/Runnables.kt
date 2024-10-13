@@ -83,7 +83,7 @@ class Runnables (private val appViewModel: AppViewModel) {
 
     fun rollRestaurant() {
         appViewModel.updateRollEngaged(true)
-        appViewModel.updateSingleRestaurantColorAndBorder(appViewModel.rolledRestaurantIndex, appViewModel.getColorTheme.selectedRestaurantSquare, lightRestaurantSelectionBorderStroke)
+        appViewModel.updateSingleRestaurantColorAndBorder(appViewModel.getRestaurantList, appViewModel.rolledRestaurantIndex, appViewModel.getColorTheme.selectedRestaurantSquare, lightRestaurantSelectionBorderStroke)
         handler.removeCallbacks(restaurantRollRunnable)
 
         var delay: Long

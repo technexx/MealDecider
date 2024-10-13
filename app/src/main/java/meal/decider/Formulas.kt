@@ -32,7 +32,7 @@ fun priceToDollarSigns(price: Int?): String {
     return stringToReturn
 }
 
-fun filterList(list: List<String>, searchString: String) : List<String> {
+fun filterSearchString(list: List<String>, searchString: String) : List<String> {
     //If search string equals the first X characters typed, filter list with just those matching entries. If search string is empty, display full list.
     return if (searchString != "") {
         list.filter { a -> a.substring(0, searchString.length).equals(searchString, true) }

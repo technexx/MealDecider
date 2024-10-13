@@ -15,14 +15,18 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import meal.decider.Database.RoomInteractions
 
 private lateinit var fusedLocationClient: FusedLocationProviderClient
 private var currentLocation: Location = Location("")
 
-class MapInteractions(private val activity: Activity, private val activityContext: Context, private val appViewModel: AppViewModel) {
+class MapInteractions(private val activity: Activity, private val activityContext: Context, private val appViewModel: AppViewModel, private val roomInteractions: RoomInteractions) {
+
+    val mainScope = CoroutineScope(Dispatchers.Main)
 
     suspend fun mapsApiCall() {
         withContext(Dispatchers.IO) {
@@ -34,6 +38,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val rating = appViewModel.minRestaurantRating
 
             //Per docs, we want to use "findplacefromtext" instead of "nearbysearch" in order to filter results and minimize billing. We are getting unnecessary data right now, but also getting null exceptions when using other query.
+            //TODO: WE HAVE SUBSTITUTED ITALIAN HERE TO TEST.
             val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&name=italian&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
             val request = Request.Builder()
@@ -49,26 +54,30 @@ class MapInteractions(private val activity: Activity, private val activityContex
 
             var restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
 
-            showLog("test","distance is ${appViewModel.maxRestaurantDistance}")
-            showLog("test", "min rating is ${appViewModel.minRestaurantRating}")
-            showLog("test", "price max is ${appViewModel.maxRestaurantPrice}")
-            for (i in restaurantList) {
-                showLog("test", "restaurant list is ${i.name + " " + i.distance}")
-            }
+            restaurantList = filteredRestaurantList(restaurantList, distance, rating, price)
+            showLog("test", "filtered list is ${restaurantList.toList()}")
 
-            restaurantList = filteredDistanceAndRatingRestaurantList(restaurantList, distance, rating)
+            appViewModel.updateSingleRestaurantColorAndBorder(restaurantList, 0, appViewModel.getColorTheme.selectedRestaurantSquare, lightRestaurantSelectionBorderStroke)
 
             appViewModel.updateRestaurantsList(restaurantList)
-            appViewModel.updateSingleRestaurantColorAndBorder(0, appViewModel.getColorTheme.selectedRestaurantSquare, lightRestaurantSelectionBorderStroke)
             appViewModel.updateRestaurantQueryFinished(true)
         }
     }
 
-    private fun filteredDistanceAndRatingRestaurantList(list: SnapshotStateList<RestaurantValues>, distanceLimit: Double, minimumRating: Double): SnapshotStateList<RestaurantValues> {
+    private fun filteredRestaurantList(list: SnapshotStateList<RestaurantValues>, distanceLimit: Double, minimumRating: Double, maxPrice: Int): SnapshotStateList<RestaurantValues> {
         val newList = SnapshotStateList<RestaurantValues>()
+
+        showLog("test", "maxPrice is $maxPrice")
+        showLog("test", "maxDistance is $distanceLimit")
+        showLog("test", "min rating is $minimumRating")
+
         for (i in list) {
-            if (i.distance!! <= distanceLimit && i.rating!! >= minimumRating) newList.add(i)
+            if (i.distance!! <= distanceLimit && i.rating!! >= minimumRating && i.priceLevel!! <= maxPrice){
+                newList.add(i)
+            }
         }
+
+        showLog("test", "new list is ${newList.toList()}")
         return newList
     }
 
