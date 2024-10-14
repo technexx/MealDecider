@@ -65,9 +65,8 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
         val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
-        val selectMode = appViewModel.cuisineSelectionMode.collectAsStateWithLifecycle()
         val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
-        val restaurantVisibility = appViewModel.restaurantVisibility.collectAsStateWithLifecycle()
+        val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
 
         var selectionColor: Int
         val buttonsEnabled = !rollEngaged.value
@@ -154,7 +153,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             description = "menu",
             tint = colorTheme.value.cuisineIconButtons,
             enabled = buttonsEnabled) {
-            expanded = !expanded
+            if (!appViewModel.optionsMenuVisibility.value) {
+                expanded = !expanded
+            }
         }
 
         //All edit mode changes occur in this composable, so if it recomps and edit mode is turned off, return all cuisine squares to original colors and apply border to selected cuisine square.
