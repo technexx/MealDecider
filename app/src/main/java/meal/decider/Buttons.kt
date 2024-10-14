@@ -78,10 +78,14 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
             if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                 coroutineScope.launch {
                     if (appViewModel.getRestaurantVisibility == 0) {
-                        mapInteractions.mapIntent(appViewModel.cuisineStringUri)
+                        if (!appViewModel.getSquareList.isEmpty()) {
+                            mapInteractions.mapIntent(appViewModel.cuisineStringUri)
+                        }
                     } else {
-                        if (appViewModel.getRestaurantQueryFinished) {
-                            mapInteractions.mapIntent(appViewModel.restaurantStringUri)
+                        if (!appViewModel.getRestaurantList.isEmpty()) {
+                            if (appViewModel.getRestaurantQueryFinished) {
+                                mapInteractions.mapIntent(appViewModel.restaurantStringUri)
+                            }
                         }
                     }
                 }
@@ -94,12 +98,17 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
         CustomIconButton(size = 72, image = R.drawable.dice, description = "dice", tint = color) {
             if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                 if (appViewModel.getRestaurantVisibility == 0) {
-                    runnables.rollCuisine()
-                    runnables.timer()
+                    if (!appViewModel.getSquareList.isEmpty()) {
+                        runnables.rollCuisine()
+                        runnables.timer()
+                    }
+
                 } else {
-                    if (appViewModel.getRestaurantQueryFinished) {
-                        runnables.rollRestaurant()
+                    if (!appViewModel.getRestaurantList.isEmpty()) {
+                        if (appViewModel.getRestaurantQueryFinished) {
+                            runnables.rollRestaurant()
 //                            appViewModel.testRestaurantRoll()
+                        }
                     }
                 }
             }

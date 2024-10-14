@@ -2,7 +2,6 @@ package meal.decider
 
 import android.app.Activity
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -159,9 +158,11 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         }
 
         //All edit mode changes occur in this composable, so if it recomps and edit mode is turned off, return all cuisine squares to original colors and apply border to selected cuisine square.
-        if (!appViewModel.getEditMode) {
-            appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
-            appViewModel.updateSingleCuisineSquareColorAndBorder(appViewModel.rolledSquareIndex, appViewModel.getSquareList[appViewModel.rolledSquareIndex].color, heavyCuisineSelectionBorderStroke)
+        if (!appViewModel.getSquareList.isEmpty()) {
+            if (!appViewModel.getEditMode) {
+                appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
+                appViewModel.updateSingleCuisineSquareColorAndBorder(appViewModel.rolledSquareIndex, appViewModel.getSquareList[appViewModel.rolledSquareIndex].color, heavyCuisineSelectionBorderStroke)
+            }
         }
 
         DropdownMenu(modifier = Modifier
@@ -234,6 +235,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val restaurantVisibility = appViewModel.restaurantVisibility.collectAsStateWithLifecycle()
         val showDialog = appViewModel.showDialog.collectAsStateWithLifecycle()
+        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
 
         Box(modifier = Modifier.fillMaxSize()) {
             Surface(
@@ -249,7 +251,16 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     }
                     Column(modifier = Modifier
                         .height(screenHeightPct(0.7).dp)) {
-                        CuisineSelectionGrid()
+                        if (!boardUiState.value.squareList.isEmpty()) {
+                            CuisineSelectionGrid()
+                        } else {
+                            Row(modifier = Modifier.fillMaxSize(),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                RegText(text = "Where did all the cuisines go?", fontSize = 24, color = colorResource(id = colorTheme.value.dialogTextColor))
+                            }
+                        }
                     }
                     Column(modifier = Modifier
                         .height(screenHeightPct(0.1).dp)
@@ -360,7 +371,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
 
     }
 
-    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun CuisineSelectionGrid() {
         val coroutineScope = rememberCoroutineScope()

@@ -39,8 +39,8 @@ private lateinit var mapInteractions: MapInteractions
 private lateinit var runnables: Runnables
 private lateinit var settings: Settings
 
-//TODO: Show suggestion message if low restaurant results (e.g. because filters too restrictive). Should also have contingencies for rolls/accessing list when empty.
-//TODO: Remove rounded edges at top corner of restaurant composable.
+//TODO: Selecting cuisines in edit mode removes their border.
+//TODO: Options menu doesn't animate.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away). We should really re-query after applying new filters.
 //TODO: Dialog transitions should animate entire composable - text animates off instead.
 
