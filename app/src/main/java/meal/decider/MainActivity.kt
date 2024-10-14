@@ -39,8 +39,8 @@ private lateinit var mapInteractions: MapInteractions
 private lateinit var runnables: Runnables
 private lateinit var settings: Settings
 
-//TODO: Selecting cuisines in edit mode removes their border.
 //TODO: Options menu doesn't animate.
+//TODO: Top app bar stuff can be selected when Options (Settings) composable is showing.
 //TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away). We should really re-query after applying new filters.
 //TODO: Dialog transitions should animate entire composable - text animates off instead.
 

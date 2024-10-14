@@ -358,12 +358,14 @@ class AppViewModel : ViewModel() {
     fun toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(index: Int) {
         val tempSquareList = getSquareList
 
+        colorTheme.value.cuisineEditModeBorderStroke
+
         if (tempSquareList[index].color == getColorTheme.selectedCuisineSquare || tempSquareList[index].color == getColorTheme.cuisineSquares) {
-            tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.selectedEditSquareColor)
+            tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.selectedEditSquareColor, getColorTheme.cuisineEditModeBorderStroke)
             addSquareToListOfCuisineSquaresToEdit(index)
         } else {
             if (tempSquareList[index].name == selectedCuisineSquare.value.name) {
-                tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.selectedCuisineSquare)
+                tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.selectedCuisineSquare, getColorTheme.cuisineEditModeBorderStroke)
             } else {
                 tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.cuisineSquares, getColorTheme.cuisineEditModeBorderStroke)
             }
