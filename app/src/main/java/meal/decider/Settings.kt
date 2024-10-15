@@ -74,7 +74,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                 }
 
                 Switch(modifier = Modifier
-                    .padding(top = 10.dp),
+                    .padding(top = 14.dp),
                     checked = checked,
                     onCheckedChange = {
                         checked = it
@@ -106,7 +106,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
         ) {
             Spacer(modifier = Modifier.height(12.dp))
             Row {
-                RegText(text = "Theme", fontSize = 28, color = Color.Black, fontWeight = FontWeight.Bold)
+                RegText(text = "Theme", fontSize = 28, color = colorResource(id = colorTheme.value.dialogTextColor), fontWeight = FontWeight.Bold)
             }
             Spacer(modifier = Modifier.height(16.dp))
             LazyVerticalGrid(
@@ -119,7 +119,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                 horizontalArrangement = Arrangement.Center,
                 content = {
                     items(colorSettingsToggle.value.size) { index ->
-                        val cardColor = if (appViewModel.getColorSettingsSelectionList[index].selected) colorResource(id = R.color.blue_grey_100) else Color.White
+                        val cardColor = if (appViewModel.getColorSettingsSelectionList[index].selected) colorResource(id = R.color.grey_500) else Color.White
 
                         Box(contentAlignment = Alignment.Center) {
                             CardUi(
@@ -179,7 +179,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
             Column {
                 Spacer(modifier = Modifier.height(10.dp))
 
-                RegText("Cuisine Selection Duration", fontSize = fontSize, color = textColor)
+                RegText("Randomization Duration", fontSize = fontSize, color = textColor)
                 Row () {
                     Slider(modifier = Modifier
                         .fillMaxWidth(0.7f)
@@ -197,7 +197,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                 }
                 Spacer(modifier = Modifier.height(spacerSizeTwo.dp))
 
-                RegText("Cuisine Selection Speed", fontSize = fontSize, color = textColor)
+                RegText("Randomization Speed", fontSize = fontSize, color = textColor)
                 Row () {
                     Slider(modifier = Modifier
                         .fillMaxWidth(0.7f)
@@ -215,40 +215,40 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                 }
                 Spacer(modifier = Modifier.height(spacerSizeTwo.dp))
 
-                RegText("Restaurant Selection Duration", fontSize = fontSize, color = textColor)
-                Row () {
-                    Slider(modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .padding(start = 4.dp),
-                        value = restaurantRollDurationSliderPosition,
-                        onValueChange = { restaurantRollDurationSliderPosition = it
-                            updateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
-                                        },
-                        valueRange = 1f..10f,
-                        steps = 9
-                    )
-                    Spacer(modifier = Modifier.height(spacerSizeOne.dp))
-
-                    RegText(text = "${restaurantRollDurationSliderPosition.toInt()}", fontSize = fontSize, color = textColor)
-                }
-                Spacer(modifier = Modifier.height(spacerSizeTwo.dp))
-
-                RegText("Restaurant Selection Speed", fontSize = fontSize, color = textColor)
-                Row () {
-                    Slider(modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .padding(start = 4.dp),
-                        value = restaurantRollDelaySliderPosition,
-                        onValueChange = { restaurantRollDelaySliderPosition = it
-                            updateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
-                                        },
-                        valueRange = 1f..10f,
-                        steps = 9
-                    )
-                    Spacer(modifier = Modifier.height(spacerSizeOne.dp))
-
-                    RegText(text = "${restaurantRollDelaySliderPosition.toInt()}", fontSize = fontSize, color = textColor)
-                }
+//                RegText("Restaurant Selection Duration", fontSize = fontSize, color = textColor)
+//                Row () {
+//                    Slider(modifier = Modifier
+//                        .fillMaxWidth(0.7f)
+//                        .padding(start = 4.dp),
+//                        value = restaurantRollDurationSliderPosition,
+//                        onValueChange = { restaurantRollDurationSliderPosition = it
+//                            updateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
+//                                        },
+//                        valueRange = 1f..10f,
+//                        steps = 9
+//                    )
+//                    Spacer(modifier = Modifier.height(spacerSizeOne.dp))
+//
+//                    RegText(text = "${restaurantRollDurationSliderPosition.toInt()}", fontSize = fontSize, color = textColor)
+//                }
+//                Spacer(modifier = Modifier.height(spacerSizeTwo.dp))
+//
+//                RegText("Restaurant Selection Speed", fontSize = fontSize, color = textColor)
+//                Row () {
+//                    Slider(modifier = Modifier
+//                        .fillMaxWidth(0.7f)
+//                        .padding(start = 4.dp),
+//                        value = restaurantRollDelaySliderPosition,
+//                        onValueChange = { restaurantRollDelaySliderPosition = it
+//                            updateSpeedSettingsInDatabase(cuisineRollDurationSliderPosition, cuisineRollDelaySliderPosition, restaurantRollDurationSliderPosition, restaurantRollDelaySliderPosition)
+//                                        },
+//                        valueRange = 1f..10f,
+//                        steps = 9
+//                    )
+//                    Spacer(modifier = Modifier.height(spacerSizeOne.dp))
+//
+//                    RegText(text = "${restaurantRollDelaySliderPosition.toInt()}", fontSize = fontSize, color = textColor)
+//                }
             }
         }
 

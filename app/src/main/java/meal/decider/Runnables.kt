@@ -86,9 +86,15 @@ class Runnables (private val appViewModel: AppViewModel) {
         appViewModel.updateSingleRestaurantColorAndBorder(appViewModel.getRestaurantList, appViewModel.rolledRestaurantIndex, appViewModel.getColorTheme.selectedRestaurantSquare, lightRestaurantSelectionBorderStroke)
         handler.removeCallbacks(restaurantRollRunnable)
 
+//        var delay: Long
+//        val durationSetting = appViewModel.restaurantRollDurationSetting
+//        var speedSetting = appViewModel.restaurantRollSpeedSetting
+//        var duration = rollDurationSettingToMillis(durationSetting)
+
+        //Using same roll for cuisines as restaurants here, to simplify.
         var delay: Long
-        val durationSetting = appViewModel.restaurantRollDurationSetting
-        var speedSetting = appViewModel.restaurantRollSpeedSetting
+        val durationSetting = appViewModel.cuisineRollDurationSetting
+        val speedSetting = appViewModel.cuisineRollSpeedSetting
         var duration = rollDurationSettingToMillis(durationSetting)
 
         restaurantRollRunnable = Runnable {
