@@ -31,14 +31,16 @@ class MapInteractions(private val activity: Activity, private val activityContex
     suspend fun mapsApiCall() {
         withContext(Dispatchers.IO) {
             //Used in uri to filter results.
-            val cuisineType = appViewModel.cuisineStringUri
+            val cuisineString = appViewModel.selectedCuisineSquare.value.name + " " + foodRestrictionsString(appViewModel.getRestrictionsList)
             val price = appViewModel.maxRestaurantPrice
             //Values filtered once retrieved from json result.
             val distance = appViewModel.maxRestaurantDistance
             val rating = appViewModel.minRestaurantRating
 
+            showLog("test", "string is $cuisineString")
+
             //Per docs, we want to use "findplacefromtext" instead of "nearbysearch" in order to filter results and minimize billing. We are getting unnecessary data right now, but also getting null exceptions when using other query.
-            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&name=$cuisineType&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
+            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&name=$cuisineString&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
             val request = Request.Builder()
                 .url(uri)
@@ -146,6 +148,8 @@ class MapInteractions(private val activity: Activity, private val activityContex
         val uri = Uri.parse("geo:0,0?q=$string")
         val intent = Intent(Intent.ACTION_VIEW, uri)
         intent.setPackage("com.google.android.apps.maps")
+
+        showLog("test", "map intent string is $string")
 
         activityContext.startActivity(intent)
     }

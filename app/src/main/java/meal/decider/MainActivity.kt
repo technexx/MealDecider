@@ -42,7 +42,6 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Restrictions don't apply to just cuisines before rolling (e.g. on app launch)
 //TODO: Fix "Restore Defaults" layout.
 
 class MainActivity : ComponentActivity() {

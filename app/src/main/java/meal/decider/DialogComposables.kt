@@ -206,8 +206,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             verticalArrangement = Arrangement.SpaceBetween)
                         {
                             Spacer(modifier = Modifier.height(10.dp))
-                            Row(
-                            ) {
+                            Row() {
                                 RegText(
                                     text = "This will restore cuisine list to default!",
                                     fontSize = 20,
