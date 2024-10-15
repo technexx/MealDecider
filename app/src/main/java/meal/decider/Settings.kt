@@ -176,7 +176,8 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
             .fillMaxSize()
             .background(colorResource(id = colorTheme.value.dialogBackground)),
             horizontalAlignment = Alignment.CenterHorizontally) {
-            Column {
+            Column (modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally){
                 Spacer(modifier = Modifier.height(10.dp))
 
                 RegText("Randomization Duration", fontSize = fontSize, color = textColor)
