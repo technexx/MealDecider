@@ -105,6 +105,7 @@ fun AnimatedTransitionDialog(
         }
     }
     ) {
+        //Setting background to (Color.Transparent) through modifier prevents text from animating off first.
         Box(
             modifier = modifier
         ) {
@@ -117,7 +118,9 @@ fun AnimatedTransitionDialog(
                 ),
                 visible = animateTrigger.value) {
                 Row() {
-                    content()
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        content()
+                    }
                 }
             }
         }

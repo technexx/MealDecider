@@ -78,7 +78,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         AnimatedTransitionDialog(
             modifier = Modifier
-                .background(colorResource(id = colorTheme.value.dialogBackground))
+                .background(Color.Transparent)
                 .height(400.dp)
                 .width(500.dp),
             onDismissRequest = {
@@ -187,7 +187,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         AnimatedTransitionDialog(
             modifier = Modifier
-                .background(colorResource(id = colorTheme.value.dialogBackground))
+                .background(Color.Transparent)
                 .height(200.dp)
                 .width(300.dp),
             onDismissRequest = {
@@ -411,7 +411,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         AnimatedTransitionDialog(
             modifier = Modifier
-                .background(colorResource(id = colorTheme.value.dialogBackground))
+                .background(Color.Transparent)
                 .height(300.dp)
                 .width(300.dp),
             onDismissRequest = {
@@ -528,7 +528,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         AnimatedTransitionDialog(
             modifier = Modifier
-                .background(colorResource(id = colorTheme.value.dialogBackground))
+                .background(Color.Transparent)
                 .height(400.dp)
                 .width(500.dp),
             onDismissRequest = {

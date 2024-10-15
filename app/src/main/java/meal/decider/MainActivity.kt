@@ -39,9 +39,6 @@ private lateinit var mapInteractions: MapInteractions
 private lateinit var runnables: Runnables
 private lateinit var settings: Settings
 
-//TODO: Rating filter, because it must occur after query, will reduce results without substituting them (for example, by filling in other places that are further away). We should really re-query after applying new filters.
-//TODO: Dialog transitions should animate entire composable - text animates off instead.
-
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
