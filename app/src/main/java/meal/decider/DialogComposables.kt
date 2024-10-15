@@ -201,20 +201,18 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     Box(modifier = Modifier
                     ) {
                         Column(modifier = Modifier
-                            .fillMaxSize()
-                            .padding(20.dp),
+                            .fillMaxSize(),
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.SpaceEvenly)
+                            verticalArrangement = Arrangement.SpaceBetween)
                         {
                             Spacer(modifier = Modifier.height(10.dp))
                             Row(
-                                verticalAlignment = Alignment.CenterVertically
                             ) {
                                 RegText(
                                     text = "This will restore cuisine list to default!",
-                                    fontSize = 18,
+                                    fontSize = 20,
                                     color = colorResource(id = colorTheme.value.dialogTextColor),
-                                    modifier = Modifier.padding(12.dp)
+                                    modifier = Modifier.padding(start = 16.dp, end = 16.dp)
                                 )
                             }
                             Spacer(modifier = Modifier.height(10.dp))

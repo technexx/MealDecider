@@ -299,7 +299,11 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     @Composable
     fun RestrictionsBarLayout() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()
         val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
+
+        val restrictionsString = foodRestrictionsString(restrictionsUi.value)
+        appViewModel.cuisineStringUri = selectedCuisineSquare.value.name + " Food " + restrictionsString
 
         Column (modifier = Modifier
             .fillMaxWidth()
