@@ -547,7 +547,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             }
                             Spacer(modifier = Modifier.height(16.dp))
                             Column (){
-                                RegText(text = "Distance", fontSize = 20, color = textColor)
+                                RegText(text = "Maximum Distance", fontSize = 20, color = textColor)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Row (modifier = Modifier
                                     .fillMaxWidth(),
@@ -560,26 +560,16 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         },
                                         valueRange = 1f..10f
                                     )
-                                    RegText(text = distanceSliderPosition.toInt().toString() + " mi", fontSize = 18, color = textColor)
+                                    Column (modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(end = 6.dp),
+                                        verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.End){
+                                        RegText(text = distanceSliderPosition.toInt().toString() + " mi", fontSize = 18, color = textColor)
+                                    }
+
                                 }
                                 Spacer(modifier = Modifier.height(16.dp))
-                                RegText(text = "Rating", fontSize = 20 , color = textColor)
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Row (modifier = Modifier
-                                    .fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween) {
-                                    Slider(modifier = Modifier
-                                        .fillMaxWidth(0.7f)
-                                        .padding(start = 4.dp),
-                                        value = ratingSliderPosition,
-                                        onValueChange = { ratingSliderPosition = it },
-                                        valueRange = 3f..4.5f,
-                                        steps = 2
-                                    )
-                                    RegText(text = "$ratingSliderPosition stars", fontSize = 18, color = textColor)
-                                }
-                                Spacer(modifier = Modifier.height(16.dp))
-                                RegText(text = "Max Price", fontSize = 18, color = textColor)
+                                RegText(text = "Maximum Price", fontSize = 18, color = textColor)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Row (modifier = Modifier
                                     .fillMaxWidth(),
@@ -593,13 +583,35 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         steps = 2
                                     )
                                     Column (modifier = Modifier
-                                        .fillMaxWidth(),
-                                        verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+                                        .fillMaxWidth()
+                                        .padding(end = 6.dp),
+                                        verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.End){
                                         priceString = ""
                                         for (i in 1..priceSliderPosition.toInt()) {
                                             priceString += "$"
                                         }
                                         RegText(text = priceString, fontSize = 18, color = textColor)
+                                    }
+                                }
+                                Spacer(modifier = Modifier.height(16.dp))
+                                RegText(text = "Minimum Rating", fontSize = 20 , color = textColor)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Row (modifier = Modifier
+                                    .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween) {
+                                    Slider(modifier = Modifier
+                                        .fillMaxWidth(0.7f)
+                                        .padding(start = 4.dp),
+                                        value = ratingSliderPosition,
+                                        onValueChange = { ratingSliderPosition = it },
+                                        valueRange = 3f..4.5f,
+                                        steps = 2
+                                    )
+                                    Column (modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(end = 6.dp),
+                                        verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.End){
+                                        RegText(text = "$ratingSliderPosition stars", fontSize = 18, color = textColor)
                                     }
                                 }
                             }

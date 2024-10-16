@@ -317,7 +317,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     CircularProgressIndicator(
                         modifier = Modifier.width(64.dp),
                         color = Color.Red,
-                        strokeWidth = 5.dp
+                        strokeWidth = 7.dp
                     )
                 }
             }
