@@ -28,7 +28,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -257,7 +256,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         .height(screenHeightPct(0.7).dp)) {
 
                         if (!boardUiState.value.squareList.isEmpty()) {
-                            Box() {
+                            Box(contentAlignment = Alignment.Center) {
                                 CuisineSelectionGrid()
                                 IndeterminateCircularIndicator()
                             }
@@ -317,16 +316,11 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 Surface(color = Color.Transparent) {
                     CircularProgressIndicator(
                         modifier = Modifier.width(64.dp),
-                        color = MaterialTheme.colorScheme.secondary,
-                        strokeWidth = 3.dp
+                        color = Color.Red,
+                        strokeWidth = 5.dp
                     )
                 }
             }
-//            Box(modifier = Modifier
-//                .fillMaxSize()
-//                .background(Color.Transparent)) {
-//
-//            }
         }
     }
 
