@@ -117,6 +117,9 @@ class AppViewModel : ViewModel() {
     private val _colorTheme = MutableStateFlow(Theme.themeColorsList[0])
     val colorTheme: StateFlow<ColorTheme> = _colorTheme.asStateFlow()
 
+    private val _mapQueryInProgress = MutableStateFlow(false)
+    val mapQueryInProgress: StateFlow<Boolean> = _mapQueryInProgress.asStateFlow()
+
     fun updateOptionsMode(optionsMode: Boolean) {
         _optionsMode.value = optionsMode
     }
@@ -227,6 +230,10 @@ class AppViewModel : ViewModel() {
 
     fun updateColorTheme(theme: ColorTheme) {
         _colorTheme.value = theme
+    }
+
+    fun updateMapQueryInProgress(inProgress: Boolean) {
+        _mapQueryInProgress.value = inProgress
     }
 
     fun addMultipleSquaresToList(squares: List<String>) {

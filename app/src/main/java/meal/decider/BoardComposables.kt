@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -24,8 +25,10 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -252,8 +255,13 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     }
                     Column(modifier = Modifier
                         .height(screenHeightPct(0.7).dp)) {
+
                         if (!boardUiState.value.squareList.isEmpty()) {
-                            CuisineSelectionGrid()
+                            Box() {
+                                CuisineSelectionGrid()
+                                IndeterminateCircularIndicator()
+                            }
+
                         } else {
                             Row(modifier = Modifier.fillMaxSize(),
                                 horizontalArrangement = Arrangement.Center,
@@ -262,6 +270,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 RegText(text = "Where did all the cuisines go?", fontSize = 24, color = colorResource(id = colorTheme.value.dialogTextColor))
                             }
                         }
+
                     }
                     Column(modifier = Modifier
                         .fillMaxWidth()
@@ -270,7 +279,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     ) {
                         buttons.InteractionButtons(0)
                     }
+
                 }
+
             }
 
             if (restaurantVisibility.value == 1) {
@@ -294,6 +305,28 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             if (showDialog.value == appViewModel.RESTAURANT_FILTERS) {
                 dialogComposables.RestaurantFiltersDialog()
             }
+        }
+    }
+
+    @Composable
+    fun IndeterminateCircularIndicator() {
+        val mapQueryInProgress = appViewModel.mapQueryInProgress.collectAsStateWithLifecycle()
+
+        if (mapQueryInProgress.value) {
+            Row() {
+                Surface(color = Color.Transparent) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.width(64.dp),
+                        color = MaterialTheme.colorScheme.secondary,
+                        strokeWidth = 3.dp
+                    )
+                }
+            }
+//            Box(modifier = Modifier
+//                .fillMaxSize()
+//                .background(Color.Transparent)) {
+//
+//            }
         }
     }
 

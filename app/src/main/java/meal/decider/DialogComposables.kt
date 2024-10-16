@@ -364,7 +364,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         if (rating != null) {
             val roundedDown = rating.toInt()
             val remainder = rating - roundedDown
-            var iterator = 5
             Row (modifier = Modifier
                 .padding(0.dp, 0.dp)) {
                 for (i in 1..5) {
@@ -375,7 +374,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             Image(painterResource(R.drawable.empty_star,), "empty star")
                         } else {
                             if (remainder >.2 && remainder <.8) {
-                                Image(painterResource(R.drawable.half_empty_star_black,), "half star")
+                                Image(painterResource(R.drawable.half_empty_star_black), "half star")
                             } else {
                                 Image(painterResource(R.drawable.empty_star,), "empty star")
                             }

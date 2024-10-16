@@ -53,6 +53,8 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
             onClick =  {
                 if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
                     if (appViewModel.getRestaurantQueryFinished) {
+                        appViewModel.updateMapQueryInProgress(true)
+
                         coroutineScope.launch {
                             mapInteractions.mapsApiCall()
                             //Sets first entry to string for maps launch.
@@ -64,6 +66,9 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
 
                             appViewModel.updateRestaurantVisibility(1)
                             appViewModel.updateShowRestaurants(true)
+
+                            appViewModel.updateMapQueryInProgress(false)
+
                         }
                     }
                 }
