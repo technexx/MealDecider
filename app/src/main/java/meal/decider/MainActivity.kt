@@ -43,6 +43,8 @@ val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
 //TODO: Fix "Restore Defaults" layout.
+//TODO: Add loading icon when clicking "places".
+//TODO: Smooth out Restaurant transition (enter/exit).
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

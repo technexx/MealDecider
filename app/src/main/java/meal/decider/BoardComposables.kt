@@ -264,7 +264,8 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         }
                     }
                     Column(modifier = Modifier
-                        .height(screenHeightPct(0.1).dp)
+                        .fillMaxWidth()
+//                        .height(screenHeightPct(0.2).dp)
                         .background(colorResource(id = colorTheme.value.cuisineInteractionButtonsRow))
                     ) {
                         buttons.InteractionButtons(0)
