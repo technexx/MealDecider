@@ -611,7 +611,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         .fillMaxWidth()
                                         .padding(end = 6.dp),
                                         verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.End){
-                                        RegText(text = "$ratingSliderPosition stars", fontSize = 18, color = textColor)
+                                        Row() {
+                                            FilterStars(ratingSliderPosition)
+                                        }
+//                                        RegText(text = "$ratingSliderPosition stars", fontSize = 18, color = textColor)
                                     }
                                 }
                             }
@@ -647,6 +650,34 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
             }
         )
+    }
+
+    @Composable
+    fun FilterStars(ratingSliderPosition: Float) {
+        val size = 16
+        for (i in 1..3) {
+            Image(
+                painterResource(R.drawable.white_star_2,), "white star full",
+                modifier = Modifier.size(size.dp, size.dp))
+        }
+        Spacer(modifier = Modifier.width(2.dp))
+        if (ratingSliderPosition.toDouble() == 3.5) {
+            Image(painterResource(R.drawable.white_star_half_2,), "white star half", modifier = Modifier.size(size.dp, size.dp))
+            showLog("test", "3.5")
+        }
+        if (ratingSliderPosition.toDouble() == 4.0) {
+            Image(painterResource(R.drawable.white_star_2,), "white star full", modifier = Modifier.size(size.dp, size.dp))
+            showLog("test", "4.0")
+
+        }
+        if (ratingSliderPosition.toDouble() == 4.5) {
+            Image(painterResource(R.drawable.white_star_2,), "white star full", modifier = Modifier.size(size.dp, size.dp))
+            showLog("test", "4.0")
+            Image(painterResource(R.drawable.white_star_half_2,), "white star half", modifier = Modifier.size(size.dp, size.dp))
+            showLog("test", "4.5")
+
+        }
+
     }
 
 }
