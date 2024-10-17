@@ -562,7 +562,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     )
                                     Column (modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(end = 6.dp),
+                                        .padding(top = 10.dp, end = 6.dp),
                                         verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.End){
                                         RegText(text = distanceSliderPosition.toInt().toString() + " mi", fontSize = 18, color = textColor)
                                     }
@@ -584,7 +584,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     )
                                     Column (modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(end = 6.dp),
+                                        .padding(top = 12.dp, end = 6.dp),
                                         verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.End){
                                         priceString = ""
                                         for (i in 1..priceSliderPosition.toInt()) {
@@ -611,7 +611,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         .fillMaxWidth()
                                         .padding(end = 6.dp),
                                         verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.End){
-                                        Row() {
+                                        Row(modifier = Modifier
+                                            .padding(top = 14.dp)) {
                                             FilterStars(ratingSliderPosition)
                                         }
 //                                        RegText(text = "$ratingSliderPosition stars", fontSize = 18, color = textColor)
