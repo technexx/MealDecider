@@ -66,9 +66,6 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
 
                             appViewModel.updateRestaurantVisibility(1)
                             appViewModel.updateShowRestaurants(true)
-
-                            appViewModel.updateMapQueryInProgress(false)
-
                         }
                     }
                 }

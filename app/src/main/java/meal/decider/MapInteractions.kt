@@ -50,8 +50,6 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val distance = appViewModel.maxRestaurantDistance
             val rating = appViewModel.minRestaurantRating
 
-            showLog("test", "string is $cuisineString")
-
             //Per docs, we want to use "findplacefromtext" instead of "nearbysearch" in order to filter results and minimize billing. We are getting unnecessary data right now, but also getting null exceptions when using other query.
             val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&name=$cuisineString&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
@@ -60,8 +58,6 @@ class MapInteractions(private val activity: Activity, private val activityContex
                 .build()
 
             val response = OkHttpClient().newCall(request).execute().body().string()
-
-
 
             val gson = GsonBuilder().setPrettyPrinting().create()
             val prettyJson = gson.toJson(JsonParser.parseString(response))

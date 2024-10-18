@@ -81,7 +81,6 @@ dependencies {
 
     //Accompanist (Permission)
     implementation ("com.google.accompanist:accompanist-permissions:0.31.3-beta")
-
     val room_version = "2.6.1"
 
     implementation("androidx.room:room-runtime:$room_version")
@@ -91,6 +90,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     implementation ("com.google.maps.android:android-maps-utils:0.5")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 //    annotationProcessor("androidx.room:room-compiler:$room_version")
 
 //    implementation ("androidx.compose:animation:1.6.7")

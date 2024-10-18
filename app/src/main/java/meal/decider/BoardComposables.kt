@@ -290,6 +290,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         appViewModel.updateRestaurantVisibility(0)
                     }) {
                     dialogComposables.RestaurantListContent()
+                    appViewModel.updateMapQueryInProgress(false)
                 }
             }
 
@@ -311,6 +312,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     fun IndeterminateCircularIndicator() {
         val mapQueryInProgress = appViewModel.mapQueryInProgress.collectAsStateWithLifecycle()
 
+        showLog("test", "map query is ${mapQueryInProgress.value}")
         if (mapQueryInProgress.value) {
             Row() {
                 Surface(color = Color.Transparent) {
