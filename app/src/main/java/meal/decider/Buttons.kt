@@ -60,7 +60,7 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                             //Sets first entry to string for maps launch.
                             if (!appViewModel.getRestaurantList.isEmpty()) {
                                 appViewModel.updateSelectedRestaurantSquare(appViewModel.getRestaurantList[0])
-                                appViewModel.updateSingleRestaurantColorAndBorder(appViewModel.getRestaurantList, 0, appViewModel.getColorTheme.selectedRestaurantSquare, defaultRestaurantBorderStroke)
+                                appViewModel.updateSingleRestaurantColorAndBorder(appViewModel.getRestaurantList, 0, appViewModel.getColorTheme.selectedRestaurantSquare, heavyCuisineSelectionBorderStroke)
                                 appViewModel.restaurantStringUri = appViewModel.getRestaurantList[0].name.toString() + " " + appViewModel.getRestaurantList[0].address
                             }
 
