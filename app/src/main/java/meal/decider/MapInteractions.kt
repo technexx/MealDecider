@@ -163,8 +163,6 @@ class MapInteractions(private val activity: Activity, private val activityContex
         val intent = Intent(Intent.ACTION_VIEW, uri)
         intent.setPackage("com.google.android.apps.maps")
 
-        showLog("test", "map intent string is $string")
-
         activityContext.startActivity(intent)
     }
 }

@@ -351,7 +351,14 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         RegText(restaurantList.value[index].name.toString(), fontSize = 16, color = colorResource( id = colorTheme.value.restaurantSquaresText))
                         val distanceInMeters = (restaurantList.value[index].distance)
                         RegText(doubleMetersToMiles(distanceInMeters!!).toString() + " miles", fontSize = 16, color = colorResource( id = colorTheme.value.restaurantSquaresText))
-                        RatingStars(restaurantList.value[index].rating)
+                        Row {
+                            RegText(text = restaurantList.value[index].rating.toString(), fontSize = 16, color = colorResource( id = colorTheme.value.restaurantSquaresText))
+                            Spacer(modifier = Modifier.width(2.dp))
+                            Column(modifier = Modifier
+                                .padding(top = 3.dp)) {
+                                RatingStars(restaurantList.value[index].rating)
+                            }
+                        }
                         RegText(priceToDollarSigns(restaurantList.value[index].priceLevel), fontSize = 16, color = colorResource( id = colorTheme.value.restaurantSquaresText))
                     }
                 }
@@ -373,7 +380,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         if (i < 5) {
                             Image(painterResource(R.drawable.empty_star,), "empty star")
                         } else {
-                            if (remainder >.2 && remainder <.8) {
+                            if (remainder >=.5 && remainder <.9) {
                                 Image(painterResource(R.drawable.half_empty_star_black), "half star")
                             } else {
                                 Image(painterResource(R.drawable.empty_star,), "empty star")
