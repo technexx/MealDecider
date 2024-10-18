@@ -42,7 +42,6 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Fix "Restore Defaults" layout.
 //TODO: Smooth out Restaurant transition (enter/exit).
 
 class MainActivity : ComponentActivity() {

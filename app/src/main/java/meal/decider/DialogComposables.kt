@@ -205,18 +205,19 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.SpaceBetween)
                         {
-                            Spacer(modifier = Modifier.height(10.dp))
+//                            Spacer(modifier = Modifier.height(8.dp))
                             Row() {
                                 RegText(
-                                    text = "This will restore cuisine list to default!",
+                                    text = "Are you sure? This will restore the original cuisine list.",
                                     fontSize = 20,
                                     color = colorResource(id = colorTheme.value.dialogTextColor),
-                                    modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+                                    modifier = Modifier.padding(top = 16.dp, start = 24.dp, end = 24.dp)
                                 )
                             }
                             Spacer(modifier = Modifier.height(10.dp))
                             Row (modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
                                 MaterialIconButton(icon = Icons.Default.Close, description = "close", tint = colorTheme.value.cancelDialogButton, modifier = Modifier.size(64.dp)) {
