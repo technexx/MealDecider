@@ -633,6 +633,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         val distance = milesToMeters(distanceSliderPosition.toDouble())
                                         val rating = ratingSliderPosition.toDouble()
                                         val price = priceSliderPosition.toInt()
+
+
                                         if (appViewModel.haveRestaurantFiltersChanged(distance, rating, price)) {
                                             showLog("test", "filters changed")
                                             appViewModel.setLocalRestaurantFilterValues(distance, rating, price)
@@ -664,18 +666,14 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         Spacer(modifier = Modifier.width(2.dp))
         if (ratingSliderPosition.toDouble() == 3.5) {
             Image(painterResource(R.drawable.white_star_half_2,), "white star half", modifier = Modifier.size(size.dp, size.dp))
-            showLog("test", "3.5")
         }
         if (ratingSliderPosition.toDouble() == 4.0) {
             Image(painterResource(R.drawable.white_star_2,), "white star full", modifier = Modifier.size(size.dp, size.dp))
-            showLog("test", "4.0")
 
         }
         if (ratingSliderPosition.toDouble() == 4.5) {
             Image(painterResource(R.drawable.white_star_2,), "white star full", modifier = Modifier.size(size.dp, size.dp))
-            showLog("test", "4.0")
             Image(painterResource(R.drawable.white_star_half_2,), "white star half", modifier = Modifier.size(size.dp, size.dp))
-            showLog("test", "4.5")
 
         }
 

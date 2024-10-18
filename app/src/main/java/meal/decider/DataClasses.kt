@@ -56,7 +56,8 @@ data class RestaurantValues(
     var priceLevel: Int? = 0,
     var rating: Double? = 0.0,
     var color: Int? = 0,
-    var border: BorderStroke = defaultRestaurantBorderStroke
+    var border: BorderStroke = defaultRestaurantBorderStroke,
+    var nextPageToken: String? = ""
 ): Comparable<RestaurantValues> {
     override fun compareTo(other: RestaurantValues): Int {
         return compareValuesBy(this, other, { it.name }, { it.distance }, {it.rating })

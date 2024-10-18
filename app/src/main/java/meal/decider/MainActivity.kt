@@ -42,6 +42,8 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
+//TODO: Increasing distance not increasing results.
+    //TODO: Can we reject results from Json that don't meet criteria?
 //TODO: Progress circle should last until Restaurants slide in.
 //TODO: Fix "Restore Defaults" layout.
 //TODO: Smooth out Restaurant transition (enter/exit).

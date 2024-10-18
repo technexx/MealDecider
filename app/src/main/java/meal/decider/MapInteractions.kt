@@ -28,6 +28,19 @@ class MapInteractions(private val activity: Activity, private val activityContex
 
     val mainScope = CoroutineScope(Dispatchers.Main)
 
+    data class PlacesResponse(
+        val results: MutableList<Place>,
+        val nextPageToken: String?,
+        // ... other fields
+    )
+
+    data class Place(
+        val name: String,
+        val rating: Double,
+        val price_level: Int
+        // ... other fields
+    )
+
     suspend fun mapsApiCall() {
         withContext(Dispatchers.IO) {
             //Used in uri to filter results.
@@ -47,13 +60,14 @@ class MapInteractions(private val activity: Activity, private val activityContex
                 .build()
 
             val response = OkHttpClient().newCall(request).execute().body().string()
+
+
+
             val gson = GsonBuilder().setPrettyPrinting().create()
             val prettyJson = gson.toJson(JsonParser.parseString(response))
 
             val json = Json { ignoreUnknownKeys = true }
             val jsonSerialized = json.decodeFromString<Root>(prettyJson)
-
-//            var restaurantList = SnapshotStateList<RestaurantValues>()
 
             var restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
 //            showLog("test", "unfiltered list is ${restaurantList.toList()}")
@@ -154,3 +168,29 @@ class MapInteractions(private val activity: Activity, private val activityContex
         activityContext.startActivity(intent)
     }
 }
+
+///NextPage for multiple sets of 20 results - currently getting null.
+
+//////////////////
+//val places = Gson().fromJson(response, MapInteractions.PlacesResponse::class.java)
+//var nextPageToken = places.nextPageToken
+//showLog("test", "nextPageToken is $nextPageToken")
+//
+//while (nextPageToken != null) {
+//    val nextUri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&name=$cuisineString&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI&pagetoken=$nextPageToken"
+//
+//    val nextRequestBuilder = Request.Builder()
+//        .url(nextUri)
+//        .get()
+//    val nextResponse = OkHttpClient().newCall(nextRequestBuilder.build()).execute()
+//    val nextResponseBody = nextResponse.body().string()
+//    val nextPlaces = Gson().fromJson(nextResponseBody, MapInteractions.PlacesResponse::class.java)
+//
+//    places.results.addAll(nextPlaces.results)
+//    nextPageToken = nextPlaces.nextPageToken
+//
+//    places.results.forEach { place ->
+//        showLog("test", place.name)
+//    }
+//}
+///////////////
