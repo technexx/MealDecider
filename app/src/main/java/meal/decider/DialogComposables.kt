@@ -256,19 +256,22 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     .height(screenHeightPct(0.8).dp)
                     .background(colorResource(id = colorTheme.value.restaurantBoard))
                 ) {
-                    if (!restaurantList.value.isEmpty()) {
-                        Row() {
-                            showLog("test", "list is ${appViewModel.selectedItemsInRestrictionList().toList()}")
-                            for (i in (appViewModel.selectedItemsInRestrictionList().indices)) {
-                                showLog("test", "cards are $i")
-                                RestrictionsCards(list = appViewModel.selectedItemsInRestrictionList(), index = i, color = colorResource(
-                                    id = R.color.light_blue_100)) {
-                                }
+                    Row(modifier = Modifier
+                        .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center) {
+                        showLog("test", "list is ${appViewModel.selectedItemsInRestrictionList().toList()}")
+                        for (i in (appViewModel.selectedItemsInRestrictionList().indices)) {
+                            showLog("test", "cards are $i")
+                            RestrictionsCards(list = appViewModel.selectedItemsInRestrictionList(), index = i, color = colorResource(
+                                id = R.color.light_blue_100)) {
                             }
                         }
+                    }
+                    if (!restaurantList.value.isEmpty()) {
                         RestaurantLazyGrid()
                     } else {
-                        Row(modifier = Modifier.fillMaxSize(),
+                        Row(modifier = Modifier.fillMaxSize()
+                            .padding(12.dp),
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
