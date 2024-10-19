@@ -524,7 +524,7 @@ class AppViewModel : ViewModel() {
         return selectedList
     }
 
-    fun colorSettingsList(index: Int): SnapshotStateList<SettingsToggle> {
+    private fun colorSettingsList(index: Int): SnapshotStateList<SettingsToggle> {
         val list = getColorSettingsSelectionList
         for (i in list) { i.selected = false }
         list[index].selected = true

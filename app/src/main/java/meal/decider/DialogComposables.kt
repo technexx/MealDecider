@@ -259,13 +259,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     Row(modifier = Modifier
                         .fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center) {
-                        showLog("test", "list is ${appViewModel.selectedItemsInRestrictionList().toList()}")
-                        for (i in (appViewModel.selectedItemsInRestrictionList().indices)) {
-                            showLog("test", "cards are $i")
-                            RestrictionsCards(list = appViewModel.selectedItemsInRestrictionList(), index = i, color = colorResource(
-                                id = R.color.light_blue_100)) {
-                            }
-                        }
+                        //TODO: RestrictionsBarLayout
                     }
                     if (!restaurantList.value.isEmpty()) {
                         RestaurantLazyGrid()
@@ -290,20 +284,13 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
     }
 
     @Composable
-    fun RestrictionsLayout(index: Int) {
+    fun RestrictionsCards(index: Int, onClick: () -> Unit) {
         val restrictionsList = appViewModel.getRestrictionsList
         val cardColor = if (appViewModel.getRestrictionsList[index].selected) colorResource(id = R.color.light_blue_100) else Color.White
 
-        RestrictionsCards(restrictionsList, index = index, color = cardColor) {
-            appViewModel.toggleRestrictionListItems(index)
-        }
-    }
-
-    @Composable
-    fun RestrictionsCards(list: List<RestrictionsValues>, index: Int, color: Color, onClick: () -> Unit) {
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = color,
+                containerColor = cardColor,
             ),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 2.dp
@@ -317,14 +304,14 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     }
                 ),
         ) {
-            RegText(text = list[index].name,
+            RegText(text = restrictionsList[index].name,
                 fontSize = 14,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(6.dp))
         }
-    }
 
+    }
 
     @Composable
     fun RestaurantLazyGrid() {

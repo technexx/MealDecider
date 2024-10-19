@@ -42,8 +42,9 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Add filter list (as text) to restaurant composable.
+//TODO: Jittery roll is likely the same cuisine being selected again, causing the pause.
 //TODO: Smooth out Restaurant transition (enter/exit).
+//TODO: Possible option to remove restrictions while restaurants visible. If we do this, we should just use the same list as we do in cuisines.
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

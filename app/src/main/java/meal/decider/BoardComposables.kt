@@ -345,7 +345,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     bottom = 16.dp),
                 content = {
                     items(restrictionsUi.value.size) { index ->
-                        dialogComposables.RestrictionsLayout(index)
+                        dialogComposables.RestrictionsCards(index) {
+                            appViewModel.toggleRestrictionListItems(index)
+                        }
                     }
                 }
             )
