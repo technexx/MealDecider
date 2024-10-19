@@ -257,13 +257,20 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     .background(colorResource(id = colorTheme.value.restaurantBoard))
                 ) {
                     if (!restaurantList.value.isEmpty()) {
+                        Row() {
+                            showLog("test", "list is ${appViewModel.selectedItemsInRestrictionList().toList()}")
+                            for (i in (appViewModel.selectedItemsInRestrictionList().indices)) {
+                                showLog("test", "cards are $i")
+                                RestrictionsLayout(i)
+                            }
+                        }
                         RestaurantLazyGrid()
                     } else {
                         Row(modifier = Modifier.fillMaxSize(),
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            RegText(text = "No results! Try expanding filters.", fontSize = 24, color = colorResource(id = colorTheme.value.dialogTextColor))
+                            RegText(text = "No results! Try expanding filters or removing restrictions.", fontSize = 24, color = colorResource(id = colorTheme.value.dialogTextColor))
                         }
                     }
                 }
@@ -274,6 +281,41 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     buttons.InteractionButtons(1)
                 }
             }
+        }
+    }
+
+    @Composable
+    fun RestrictionsLayout(index: Int) {
+        val cardColor = if (appViewModel.getRestrictionsList[index].selected) colorResource(id = R.color.light_blue_100) else Color.White
+
+        RestrictionsCards(index = index, color = cardColor) {
+            appViewModel.toggleRestrictionListItems(index)
+        }
+    }
+
+    @Composable
+    fun RestrictionsCards(index: Int, color: Color, onClick: () -> Unit) {
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = color,
+            ),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 2.dp
+            ),
+            modifier = Modifier
+                .padding(4.dp)
+                .selectable(
+                    selected = true,
+                    onClick = {
+                        onClick()
+                    }
+                ),
+        ) {
+            RegText(text = appViewModel.getRestrictionsList[index].name,
+                fontSize = 14,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(6.dp))
         }
     }
 

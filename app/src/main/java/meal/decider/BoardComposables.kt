@@ -280,7 +280,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     }
 
                 }
-
             }
 
             if (restaurantVisibility.value == 1) {
@@ -312,7 +311,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     fun IndeterminateCircularIndicator() {
         val mapQueryInProgress = appViewModel.mapQueryInProgress.collectAsStateWithLifecycle()
 
-        showLog("test", "map query is ${mapQueryInProgress.value}")
         if (mapQueryInProgress.value) {
             Row() {
                 Surface(color = Color.Transparent) {
@@ -347,30 +345,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     bottom = 16.dp),
                 content = {
                     items(restrictionsUi.value.size) { index ->
-                        val cardColor = if (appViewModel.getRestrictionsList[index].selected) colorResource(id = R.color.grey_500) else Color.White
-
-                        Card(
-                            colors = CardDefaults.cardColors(
-                                containerColor = cardColor,
-                            ),
-                            elevation = CardDefaults.cardElevation(
-                                defaultElevation = 2.dp
-                            ),
-                            modifier = Modifier
-                                .padding(4.dp)
-                                .selectable(
-                                    selected = true,
-                                    onClick = {
-                                        appViewModel.toggleRestrictionListItems(index)
-                                    }
-                                ),
-                        ) {
-                            RegText(text = appViewModel.getRestrictionsList[index].name,
-                                fontSize = 14,
-                                color = Color.Black,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(6.dp))
-                        }
+                        dialogComposables.RestrictionsLayout(index)
                     }
                 }
             )

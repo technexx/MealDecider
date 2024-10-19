@@ -42,6 +42,7 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
+//TODO: Add filter list (as text) to restaurant composable.
 //TODO: Smooth out Restaurant transition (enter/exit).
 
 class MainActivity : ComponentActivity() {
@@ -97,7 +98,7 @@ class MainActivity : ComponentActivity() {
             )
 
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])
-            appViewModel.updateCuisineStringUriAndHasChangedBoolean(appViewModel.getselectedCuisineSquare.name + " Food ")
+            appViewModel.updateCuisineStringUriAndHasChangedBoolean(appViewModel.getSelectedCuisineSquare.name + " Food ")
 
             appViewModel.updateColorTheme(roomInteractions.retrieveColorThemeFromSharedPref())
 //            appViewModel.updateColorSettingsSelectionList()

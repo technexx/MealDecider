@@ -266,7 +266,7 @@ class AppViewModel : ViewModel() {
         var squareNames = squareNamesList()
         val currentSquareList = getSquareList
         val newSquareList: SnapshotStateList<SquareValues> = SnapshotStateList()
-        val selectedCuisineSquareName = getselectedCuisineSquare.name
+        val selectedCuisineSquareName = getSelectedCuisineSquare.name
 
         if (typeOfSort == "A-Z") {
             squareNames = squareNames.sorted().toMutableList()
@@ -438,7 +438,7 @@ class AppViewModel : ViewModel() {
 
     private fun resetSquareColors() {
         val squareList = getSquareList
-        val selectedCuisineSquare = getselectedCuisineSquare
+        val selectedCuisineSquare = getSelectedCuisineSquare
 
         for (i in squareList) {
             i.color = getColorTheme.cuisineSquares
@@ -465,7 +465,7 @@ class AppViewModel : ViewModel() {
 
     private fun doesSelectedCuisineSquareExist() : Boolean {
         val squareList = getSquareList
-        val selectedCuisineSquare = getselectedCuisineSquare
+        val selectedCuisineSquare = getSelectedCuisineSquare
 
         for (i in squareList) {
             if (i.name == selectedCuisineSquare.name) return true
@@ -512,6 +512,18 @@ class AppViewModel : ViewModel() {
         updateRestrictionsList(updatedList)
     }
 
+    fun selectedItemsInRestrictionList() : List<RestrictionsValues> {
+        val list = getRestrictionsList
+        val selectedList = mutableStateListOf<RestrictionsValues>()
+//        showLog("test", "list is ${getRestrictionsList.toList()}")
+        for (i in list) {
+            if (i.selected) {
+                selectedList.add(i)
+            }
+        }
+        return selectedList
+    }
+
     fun colorSettingsList(index: Int): SnapshotStateList<SettingsToggle> {
         val list = getColorSettingsSelectionList
         for (i in list) { i.selected = false }
@@ -527,7 +539,7 @@ class AppViewModel : ViewModel() {
     }
 
     val getSquareList get() = boardUiState.value.squareList
-    val getselectedCuisineSquare get() = selectedCuisineSquare.value
+    val getSelectedCuisineSquare get() = selectedCuisineSquare.value
     val getListOfCuisineSquaresToEdit get() = listOfCuisineSquaresToEdit.value
     val getListOfCuisinesToAdd get() = listOfCuisinesToAdd.value
     val getRestaurantList get() = _restaurantList.value
