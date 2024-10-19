@@ -261,7 +261,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             showLog("test", "list is ${appViewModel.selectedItemsInRestrictionList().toList()}")
                             for (i in (appViewModel.selectedItemsInRestrictionList().indices)) {
                                 showLog("test", "cards are $i")
-                                RestrictionsLayout(i)
+                                RestrictionsCards(list = appViewModel.selectedItemsInRestrictionList(), index = i, color = colorResource(
+                                    id = R.color.light_blue_100)) {
+                                }
                             }
                         }
                         RestaurantLazyGrid()
@@ -286,15 +288,16 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
     @Composable
     fun RestrictionsLayout(index: Int) {
+        val restrictionsList = appViewModel.getRestrictionsList
         val cardColor = if (appViewModel.getRestrictionsList[index].selected) colorResource(id = R.color.light_blue_100) else Color.White
 
-        RestrictionsCards(index = index, color = cardColor) {
+        RestrictionsCards(restrictionsList, index = index, color = cardColor) {
             appViewModel.toggleRestrictionListItems(index)
         }
     }
 
     @Composable
-    fun RestrictionsCards(index: Int, color: Color, onClick: () -> Unit) {
+    fun RestrictionsCards(list: List<RestrictionsValues>, index: Int, color: Color, onClick: () -> Unit) {
         Card(
             colors = CardDefaults.cardColors(
                 containerColor = color,
@@ -311,7 +314,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     }
                 ),
         ) {
-            RegText(text = appViewModel.getRestrictionsList[index].name,
+            RegText(text = list[index].name,
                 fontSize = 14,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
