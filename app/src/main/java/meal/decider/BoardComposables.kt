@@ -355,11 +355,12 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     items(restrictionsUi.value.size) { index ->
                         RestrictionsCards(index) {
                             appViewModel.toggleRestrictionListItems(index)
-                            if (appViewModel.getRestaurantVisibility == 1) {
-                                coroutineScope.launch {
-                                    mapInteractions.mapsApiCall()
-                                }
-                            }
+                            //This is to refresh restaurants if we decide to allow restriction toggles while restaurant list is shown.
+//                            if (appViewModel.getRestaurantVisibility == 1) {
+//                                coroutineScope.launch {
+//                                    mapInteractions.mapsApiCall()
+//                                }
+//                            }
                         }
                     }
                 }

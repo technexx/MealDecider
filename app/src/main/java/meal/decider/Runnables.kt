@@ -42,7 +42,8 @@ class Runnables (private val appViewModel: AppViewModel) {
         var duration = rollDurationSettingToMillis(durationSetting)
 
         cuisineRollRunnable = Runnable {
-            appViewModel.rolledSquareIndex = Random.nextInt(0, appViewModel.getSquareList.size)
+            appViewModel.rolledSquareIndex = randomNonRepeatingRoll(appViewModel.rolledSquareIndex, appViewModel.getSquareList.size)
+
             val newSquareList = squareListWithRandomColorChanged(appViewModel.rolledSquareIndex)
             appViewModel.updateSquareList(newSquareList)
 
@@ -98,7 +99,8 @@ class Runnables (private val appViewModel: AppViewModel) {
         var duration = rollDurationSettingToMillis(durationSetting)
 
         restaurantRollRunnable = Runnable {
-            appViewModel.rolledRestaurantIndex = Random.nextInt(0, appViewModel.getRestaurantList.size)
+            appViewModel.rolledRestaurantIndex = randomNonRepeatingRoll(appViewModel.rolledSquareIndex, appViewModel.getRestaurantList.size)
+
             val newRestaurantList = restaurantListWithRandomColorChanged(appViewModel.rolledRestaurantIndex)
             appViewModel.updateRestaurantsList(newRestaurantList)
 
@@ -185,5 +187,14 @@ class Runnables (private val appViewModel: AppViewModel) {
         handler.post(restaurantBorderStrokeToggleRunnable)
     }
 
-    fun cancelRestaurantBorderStrokeToggleRunnable() { handler.removeCallbacks(restaurantBorderStrokeToggleRunnable) }
+    private fun randomNonRepeatingRoll(lastRoll: Int, numberCap: Int): Int {
+        var newRoll = Random.nextInt(0, numberCap)
+        var selectedRoll = newRoll
+        while (newRoll == lastRoll) {
+            newRoll = Random.nextInt(0, numberCap)
+            selectedRoll = newRoll
+        }
+        return selectedRoll
+    }
+
 }
