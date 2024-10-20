@@ -66,16 +66,21 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val jsonSerialized = json.decodeFromString<Root>(prettyJson)
 
             var restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
-//            showLog("test", "unfiltered list is ${restaurantList.toList()}")
-
             restaurantList = filteredRestaurantList(restaurantList, distance, rating, price)
-//            showLog("test", "filtered list is ${restaurantList.toList()}")
 
-            if (!restaurantList.isEmpty()) {
-                appViewModel.updateSingleRestaurantColorAndBorder(restaurantList, 0, appViewModel.getColorTheme.selectedRestaurantSquare, lightRestaurantSelectionBorderStroke)
+            if (appViewModel.hasRestaurantListChanged(appViewModel.currentRestaurantList, restaurantList)) {
+                showLog("test", "has changed")
+                appViewModel.currentRestaurantList = restaurantList
+
+                if (!restaurantList.isEmpty()) {
+                    appViewModel.updateSelectedRestaurantSquare(restaurantList[0])
+                    appViewModel.updateSingleRestaurantColorAndBorder(restaurantList, 0, appViewModel.getColorTheme.selectedRestaurantSquare, heavyCuisineSelectionBorderStroke)
+                    appViewModel.restaurantStringUri = restaurantList[0].name.toString() + " " + restaurantList[0].address
+                }
+
+                appViewModel.updateRestaurantsList(restaurantList)
             }
 
-            appViewModel.updateRestaurantsList(restaurantList)
             appViewModel.updateRestaurantQueryFinished(true)
         }
     }

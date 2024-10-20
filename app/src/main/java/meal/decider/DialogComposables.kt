@@ -485,7 +485,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
 
                                         if (appViewModel.haveRestaurantFiltersChanged(distance, rating, price)) {
-                                            showLog("test", "filters changed")
                                             appViewModel.setLocalRestaurantFilterValues(distance, rating, price)
                                             roomInteractions.updateRestaurantFilters(distance, rating, price)
 

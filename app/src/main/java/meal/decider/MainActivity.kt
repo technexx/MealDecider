@@ -42,6 +42,7 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
+//TODO: Should retain rolled restaurant when exiting composable - or simply not re-query if nothing has been changed.
 //TODO: Add disclaimer that app uses verbatim google searches and may not always be accurate.
 //TODO: Smooth out Restaurant transition (enter/exit).
 

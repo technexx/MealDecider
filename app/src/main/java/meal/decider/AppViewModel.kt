@@ -20,6 +20,8 @@ class AppViewModel : ViewModel() {
     var rolledSquareIndex = 0
     var rolledRestaurantIndex = 0
 
+    var currentRestaurantList = SnapshotStateList<RestaurantValues>()
+
     var maxRestaurantDistance = 0.0
     var minRestaurantRating = 3.0
     var maxRestaurantPrice = 1
@@ -488,6 +490,16 @@ class AppViewModel : ViewModel() {
         maxRestaurantDistance = distance
         minRestaurantRating = rating
         maxRestaurantPrice = price
+    }
+
+    fun hasRestaurantListChanged(currentList: List<RestaurantValues>, newList: List<RestaurantValues>): Boolean {
+        if (currentList.isEmpty()) return true
+        if (currentList.size == newList.size) {
+            for (i in currentList.indices) {
+                if (currentList[i].name != newList[i].name) return true
+            }
+        }
+        return false
     }
 
     fun haveRestaurantFiltersChanged(distance: Double, rating: Double, price: Int): Boolean {
