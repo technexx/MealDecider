@@ -290,7 +290,8 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             }
 
             if (restaurantVisibility.value == 1) {
-                AnimatedComposable(
+                val rollEngaged = appViewModel.getRollEngaged
+                AnimatedComposable(rollEngaged, false,
                     modifier = Modifier.fillMaxSize(),
                     backHandler = {
                         appViewModel.updateRestaurantVisibility(0)

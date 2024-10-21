@@ -39,6 +39,7 @@ private suspend fun startDismissWithExitAnimation(
 
 @Composable
 fun AnimatedComposable(
+    disableBackHandler: Boolean = false,
     any: Any? = Unit,
     modifier: Modifier = Modifier,
     backHandler: () -> Unit,
@@ -48,9 +49,12 @@ fun AnimatedComposable(
     val animateTrigger = remember { mutableStateOf(false) }
 
     BackHandler {
-        coroutineScope.launch {
-            startDismissWithExitAnimation(animateTrigger, backHandler)
+        if (!disableBackHandler) {
+            coroutineScope.launch {
+                startDismissWithExitAnimation(animateTrigger, backHandler)
+            }
         }
+
     }
 
     LaunchedEffect(key1 = any) {
