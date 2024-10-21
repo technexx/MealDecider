@@ -7,23 +7,20 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.CoroutineScope
@@ -35,7 +32,7 @@ private suspend fun startDismissWithExitAnimation(
     onDismissRequest: () -> Unit
 ) {
     animateTrigger.value = false
-    //This is being applied to exit, not the value entered in animationExit, but it won't exceed what is in animationExit (e.g. 3000 here and 300 there will only use 300). It is causing the animation to end early (e.g. if we have 3000 exit and 500 here, exit will be 1/6 through when the 500 kicks in and removes it completely).
+    //This is being applied to exit, not the value entered in animationExit, but it won't exceed what is in animationExit (e.g. 3000 here and 300 there will only use 300).
     delay(500)
     onDismissRequest()
 }
@@ -66,12 +63,13 @@ fun AnimatedComposable(
     Box(
         modifier = modifier
     ) {
+        //Expand in/out cutting out halfway is behaving normally - it's the animation is supposed to do.
         AnimatedScaleInTransition(
-            animationEnter = slideInHorizontally (
-                animationSpec = tween(300)
+            animationEnter = fadeIn(animationSpec = tween(500)) + slideInHorizontally (
+                animationSpec = tween(500)
             ),
-            animationExit = slideOutHorizontally(
-                animationSpec = tween(3000),
+            animationExit = fadeOut(animationSpec = tween(500)) + slideOutHorizontally(
+                animationSpec = tween(500),
             ),
             visible = animateTrigger.value) {
             contentAnimated()
@@ -180,72 +178,4 @@ fun AnimatedScaleInTransition(
         visible = visible,
         content = content
     )
-}
-
-@Composable
-fun AnimatedEntranceTest(
-    animationEnter: EnterTransition,
-    visible: Boolean,
-    content: @Composable AnimatedVisibilityScope.() -> Unit
-) {
-    AnimatedVisibility(
-        enter = animationEnter,
-        visible = visible,
-        content = content
-    )
-}
-
-@Composable
-fun AnimatingDialog(
-    isOpen: Boolean,
-    content: @Composable () -> Unit,
-    onDismissRequest: () -> Unit,
-    enterDuration: Int = 300, // milliseconds
-    exitDuration: Int = 200, // milliseconds
-) {
-    var animatedVisibility by remember { mutableStateOf(false) }
-    val enterAnim = remember {
-        androidx.compose.animation.core.Animatable(
-            initialValue = 1f,
-            if (animatedVisibility) 1f else 0f
-        )
-    }
-
-    LaunchedEffect(isOpen) {
-        if (isOpen) {
-            enterAnim.animateTo(
-                targetValue = 1f,
-                animationSpec = tween(durationMillis = enterDuration)
-            )
-        } else {
-            enterAnim.animateTo(
-                targetValue = 0f,
-                animationSpec = tween(durationMillis = exitDuration)
-            )
-        }
-        animatedVisibility = isOpen
-    }
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        Dialog(
-            onDismissRequest = onDismissRequest,
-            content = {
-                AnimatedContent(
-                    alpha = enterAnim.value,
-                    content = content
-                )
-            }
-        )
-    }
-}
-
-
-@Composable
-private fun AnimatedContent(
-    alpha: Float,
-    content: @Composable () -> Unit,
-) {
-    CompositionLocalProvider(LocalContentAlpha provides alpha) {
-        Text("Fading in/out")
-    }
 }
