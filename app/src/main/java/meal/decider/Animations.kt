@@ -35,7 +35,8 @@ private suspend fun startDismissWithExitAnimation(
     onDismissRequest: () -> Unit
 ) {
     animateTrigger.value = false
-    delay(200)
+    //This is being applied to exit, not the value entered in animationExit, but it won't exceed what is in animationExit (e.g. 3000 here and 300 there will only use 300). It is causing the animation to end early (e.g. if we have 3000 exit and 500 here, exit will be 1/6 through when the 500 kicks in and removes it completely).
+    delay(500)
     onDismissRequest()
 }
 
@@ -45,7 +46,6 @@ fun AnimatedComposable(
     modifier: Modifier = Modifier,
     backHandler: () -> Unit,
     contentAnimated: @Composable () -> Unit = { },
-    contentStatic: @Composable () -> Unit,
 ){
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val animateTrigger = remember { mutableStateOf(false) }
@@ -58,7 +58,7 @@ fun AnimatedComposable(
 
     LaunchedEffect(key1 = any) {
         launch {
-            delay(0)
+            delay(200)
             animateTrigger.value = true
         }
     }
@@ -68,14 +68,13 @@ fun AnimatedComposable(
     ) {
         AnimatedScaleInTransition(
             animationEnter = slideInHorizontally (
-                animationSpec = tween(200)
+                animationSpec = tween(300)
             ),
             animationExit = slideOutHorizontally(
-                animationSpec = tween(200),
+                animationSpec = tween(3000),
             ),
             visible = animateTrigger.value) {
             contentAnimated()
-            contentStatic()
         }
     }
 }

@@ -69,7 +69,6 @@ class MapInteractions(private val activity: Activity, private val activityContex
             restaurantList = filteredRestaurantList(restaurantList, distance, rating, price)
 
             if (appViewModel.hasRestaurantListChanged(appViewModel.currentRestaurantList, restaurantList)) {
-                showLog("test", "has changed")
                 appViewModel.currentRestaurantList = restaurantList
 
                 if (!restaurantList.isEmpty()) {

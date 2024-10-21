@@ -624,6 +624,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             columns = StaggeredGridCells.Adaptive(128.dp),
         ) {
             items(restaurantList.value.size) { index ->
+
                 if (rollEngaged.value) {
                     if (appViewModel.restaurantAutoScroll) {
                         coroutineScope.launch {
