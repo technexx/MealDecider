@@ -395,6 +395,36 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         if (settingsDialogVisibility.value.colors) {
             settings.ColorsSettingDialog()
         }
+    }
+
+
+    @Composable
+    fun RestrictionsCards(index: Int, onClick: () -> Unit) {
+        val restrictionsList = appViewModel.getRestrictionsList
+        val cardColor = if (appViewModel.getRestrictionsList[index].selected) colorResource(id = R.color.light_blue_100) else Color.White
+
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = cardColor,
+            ),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 2.dp
+            ),
+            modifier = Modifier
+                .padding(4.dp)
+                .selectable(
+                    selected = true,
+                    onClick = {
+                        onClick()
+                    }
+                ),
+        ) {
+            RegText(text = restrictionsList[index].name,
+                fontSize = 14,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(6.dp))
+        }
 
     }
 
@@ -535,8 +565,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     Row(modifier = Modifier
                         .fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center) {
-                        //TODO: Should have Restaurant Composable not overlay over Restrictions, so it just gets kept as it does, and not called again here.
-//                        RestrictionsBarLayout()
                     }
                     if (!restaurantList.value.isEmpty()) {
                         RestaurantLazyGrid()
@@ -559,36 +587,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 }
             }
         }
-    }
-
-    @Composable
-    fun RestrictionsCards(index: Int, onClick: () -> Unit) {
-        val restrictionsList = appViewModel.getRestrictionsList
-        val cardColor = if (appViewModel.getRestrictionsList[index].selected) colorResource(id = R.color.light_blue_100) else Color.White
-
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = cardColor,
-            ),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 2.dp
-            ),
-            modifier = Modifier
-                .padding(4.dp)
-                .selectable(
-                    selected = true,
-                    onClick = {
-                        onClick()
-                    }
-                ),
-        ) {
-            RegText(text = restrictionsList[index].name,
-                fontSize = 14,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(6.dp))
-        }
-
     }
 
     @Composable
@@ -625,7 +623,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             columns = StaggeredGridCells.Adaptive(160.dp),
         ) {
             items(restaurantList.value.size) { index ->
-
                 if (rollEngaged.value) {
                     if (appViewModel.restaurantAutoScroll) {
                         coroutineScope.launch {

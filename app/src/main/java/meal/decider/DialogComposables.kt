@@ -483,7 +483,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         val rating = ratingSliderPosition.toDouble()
                                         val price = priceSliderPosition.toInt()
 
-
                                         if (appViewModel.haveRestaurantFiltersChanged(distance, rating, price)) {
                                             appViewModel.setLocalRestaurantFilterValues(distance, rating, price)
                                             roomInteractions.updateRestaurantFilters(distance, rating, price)

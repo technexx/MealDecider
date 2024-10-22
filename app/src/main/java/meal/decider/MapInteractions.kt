@@ -68,41 +68,13 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val json = Json { ignoreUnknownKeys = true }
             val jsonSerialized = json.decodeFromString<Root>(prettyJson)
 
-//            showLog("test", "json is $prettyJson")
-//            showLog("test", "serialized is ${jsonSerialized.results}")
-//            showLog("test","token returned is ${jsonSerialized.next_page_token}")
-//
-//            /////////////
-//            var token = jsonSerialized.next_page_token
-//
-//            while (token != null) {
-//                val newUri = uri + "&pagetoken=$token"
-//
-//                Thread.sleep(2000)
-//
-//                val req = Request.Builder()
-//                    .url(newUri)
-//                    .build()
-//
-//                val resp = OkHttpClient().newCall(req).execute().body().string()
-//
-//                val gson2 = GsonBuilder().setPrettyPrinting().create()
-//                val prettyJson2 = gson2.toJson(JsonParser.parseString(resp))
-//                val jsonSerialized2 = json.decodeFromString<Root>(prettyJson2)
-//
-//                token = jsonSerialized2.next_page_token
-//
-//                showLog("test", "new json is $prettyJson2")
-//                showLog("test", "$token")
-//            }
-            /////////////////////
-
             var restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
             restaurantList = filteredRestaurantList(restaurantList, distance, rating, price)
 
-
             if (appViewModel.hasRestaurantListChanged(appViewModel.currentRestaurantList, restaurantList)) {
                 appViewModel.currentRestaurantList = restaurantList
+
+                showLog("test", "set size is ${restaurantList.size}")
 
                 if (!restaurantList.isEmpty()) {
                     appViewModel.updateSelectedRestaurantSquare(restaurantList[0])
@@ -110,6 +82,9 @@ class MapInteractions(private val activity: Activity, private val activityContex
                     appViewModel.restaurantStringUri = restaurantList[0].name.toString() + " " + restaurantList[0].address
                 }
 
+//                for (i in restaurantList) {
+//                    showLog("test", "restaurants are ${i.name}")
+//                }
                 appViewModel.updateRestaurantsList(restaurantList)
             }
 
@@ -220,3 +195,33 @@ class MapInteractions(private val activity: Activity, private val activityContex
 //    }
 //}
 ///////////////
+
+///////////////////////////
+//            showLog("test", "json is $prettyJson")
+//            showLog("test", "serialized is ${jsonSerialized.results}")
+//            showLog("test","token returned is ${jsonSerialized.next_page_token}")
+//
+//            /////////////
+//            var token = jsonSerialized.next_page_token
+//
+//            while (token != null) {
+//                val newUri = uri + "&pagetoken=$token"
+//
+//                Thread.sleep(2000)
+//
+//                val req = Request.Builder()
+//                    .url(newUri)
+//                    .build()
+//
+//                val resp = OkHttpClient().newCall(req).execute().body().string()
+//
+//                val gson2 = GsonBuilder().setPrettyPrinting().create()
+//                val prettyJson2 = gson2.toJson(JsonParser.parseString(resp))
+//                val jsonSerialized2 = json.decodeFromString<Root>(prettyJson2)
+//
+//                token = jsonSerialized2.next_page_token
+//
+//                showLog("test", "new json is $prettyJson2")
+//                showLog("test", "$token")
+//            }
+/////////////////////

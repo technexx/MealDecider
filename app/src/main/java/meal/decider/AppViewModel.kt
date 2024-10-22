@@ -493,8 +493,7 @@ class AppViewModel : ViewModel() {
     }
 
     fun hasRestaurantListChanged(currentList: List<RestaurantValues>, newList: List<RestaurantValues>): Boolean {
-        if (currentList.isEmpty()) return true
-        if (currentList.size == newList.size) {
+        if (currentList.isEmpty() || currentList.size != newList.size) return true else {
             for (i in currentList.indices) {
                 if (currentList[i].name != newList[i].name) return true
             }
