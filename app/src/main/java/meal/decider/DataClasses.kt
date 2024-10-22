@@ -55,6 +55,7 @@ data class RestaurantValues(
     var distance: Double? = 0.0,
     var priceLevel: Int? = 0,
     var rating: Double? = 0.0,
+//    var isOpen: Boolean = false,
     var color: Int? = 0,
     var border: BorderStroke = defaultRestaurantBorderStroke,
     var nextPageToken: String? = ""
@@ -81,6 +82,7 @@ data class Result(
     val vicinity: String? = null,
     val price_level: Int? = null,
     val rating: Double? = null,
+    val opening_hours: OpeningHours? = null
 )
 
 @Serializable
@@ -92,4 +94,9 @@ data class Geometry(
 data class Location(
     val lat: Double? = null,
     val lng: Double? = null,
+)
+
+@Serializable
+data class OpeningHours(
+    val open_now: Boolean? = null
 )

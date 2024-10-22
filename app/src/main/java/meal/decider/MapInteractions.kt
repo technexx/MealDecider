@@ -41,6 +41,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
         // ... other fields
     )
 
+    //TODO: While this works, we are using the web service method. We should switch over to Places object.
     suspend fun mapsApiCall() {
         withContext(Dispatchers.IO) {
             //Used in uri to filter results.
@@ -51,7 +52,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val rating = appViewModel.minRestaurantRating
 
             //Per docs, we want to use "findplacefromtext" instead of "nearbysearch" in order to filter results and minimize billing. We are getting unnecessary data right now, but also getting null exceptions when using other query.
-            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, rating&name=$cuisineString&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
+            val uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, opennow, rating&name=$cuisineString&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
             val request = Request.Builder()
                 .url(uri)
@@ -62,8 +63,12 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val gson = GsonBuilder().setPrettyPrinting().create()
             val prettyJson = gson.toJson(JsonParser.parseString(response))
 
+            //TODO: OpenNow does get listed here, so just add a var to RestaurantValues data class, and add that to it in restaurantResultListFromSerializedJson(...)
+
             val json = Json { ignoreUnknownKeys = true }
             val jsonSerialized = json.decodeFromString<Root>(prettyJson)
+            showLog("test", "json is $prettyJson")
+            showLog("test", "serialized is ${jsonSerialized.results}")
 
             var restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
             restaurantList = filteredRestaurantList(restaurantList, distance, rating, price)
@@ -114,11 +119,6 @@ class MapInteractions(private val activity: Activity, private val activityContex
             )
         }
         return restaurantList
-    }
-
-    fun testRestaurants() {
-//        appViewModel.originalRestaurantList = dummyRestaurantList()
-        appViewModel.updateRestaurantsList(dummyRestaurantList())
     }
 
     fun dummyRestaurantList(): SnapshotStateList<RestaurantValues> {

@@ -42,9 +42,11 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Restaurant list items sometimes reposition during scroll. Not using staggered grid works but looks worse.
+//TODO: Add "is open" filter.
 //TODO: Add disclaimer that app uses verbatim google searches and may not always be accurate.
 //TODO: Add more colors/fonts/raised texts.
+//TODO: Get App Icon.
+//TODO: Restaurant list items sometimes reposition during scroll. Not using staggered grid works but looks worse.
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

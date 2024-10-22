@@ -622,7 +622,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
-            columns = StaggeredGridCells.Adaptive(128.dp),
+            columns = StaggeredGridCells.Adaptive(160.dp),
         ) {
             items(restaurantList.value.size) { index ->
 
