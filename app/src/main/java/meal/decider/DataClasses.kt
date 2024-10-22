@@ -69,10 +69,10 @@ object RestaurantsObject {
     var RestaurantList: SnapshotStateList<RestaurantValues> = mutableStateListOf()
 }
 
-//Note how after the initial List<Result> we pass in the classes, not a list of classes.
 @Serializable
 data class Root(
     val results: List<Result>? = null,
+    val next_page_token: String? = null
 )
 
 @Serializable
@@ -82,7 +82,7 @@ data class Result(
     val vicinity: String? = null,
     val price_level: Int? = null,
     val rating: Double? = null,
-    val opening_hours: OpeningHours? = null
+    val opening_hours: OpeningHours? = null,
 )
 
 @Serializable
