@@ -17,7 +17,8 @@ data class RestaurantFilters(
     @PrimaryKey (autoGenerate = false) val uid: Int? = 0,
     @ColumnInfo(name = "distance") val distance: Double,
     @ColumnInfo(name = "rating") val rating: Double,
-    @ColumnInfo(name = "price") val price: Double
+    @ColumnInfo(name = "price") val price: Double,
+    @ColumnInfo(name = "open_now") val openNow: Boolean
 )
 
 @Entity (tableName = "options")

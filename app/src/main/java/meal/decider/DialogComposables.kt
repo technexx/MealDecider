@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
@@ -358,6 +359,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var distanceSliderPosition by remember { mutableFloatStateOf(3f) }
         var ratingSliderPosition by remember { mutableFloatStateOf(3f) }
         var priceSliderPosition by remember { mutableFloatStateOf(1f) }
+        var isOpen by remember { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
             coroutineScope.launch {
@@ -365,6 +367,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 distanceSliderPosition = doubleMetersToMiles(restaurantFilters[0].distance).toFloat()
                 ratingSliderPosition = restaurantFilters[0].rating.toFloat()
                 priceSliderPosition = restaurantFilters[0].price.toFloat()
+                isOpen = restaurantFilters[0].openNow
             }
         }
 
@@ -373,9 +376,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         AnimatedTransitionDialog(
             modifier = Modifier
-                .background(Color.Transparent)
-                .height(400.dp)
-                .width(500.dp),
+                .height(500.dp)
+                .fillMaxWidth()
+                .background(Color.Transparent),
             onDismissRequest = {
                 appViewModel.updateShowDialog(appViewModel.NO_DIALOG)
             },
@@ -418,7 +421,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
                                 }
                                 Spacer(modifier = Modifier.height(16.dp))
-                                RegText(text = "Maximum Price", fontSize = 18, color = textColor)
+                                RegText(text = "Maximum Price", fontSize = 20, color = textColor)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Row (modifier = Modifier
                                     .fillMaxWidth(),
@@ -464,7 +467,22 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                             .padding(top = 14.dp)) {
                                             FilterStars(ratingSliderPosition)
                                         }
-//                                        RegText(text = "$ratingSliderPosition stars", fontSize = 18, color = textColor)
+                                    }
+                                }
+
+                                Spacer(modifier = Modifier.height(24.dp))
+
+                                Column (modifier = Modifier){
+                                    Row(modifier = Modifier
+                                        .fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween) {
+                                        RegText(text = "Open Now", fontSize = 20 , color = textColor, modifier = Modifier
+                                            .padding(top = 6.dp))
+                                        Checkbox(modifier = Modifier,
+                                            checked = isOpen, onCheckedChange = {
+                                            isOpen = it
+                                            showLog("test", "isOpen is $isOpen")
+                                        })
                                     }
                                 }
                             }
@@ -485,7 +503,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
                                         if (appViewModel.haveRestaurantFiltersChanged(distance, rating, price)) {
                                             appViewModel.setLocalRestaurantFilterValues(distance, rating, price)
-                                            roomInteractions.updateRestaurantFilters(distance, rating, price)
+                                            roomInteractions.updateRestaurantFilters(distance, rating, price, isOpen)
 
                                             mapInteractions.mapsApiCall()
                                         }

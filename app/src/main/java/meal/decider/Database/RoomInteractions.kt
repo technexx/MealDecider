@@ -89,7 +89,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
     }
 
     fun populateRestaurantFiltersWithInitialValues() {
-        val restaurantFilters = RestaurantFilters(null, milesToMeters(5.0), 3.0, 4.0)
+        val restaurantFilters = RestaurantFilters(null, milesToMeters(5.0), 3.0, 4.0, false)
         restaurantFiltersDao.insertRestaurantFilters(restaurantFilters)
     }
 
@@ -101,9 +101,9 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         return restaurantFilters
     }
 
-    suspend fun updateRestaurantFilters(distance: Double, rating: Double, price: Int) {
+    suspend fun updateRestaurantFilters(distance: Double, rating: Double, price: Int, isOpen: Boolean) {
         withContext(Dispatchers.IO) {
-            restaurantFiltersDao.updateFilters(distance, rating, price)
+            restaurantFiltersDao.updateFilters(distance, rating, price, isOpen)
         }
     }
 

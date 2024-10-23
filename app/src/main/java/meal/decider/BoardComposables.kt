@@ -594,19 +594,19 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             .background(colorResource(id = R.color.grey_300)),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center) {
-            val fontSize = 14
+            val fontSize = 16
             val miles = doubleMetersToMiles(appViewModel.maxRestaurantDistance)
-            RegText(text = "Distance <= $miles mi", fontSize = fontSize)
+            RegText(text = "<= $miles mi", fontSize = fontSize)
             Spacer(modifier = Modifier.width(6.dp))
             RegText(text = "•")
             Spacer(modifier = Modifier.width(6.dp))
             var priceString = ""
             for (i in 1..appViewModel.maxRestaurantPrice) priceString += "$"
-            RegText(text = "Price <= $priceString", fontSize = fontSize)
+            RegText(text = "<= $priceString", fontSize = fontSize)
             Spacer(modifier = Modifier.width(6.dp))
             RegText(text = "•")
             Spacer(modifier = Modifier.width(6.dp))
-            RegText(text = "Rating >= ", fontSize = fontSize)
+            RegText(text = ">= ", fontSize = fontSize)
             dialogComposables.FilterStars(ratingSliderPosition = appViewModel.minRestaurantRating.toFloat())
         }
     }

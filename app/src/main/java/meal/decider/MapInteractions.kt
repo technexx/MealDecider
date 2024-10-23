@@ -74,8 +74,6 @@ class MapInteractions(private val activity: Activity, private val activityContex
             if (appViewModel.hasRestaurantListChanged(appViewModel.currentRestaurantList, restaurantList)) {
                 appViewModel.currentRestaurantList = restaurantList
 
-                showLog("test", "set size is ${restaurantList.size}")
-
                 if (!restaurantList.isEmpty()) {
                     appViewModel.updateSelectedRestaurantSquare(restaurantList[0])
                     appViewModel.updateSingleRestaurantColorAndBorder(restaurantList, 0, appViewModel.getColorTheme.selectedRestaurantSquare, heavyCuisineSelectionBorderStroke)
