@@ -588,6 +588,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
 
     @Composable
     fun RestaurantFilterBar() {
+        val bullet: @Composable () -> Unit = { RegText(text = "•", modifier = Modifier.padding(top = 2.dp)) }
         Row(modifier = Modifier
             .wrapContentSize()
             .fillMaxWidth()
@@ -598,16 +599,22 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             val miles = doubleMetersToMiles(appViewModel.maxRestaurantDistance)
             RegText(text = "<= $miles mi", fontSize = fontSize)
             Spacer(modifier = Modifier.width(6.dp))
-            RegText(text = "•")
+            bullet()
             Spacer(modifier = Modifier.width(6.dp))
             var priceString = ""
             for (i in 1..appViewModel.maxRestaurantPrice) priceString += "$"
             RegText(text = "<= $priceString", fontSize = fontSize)
             Spacer(modifier = Modifier.width(6.dp))
-            RegText(text = "•")
+            bullet()
             Spacer(modifier = Modifier.width(6.dp))
             RegText(text = ">= ", fontSize = fontSize)
             dialogComposables.FilterStars(ratingSliderPosition = appViewModel.minRestaurantRating.toFloat())
+            if (appViewModel.isOpen) {
+                Spacer(modifier = Modifier.width(6.dp))
+                bullet()
+                Spacer(modifier = Modifier.width(6.dp))
+                RegText(text = "Open Now", fontSize = fontSize)
+            }
         }
     }
 

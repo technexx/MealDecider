@@ -100,7 +100,8 @@ class MainActivity : ComponentActivity() {
             appViewModel.setLocalRestaurantFilterValues(
                 restaurantFilters.distance,
                 restaurantFilters.rating,
-                restaurantFilters.price.toInt()
+                restaurantFilters.price.toInt(),
+                restaurantFilters.openNow
             )
 
             appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[0])

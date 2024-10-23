@@ -481,7 +481,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         Checkbox(modifier = Modifier,
                                             checked = isOpen, onCheckedChange = {
                                             isOpen = it
-                                            showLog("test", "isOpen is $isOpen")
                                         })
                                     }
                                 }
@@ -502,7 +501,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         val price = priceSliderPosition.toInt()
 
                                         if (appViewModel.haveRestaurantFiltersChanged(distance, rating, price)) {
-                                            appViewModel.setLocalRestaurantFilterValues(distance, rating, price)
+                                            appViewModel.setLocalRestaurantFilterValues(distance, rating, price, isOpen)
                                             roomInteractions.updateRestaurantFilters(distance, rating, price, isOpen)
 
                                             mapInteractions.mapsApiCall()

@@ -25,6 +25,7 @@ class AppViewModel : ViewModel() {
     var maxRestaurantDistance = 0.0
     var minRestaurantRating = 3.0
     var maxRestaurantPrice = 1
+    var isOpen = false
 
     var cuisineRollSpeedSetting : Long = 0
     var cuisineRollDurationSetting : Long = 0
@@ -486,10 +487,11 @@ class AppViewModel : ViewModel() {
         updateRestaurantsList(newList)
     }
 
-    fun setLocalRestaurantFilterValues(distance: Double, rating: Double, price: Int) {
+    fun setLocalRestaurantFilterValues(distance: Double, rating: Double, price: Int, openNow: Boolean) {
         maxRestaurantDistance = distance
         minRestaurantRating = rating
         maxRestaurantPrice = price
+        isOpen = openNow
     }
 
     fun hasRestaurantListChanged(currentList: List<RestaurantValues>, newList: List<RestaurantValues>): Boolean {
