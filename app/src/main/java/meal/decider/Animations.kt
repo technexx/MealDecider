@@ -14,6 +14,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -53,7 +54,6 @@ fun AnimatedComposable(
                 startDismissWithExitAnimation(animateTrigger, backHandler)
             }
         }
-
     }
 
     LaunchedEffect(key1 = any) {
@@ -167,6 +167,27 @@ fun AnimatedTransitionVoid(
         }
     }
 }
+
+@Composable
+fun AnimatedDropDownMenu(
+    expanded: Boolean,
+    content: @Composable () -> Unit) {
+    var isExpanded = expanded
+
+    AnimatedScaleInTransition(
+        animationEnter = fadeIn(animationSpec = tween(500)) + slideInHorizontally (
+            animationSpec = tween(500)
+        ),
+        animationExit = fadeOut(animationSpec = tween(500)) + slideOutHorizontally(
+            animationSpec = tween(500),
+        ),
+        visible = isExpanded) {
+        DropdownMenu(expanded = expanded, onDismissRequest = { isExpanded = false }) {
+            if (expanded) content()
+        }
+    }
+}
+
 
 @Composable
 fun AnimatedScaleInTransition(

@@ -1,7 +1,13 @@
 package meal.decider
 
 import android.app.Activity
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -161,7 +167,8 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             icon = Icons.Filled.Menu,
             description = "menu",
             tint = colorTheme.value.cuisineIconButtons,
-            enabled = buttonsEnabled) {
+            enabled = buttonsEnabled
+        ) {
             if (!appViewModel.optionsMenuVisibility.value) {
                 expanded = !expanded
             }
@@ -171,70 +178,87 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         if (!appViewModel.getSquareList.isEmpty()) {
             if (!appViewModel.getEditMode) {
                 appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
-                appViewModel.updateSingleCuisineSquareColorAndBorder(appViewModel.rolledSquareIndex, appViewModel.getSquareList[appViewModel.rolledSquareIndex].color, heavyCuisineSelectionBorderStroke)
+                appViewModel.updateSingleCuisineSquareColorAndBorder(
+                    appViewModel.rolledSquareIndex,
+                    appViewModel.getSquareList[appViewModel.rolledSquareIndex].color,
+                    heavyCuisineSelectionBorderStroke
+                )
             }
         }
 
-        DropdownMenu(modifier = Modifier
-            .background(colorResource(colorTheme.value.dropDownMenuBackground)),
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            if (restaurantVisibility.value == 0) {
-                DropDownItemUi(
-                    text = "Add Cuisine",
-                    fontSize = 18,
-                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    appViewModel.updateAddMode(true)
-                    appViewModel.updateEditMode(false)
-                    expanded = false
-                }
-                DropDownItemUi(
-                    text = "Edit Cuisines",
-                    fontSize = 18,
-                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    //Resets list of squares to edit.
-                    appViewModel.updateListOfCuisineSquaresToEdit(listOf())
-                    if (!appViewModel.getEditMode) {
-                        appViewModel.updateEditMode(true)
-                        appViewModel.updateAllCuisineBorders(colorTheme.value.cuisineEditModeBorderStroke)
-                    } else {
+        AnimatedVisibility(
+            enter = fadeIn(animationSpec = tween(500)) + slideInHorizontally (
+                animationSpec = tween(500)),
+            exit = fadeOut(animationSpec = tween(500)) + slideOutHorizontally(
+                animationSpec = tween(500)),
+            visible = expanded) {
+            DropdownMenu(modifier = Modifier
+                .background(colorResource(colorTheme.value.dropDownMenuBackground)),
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                if (restaurantVisibility.value == 0) {
+                    DropDownItemUi(
+                        text = "Add Cuisine",
+                        fontSize = 18,
+                        color = colorResource(id = colorTheme.value.dialogTextColor)
+                    ) {
+                        appViewModel.updateAddMode(true)
                         appViewModel.updateEditMode(false)
+                        expanded = false
                     }
-                    expanded = false
+                    DropDownItemUi(
+                        text = "Edit Cuisines",
+                        fontSize = 18,
+                        color = colorResource(id = colorTheme.value.dialogTextColor)
+                    ) {
+                        //Resets list of squares to edit.
+                        appViewModel.updateListOfCuisineSquaresToEdit(listOf())
+                        if (!appViewModel.getEditMode) {
+                            appViewModel.updateEditMode(true)
+                            appViewModel.updateAllCuisineBorders(colorTheme.value.cuisineEditModeBorderStroke)
+                        } else {
+                            appViewModel.updateEditMode(false)
+                        }
+                        expanded = false
+                    }
+                    DropDownItemUi(
+                        text = "Sort",
+                        fontSize = 18,
+                        color = colorResource(id = colorTheme.value.dialogTextColor)
+                    ) {
+                        appViewModel.updateShowDialog(appViewModel.CUISINE_SORT)
+                        appViewModel.updateEditMode(false)
+                        expanded = false
+                    }
+                    DropDownItemUi(
+                        text = "Restore Defaults",
+                        fontSize = 18,
+                        color = colorResource(id = colorTheme.value.dialogTextColor)
+                    ) {
+                        appViewModel.updateRestoreDefaults(true)
+                        expanded = false
+                    }
                 }
-                DropDownItemUi(
-                    text = "Sort",
-                    fontSize = 18,
-                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    appViewModel.updateShowDialog(appViewModel.CUISINE_SORT)
-                    appViewModel.updateEditMode(false)
-                    expanded = false
-                }
-                DropDownItemUi(
-                    text = "Restore Defaults",
-                    fontSize = 18,
-                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    appViewModel.updateRestoreDefaults(true)
-                    expanded = false
-                }
-            }
 
-            if (restaurantVisibility.value == 1) {
-                DropDownItemUi(
-                    text = "Filters",
-                    fontSize = 18,
-                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    appViewModel.updateShowDialog(appViewModel.RESTAURANT_FILTERS)
-                    expanded = false
-                }
+                if (restaurantVisibility.value == 1) {
+                    DropDownItemUi(
+                        text = "Filters",
+                        fontSize = 18,
+                        color = colorResource(id = colorTheme.value.dialogTextColor)
+                    ) {
+                        appViewModel.updateShowDialog(appViewModel.RESTAURANT_FILTERS)
+                        expanded = false
+                    }
 
-                DropDownItemUi(
-                    text = "Sort",
-                    fontSize = 18,
-                    color = colorResource(id = colorTheme.value.dialogTextColor)) {
-                    appViewModel.updateShowDialog(appViewModel.RESTAURANT_SORT)
-                    expanded = false
+                    DropDownItemUi(
+                        text = "Sort",
+                        fontSize = 18,
+                        color = colorResource(id = colorTheme.value.dialogTextColor)
+                    ) {
+                        appViewModel.updateShowDialog(appViewModel.RESTAURANT_SORT)
+                        expanded = false
+                    }
                 }
             }
         }
