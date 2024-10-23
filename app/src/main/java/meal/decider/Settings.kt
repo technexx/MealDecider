@@ -59,6 +59,7 @@ class Settings(val appViewModel: AppViewModel, val roomInteractions: RoomInterac
                 onClick = {
                     appViewModel.updateSettingsDialogVisibility(speeds = false, sounds = false, colors = true)
                 })
+            Spacer(modifier = Modifier.height(20.dp))
             Row {
                 RegTextButton(text = "Auto Scroll",  fontSize = 26, color = textColor,
                     onClick = {

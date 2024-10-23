@@ -562,10 +562,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     .height(screenHeightPct(0.8).dp)
                     .background(colorResource(id = colorTheme.value.restaurantBoard))
                 ) {
-                    Row(modifier = Modifier
-                        .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center) {
-                    }
+                    RestaurantFilterBar()
                     if (!restaurantList.value.isEmpty()) {
                         RestaurantLazyGrid()
                     } else {
@@ -586,6 +583,31 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     buttons.InteractionButtons(1)
                 }
             }
+        }
+    }
+
+    @Composable
+    fun RestaurantFilterBar() {
+        Row(modifier = Modifier
+            .wrapContentSize()
+            .fillMaxWidth()
+            .background(colorResource(id = R.color.grey_300)),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center) {
+            val fontSize = 14
+            val miles = doubleMetersToMiles(appViewModel.maxRestaurantDistance)
+            RegText(text = "Distance <= $miles mi", fontSize = fontSize)
+            Spacer(modifier = Modifier.width(6.dp))
+            RegText(text = "•")
+            Spacer(modifier = Modifier.width(6.dp))
+            var priceString = ""
+            for (i in 1..appViewModel.maxRestaurantPrice) priceString += "$"
+            RegText(text = "Price <= $priceString", fontSize = fontSize)
+            Spacer(modifier = Modifier.width(6.dp))
+            RegText(text = "•")
+            Spacer(modifier = Modifier.width(6.dp))
+            RegText(text = "Rating >= ", fontSize = fontSize)
+            dialogComposables.FilterStars(ratingSliderPosition = appViewModel.minRestaurantRating.toFloat())
         }
     }
 

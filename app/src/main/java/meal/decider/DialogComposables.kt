@@ -362,7 +362,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         LaunchedEffect(Unit) {
             coroutineScope.launch {
                 val restaurantFilters = roomInteractions.getRestaurantFilters()
-                distanceSliderPosition = metersToMiles(restaurantFilters[0].distance).toFloat()
+                distanceSliderPosition = doubleMetersToMiles(restaurantFilters[0].distance).toFloat()
                 ratingSliderPosition = restaurantFilters[0].rating.toFloat()
                 priceSliderPosition = restaurantFilters[0].price.toFloat()
             }
@@ -523,7 +523,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
             Image(painterResource(R.drawable.white_star_half_2,), "white star half", modifier = Modifier.size(size.dp, size.dp))
 
         }
-
     }
 
 }
