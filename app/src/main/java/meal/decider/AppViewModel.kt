@@ -25,7 +25,7 @@ class AppViewModel : ViewModel() {
     var maxRestaurantDistance = 0.0
     var minRestaurantRating = 3.0
     var maxRestaurantPrice = 1
-    var isOpen = false
+    var isOpen: Boolean = false
 
     var cuisineRollSpeedSetting : Long = 0
     var cuisineRollDurationSetting : Long = 0

@@ -42,6 +42,8 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
+//TODO: Sorting in cuisines removes border of selected and does not retain visible selection in dialog.
+//TODO: Distance in filters bar use decimals (e.g. 4.3 instead of 4)
 //TODO: Add disclaimer that app uses verbatim google searches and may not always be accurate.
 //TODO: Add more colors/fonts/raised texts.
 //TODO: Drop down menus should be animated.

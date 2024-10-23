@@ -53,6 +53,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
             //Values filtered once retrieved from json result.
             val distance = appViewModel.maxRestaurantDistance
             val rating = appViewModel.minRestaurantRating
+            val isOpen = appViewModel.isOpen
 
             var uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, opennow, rating&name=$cuisineString&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
@@ -69,7 +70,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val jsonSerialized = json.decodeFromString<Root>(prettyJson)
 
             var restaurantList = restaurantResultListFromSerializedJson(jsonSerialized)
-            restaurantList = filteredRestaurantList(restaurantList, distance, rating, price)
+            restaurantList = filteredRestaurantList(restaurantList, distance, rating, price, isOpen)
 
             if (appViewModel.hasRestaurantListChanged(appViewModel.currentRestaurantList, restaurantList)) {
                 appViewModel.currentRestaurantList = restaurantList
@@ -90,12 +91,17 @@ class MapInteractions(private val activity: Activity, private val activityContex
         }
     }
 
-    private fun filteredRestaurantList(list: SnapshotStateList<RestaurantValues>, distanceLimit: Double, minimumRating: Double, maxPrice: Int): SnapshotStateList<RestaurantValues> {
+    private fun filteredRestaurantList(list: SnapshotStateList<RestaurantValues>, distanceLimit: Double, minimumRating: Double, maxPrice: Int, isOpen: Boolean): SnapshotStateList<RestaurantValues> {
         val newList = SnapshotStateList<RestaurantValues>()
 
         for (i in list) {
-            if (i.distance!! <= distanceLimit && i.rating!! >= minimumRating && i.priceLevel!! <= maxPrice){
+            if (i.distance!! <= distanceLimit && i.rating!! >= minimumRating && i.priceLevel!! <= maxPrice) {
                 newList.add(i)
+                if (isOpen) {
+                    if (i.isOpen != true) {
+                        newList.remove(i)
+                    }
+                }
             }
         }
 
@@ -115,8 +121,8 @@ class MapInteractions(private val activity: Activity, private val activityContex
         for (i in result.results!!.indices) {
             val distance = floatArrayToDouble(distanceOfRestaurantFromCurrentLocation(currentLocation.latitude, currentLocation.longitude,
                 result.results[i].geometry?.location?.lat, result.results[i].geometry?.location?.lng))
-            restaurantList.add(RestaurantValues(result.results[i].name, result.results[i].vicinity, distance,
-                result.results[i].price_level, result.results[i].rating, appViewModel.getColorTheme.restaurantSquares)
+            restaurantList.add(RestaurantValues(result.results[i].name, result.results[i].vicinity, distance, result.results[i].price_level, result.results[i].rating,
+                result.results[i].opening_hours?.open_now, appViewModel.getColorTheme.restaurantSquares)
             )
         }
         return restaurantList
@@ -129,7 +135,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
         var price = 1
         for (i in 1..20) {
             distance += 1000; rating += 0.1; if (i%5==0 && price <4) price += 1
-            listToReturn.add(RestaurantValues("So Good Restaurant With Way More Text Here It Is", "123 Bird Brain Lane", doubleMetersToMiles(distance), price, rating, appViewModel.getColorTheme.restaurantBoard))
+            listToReturn.add(RestaurantValues("So Good Restaurant With Way More Text Here It Is", "123 Bird Brain Lane", doubleMetersToMiles(distance), price, rating, true, appViewModel.getColorTheme.restaurantBoard))
         }
         return listToReturn
     }

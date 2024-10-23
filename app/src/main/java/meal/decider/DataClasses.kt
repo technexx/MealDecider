@@ -55,7 +55,7 @@ data class RestaurantValues(
     var distance: Double? = 0.0,
     var priceLevel: Int? = 0,
     var rating: Double? = 0.0,
-//    var isOpen: Boolean = false,
+    var isOpen: Boolean? = false,
     var color: Int? = 0,
     var border: BorderStroke = defaultRestaurantBorderStroke,
     var nextPageToken: String? = ""
