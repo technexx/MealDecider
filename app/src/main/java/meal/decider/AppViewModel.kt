@@ -20,6 +20,9 @@ class AppViewModel : ViewModel() {
     var rolledSquareIndex = 0
     var rolledRestaurantIndex = 0
 
+    var cuisineSortIndex = 0
+    var restaurantSortIndex = 0
+
     var currentRestaurantList = SnapshotStateList<RestaurantValues>()
 
     var maxRestaurantDistance = 0.0

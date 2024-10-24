@@ -243,7 +243,11 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val selectedCircleIndex = remember { mutableStateOf(0) }
         var circles = listOf<String>()
         var sortText = "A-Z"
+        var indexToSave = 0
         var textSize = 16
+
+        if (appViewModel.getShowDialog == appViewModel.CUISINE_SORT) selectedCircleIndex.value = appViewModel.cuisineSortIndex
+        if (appViewModel.getShowDialog == appViewModel.RESTAURANT_SORT) selectedCircleIndex.value = appViewModel.restaurantSortIndex
 
         if (showDialog.value == appViewModel.CUISINE_SORT) {
             circles = listOf("A-Z", "Random")
@@ -280,6 +284,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
+                                    showLog("test", "selectable is ${selectedCircleIndex.value}")
+
                                     SelectableCircle(
                                         selected = index == selectedCircleIndex.value,
                                         text = circleText,
@@ -287,6 +293,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         onClick = {
                                             selectedCircleIndex.value = index
                                             sortText = circleText
+                                            indexToSave = index
                                         }
                                     )
                                 }
@@ -303,15 +310,18 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
                                 MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(64.dp)) {
                                     if (appViewModel.getShowDialog == appViewModel.CUISINE_SORT) {
-                                    appViewModel.sortAndUpdateCuisineList(sortText)
+                                      appViewModel.sortAndUpdateCuisineList(sortText)
                                         coroutineScope.launch {
                                             roomInteractions.updateCuisines(appViewModel.getSquareList)
                                             roomInteractions.deleteAllCuisines()
                                             roomInteractions.insertMultipleCuisines(appViewModel.getListOfSquareNames())
                                         }
+                                        appViewModel.cuisineSortIndex = indexToSave
+                                        showLog("test", "index to save is $indexToSave")
                                     }
                                     if (appViewModel.getShowDialog == appViewModel.RESTAURANT_SORT) {
                                         appViewModel.sortAndUpdateRestaurantList(sortText)
+                                        appViewModel.restaurantSortIndex = indexToSave
                                     }
                                     appViewModel.updateShowDialog(appViewModel.NO_DIALOG)
                                 }
