@@ -436,7 +436,7 @@ class AppViewModel : ViewModel() {
         }
 
         updateSquareList(currentSquaresList)
-        updateEditMode(false)
+
         if (!getSquareList.isEmpty()) {
             resetSquareColors()
         }

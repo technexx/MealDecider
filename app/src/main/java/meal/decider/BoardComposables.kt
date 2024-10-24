@@ -77,6 +77,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     fun GlobalUi() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val coroutineScope = rememberCoroutineScope()
+        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
         val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
@@ -101,7 +102,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         Text("Meal Decider")
                     },
                     actions = {
-                        if (listOfCuisineSquaresToEdit.value.isNotEmpty() && editMode.value) {
+                        if (!boardUiState.value.squareList.isEmpty() && editMode.value) {
                             MaterialIconButton(
                                 icon = Icons.Filled.Delete,
                                 description = "delete",
@@ -109,6 +110,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 coroutineScope.launch {
                                     roomInteractions.deleteMultipleCuisines()
                                     appViewModel.deleteSelectedCuisines()
+//                                    appViewModel.updateEditMode(false)
                                 }
                             }
                         }
