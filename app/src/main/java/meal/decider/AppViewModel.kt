@@ -286,7 +286,7 @@ class AppViewModel : ViewModel() {
             if (!newSquareList[i].name.equals(selectedCuisineSquareName, true)) {
                 newSquareList[i] = SquareValues(newSquareList[i].name, getColorTheme.cuisineSquares)
             } else {
-                newSquareList[i] = SquareValues(newSquareList[i].name, getColorTheme.selectedCuisineSquare)
+                newSquareList[i] = SquareValues(newSquareList[i].name, getColorTheme.selectedCuisineSquare, heavyCuisineSelectionBorderStroke)
                 rolledSquareIndex = i
             }
         }
