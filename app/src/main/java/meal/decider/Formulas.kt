@@ -17,7 +17,12 @@ fun floatArrayToDouble(meters: FloatArray): Double {
 }
 
 fun doubleMetersToMiles(meters: Double): Double {
-    return BigDecimal(meters * .00062137).setScale(1, RoundingMode.DOWN).toDouble()
+    return BigDecimal(meters * .00062137).setScale(1, RoundingMode.UP).toDouble()
+}
+
+//TODO: Round from closest to.
+fun doubleMetersToMilesAsInt(meters: Double): Int {
+    return BigDecimal(meters * .00062137).setScale(1, RoundingMode.HALF_UP).toInt()
 }
 
 fun milesToMeters(miles: Double): Double { return miles*1609 }

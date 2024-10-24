@@ -624,7 +624,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center) {
             val fontSize = 16
-            val miles = doubleMetersToMiles(appViewModel.maxRestaurantDistance)
+            val miles = doubleMetersToMilesAsInt(appViewModel.maxRestaurantDistance)
             RegText(text = "<= $miles mi", fontSize = fontSize)
             Spacer(modifier = Modifier.width(6.dp))
             bullet()
