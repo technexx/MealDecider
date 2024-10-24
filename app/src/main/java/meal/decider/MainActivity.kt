@@ -42,8 +42,9 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Sorting in cuisines does not retain selection in dialog.
-//TODO: Bug (after sorting and re-launch of app, I think), of all cuisines showing as same one.
+//TODO: Even tho "Random" retains its selected bubble, it will still sort alphabetically.
+    //TODO:
+//TODO: Bug (after sorting and re-launch of app), of all cuisines showing as same one.
 //TODO: Add disclaimer that app uses verbatim google searches and may not always be accurate.
 //TODO: Add more colors/fonts/raised texts.
 //TODO: Drop down menus should be animated.

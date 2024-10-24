@@ -246,9 +246,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var indexToSave = 0
         var textSize = 16
 
-        if (appViewModel.getShowDialog == appViewModel.CUISINE_SORT) selectedCircleIndex.value = appViewModel.cuisineSortIndex
-        if (appViewModel.getShowDialog == appViewModel.RESTAURANT_SORT) selectedCircleIndex.value = appViewModel.restaurantSortIndex
-
         if (showDialog.value == appViewModel.CUISINE_SORT) {
             circles = listOf("A-Z", "Random")
             textSize = 22
@@ -257,6 +254,15 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         if (showDialog.value == appViewModel.RESTAURANT_SORT) {
             circles = listOf("A-Z", "Distance", "Rating", "Price", "Random")
             textSize = 16
+        }
+
+        if (appViewModel.getShowDialog == appViewModel.CUISINE_SORT) {
+            selectedCircleIndex.value = appViewModel.cuisineSortIndex
+            sortText = circles[appViewModel.cuisineSortIndex]
+        }
+        if (appViewModel.getShowDialog == appViewModel.RESTAURANT_SORT) {
+            selectedCircleIndex.value = appViewModel.restaurantSortIndex
+            sortText = circles[appViewModel.restaurantSortIndex]
         }
 
         AnimatedTransitionDialog(
