@@ -290,7 +290,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
-                                    showLog("test", "selectable is ${selectedCircleIndex.value}")
+//                                    showLog("test", "selectable is ${selectedCircleIndex.value}")
 
                                     SelectableCircle(
                                         selected = index == selectedCircleIndex.value,
@@ -316,14 +316,20 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
                                 MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(64.dp)) {
                                     if (appViewModel.getShowDialog == appViewModel.CUISINE_SORT) {
-                                      appViewModel.sortAndUpdateCuisineList(sortText)
+                                        appViewModel.sortAndUpdateCuisineList(sortText)
+
                                         coroutineScope.launch {
-                                            roomInteractions.updateCuisines(appViewModel.getSquareList)
+//                                            roomInteractions.updateCuisines()
                                             roomInteractions.deleteAllCuisines()
                                             roomInteractions.insertMultipleCuisines(appViewModel.getListOfSquareNames())
                                         }
+
+                                        coroutineScope.launch {
+
+                                        }
+                                        showLog("test", "updated cuisines are ${appViewModel.getSquareList.toList()}")
+
                                         appViewModel.cuisineSortIndex = indexToSave
-                                        showLog("test", "index to save is $indexToSave")
                                     }
                                     if (appViewModel.getShowDialog == appViewModel.RESTAURANT_SORT) {
                                         appViewModel.sortAndUpdateRestaurantList(sortText)

@@ -13,6 +13,7 @@ import meal.decider.ColorTheme
 import meal.decider.SquareValues
 import meal.decider.Theme
 import meal.decider.milesToMeters
+import meal.decider.showLog
 
 class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel, private val activity: Activity) {
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
@@ -28,6 +29,14 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             deleteAllCuisines()
             populateDatabaseWithInitialCuisines()
         }
+    }
+
+    suspend fun getCuisineListFromDatabase(): List<Cuisines> {
+        var list: List<Cuisines>
+        withContext(Dispatchers.IO) {
+            list = cuisineDao.getAllCuisines()
+        }
+        return list
     }
 
     private suspend fun populateDatabaseWithInitialCuisines() {
@@ -64,12 +73,17 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
 
     //This will rely on lists being same length, so add a check exception.
     //With unique keys set to true in Cuisine Entity, we can't update database values one by one, because that will result in temporary identical entries.
-    suspend fun updateCuisines(list: SnapshotStateList<SquareValues>) {
+    //TODO: List being passed into update is fine, but retrieved list is the repeats.
+    suspend fun updateCuisines() {
         withContext(Dispatchers.IO) {
-            val dbSquareList = cuisineDao.getAllCuisines()
-            for (i in dbSquareList.indices) {
-                cuisineDao.updateCuisine(list[i].name, list[i].color)
+            val newList: MutableList<Cuisines> = mutableListOf()
+            for (i in appViewModel.getSquareList) {
+                newList.add(Cuisines(null, i.name, i.color))
             }
+            showLog("test", "from state is ${appViewModel.getSquareList.toList()}")
+            cuisineDao.updateCuisineList(newList)
+            showLog("test", "from db is ${cuisineDao.getAllCuisines()}")
+
         }
     }
 

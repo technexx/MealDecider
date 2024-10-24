@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface CuisineDao {
@@ -24,7 +25,13 @@ interface CuisineDao {
     fun insertCuisine(vararg cuisine: Cuisines)
 
     @Query("UPDATE cuisine SET cuisine_name = :name, cuisine_color = :color")
-    fun updateCuisine(name: String, color: Int)
+    fun updateSingleCuisine(name: String, color: Int)
+
+    @Update
+    fun updateCuisines(cuisine: Cuisines)
+
+    @Update
+    fun updateCuisineList(list: List<Cuisines>)
 
     @Query("DELETE FROM cuisine WHERE cuisine_name = :name")
     fun deleteCuisineFromName(name: String)
