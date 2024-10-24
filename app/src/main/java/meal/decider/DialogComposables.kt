@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
@@ -240,6 +241,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val coroutineScope = rememberCoroutineScope()
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val showDialog = appViewModel.showDialog.collectAsStateWithLifecycle()
+        var height = 300
+        var width = 300
         val selectedCircleIndex = remember { mutableStateOf(0) }
         var circles = listOf<String>()
         var sortText = "A-Z"
@@ -257,6 +260,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         }
 
         if (appViewModel.getShowDialog == appViewModel.CUISINE_SORT) {
+            height = 200
             selectedCircleIndex.value = appViewModel.cuisineSortIndex
             sortText = circles[appViewModel.cuisineSortIndex]
         }
@@ -268,8 +272,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         AnimatedTransitionDialog(
             modifier = Modifier
                 .background(Color.Transparent)
-                .height(300.dp)
-                .width(300.dp),
+                .height(height.dp)
+                .width(width.dp),
             onDismissRequest = {
                 appViewModel.updateShowDialog(appViewModel.NO_DIALOG)
             },
@@ -367,6 +371,43 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                 // Add any content you want inside the circle here
             }
         }
+    }
+
+    @Composable
+    fun DisclaimerDialog() {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+        val textColor = colorResource(id = colorTheme.value.dialogTextColor)
+
+        AnimatedTransitionDialog(
+            modifier = Modifier
+                .height(300.dp)
+                .width(300.dp)
+                .background(Color.Transparent)
+            ,
+            onDismissRequest = {
+                appViewModel.updateShowDialog(appViewModel.NO_DIALOG)
+            },
+            content = {
+                Surface(
+                    shape = RoundedCornerShape(16.dp),
+                    color = colorResource(colorTheme.value.dialogBackground)
+                ) {
+                    Box(modifier = Modifier
+                        .wrapContentSize()
+                    ) {
+                        Column(modifier = Modifier
+                            .padding(20.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        )
+                        {
+                            RegText(text = "Restaurant lists are pulled directly from Google Maps searches, and no guarantee can be made as to their relevance or accuracy.", color = textColor, fontSize = 20,
+                                modifier = Modifier
+                                    .padding(start = 4.dp, end = 4.dp))
+                        }
+                    }
+                }
+            })
     }
 
     @Composable

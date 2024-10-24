@@ -41,6 +41,7 @@ class AppViewModel : ViewModel() {
     var CUISINE_SORT = 1
     var RESTAURANT_FILTERS = 2
     var RESTAURANT_SORT = 3
+    var DISCLAIMER = 4
 
     private val _boardUiState = MutableStateFlow(BoardValues())
     val boardUiState : StateFlow<BoardValues> = _boardUiState.asStateFlow()
@@ -87,14 +88,8 @@ class AppViewModel : ViewModel() {
     private val _showDialog = MutableStateFlow(0)
     val showDialog: StateFlow<Int> = _showDialog.asStateFlow()
 
-    private val _showRestaurants = MutableStateFlow(false)
-    val showRestaurants: StateFlow<Boolean> = _showRestaurants.asStateFlow()
-
     private val _restaurantList = MutableStateFlow(RestaurantsObject.RestaurantList)
     val restaurantList: StateFlow<SnapshotStateList<RestaurantValues>> = _restaurantList.asStateFlow()
-
-    private val _showRestaurantSettings = MutableStateFlow(false)
-    val showRestaurantSettings: StateFlow<Boolean> = _showRestaurantSettings.asStateFlow()
 
     private val _restaurantVisibility = MutableStateFlow(0)
     val restaurantVisibility: StateFlow<Int> = _restaurantVisibility.asStateFlow()
@@ -202,14 +197,6 @@ class AppViewModel : ViewModel() {
         _showDialog.value = dialog
     }
 
-    fun updateShowRestaurants(show: Boolean) {
-        _showRestaurants.value = show
-    }
-
-    fun updateShowRestaurantSettings(show: Boolean) {
-        _showRestaurantSettings.value = show
-    }
-
     fun updateRestaurantVisibility(value: Int) {
         _restaurantVisibility.value = value
     }
@@ -220,14 +207,6 @@ class AppViewModel : ViewModel() {
 
     fun updateRestaurantQueryFinished(finished: Boolean) {
         _restaurantQueryFinished.value = finished
-    }
-
-    fun updateCuisineSelectionMode(enabled: Boolean) {
-        _cuisineSelectionMode.value = enabled
-    }
-
-    fun updateRestaurantSelectionMode(enabled: Boolean) {
-        _restaurantSelectionMode.value = enabled
     }
 
     fun updateColorSettingsToggleList(list: SnapshotStateList<SettingsToggle>) {

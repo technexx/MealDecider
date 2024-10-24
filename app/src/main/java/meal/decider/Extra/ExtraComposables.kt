@@ -90,7 +90,6 @@ fun EditDialogBox(appViewModel: AppViewModel) {
                         }
                         IconButton(onClick = {
                             appViewModel.updateSquareName(appViewModel.singleSquareIndexToEdit, txtField)
-                            appViewModel.updateActiveEdit(false)
                         }) {
                         }
                     }

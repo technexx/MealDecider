@@ -58,7 +58,6 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
                         coroutineScope.launch {
                             mapInteractions.mapsApiCall()
                             appViewModel.updateRestaurantVisibility(1)
-                            appViewModel.updateShowRestaurants(true)
                         }
                     }
                 }

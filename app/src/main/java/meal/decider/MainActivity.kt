@@ -41,7 +41,6 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Add disclaimer that app uses verbatim google searches and may not always be accurate.
 //TODO: Add more colors/fonts/raised texts.
 //TODO: Drop down menus should be animated.
 //TODO: Get App Icon.

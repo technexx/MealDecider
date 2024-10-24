@@ -234,6 +234,14 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     appViewModel.updateRestoreDefaults(true)
                     expanded = false
                 }
+                DropDownItemUi(
+                    text = "Disclaimer",
+                    fontSize = 18,
+                    color = colorResource(id = colorTheme.value.dialogTextColor)
+                ) {
+                    appViewModel.updateShowDialog(appViewModel.DISCLAIMER)
+                    expanded = false
+                }
             }
 
             if (restaurantVisibility.value == 1) {
@@ -329,6 +337,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
 
             if (showDialog.value == appViewModel.RESTAURANT_FILTERS) {
                 dialogComposables.RestaurantFiltersDialog()
+            }
+
+            if (showDialog.value == appViewModel.DISCLAIMER) {
+                dialogComposables.DisclaimerDialog()
             }
         }
     }
