@@ -41,14 +41,14 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Bug (after sorting and re-launch of app), of all cuisines showing as same one.
-//TODO: After second sort random, it goes back to A-Z (bubble selection).
 //TODO: Add disclaimer that app uses verbatim google searches and may not always be accurate.
 //TODO: Add more colors/fonts/raised texts.
 //TODO: Drop down menus should be animated.
 //TODO: Get App Icon.
 //TODO: Test layout on other sized emulated devices
 //TODO: Optimize Lazy Lists speed (e.g. scrolling, general speed).
+//TODO: Sort not retaining on re-app launch (insertion/update stuff)
+//TODO: After second sort random, it goes back to A-Z (bubble selection).
 //TODO: Work on NextPage retrieval. We are getting its token at top of json response. Invalid request may be due to needing a delay on the request.
 //TODO: Restaurant list items sometimes reposition during scroll. Not using staggered grid works but looks worse.
 

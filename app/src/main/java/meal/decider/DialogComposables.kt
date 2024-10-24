@@ -324,11 +324,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                             roomInteractions.insertMultipleCuisines(appViewModel.getListOfSquareNames())
                                         }
 
-                                        coroutineScope.launch {
-
-                                        }
-                                        showLog("test", "updated cuisines are ${appViewModel.getSquareList.toList()}")
-
                                         appViewModel.cuisineSortIndex = indexToSave
                                     }
                                     if (appViewModel.getShowDialog == appViewModel.RESTAURANT_SORT) {

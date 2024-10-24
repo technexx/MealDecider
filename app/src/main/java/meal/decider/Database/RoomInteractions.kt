@@ -64,6 +64,8 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         }
 
     suspend fun insertMultipleCuisines(list: List<String>) {
+//        showLog("test", "being added is $list")
+
         withContext(Dispatchers.IO) {
             for (i in list) {
                 cuisineDao.insertCuisine(Cuisines(null, i, appViewModel.getColorTheme.cuisineSquares))
@@ -73,7 +75,8 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
 
     //This will rely on lists being same length, so add a check exception.
     //With unique keys set to true in Cuisine Entity, we can't update database values one by one, because that will result in temporary identical entries.
-    //TODO: List being passed into update is fine, but retrieved list is the repeats.
+
+    //List being passed into update is fine, but retrieved list is the repeats.
     suspend fun updateCuisines() {
         withContext(Dispatchers.IO) {
             val newList: MutableList<Cuisines> = mutableListOf()

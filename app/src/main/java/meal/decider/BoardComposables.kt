@@ -112,18 +112,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 }
                             }
                         }
-//                        if (selectMode.value) {
-//                            selectionColor = appViewModel.getColorTheme.selectedCuisineIcon
-//                        } else {
-//                            selectionColor = appViewModel.getColorTheme.cuisineIconButtons
-//                        }
-//                        MaterialIconButton(
-//                            icon = Icons.Filled.Create,
-//                            description = "select",
-//                            tint = selectionColor,
-//                            enabled = buttonsEnabled) {
-//                            appViewModel.updateCuisineSelectionMode(!appViewModel.getCuisineSelectionMode)
-//                        }
                         Box(
                             modifier = Modifier
                                 .wrapContentSize(Alignment.TopEnd)
@@ -179,7 +167,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             if (!appViewModel.getEditMode) {
                 appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
                 appViewModel.updateSingleCuisineSquareColorAndBorder(
-                    appViewModel.rolledSquareIndex,
+                    0,
                     appViewModel.getSquareList[appViewModel.rolledSquareIndex].color,
                     heavyCuisineSelectionBorderStroke
                 )
