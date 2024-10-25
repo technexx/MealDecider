@@ -41,7 +41,10 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
+//TODO: Add Dialog search box not scrolling down to entered text and also recomp'ing, likely due to above.
+//TODO: Issue of one cuisine remaining when deleting last one.
 //TODO: Add more colors/fonts/raised texts.
+    //TODO: "Add" dialog needs love.
 //TODO: Drop down menus should be animated.
 //TODO: Get App Icon.
 //TODO: Test layout on other sized emulated devices

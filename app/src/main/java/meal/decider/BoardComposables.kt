@@ -82,7 +82,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
         val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
         val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
-        val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
 
         var selectionColor: Int
         val buttonsEnabled = !rollEngaged.value
@@ -102,7 +101,8 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         Text("Meal Decider")
                     },
                     actions = {
-                        if (!boardUiState.value.squareList.isEmpty() && editMode.value) {
+                        // TODO: Right now, any dropdown or dismissal thereof causes a boardUi recomp, even with the below conditional not using its state flow. But, this does not occur if our square list is empty (i.e. all deleted).
+                        if (listOfCuisineSquaresToEdit.value.isNotEmpty() && editMode.value && !appViewModel.boardUiState.value.squareList.isEmpty()) {
                             MaterialIconButton(
                                 icon = Icons.Filled.Delete,
                                 description = "delete",
@@ -272,6 +272,18 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val restaurantVisibility = appViewModel.restaurantVisibility.collectAsStateWithLifecycle()
         val showDialog = appViewModel.showDialog.collectAsStateWithLifecycle()
         val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
+
+        var previousValue by remember { mutableStateOf(boardUiState.value) }
+        val currentValue = appViewModel.boardUiState.collectAsStateWithLifecycle().value
+
+        if (currentValue != previousValue) {
+            showLog("test", "board state changed")
+
+            previousValue = currentValue
+        }
+
+        showLog("test", "board recomp")
+
 
         Box(modifier = Modifier.fillMaxSize()) {
             Surface(
