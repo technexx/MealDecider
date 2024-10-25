@@ -324,18 +324,6 @@ class AppViewModel : ViewModel() {
         return listToReturn
     }
 
-    fun adjustDisplayedCuisineListFromDisplayedSquares() {
-        val listToDisplay = fullCuisineList.toMutableList()
-        val squareNameList = getListOfSquareNames().toMutableList()
-
-        for (i in squareNameList) {
-            if (fullCuisineList.contains(i)) {
-                listToDisplay.remove(i)
-            }
-        }
-        updateDisplayedCuisineList(listToDisplay)
-    }
-
     fun toggleAddCuisineSelections(cuisine: String) {
         val listToAdd = getListOfCuisinesToAdd.toMutableList()
 

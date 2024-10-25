@@ -73,6 +73,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val displayedList = appViewModel.displayedCuisineList.collectAsStateWithLifecycle()
         var searchTerms : List<String>
 
+        appViewModel.updateDisplayedCuisineList(fullCuisineList)
+
         AnimatedTransitionDialog(
             modifier = Modifier
                 .background(Color.Transparent)
@@ -113,7 +115,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    appViewModel.adjustDisplayedCuisineListFromDisplayedSquares()
                     DisplayedCuisineList(displayedList)
 
                     Row (modifier = Modifier

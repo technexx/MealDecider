@@ -101,8 +101,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         Text("Meal Decider")
                     },
                     actions = {
-                        // TODO: Right now, any dropdown or dismissal thereof causes a boardUi recomp, even with the below conditional not using its state flow. But, this does not occur if our square list is empty (i.e. all deleted).
-                        if (listOfCuisineSquaresToEdit.value.isNotEmpty() && editMode.value && !appViewModel.boardUiState.value.squareList.isEmpty()) {
+                        if (listOfCuisineSquaresToEdit.value.isNotEmpty() && editMode.value && !appViewModel.getSquareList.isEmpty()) {
                             MaterialIconButton(
                                 icon = Icons.Filled.Delete,
                                 description = "delete",
@@ -277,12 +276,12 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val currentValue = appViewModel.boardUiState.collectAsStateWithLifecycle().value
 
         if (currentValue != previousValue) {
-            showLog("test", "board state changed")
+//            showLog("test", "board state changed")
 
             previousValue = currentValue
         }
 
-        showLog("test", "board recomp")
+//        showLog("test", "board recomp")
 
 
         Box(modifier = Modifier.fillMaxSize()) {

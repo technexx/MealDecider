@@ -41,7 +41,6 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Add Dialog search box not scrolling down to entered text and also recomp'ing, likely due to above.
 //TODO: Issue of one cuisine remaining when deleting last one.
 //TODO: Add more colors/fonts/raised texts.
     //TODO: "Add" dialog needs love.
@@ -49,6 +48,7 @@ val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 //TODO: Get App Icon.
 //TODO: Test layout on other sized emulated devices
 //TODO: Optimize Lazy Lists speed (e.g. scrolling, general speed).
+//TODO: Both Settings and Options Drop Downs recomp cuisine board, including selecting anything from Options.
 //TODO: Sort not retaining on re-app launch (insertion/update stuff)
 //TODO: After second sort random, it goes back to A-Z (bubble selection).
 //TODO: Work on NextPage retrieval. We are getting its token at top of json response. Invalid request may be due to needing a delay on the request.
