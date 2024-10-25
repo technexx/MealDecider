@@ -77,16 +77,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     fun GlobalUi() {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val coroutineScope = rememberCoroutineScope()
-        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
         val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
-        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
-
-        var selectionColor: Int
-        val buttonsEnabled = !rollEngaged.value
-        var expanded by remember { mutableStateOf(false) }
-        if (rollEngaged.value) expanded = false
+        val buttonsEnabled = !appViewModel.getRollEngaged
 
         Scaffold(
             modifier = Modifier
@@ -118,6 +112,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 .wrapContentSize(Alignment.TopEnd)
                         ) {
                             Row {
+                                showLog("test", "global")
                                 DropdownMenuSelections()
 
                                 MaterialIconButton(
@@ -151,6 +146,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
         val buttonsEnabled = !rollEngaged.value
         var expanded by remember { mutableStateOf(false) }
+        var editMode = appViewModel.editMode.collectAsStateWithLifecycle()
+
+        showLog("test", "dropDown")
 
         MaterialIconButton(
             icon = Icons.Filled.Menu,
@@ -165,7 +163,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
 
         //All edit mode changes occur in this composable, so if it recomps and edit mode is turned off, return all cuisine squares to original colors and apply border to selected cuisine square.
         if (!appViewModel.getSquareList.isEmpty()) {
-            if (!appViewModel.getEditMode) {
+            if (!editMode.value) {
+                showLog("test", "${editMode.value}")
+
                 appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
                 appViewModel.updateSingleCuisineSquareColorAndBorder(
                     0,
@@ -488,7 +488,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 coroutineScope.launch {
                     sectionGridState.animateScrollToItem(appViewModel.rolledSquareIndex)
                     runnables.cuisineBorderStrokeToggleAnimation(2000, 200)
-                    //mapInteractions.testRestaurants()
                     appViewModel.cuisineStringUri = rolledCuisineString
 
                     delay(2000)

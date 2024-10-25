@@ -41,13 +41,12 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Issue of one cuisine remaining when deleting last one.
+//TODO: Global/Board/Dropdown recomping post cuisine roll - updateSingleCuisineSquareColorAndBorder() from DropDown is causing index 0 border/color issue.
 //TODO: Add more colors/fonts/raised texts.
-    //TODO: "Add" dialog needs love.
-//TODO: Drop down menus should be animated.
 //TODO: Get App Icon.
 //TODO: Test layout on other sized emulated devices
 //TODO: Optimize Lazy Lists speed (e.g. scrolling, general speed).
+//TODO: Drop down menus should be animated.
 //TODO: Both Settings and Options Drop Downs recomp cuisine board, including selecting anything from Options.
 //TODO: Sort not retaining on re-app launch (insertion/update stuff)
 //TODO: After second sort random, it goes back to A-Z (bubble selection).
