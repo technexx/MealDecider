@@ -112,7 +112,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 .wrapContentSize(Alignment.TopEnd)
                         ) {
                             Row {
-                                showLog("test", "global")
                                 DropdownMenuSelections()
 
                                 MaterialIconButton(
@@ -143,10 +142,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val coroutineScope = rememberCoroutineScope()
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val restaurantVisibility = appViewModel.restaurantVisibility.collectAsStateWithLifecycle()
-        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
-        val buttonsEnabled = !rollEngaged.value
+//        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
+        val buttonsEnabled = !appViewModel.getRollEngaged
         var expanded by remember { mutableStateOf(false) }
-        var editMode = appViewModel.editMode.collectAsStateWithLifecycle()
+        val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
 
         showLog("test", "dropDown")
 
@@ -417,24 +416,27 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
         val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
 
-        if (addMode.value) {
-            dialogComposables.AddDialogBox()
-        }
+        if (!appViewModel.getRollEngaged) {
+            showLog("test", "${appViewModel.getRollEngaged}")
+            if (addMode.value) {
+                dialogComposables.AddDialogBox()
+            }
 
-        if (restoreDefaults.value) {
-            dialogComposables.ConfirmRestoreDefaultsDialog()
-        }
+            if (restoreDefaults.value) {
+                dialogComposables.ConfirmRestoreDefaultsDialog()
+            }
 
-        if (optionsMode.value) {
-            settings.OptionsDialogUi()
-        }
+            if (optionsMode.value) {
+                settings.OptionsDialogUi()
+            }
 
-        if (settingsDialogVisibility.value.speeds) {
-            settings.SpeedSettingsDialog()
-        }
+            if (settingsDialogVisibility.value.speeds) {
+                settings.SpeedSettingsDialog()
+            }
 
-        if (settingsDialogVisibility.value.colors) {
-            settings.ColorsSettingDialog()
+            if (settingsDialogVisibility.value.colors) {
+                settings.ColorsSettingDialog()
+            }
         }
     }
 

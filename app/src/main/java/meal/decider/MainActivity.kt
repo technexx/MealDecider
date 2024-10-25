@@ -41,7 +41,8 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Global/Board/Dropdown recomping post cuisine roll - updateSingleCuisineSquareColorAndBorder() from DropDown is causing index 0 border/color issue.
+//TODO: Board/Dropdown recomping post cuisine roll - updateSingleCuisineSquareColorAndBorder() from DropDown is causing index 0 border/color issue.
+    //TODO: rollEngaged live state was causing global recomp until we removed it
 //TODO: Add more colors/fonts/raised texts.
 //TODO: Get App Icon.
 //TODO: Test layout on other sized emulated devices
