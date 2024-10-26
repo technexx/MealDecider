@@ -107,6 +107,17 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                     appViewModel.deleteSelectedCuisines()
                                 }
                             }
+                        } else {
+                            if (!appViewModel.getSquareList.isEmpty()) {
+                                if (!editMode.value) {
+                                    appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
+                                    appViewModel.updateSingleCuisineSquareColorAndBorder(
+                                        0,
+                                        appViewModel.getSquareList[appViewModel.rolledSquareIndex].color,
+                                        heavyCuisineSelectionBorderStroke
+                                    )
+                                }
+                            }
                         }
                         Box(
                             modifier = Modifier
@@ -154,18 +165,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         ) {
             if (!appViewModel.optionsMenuVisibility.value) {
                 expanded = !expanded
-            }
-        }
-
-        //All edit mode changes occur in this composable, so if it recomps and edit mode is turned off, return all cuisine squares to original colors and apply border to selected cuisine square.
-        if (!appViewModel.getSquareList.isEmpty()) {
-            if (!editMode.value) {
-                appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
-                appViewModel.updateSingleCuisineSquareColorAndBorder(
-                    0,
-                    appViewModel.getSquareList[appViewModel.rolledSquareIndex].color,
-                    heavyCuisineSelectionBorderStroke
-                )
             }
         }
 
