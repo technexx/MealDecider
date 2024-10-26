@@ -282,8 +282,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     }
                     Column(modifier = Modifier
                         .height(screenHeightPct(0.7).dp)) {
-
                         //TODO: LiveData of boardState here will cause constant recomp, because square list is constantly change (colors) during roll.
+
+                        //TODO: Because our update to this value is in the cuisine composable and that is not composed when list is empty, it does not update so this is not called.
                         if (!cuisineListIsEmpty.value) {
                             Box(contentAlignment = Alignment.Center) {
                                 CuisineSelectionGrid()
@@ -427,7 +428,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         }
     }
 
-
     @Composable
     fun RestrictionsCards(index: Int, onClick: () -> Unit) {
         val restrictionsList = appViewModel.getRestrictionsList
@@ -496,7 +496,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 bottom = 16.dp
             ),
             content = {
-                //TODO: This would need to be called in any composable where we add cuisines again - maybe down near our calls to each index?
+                //TODO: This is not recomping because it isn't composed to begin with - replaced w/ our text warning when list size is 0.
                 if(appViewModel.getSquareList.isEmpty()) {
                     showLog("test", "empty")
                     appViewModel.updateCuisineListIsEmpty(true)
