@@ -41,8 +41,6 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Board/Dropdown recomping post cuisine roll - updateSingleCuisineSquareColorAndBorder() from DropDown is causing index 0 border/color issue.
-    //TODO: rollEngaged live state was causing global recomp until we removed it
 //TODO: Add more colors/fonts/raised texts.
 //TODO: Get App Icon.
 //TODO: Test layout on other sized emulated devices
@@ -53,6 +51,8 @@ val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 //TODO: After second sort random, it goes back to A-Z (bubble selection).
 //TODO: Work on NextPage retrieval. We are getting its token at top of json response. Invalid request may be due to needing a delay on the request.
 //TODO: Restaurant list items sometimes reposition during scroll. Not using staggered grid works but looks worse.
+
+//TODO: Need to be careful about live data and only use it when necessary. It can easily cause chaining recompositions.
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

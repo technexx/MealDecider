@@ -78,7 +78,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val coroutineScope = rememberCoroutineScope()
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-        val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
+//        val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
         val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
         val buttonsEnabled = !appViewModel.getRollEngaged
 
@@ -95,7 +95,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         Text("Meal Decider")
                     },
                     actions = {
-                        if (listOfCuisineSquaresToEdit.value.isNotEmpty() && editMode.value && !appViewModel.getSquareList.isEmpty()) {
+                        if (listOfCuisineSquaresToEdit.value.isNotEmpty() && !appViewModel.getSquareList.isEmpty()) {
                             MaterialIconButton(
                                 icon = Icons.Filled.Delete,
                                 description = "delete",
@@ -147,8 +147,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         var expanded by remember { mutableStateOf(false) }
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
 
-        showLog("test", "dropDown")
-
         MaterialIconButton(
             icon = Icons.Filled.Menu,
             description = "menu",
@@ -163,8 +161,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         //All edit mode changes occur in this composable, so if it recomps and edit mode is turned off, return all cuisine squares to original colors and apply border to selected cuisine square.
         if (!appViewModel.getSquareList.isEmpty()) {
             if (!editMode.value) {
-                showLog("test", "${editMode.value}")
-
                 appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
                 appViewModel.updateSingleCuisineSquareColorAndBorder(
                     0,
@@ -271,18 +267,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val showDialog = appViewModel.showDialog.collectAsStateWithLifecycle()
         val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
 
-        var previousValue by remember { mutableStateOf(boardUiState.value) }
-        val currentValue = appViewModel.boardUiState.collectAsStateWithLifecycle().value
-
-        if (currentValue != previousValue) {
-//            showLog("test", "board state changed")
-
-            previousValue = currentValue
-        }
-
-//        showLog("test", "board recomp")
-
-
         Box(modifier = Modifier.fillMaxSize()) {
             Surface(
                 color = colorResource(id = colorTheme.value.cuisineBoard),
@@ -292,18 +276,20 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         .fillMaxWidth()
                         .height(screenHeightPct(0.1).dp)
                     ) {
+                        showLog("test", "board recomp")
+
                         RestrictionsBarLayout()
                         DialogCompositions()
                     }
                     Column(modifier = Modifier
                         .height(screenHeightPct(0.7).dp)) {
 
-                        if (!boardUiState.value.squareList.isEmpty()) {
+                        //TODO: LiveData of boardState here will cause constant recomp, because square list is constantly change (colors) during roll.
+                        if (!appViewModel.getSquareList.isEmpty()) {
                             Box(contentAlignment = Alignment.Center) {
                                 CuisineSelectionGrid()
                                 IndeterminateCircularIndicator()
                             }
-
                         } else {
                             Row(modifier = Modifier.fillMaxSize(),
                                 horizontalArrangement = Arrangement.Center,
@@ -415,28 +401,30 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val restoreDefaults = appViewModel.restoreDefaults.collectAsStateWithLifecycle()
         val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
         val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
+//        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
 
-        if (!appViewModel.getRollEngaged) {
-            showLog("test", "${appViewModel.getRollEngaged}")
-            if (addMode.value) {
-                dialogComposables.AddDialogBox()
-            }
+        //State flow seems to ignore encompassing conditionals (e.g. a state flow condition within a (if) conditional will continue to operate.
 
-            if (restoreDefaults.value) {
-                dialogComposables.ConfirmRestoreDefaultsDialog()
-            }
+        showLog("test", "dialog recomp")
 
-            if (optionsMode.value) {
-                settings.OptionsDialogUi()
-            }
+        if (addMode.value) {
+            dialogComposables.AddDialogBox()
+        }
 
-            if (settingsDialogVisibility.value.speeds) {
-                settings.SpeedSettingsDialog()
-            }
+        if (restoreDefaults.value) {
+            dialogComposables.ConfirmRestoreDefaultsDialog()
+        }
 
-            if (settingsDialogVisibility.value.colors) {
-                settings.ColorsSettingDialog()
-            }
+        if (optionsMode.value) {
+            settings.OptionsDialogUi()
+        }
+
+        if (settingsDialogVisibility.value.speeds) {
+            settings.SpeedSettingsDialog()
+        }
+
+        if (settingsDialogVisibility.value.colors) {
+            settings.ColorsSettingDialog()
         }
     }
 
@@ -560,11 +548,13 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     @Composable
     fun CuisineCard(modifier: Modifier, index: Int) {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
+//        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
         val elevation = if (index == appViewModel.rolledSquareIndex) 12.dp else 4.dp
-        val squareColor = boardUiState.value.squareList[index].color
 
+//        val squareColor = boardUiState.value.squareList[index].color
+        val squareColor = appViewModel.getSquareList[index].color
         val borderStroke = appViewModel.getSquareList[index].border
+        val squareText = appViewModel.getSquareList[index].name
 
         Card(
             modifier = modifier,
@@ -577,7 +567,8 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             ),
         ) {
             RegText(
-                text = boardUiState.value.squareList[index].name,
+//                text = boardUiState.value.squareList[index].name,
+                text = squareText,
                 fontSize = 18,
                 color = colorResource(id = colorTheme.value.cuisineSquaresText),
                 fontWeight = FontWeight.Bold,
