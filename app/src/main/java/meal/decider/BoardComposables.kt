@@ -103,7 +103,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 coroutineScope.launch {
                                     roomInteractions.deleteMultipleCuisines()
                                     appViewModel.deleteSelectedCuisines()
-//                                    appViewModel.updateEditMode(false)
                                 }
                             }
                         }
@@ -265,7 +264,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val restaurantVisibility = appViewModel.restaurantVisibility.collectAsStateWithLifecycle()
         val showDialog = appViewModel.showDialog.collectAsStateWithLifecycle()
-        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
+        val cuisineListIsEmpty = appViewModel.cuisineListIsEmpty.collectAsStateWithLifecycle()
 
         Box(modifier = Modifier.fillMaxSize()) {
             Surface(
@@ -285,7 +284,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         .height(screenHeightPct(0.7).dp)) {
 
                         //TODO: LiveData of boardState here will cause constant recomp, because square list is constantly change (colors) during roll.
-                        if (!appViewModel.getSquareList.isEmpty()) {
+                        if (!cuisineListIsEmpty.value) {
                             Box(contentAlignment = Alignment.Center) {
                                 CuisineSelectionGrid()
                                 IndeterminateCircularIndicator()
@@ -497,6 +496,16 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 bottom = 16.dp
             ),
             content = {
+                //TODO: This would need to be called in any composable where we add cuisines again - maybe down near our calls to each index?
+                if(appViewModel.getSquareList.isEmpty()) {
+                    showLog("test", "empty")
+                    appViewModel.updateCuisineListIsEmpty(true)
+                } else {
+                    showLog("test", "not empty")
+
+                    appViewModel.updateRestaurantListIsEmpty(false)
+                }
+
                 items(boardUiState.value.squareList.size) { index ->
                     if (appViewModel.rolledSquareIndex == index) sizeMod = 1.0f else sizeMod = 0.95f
 
@@ -585,6 +594,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
         var expanded by remember { mutableStateOf(false) }
         if (rollEngaged.value) expanded = false
+        val restaurantListIsEmpty = appViewModel.restaurantListIsEmpty.collectAsStateWithLifecycle()
 
         Surface() {
             Column(modifier = Modifier

@@ -41,6 +41,9 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
+//TODO: Check restaurant list live data when triggering "empty" text message.
+//TODO: Accessing Options or Settings will set cuisine selection back to index 0 - they both trigger board/dialog recomps.
+//TODO: Issue w/ one cuisine remaining after deleting all.
 //TODO: Add more colors/fonts/raised texts.
 //TODO: Get App Icon.
 //TODO: Test layout on other sized emulated devices

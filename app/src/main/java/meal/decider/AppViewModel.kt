@@ -121,9 +121,11 @@ class AppViewModel : ViewModel() {
     private val _mapQueryInProgress = MutableStateFlow(false)
     val mapQueryInProgress: StateFlow<Boolean> = _mapQueryInProgress.asStateFlow()
 
-    fun updateOptionsMode(optionsMode: Boolean) {
-        _optionsMode.value = optionsMode
-    }
+    private val _cuisineListIsEmpty = MutableStateFlow(false)
+    val cuisineListIsEmpty: StateFlow<Boolean> = _cuisineListIsEmpty.asStateFlow()
+
+    private val _restaurantListIsEmpty = MutableStateFlow(false)
+    val restaurantListIsEmpty: StateFlow<Boolean> = _restaurantListIsEmpty.asStateFlow()
 
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
         _boardUiState.update { currentState ->
@@ -221,12 +223,12 @@ class AppViewModel : ViewModel() {
         _mapQueryInProgress.value = inProgress
     }
 
-    fun addMultipleSquaresToList(squares: List<String>) {
-        val squareList = getSquareList
-        for (i in squares) {
-            squareList.add(SquareValues(i, getColorTheme.cuisineSquares))
-        }
-        updateSquareList(squareList)
+    fun updateCuisineListIsEmpty(isEmpty: Boolean) {
+        _cuisineListIsEmpty.value = isEmpty
+    }
+
+    fun updateRestaurantListIsEmpty(isEmpty: Boolean) {
+        _restaurantListIsEmpty.value = isEmpty
     }
 
     fun updateSquareName(index: Int, name: String) {
@@ -391,6 +393,14 @@ class AppViewModel : ViewModel() {
         val tempList = getListOfCuisineSquaresToEdit.toMutableList()
         tempList.removeLast()
         updateListOfCuisineSquaresToEdit(tempList)
+    }
+
+    fun addMultipleSquaresToList(squares: List<String>) {
+        val squareList = getSquareList
+        for (i in squares) {
+            squareList.add(SquareValues(i, getColorTheme.cuisineSquares))
+        }
+        updateSquareList(squareList)
     }
 
     //With SnapShotStateLists, our contains() conditional is true, but not with regular Lists.
