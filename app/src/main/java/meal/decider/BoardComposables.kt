@@ -79,9 +79,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val coroutineScope = rememberCoroutineScope()
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-//        val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
+        val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
         val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
         val buttonsEnabled = !appViewModel.getRollEngaged
+        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
 
         Scaffold(
             modifier = Modifier
@@ -96,7 +97,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         Text("Meal Decider")
                     },
                     actions = {
-                        if (listOfCuisineSquaresToEdit.value.isNotEmpty() && !appViewModel.getSquareList.isEmpty()) {
+                        if (editMode.value) {
                             MaterialIconButton(
                                 icon = Icons.Filled.Delete,
                                 description = "delete",
@@ -139,10 +140,8 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
 
     @Composable
     fun DropdownMenuSelections() {
-        val coroutineScope = rememberCoroutineScope()
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val restaurantVisibility = appViewModel.restaurantVisibility.collectAsStateWithLifecycle()
-//        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
         val buttonsEnabled = !appViewModel.getRollEngaged
         var expanded by remember { mutableStateOf(false) }
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
@@ -451,17 +450,12 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     @Composable
     fun CuisineLayout() {
         val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
-        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
 
         if (!boardUiState.value.squareList.isEmpty()) {
             CuisineLazyGrid(boardUiState)
         } else {
-            Row(modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                RegText(text = "Where did all the cuisines go?", fontSize = 24, color = colorResource(id = colorTheme.value.dialogTextColor))
-            }
+            EmptyCuisineMessage()
+            appViewModel.updateEditMode(false)
         }
     }
 
@@ -552,10 +546,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     @Composable
     fun CuisineCard(modifier: Modifier, index: Int) {
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
-//        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
         val elevation = if (index == appViewModel.rolledSquareIndex) 12.dp else 4.dp
-
-//        val squareColor = boardUiState.value.squareList[index].color
         val squareColor = appViewModel.getSquareList[index].color
         val borderStroke = appViewModel.getSquareList[index].border
         val squareText = appViewModel.getSquareList[index].name
@@ -581,6 +572,17 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         }
     }
 
+    @Composable
+    fun EmptyCuisineMessage() {
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+
+        Row(modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            RegText(text = "Where did all the cuisines go?", fontSize = 24, color = colorResource(id = colorTheme.value.dialogTextColor))
+        }
+    }
 
     @Composable
     fun RestaurantListContent() {

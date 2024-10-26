@@ -130,6 +130,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd)
                                 roomInteractions.insertMultipleCuisines(appViewModel.getListOfCuisinesToAdd)
                                 appViewModel.updateAddMode(false)
+                                appViewModel.updateEditMode(false)
                                 appViewModel.updateListOfCuisinesToAdd(emptyList())
 
                             }
