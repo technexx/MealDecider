@@ -48,6 +48,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -282,23 +283,12 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     }
                     Column(modifier = Modifier
                         .height(screenHeightPct(0.7).dp)) {
+
                         //TODO: LiveData of boardState here will cause constant recomp, because square list is constantly change (colors) during roll.
-
-                        //TODO: Because our update to this value is in the cuisine composable and that is not composed when list is empty, it does not update so this is not called.
-                        if (!cuisineListIsEmpty.value) {
-                            Box(contentAlignment = Alignment.Center) {
-                                CuisineSelectionGrid()
-                                IndeterminateCircularIndicator()
-                            }
-                        } else {
-                            Row(modifier = Modifier.fillMaxSize(),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                RegText(text = "Where did all the cuisines go?", fontSize = 24, color = colorResource(id = colorTheme.value.dialogTextColor))
-                            }
+                        Box(contentAlignment = Alignment.Center) {
+                            CuisineLayout()
+                            IndeterminateCircularIndicator()
                         }
-
                     }
                     Column(modifier = Modifier
                         .fillMaxWidth()
@@ -459,18 +449,35 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     }
 
     @Composable
-    fun CuisineSelectionGrid() {
+    fun CuisineLayout() {
+        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
+        val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
+
+        if (!boardUiState.value.squareList.isEmpty()) {
+            CuisineLazyGrid(boardUiState)
+        } else {
+            Row(modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                RegText(text = "Where did all the cuisines go?", fontSize = 24, color = colorResource(id = colorTheme.value.dialogTextColor))
+            }
+        }
+    }
+
+    @Composable
+    fun CuisineLazyGrid(squareListState: State<BoardValues>) {
         val coroutineScope = rememberCoroutineScope()
         val sectionGridState = rememberLazyGridState()
 
-        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
+        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
         val cuisineRollFinished = appViewModel.cuisineRollFinished.collectAsStateWithLifecycle()
         val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
         val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()
-        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
-
         val restrictionsString = foodRestrictionsString(restrictionsUi.value)
         val rolledCuisineString = selectedCuisineSquare.value.name + " Food " + restrictionsString
+
+        var sizeMod: Float
 
         if (cuisineRollFinished.value) {
             LaunchedEffect(Unit) {
@@ -485,8 +492,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             }
         }
 
-        var sizeMod: Float
-
         LazyVerticalGrid(state = sectionGridState,
             columns = GridCells.Adaptive(minSize = 128.dp),
             contentPadding = PaddingValues(
@@ -496,17 +501,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 bottom = 16.dp
             ),
             content = {
-                //TODO: This is not recomping because it isn't composed to begin with - replaced w/ our text warning when list size is 0.
-                if(appViewModel.getSquareList.isEmpty()) {
-                    showLog("test", "empty")
-                    appViewModel.updateCuisineListIsEmpty(true)
-                } else {
-                    showLog("test", "not empty")
-
-                    appViewModel.updateRestaurantListIsEmpty(false)
-                }
-
-                items(boardUiState.value.squareList.size) { index ->
+                items(squareListState.value.squareList.size) { index ->
                     if (appViewModel.rolledSquareIndex == index) sizeMod = 1.0f else sizeMod = 0.95f
 
                     if (rollEngaged.value) {
