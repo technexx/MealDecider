@@ -521,19 +521,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                             index
                                         )
                                     }
-                                    if (appViewModel.getCuisineSelectionMode) {
-                                        appViewModel.updateSelectedCuisineSquare(appViewModel.getSquareList[index])
-                                        appViewModel.updateCuisineStringUriAndHasChangedBoolean(
-                                            appViewModel.selectedCuisineSquare.value.name + " Food " + foodRestrictionsString(
-                                                appViewModel.getRestrictionsList
-                                            )
-                                        )
-                                        appViewModel.updateSingleCuisineSquareColorAndBorder(
-                                            index,
-                                            appViewModel.getColorTheme.selectedCuisineSquare,
-                                            heavyCuisineSelectionBorderStroke
-                                        )
-                                    }
                                 }
                             ),
                             index = index)

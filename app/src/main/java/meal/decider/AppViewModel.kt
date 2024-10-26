@@ -97,9 +97,6 @@ class AppViewModel : ViewModel() {
     private val _restaurantQueryFinished = MutableStateFlow(true)
     val restaurantQueryFinished: StateFlow<Boolean> = _restaurantQueryFinished.asStateFlow()
 
-    private val _cuisineSelectionMode = MutableStateFlow(false)
-    val cuisineSelectionMode: StateFlow<Boolean> = _cuisineSelectionMode.asStateFlow()
-
     private val _restaurantSelectionMode = MutableStateFlow(false)
     val restaurantSelectionMode: StateFlow<Boolean> = _restaurantSelectionMode.asStateFlow()
 
@@ -395,10 +392,14 @@ class AppViewModel : ViewModel() {
         updateListOfCuisineSquaresToEdit(tempList)
     }
 
-    fun addMultipleSquaresToList(squares: List<String>) {
+    fun addMultipleSquaresToList(squares: List<String>, listWasEmpty: Boolean) {
         val squareList = getSquareList
         for (i in squares) {
             squareList.add(SquareValues(i, getColorTheme.cuisineSquares))
+        }
+        if (listWasEmpty) {
+            squareList[0].color = getColorTheme.selectedCuisineSquare
+            squareList[0].border = getColorTheme.selectedCuisineBorderStroke
         }
         updateSquareList(squareList)
     }
@@ -546,7 +547,6 @@ class AppViewModel : ViewModel() {
     val getRestrictionsList get() = restrictionsList.value
     val getRestaurantQueryFinished get() = restaurantQueryFinished.value
 
-    val getCuisineSelectionMode get() = cuisineSelectionMode.value
     val getRestaurantSelectionMode get() = restaurantSelectionMode.value
 
     val getColorSettingsSelectionList get() = colorSettingsSelectionList.value

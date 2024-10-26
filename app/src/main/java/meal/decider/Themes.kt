@@ -16,6 +16,7 @@ data class ColorTheme(
     val selectedCuisineSquare: Int,
     val selectedCuisineIcon: Int,
     val selectedEditSquareColor: Int,
+    val selectedCuisineBorderStroke: BorderStroke,
     val defaultCuisineBorderStroke: BorderStroke,
     val cuisineEditModeBorderStroke: BorderStroke,
 
@@ -57,6 +58,7 @@ object Theme {
             selectedCuisineSquare = R.color.red_200,
             selectedCuisineIcon = R.color.red_a700,
             selectedEditSquareColor = R.color.light_blue_100,
+            selectedCuisineBorderStroke = BorderStroke(3.dp, Color.Red),
             defaultCuisineBorderStroke = BorderStroke(1.dp, Color.Black),
             cuisineEditModeBorderStroke = BorderStroke(3.dp, Color.Black),
 
@@ -96,8 +98,9 @@ object Theme {
             selectedCuisineSquare = R.color.red_200,
             selectedCuisineIcon = R.color.red_a700,
             selectedEditSquareColor = R.color.light_blue_100,
+            selectedCuisineBorderStroke = BorderStroke(3.dp, Color.Red),
             defaultCuisineBorderStroke = BorderStroke(1.dp, Color.White),
-            cuisineEditModeBorderStroke = BorderStroke(3.dp, Color(R.color.red_200)),
+            cuisineEditModeBorderStroke =  BorderStroke(3.dp, Color(R.color.red_200)),
 
             restaurantTopRow = R.color.grey_700,
             restaurantBoard = R.color.grey_800,
