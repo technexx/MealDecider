@@ -160,7 +160,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         ){
             items (list.value.size) { index ->
                 backgroundColor = if (!listOfCuisinesToAdd.value.contains(list.value[index])) {
-                    colorTheme.value.dialogItemColor
+                    colorTheme.value.dialogBackground
                 } else {
                     colorTheme.value.dialogTextHighlight
                 }
@@ -187,7 +187,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         style = TextStyle(
                             fontSize = 24.sp,
                             shadow = Shadow(
-                                color = Color.Black, offset = offSet, blurRadius = 1f
+                                color = colorResource(id = colorTheme.value.dialogShadow), offset = offSet, blurRadius = 1f
                             )
                         ),
                         text = list.value[index],
