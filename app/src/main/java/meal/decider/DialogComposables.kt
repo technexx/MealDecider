@@ -71,7 +71,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val coroutineScope = rememberCoroutineScope()
         var txtField by remember { mutableStateOf("") }
         val displayedList = appViewModel.displayedCuisineList.collectAsStateWithLifecycle()
-        var searchTerms : List<String>
+        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
+        var modifiedList = appViewModel.modifiedAddCuisineList(boardUiState.value.squareList)
 
         appViewModel.updateDisplayedCuisineList(fullCuisineList)
 
@@ -103,8 +104,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             placeholder = {Text( "e.g. Filipino") },
                             onValueChange = {
                                 txtField = it
-                                searchTerms = filterSearchString(fullCuisineList, txtField)
-                                appViewModel.updateDisplayedCuisineList(searchTerms)},
+                                modifiedList = filterSearchString(modifiedList, txtField)
+                                appViewModel.updateDisplayedCuisineList(modifiedList)},
                             singleLine = true,
                             textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
                             colors = TextFieldDefaults.outlinedTextFieldColors(

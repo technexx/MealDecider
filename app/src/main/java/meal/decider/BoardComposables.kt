@@ -105,6 +105,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 coroutineScope.launch {
                                     roomInteractions.deleteMultipleCuisines()
                                     appViewModel.deleteSelectedCuisines()
+                                    appViewModel.updateEditMode(false)
                                 }
                             }
                         } else {

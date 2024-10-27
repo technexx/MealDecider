@@ -459,6 +459,14 @@ class AppViewModel : ViewModel() {
         return false
     }
 
+    fun modifiedAddCuisineList(squareList: List<SquareValues>): List<String> {
+        val fullList = fullCuisineList
+        for (i in squareList.indices) {
+            fullList.remove(squareList[i].name)
+        }
+        return fullList
+    }
+
     fun updateSingleRestaurantColorAndBorder(list: SnapshotStateList<RestaurantValues>, index: Int, color: Int, border: BorderStroke) {
         val tempRestaurantList = list
         val newList = SnapshotStateList<RestaurantValues>()

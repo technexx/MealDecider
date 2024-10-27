@@ -42,7 +42,6 @@ val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
 //TODO: Check restaurant list live data when triggering "empty" text message.
-//TODO: Cuisines already on board are still available to add in add dialog.
 //TODO: Larger size of selected cuisine card should only kick in when rolling - can look weird otherwise especially w/ smaller lists.
 //TODO: Add more colors/fonts/raised texts.
 //TODO: Get App Icon.
