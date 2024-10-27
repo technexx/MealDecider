@@ -33,7 +33,7 @@ private suspend fun startDismissWithExitAnimation(
 ) {
     animateTrigger.value = false
     //This is being applied to exit, not the value entered in animationExit, but it won't exceed what is in animationExit (e.g. 3000 here and 300 there will only use 300).
-    delay(500)
+    delay(200)
     onDismissRequest()
 }
 
