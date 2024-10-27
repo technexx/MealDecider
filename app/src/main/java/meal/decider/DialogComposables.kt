@@ -45,7 +45,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -98,7 +100,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         TextField(modifier = Modifier,
-//                                .fillMaxWidth(0.8f),
                             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
                             value = txtField,
                             placeholder = {Text( "e.g. Filipino") },
@@ -119,14 +120,15 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                     DisplayedCuisineList(displayedList)
 
                     Row (modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxSize(),
                         horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.Bottom
                     ) {
-                        MaterialIconButton(icon = Icons.Filled.Close, description = "close", tint = colorTheme.value.cancelDialogButton, modifier = Modifier.size(64.dp)) {
+                        MaterialIconButton(icon = Icons.Filled.Close, description = "close", tint = colorTheme.value.cancelDialogButton, modifier = Modifier.size(96.dp)) {
                             appViewModel.updateAddMode(false)
                             appViewModel.updateListOfCuisinesToAdd(emptyList())
                         }
-                        MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(64.dp)) {
+                        MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(96.dp)) {
                             coroutineScope.launch {
                                 val listIsEmpty = appViewModel.getSquareList.isEmpty()
                                 appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd, listIsEmpty)
@@ -158,7 +160,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         ){
             items (list.value.size) { index ->
                 backgroundColor = if (!listOfCuisinesToAdd.value.contains(list.value[index])) {
-                    colorTheme.value.dialogBackground
+                    colorTheme.value.dialogItemColor
                 } else {
                     colorTheme.value.dialogTextHighlight
                 }
@@ -170,15 +172,26 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             appViewModel.toggleAddCuisineSelections(list.value[index])
                         }
                     )) {
-                    Text(modifier = Modifier
-                        .background(
-                            colorResource(backgroundColor),
-                            shape = RoundedCornerShape(5.dp)
-                        )
-                        .padding(8.dp),
+                    val offSet = Offset(3.0f, 6.0f)
+
+                    Text(
+                        modifier = Modifier
+//                            .shadow(6.dp)
+                            .background(
+                                colorResource(backgroundColor),
+                                shape = RoundedCornerShape(5.dp)
+                            )
+                            .padding(8.dp),
                         fontSize = 20.sp,
                         color = colorResource(id = colorTheme.value.dialogTextColor),
-                        text = list.value[index])
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            shadow = Shadow(
+                                color = Color.Black, offset = offSet, blurRadius = 1f
+                            )
+                        ),
+                        text = list.value[index],
+                    )
                 }
             }
         }
