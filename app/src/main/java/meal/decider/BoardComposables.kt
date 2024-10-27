@@ -464,7 +464,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val restrictionsString = foodRestrictionsString(restrictionsUi.value)
         val rolledCuisineString = selectedCuisineSquare.value.name + " Food " + restrictionsString
 
-        var sizeMod: Float
+        var sizeMod = 1.0f
 
         if (cuisineRollFinished.value) {
             LaunchedEffect(Unit) {
@@ -489,7 +489,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             ),
             content = {
                 items(squareListState.value.squareList.size) { index ->
-                    if (appViewModel.rolledSquareIndex == index) sizeMod = 1.0f else sizeMod = 0.95f
+                    if (appViewModel.rolledSquareIndex == index) sizeMod = 1.0f else sizeMod = 0.99f
 
                     if (rollEngaged.value) {
                         if (appViewModel.restaurantAutoScroll) {
@@ -542,7 +542,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             ),
         ) {
             RegText(
-//                text = boardUiState.value.squareList[index].name,
                 text = squareText,
                 fontSize = 18,
                 color = colorResource(id = colorTheme.value.cuisineSquaresText),

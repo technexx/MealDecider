@@ -41,7 +41,6 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Larger size of selected cuisine card should only kick in when rolling - can look weird otherwise especially w/ smaller lists.
 //TODO: Add more colors/fonts/raised texts.
 //TODO: Get App Icon.
 //TODO: Test layout on other sized emulated devices
