@@ -189,7 +189,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
     }
 
     fun retrieveColorThemeFromSharedPref(): ColorTheme {
-        val colorThemeString = sharedPref.getString("theme", "light")
+        val colorThemeString = sharedPref.getString("theme", "dark")
         var colorTheme = Theme.themeColorsList[0]
         if (colorThemeString == "light") colorTheme = Theme.themeColorsList[0]
         if (colorThemeString == "dark") colorTheme = Theme.themeColorsList[1]
