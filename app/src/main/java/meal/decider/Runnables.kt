@@ -99,7 +99,7 @@ class Runnables (private val appViewModel: AppViewModel) {
         var duration = rollDurationSettingToMillis(durationSetting)
 
         restaurantRollRunnable = Runnable {
-            appViewModel.rolledRestaurantIndex = randomNonRepeatingRoll(appViewModel.rolledSquareIndex, appViewModel.getRestaurantList.size)
+            appViewModel.rolledRestaurantIndex = randomNonRepeatingRoll(appViewModel.rolledRestaurantIndex, appViewModel.getRestaurantList.size)
 
             val newRestaurantList = restaurantListWithRandomColorChanged(appViewModel.rolledRestaurantIndex)
             appViewModel.updateRestaurantsList(newRestaurantList)

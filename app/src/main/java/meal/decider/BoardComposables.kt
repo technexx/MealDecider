@@ -275,8 +275,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         .fillMaxWidth()
                         .height(screenHeightPct(0.1).dp)
                     ) {
-                        showLog("test", "board recomp")
-
                         RestrictionsBarLayout()
                         DialogCompositions()
                     }
@@ -390,11 +388,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val restoreDefaults = appViewModel.restoreDefaults.collectAsStateWithLifecycle()
         val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
         val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
-//        val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
-
-        //State flow seems to ignore encompassing conditionals (e.g. a state flow condition within a (if) conditional will continue to operate.
-
-        showLog("test", "dialog recomp")
 
         if (addMode.value) {
             dialogComposables.AddDialogBox()
