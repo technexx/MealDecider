@@ -481,6 +481,7 @@ class AppViewModel : ViewModel() {
         minRestaurantRating = rating
         maxRestaurantPrice = price
         isOpen = openNow
+        showLog("test", "isOpen is $isOpen")
     }
 
     fun hasRestaurantListChanged(currentList: List<RestaurantValues>, newList: List<RestaurantValues>): Boolean {
@@ -492,8 +493,8 @@ class AppViewModel : ViewModel() {
         return false
     }
 
-    fun haveRestaurantFiltersChanged(distance: Double, rating: Double, price: Int): Boolean {
-        return maxRestaurantDistance !=distance || minRestaurantRating != rating || maxRestaurantPrice != price
+    fun haveRestaurantFiltersChanged(distance: Double, rating: Double, price: Int, openNow: Boolean): Boolean {
+        return maxRestaurantDistance !=distance || minRestaurantRating != rating || maxRestaurantPrice != price || isOpen != openNow
     }
 
     fun updateCuisineStringUriAndHasChangedBoolean(cuisineSelected: String) {
