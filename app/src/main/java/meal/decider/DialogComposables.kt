@@ -386,8 +386,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
 
         AnimatedTransitionDialog(
             modifier = Modifier
-                .height(300.dp)
-                .width(300.dp)
+                .height(200.dp)
+                .width(400.dp)
                 .background(Color.Transparent)
             ,
             onDismissRequest = {
@@ -407,7 +407,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             verticalArrangement = Arrangement.Center
                         )
                         {
-                            RegText(text = "Restaurant lists are pulled directly from Google Maps searches, and no guarantee can be made as to their relevance or accuracy.", color = textColor, fontSize = 20,
+                            RegText(text = "Restaurant are pulled directly from Google Maps searches, and no guarantee can be made as to their relevance or accuracy.", color = textColor, fontSize = 20,
                                 modifier = Modifier
                                     .padding(start = 4.dp, end = 4.dp))
                         }

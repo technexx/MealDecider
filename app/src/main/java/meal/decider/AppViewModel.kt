@@ -364,8 +364,6 @@ class AppViewModel : ViewModel() {
         newList[index].color = color
         newList[index].border = border
 
-        showLog("test", "index in update single square is $index")
-
         updateSquareList(newList)
     }
 

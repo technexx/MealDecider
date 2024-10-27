@@ -110,10 +110,10 @@ fun AnimatedTransitionDialog(
             modifier = modifier
         ) {
             AnimatedScaleInTransition(
-                animationEnter = slideInHorizontally (
+                animationEnter = fadeIn(animationSpec = tween(200)) + slideInHorizontally (
                     animationSpec = tween(200)
                 ),
-                animationExit = slideOutHorizontally(
+                animationExit = fadeOut(animationSpec = tween(200)) + slideOutHorizontally(
                     animationSpec = tween(200),
                 ),
                 visible = animateTrigger.value) {
