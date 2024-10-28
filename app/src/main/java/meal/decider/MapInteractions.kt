@@ -19,12 +19,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
-import meal.decider.Database.RoomInteractions
 
 private lateinit var fusedLocationClient: FusedLocationProviderClient
 private var currentLocation: Location = Location("")
 
-class MapInteractions(private val activity: Activity, private val activityContext: Context, private val appViewModel: AppViewModel, private val roomInteractions: RoomInteractions) {
+class MapInteractions(private val activity: Activity, private val activityContext: Context, private val appViewModel: AppViewModel) {
 
     val mainScope = CoroutineScope(Dispatchers.Main)
 
@@ -55,7 +54,10 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val rating = appViewModel.minRestaurantRating
             val isOpen = appViewModel.isOpen
 
-            var uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, opennow, rating&name=$cuisineString&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
+            //Without type=restaurant
+//            var uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, opennow, rating&name=$cuisineString&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
+
+            var uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, opennow, rating&type=restaurant&name=$cuisineString&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
 
             val request = Request.Builder()
                 .url(uri)

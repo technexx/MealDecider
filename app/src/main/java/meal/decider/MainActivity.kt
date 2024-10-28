@@ -41,6 +41,8 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
+//TODO: RolledSquareIndex doesn't update if list goes to zero + adding cuisines.
+//TODO: Adding a cuisine from a zero list doesn't update its string for searching.
 //TODO: Get App Icon.
 //TODO: Test layout on other sized emulated devices
 //TODO: Optimize Lazy Lists speed (e.g. scrolling, general speed).
@@ -51,6 +53,8 @@ val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 //TODO: Restaurant list items sometimes reposition during scroll. Not using staggered grid works but looks worse.
 
 //TODO: Need to be careful about live data and only use it when necessary. It can easily cause chaining recompositions.
+
+//Icons: Krampus_Highjack, drogula, LilaMaeMay,
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +72,7 @@ class MainActivity : ComponentActivity() {
         ).build()
         roomInteractions = RoomInteractions(cuisineDatabase, appViewModel, activity)
 
-        mapInteractions = MapInteractions(activity, activityContext, appViewModel, roomInteractions)
+        mapInteractions = MapInteractions(activity, activityContext, appViewModel)
         mapInteractions.fusedLocationListener()
 
         runnables = Runnables(appViewModel)

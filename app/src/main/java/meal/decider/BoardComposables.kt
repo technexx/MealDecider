@@ -110,15 +110,13 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                             }
                         } else {
                             if (!appViewModel.getSquareList.isEmpty()) {
-                                if (!editMode.value) {
-                                    appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
-                                    appViewModel.updateSingleCuisineSquareColorAndBorder(
-                                        0,
-                                        appViewModel.getSquareList[appViewModel.rolledSquareIndex].color,
-                                        heavyCuisineSelectionBorderStroke
-                                    )
-                                }
+                                appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
                             }
+                            //                            appViewModel.updateSingleCuisineSquareColorAndBorder(
+//                                0,
+//                                appViewModel.getSquareList[appViewModel.rolledSquareIndex].color,
+//                                heavyCuisineSelectionBorderStroke
+//                            )
                         }
                         Box(
                             modifier = Modifier
