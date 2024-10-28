@@ -420,7 +420,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             verticalArrangement = Arrangement.Center
                         )
                         {
-                            RegText(text = "Restaurant are pulled directly from Google Maps searches, and no guarantee can be made as to their relevance or accuracy.", color = textColor, fontSize = 20,
+                            RegText(text = "Restaurants are pulled directly from Google Maps searches, and no guarantee can be made as to their relevance or accuracy.", color = textColor, fontSize = 20,
                                 modifier = Modifier
                                     .padding(start = 4.dp, end = 4.dp))
                         }
@@ -487,7 +487,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                         value = distanceSliderPosition,
                                         onValueChange = { distanceSliderPosition = it
                                         },
-                                        valueRange = 1f..10f
+                                        valueRange = 1f..20f
                                     )
                                     Column (modifier = Modifier
                                         .fillMaxWidth()

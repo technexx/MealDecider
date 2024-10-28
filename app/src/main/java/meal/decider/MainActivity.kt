@@ -45,7 +45,6 @@ val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 //TODO: Test layout on other sized emulated devices
 //TODO: Optimize Lazy Lists speed (e.g. scrolling, general speed).
 //TODO: Drop down menus should be animated.
-//TODO: Both Settings and Options Drop Downs recomp cuisine board, including selecting anything from Options.
 //TODO: Sort not retaining on re-app launch (insertion/update stuff)
 //TODO: After second sort random, it goes back to A-Z (bubble selection).
 //TODO: Work on NextPage retrieval. We are getting its token at top of json response. Invalid request may be due to needing a delay on the request.
