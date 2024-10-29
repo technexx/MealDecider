@@ -41,9 +41,9 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Squarelist border gets another update after our add dialog method, which resets its border color. State flow overflow?
+//TODO: Squarelist border gets another update after our add dialog method, which resets its border color. Commenting out everything else in "confirm" doesn't fix it. Recompose issue?
+
 //TODO: Adding a cuisine from a zero list doesn't update its string for searching.
-//TODO: Need our border of cuisines to update @ 0 index if we're adding after list has been zero'd (function commented out in app bar delete button).
 //TODO: Get App Icon.
 //TODO: Test layout on other sized emulated devices
 //TODO: Optimize Lazy Lists speed (e.g. scrolling, general speed).

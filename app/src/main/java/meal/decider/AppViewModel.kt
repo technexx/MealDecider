@@ -418,6 +418,7 @@ class AppViewModel : ViewModel() {
 
     private fun emptyCuisineListIsBeingAddedTo(squareList: SnapshotStateList<SquareValues>) {
         rolledSquareIndex = 0
+        cuisineStringUri = squareList[0].name
         squareList[0].color = getColorTheme.selectedCuisineSquare
         squareList[0].border = getColorTheme.selectedCuisineBorderStroke
 

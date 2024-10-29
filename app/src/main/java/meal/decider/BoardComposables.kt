@@ -48,7 +48,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -80,9 +79,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val coroutineScope = rememberCoroutineScope()
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
-        val listOfCuisineSquaresToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
         val buttonsEnabled = !appViewModel.getRollEngaged
-        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
 
         Scaffold(
             modifier = Modifier
@@ -262,7 +259,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val restaurantVisibility = appViewModel.restaurantVisibility.collectAsStateWithLifecycle()
         val showDialog = appViewModel.showDialog.collectAsStateWithLifecycle()
-        val cuisineListIsEmpty = appViewModel.cuisineListIsEmpty.collectAsStateWithLifecycle()
 
         Box(modifier = Modifier.fillMaxSize()) {
             Surface(
@@ -278,8 +274,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     }
                     Column(modifier = Modifier
                         .height(screenHeightPct(0.7).dp)) {
-
-                        //TODO: LiveData of boardState here will cause constant recomp, because square list is constantly change (colors) during roll.
                         Box(contentAlignment = Alignment.Center) {
                             CuisineLayout()
                             IndeterminateCircularIndicator()
@@ -442,8 +436,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     fun CuisineLayout() {
         val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
 
-        if (!boardUiState.value.squareList.isEmpty()) {
-            CuisineLazyGrid(boardUiState)
+        if (boardUiState.value.squareList.isNotEmpty()) {
+            showLog("test", "cuisine recomp")
+            CuisineLazyGrid()
         } else {
             EmptyCuisineMessage()
             appViewModel.updateEditMode(false)
@@ -451,9 +446,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     }
 
     @Composable
-    fun CuisineLazyGrid(squareListState: State<BoardValues>) {
+    fun CuisineLazyGrid() {
         val coroutineScope = rememberCoroutineScope()
         val sectionGridState = rememberLazyGridState()
+        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
 
         val rollEngaged = appViewModel.rollEngaged.collectAsStateWithLifecycle()
         val cuisineRollFinished = appViewModel.cuisineRollFinished.collectAsStateWithLifecycle()
@@ -486,7 +482,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 bottom = 16.dp
             ),
             content = {
-                items(squareListState.value.squareList.size) { index ->
+                items(boardUiState.value.squareList.size) { index ->
                     if (appViewModel.rolledSquareIndex == index) sizeMod = 1.0f else sizeMod = 0.99f
 
                     if (rollEngaged.value) {
