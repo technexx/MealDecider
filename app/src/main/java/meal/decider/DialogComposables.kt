@@ -129,15 +129,15 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             appViewModel.updateListOfCuisinesToAdd(emptyList())
                         }
                         MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(96.dp)) {
-                            if (appViewModel.getDisplayedCuisineList.isNotEmpty()) {
-                                coroutineScope.launch {
-                                    val listIsEmpty = appViewModel.getSquareList.isEmpty()
-                                    appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd, listIsEmpty)
+                            coroutineScope.launch {
+                                if (appViewModel.getListOfCuisinesToAdd.isNotEmpty()) {
+                                    val cuisineListIsEmpty = appViewModel.getSquareList.isEmpty()
+
+                                    appViewModel.addMultipleSquaresToList(appViewModel.getListOfCuisinesToAdd, cuisineListIsEmpty)
                                     roomInteractions.insertMultipleCuisines(appViewModel.getListOfCuisinesToAdd)
                                     appViewModel.updateAddMode(false)
                                     appViewModel.updateEditMode(false)
                                     appViewModel.updateListOfCuisinesToAdd(emptyList())
-
                                 }
                             }
                         }

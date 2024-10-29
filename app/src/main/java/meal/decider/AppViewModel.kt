@@ -125,9 +125,11 @@ class AppViewModel : ViewModel() {
     val restaurantListIsEmpty: StateFlow<Boolean> = _restaurantListIsEmpty.asStateFlow()
 
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
-        for (i in list) {
-//            showLog("test", "colors are ${i.color}")
+        if (list.isNotEmpty()) {
+            val square = list[0].border
+            showLog("test", "border in update method is $square")
         }
+
         _boardUiState.update { currentState ->
             currentState.copy(squareList = list)
         }
@@ -398,23 +400,29 @@ class AppViewModel : ViewModel() {
     }
 
     private fun removeSquareFromListOfSquareIndicesToUpdate() {
-        showLog("test", "list when removing is $getListOfCuisineSquaresToEdit")
-
         val tempList = getListOfCuisineSquaresToEdit.toMutableList()
         tempList.removeLast()
         updateListOfCuisineSquaresToEdit(tempList)
     }
 
-    fun addMultipleSquaresToList(squares: List<String>, listWasEmpty: Boolean) {
+    fun addMultipleSquaresToList(squares: List<String>, listIsEmpty: Boolean) {
         val squareList = getSquareList
         for (i in squares) {
             squareList.add(SquareValues(i, getColorTheme.cuisineSquares))
         }
-        if (listWasEmpty) {
-            squareList[0].color = getColorTheme.selectedCuisineSquare
-            squareList[0].border = getColorTheme.selectedCuisineBorderStroke
+
+        if (listIsEmpty) {
+            emptyCuisineListIsBeingAddedTo(squareList)
         }
+    }
+
+    private fun emptyCuisineListIsBeingAddedTo(squareList: SnapshotStateList<SquareValues>) {
+        rolledSquareIndex = 0
+        squareList[0].color = getColorTheme.selectedCuisineSquare
+        squareList[0].border = getColorTheme.selectedCuisineBorderStroke
+
         updateSquareList(squareList)
+        updateSelectedCuisineSquare(getSquareList[0])
     }
 
     //With SnapShotStateLists, our contains() conditional is true, but not with regular Lists.

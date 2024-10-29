@@ -41,8 +41,7 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: RolledSquareIndex doesn't update if list goes to zero + adding cuisines.
-//TODO: Crash if "confirm" in add dialog if nothing selected and cuisines are currently empty.
+//TODO: Squarelist border gets another update after our add dialog method, which resets its border color. State flow overflow?
 //TODO: Adding a cuisine from a zero list doesn't update its string for searching.
 //TODO: Need our border of cuisines to update @ 0 index if we're adding after list has been zero'd (function commented out in app bar delete button).
 //TODO: Get App Icon.
