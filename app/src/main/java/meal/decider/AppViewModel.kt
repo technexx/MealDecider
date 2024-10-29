@@ -125,11 +125,6 @@ class AppViewModel : ViewModel() {
     val restaurantListIsEmpty: StateFlow<Boolean> = _restaurantListIsEmpty.asStateFlow()
 
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
-        if (list.isNotEmpty()) {
-            val square = list[0].border
-            showLog("test", "border in update method is $square")
-        }
-
         _boardUiState.update { currentState ->
             currentState.copy(squareList = list)
         }

@@ -574,7 +574,6 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 MaterialIconButton(icon = Icons.Filled.Check, description = "confirm", tint = colorTheme.value.confirmDialogButton, modifier = Modifier.size(64.dp)) {
                                     coroutineScope.launch {
                                         val distance = milesToMeters(distanceSliderPosition.toDouble())
-                                        showLog("test", "distance saved is $distance")
                                         val rating = ratingSliderPosition.toDouble()
                                         val price = priceSliderPosition.toInt()
 

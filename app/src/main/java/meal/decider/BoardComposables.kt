@@ -99,23 +99,22 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 icon = Icons.Filled.Delete,
                                 description = "delete",
                                 tint = colorTheme.value.cuisineIconButtons) {
+                                appViewModel.deleteSelectedCuisines()
+                                appViewModel.updateEditMode(false)
+
+                                if (!appViewModel.getSquareList.isEmpty()) {
+                                    appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
+
+                                    appViewModel.updateSingleCuisineSquareColorAndBorder(
+                                        0,
+                                        appViewModel.getSquareList[appViewModel.rolledSquareIndex].color,
+                                        heavyCuisineSelectionBorderStroke
+                                    )
+                                }
+
                                 coroutineScope.launch {
                                     roomInteractions.deleteMultipleCuisines()
-                                    appViewModel.deleteSelectedCuisines()
                                 }
-                            }
-                        }
-
-                        if (!editMode.value) {
-                            if (!appViewModel.getSquareList.isEmpty()) {
-                                //TODO: This is the recomp culprit.
-                                appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
-
-                                appViewModel.updateSingleCuisineSquareColorAndBorder(
-                                    0,
-                                    appViewModel.getSquareList[appViewModel.rolledSquareIndex].color,
-                                    heavyCuisineSelectionBorderStroke
-                                )
                             }
                         }
                         Box(
@@ -440,7 +439,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
 
         if (boardUiState.value.squareList.isNotEmpty()) {
-            showLog("test", "cuisine recomp")
             CuisineLazyGrid()
         } else {
             EmptyCuisineMessage()

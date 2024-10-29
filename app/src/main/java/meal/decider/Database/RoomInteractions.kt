@@ -13,7 +13,6 @@ import meal.decider.ColorTheme
 import meal.decider.SquareValues
 import meal.decider.Theme
 import meal.decider.milesToMeters
-import meal.decider.showLog
 
 class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel, private val activity: Activity) {
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
@@ -83,9 +82,7 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             for (i in appViewModel.getSquareList) {
                 newList.add(Cuisines(null, i.name, i.color))
             }
-            showLog("test", "from state is ${appViewModel.getSquareList.toList()}")
             cuisineDao.updateCuisineList(newList)
-            showLog("test", "from db is ${cuisineDao.getAllCuisines()}")
 
         }
     }
