@@ -41,9 +41,6 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
-//TODO: Squarelist border gets another update after our add dialog method, which resets its border color. Commenting out everything else in "confirm" doesn't fix it. Recompose issue?
-
-//TODO: Adding a cuisine from a zero list doesn't update its string for searching.
 //TODO: Get App Icon.
 //TODO: Test layout on other sized emulated devices
 //TODO: Optimize Lazy Lists speed (e.g. scrolling, general speed).
@@ -53,6 +50,7 @@ val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 //TODO: Work on NextPage retrieval. We are getting its token at top of json response. Invalid request may be due to needing a delay on the request.
 //TODO: Restaurant list items sometimes reposition during scroll. Not using staggered grid works but looks worse.
 
+//TODO: Border/Square color issues can be the result of our editMode state flow in top app bar.
 //TODO: Need to be careful about live data and only use it when necessary. It can easily cause chaining recompositions.
 
 //Icons: Krampus_Highjack, drogula, LilaMaeMay,

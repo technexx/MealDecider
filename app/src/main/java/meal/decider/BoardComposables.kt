@@ -102,18 +102,21 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 coroutineScope.launch {
                                     roomInteractions.deleteMultipleCuisines()
                                     appViewModel.deleteSelectedCuisines()
-                                    appViewModel.updateEditMode(false)
                                 }
                             }
-                        } else {
+                        }
+
+                        if (!editMode.value) {
                             if (!appViewModel.getSquareList.isEmpty()) {
+                                //TODO: This is the recomp culprit.
                                 appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
+
+                                appViewModel.updateSingleCuisineSquareColorAndBorder(
+                                    0,
+                                    appViewModel.getSquareList[appViewModel.rolledSquareIndex].color,
+                                    heavyCuisineSelectionBorderStroke
+                                )
                             }
-                            //                            appViewModel.updateSingleCuisineSquareColorAndBorder(
-//                                0,
-//                                appViewModel.getSquareList[appViewModel.rolledSquareIndex].color,
-//                                heavyCuisineSelectionBorderStroke
-//                            )
                         }
                         Box(
                             modifier = Modifier
