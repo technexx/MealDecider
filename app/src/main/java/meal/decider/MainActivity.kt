@@ -42,7 +42,9 @@ val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
 //TODO: RolledSquareIndex doesn't update if list goes to zero + adding cuisines.
+//TODO: Crash if "confirm" in add dialog if nothing selected and cuisines are currently empty.
 //TODO: Adding a cuisine from a zero list doesn't update its string for searching.
+//TODO: Need our border of cuisines to update @ 0 index if we're adding after list has been zero'd (function commented out in app bar delete button).
 //TODO: Get App Icon.
 //TODO: Test layout on other sized emulated devices
 //TODO: Optimize Lazy Lists speed (e.g. scrolling, general speed).

@@ -125,6 +125,9 @@ class AppViewModel : ViewModel() {
     val restaurantListIsEmpty: StateFlow<Boolean> = _restaurantListIsEmpty.asStateFlow()
 
     fun updateSquareList(list: SnapshotStateList<SquareValues>) {
+        for (i in list) {
+//            showLog("test", "colors are ${i.color}")
+        }
         _boardUiState.update { currentState ->
             currentState.copy(squareList = list)
         }
@@ -323,6 +326,15 @@ class AppViewModel : ViewModel() {
         return listToReturn
     }
 
+
+    fun getListOfSquaresToEditNames(): List<String> {
+        val listToReturn = mutableListOf<String>()
+        for (i in getListOfCuisineSquaresToEdit) {
+            listToReturn.add(i.name)
+        }
+        return listToReturn
+    }
+
     fun toggleAddCuisineSelections(cuisine: String) {
         val listToAdd = getListOfCuisinesToAdd.toMutableList()
 
@@ -337,19 +349,20 @@ class AppViewModel : ViewModel() {
     fun toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(index: Int) {
         val tempSquareList = getSquareList
 
-        colorTheme.value.cuisineEditModeBorderStroke
-
-        if (tempSquareList[index].color == getColorTheme.selectedCuisineSquare || tempSquareList[index].color == getColorTheme.cuisineSquares) {
+        if (!getListOfSquaresToEditNames().contains(getListOfSquareNames()[index])) {
             tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.selectedEditSquareColor, getColorTheme.cuisineEditModeBorderStroke)
+
             addSquareToListOfCuisineSquaresToEdit(index)
         } else {
-            if (tempSquareList[index].name == selectedCuisineSquare.value.name) {
+            if (tempSquareList[index].name == getSelectedCuisineSquare.name) {
                 tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.selectedCuisineSquare, getColorTheme.cuisineEditModeBorderStroke)
             } else {
                 tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.cuisineSquares, getColorTheme.cuisineEditModeBorderStroke)
             }
             removeSquareFromListOfSquareIndicesToUpdate()
+
         }
+
         updateSquareList(tempSquareList)
     }
 
@@ -385,6 +398,8 @@ class AppViewModel : ViewModel() {
     }
 
     private fun removeSquareFromListOfSquareIndicesToUpdate() {
+        showLog("test", "list when removing is $getListOfCuisineSquaresToEdit")
+
         val tempList = getListOfCuisineSquaresToEdit.toMutableList()
         tempList.removeLast()
         updateListOfCuisineSquaresToEdit(tempList)
@@ -481,7 +496,6 @@ class AppViewModel : ViewModel() {
         minRestaurantRating = rating
         maxRestaurantPrice = price
         isOpen = openNow
-        showLog("test", "isOpen is $isOpen")
     }
 
     fun hasRestaurantListChanged(currentList: List<RestaurantValues>, newList: List<RestaurantValues>): Boolean {
@@ -513,18 +527,6 @@ class AppViewModel : ViewModel() {
         updatedList.addAll(list)
 
         updateRestrictionsList(updatedList)
-    }
-
-    fun selectedItemsInRestrictionList() : List<RestrictionsValues> {
-        val list = getRestrictionsList
-        val selectedList = mutableStateListOf<RestrictionsValues>()
-//        showLog("test", "list is ${getRestrictionsList.toList()}")
-        for (i in list) {
-            if (i.selected) {
-                selectedList.add(i)
-            }
-        }
-        return selectedList
     }
 
     private fun colorSettingsList(index: Int): SnapshotStateList<SettingsToggle> {
@@ -561,5 +563,5 @@ class AppViewModel : ViewModel() {
 
     val getShowDialog get() = showDialog.value
 
-    val getSettingsDialogVisibility get() = settingsDialogVisibility.value
+    val getDisplayedCuisineList get() = displayedCuisineList.value
 }

@@ -51,13 +51,15 @@ class Buttons (private val appViewModel: AppViewModel, private val mapInteractio
             fontSize = 20,
             color = color,
             onClick =  {
-                if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
-                    if (appViewModel.getRestaurantQueryFinished) {
-                        appViewModel.updateMapQueryInProgress(true)
+                if (!appViewModel.getSquareList.isEmpty()) {
+                    if (!appViewModel.getRollEngaged && !appViewModel.getEditMode) {
+                        if (appViewModel.getRestaurantQueryFinished) {
+                            appViewModel.updateMapQueryInProgress(true)
 
-                        coroutineScope.launch {
-                            mapInteractions.mapsApiCall()
-                            appViewModel.updateRestaurantVisibility(1)
+                            coroutineScope.launch {
+                                mapInteractions.mapsApiCall()
+                                appViewModel.updateRestaurantVisibility(1)
+                            }
                         }
                     }
                 }

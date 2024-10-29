@@ -508,9 +508,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 selected = true,
                                 onClick = {
                                     if (appViewModel.getEditMode) {
-                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(
-                                            index
-                                        )
+                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(index)
                                     }
                                 }
                             ),
