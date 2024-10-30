@@ -104,12 +104,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
 
                                 if (!appViewModel.getSquareList.isEmpty()) {
                                     appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
-
                                     appViewModel.updateSingleCuisineSquareColorAndBorder(
                                         0,
-                                        appViewModel.getSquareList[appViewModel.rolledSquareIndex].color,
-                                        heavyCuisineSelectionBorderStroke
-                                    )
+                                        appViewModel.getSquareList[appViewModel.rolledSquareIndex].color, heavyCuisineSelectionBorderStroke)
                                 }
 
                                 coroutineScope.launch {
@@ -505,7 +502,9 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 selected = true,
                                 onClick = {
                                     if (appViewModel.getEditMode) {
-                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(index)
+                                        appViewModel.toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(
+                                            index
+                                        )
                                     }
                                 }
                             ),
@@ -563,7 +562,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val restaurantList = appViewModel.restaurantList.collectAsStateWithLifecycle()
         var expanded by remember { mutableStateOf(false) }
         if (rollEngaged.value) expanded = false
-        val restaurantListIsEmpty = appViewModel.restaurantListIsEmpty.collectAsStateWithLifecycle()
 
         Surface() {
             Column(modifier = Modifier

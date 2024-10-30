@@ -72,7 +72,7 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         var txtField by remember { mutableStateOf("") }
         val displayedList = appViewModel.displayedCuisineList.collectAsStateWithLifecycle()
         val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
-        var modifiedList = appViewModel.modifiedAddCuisineList(boardUiState.value.squareList)
+        var modifiedList = appViewModel.modifiedAddCuisineList(appViewModel.getSquareList)
 
         appViewModel.updateDisplayedCuisineList(fullCuisineList)
 
@@ -102,7 +102,10 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                             value = txtField,
                             placeholder = {Text( "e.g. Filipino") },
                             onValueChange = {
+                                //Default to modified list (full list minus cuisines on board).
+                                modifiedList = appViewModel.modifiedAddCuisineList(appViewModel.getSquareList)
                                 txtField = it
+                                //Modified list is filtered from text entered.
                                 modifiedList = filterSearchString(modifiedList, txtField)
                                 appViewModel.updateDisplayedCuisineList(modifiedList)},
                             singleLine = true,
