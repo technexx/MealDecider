@@ -49,10 +49,11 @@ class Runnables (private val appViewModel: AppViewModel) {
 
             delay = modifierDelay(duration, speedSetting)
             duration -= delay
+            showLog("test", "duration is $duration")
 
             handler.postDelayed(cuisineRollRunnable, delay)
 
-            if (duration < 50 || delay < 50) {
+            if (duration < 50 || delay < 35) {
                 val index = appViewModel.rolledSquareIndex
 
                 appViewModel.updateSingleCuisineSquareColorAndBorder(index, appViewModel.getSquareList[index].color, heavyCuisineSelectionBorderStroke)
