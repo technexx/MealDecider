@@ -30,14 +30,6 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         }
     }
 
-    suspend fun getCuisineListFromDatabase(): List<Cuisines> {
-        var list: List<Cuisines>
-        withContext(Dispatchers.IO) {
-            list = cuisineDao.getAllCuisines()
-        }
-        return list
-    }
-
     private suspend fun populateDatabaseWithInitialCuisines() {
         for (i in appViewModel.starterSquareList().indices) {
             if (i==0) insertCuisine(appViewModel.starterSquareList()[i].name, Theme.themeColorsList[0].selectedCuisineSquare) else
@@ -52,7 +44,6 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
             for (i in listOfDatabaseCuisines) {
                 squareList.add(SquareValues(i.name!!, i.color!!))
             }
-
             appViewModel.updateSquareList(squareList)
         }
     }
@@ -63,8 +54,6 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
         }
 
     suspend fun insertMultipleCuisines(list: List<String>) {
-//        showLog("test", "being added is $list")
-
         withContext(Dispatchers.IO) {
             for (i in list) {
                 cuisineDao.insertCuisine(Cuisines(null, i, appViewModel.getColorTheme.cuisineSquares))

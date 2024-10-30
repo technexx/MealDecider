@@ -80,6 +80,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
         val buttonsEnabled = !appViewModel.getRollEngaged
+        val cuisinesToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
 
         Scaffold(
             modifier = Modifier
@@ -94,7 +95,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         Text("Meal Decider")
                     },
                     actions = {
-                        if (editMode.value) {
+                        if (editMode.value && cuisinesToEdit.value.isNotEmpty()) {
                             MaterialIconButton(
                                 icon = Icons.Filled.Delete,
                                 description = "delete",
@@ -163,6 +164,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             }
         }
 
+        //For our drop down menus. Currently not working with them.
         AnimatedVisibility(
             enter = fadeIn(animationSpec = tween(500)) + slideInHorizontally (
                 animationSpec = tween(500)
