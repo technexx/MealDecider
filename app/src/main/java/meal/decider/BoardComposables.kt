@@ -203,6 +203,10 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         appViewModel.updateAllCuisineBorders(colorTheme.value.cuisineEditModeBorderStroke)
                     } else {
                         appViewModel.updateEditMode(false)
+                        appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
+                        appViewModel.updateSingleCuisineSquareColorAndBorder(
+                            0,
+                            appViewModel.getSquareList[appViewModel.rolledSquareIndex].color, heavyCuisineSelectionBorderStroke)
                     }
                     expanded = false
                 }
