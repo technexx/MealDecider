@@ -41,6 +41,7 @@ private lateinit var settings: Settings
 val ioScope = CoroutineScope(Job() + Dispatchers.IO)
 val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
+//TODO: Toggling off edit mode doesn't reset borders.
 //TODO: Test layout on other sized emulated devices
 //TODO: Optimize Lazy Lists speed (e.g. scrolling, general speed).
 //TODO: Drop down menus should be animated.
@@ -51,8 +52,6 @@ val mainScope = CoroutineScope(Job() + Dispatchers.Main)
 
 //TODO: Border/Square color issues can be the result of our editMode state flow in top app bar.
 //TODO: Need to be careful about live data and only use it when necessary. It can easily cause chaining recompositions.
-
-//Icons: Krampus_Highjack, drogula, LilaMaeMay,
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

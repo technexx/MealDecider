@@ -71,10 +71,9 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
         val coroutineScope = rememberCoroutineScope()
         var txtField by remember { mutableStateOf("") }
         val displayedList = appViewModel.displayedCuisineList.collectAsStateWithLifecycle()
-        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
-        var modifiedList = appViewModel.modifiedAddCuisineList(appViewModel.getSquareList)
 
-        appViewModel.updateDisplayedCuisineList(fullCuisineList)
+        var modifiedList = appViewModel.modifiedAddCuisineList(appViewModel.getSquareList)
+        appViewModel.updateDisplayedCuisineList(modifiedList)
 
         AnimatedTransitionDialog(
             modifier = Modifier
@@ -107,7 +106,8 @@ class DialogComposables(private val appViewModel: AppViewModel, appDatabase: Cui
                                 txtField = it
                                 //Modified list is filtered from text entered.
                                 modifiedList = filterSearchString(modifiedList, txtField)
-                                appViewModel.updateDisplayedCuisineList(modifiedList)},
+                                showLog("test", "update list in onValueChanged is $modifiedList")
+                                appViewModel.updateDisplayedCuisineList(modifiedList) },
                             singleLine = true,
                             textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold),
                             colors = TextFieldDefaults.outlinedTextFieldColors(

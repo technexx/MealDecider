@@ -220,14 +220,6 @@ class AppViewModel : ViewModel() {
         _mapQueryInProgress.value = inProgress
     }
 
-    fun updateCuisineListIsEmpty(isEmpty: Boolean) {
-        _cuisineListIsEmpty.value = isEmpty
-    }
-
-    fun updateRestaurantListIsEmpty(isEmpty: Boolean) {
-        _restaurantListIsEmpty.value = isEmpty
-    }
-
     fun updateSquareName(index: Int, name: String) {
         val list = getSquareList
         list[index].name = name
@@ -476,12 +468,15 @@ class AppViewModel : ViewModel() {
         return false
     }
 
-    fun modifiedAddCuisineList(squareList: List<SquareValues>): List<String> {
-        val fullList = fullCuisineList
-        for (i in squareList.indices) {
-            fullList.remove(squareList[i].name)
+    fun modifiedAddCuisineList(currentCuisineList: List<SquareValues>): List<String> {
+        val modifiedList = mutableListOf<String>()
+        modifiedList.addAll(fullCuisineList)
+
+        for (i in currentCuisineList.indices) {
+            modifiedList.remove(currentCuisineList[i].name)
         }
-        return fullList
+
+        return modifiedList
     }
 
     fun updateSingleRestaurantColorAndBorder(list: SnapshotStateList<RestaurantValues>, index: Int, color: Int, border: BorderStroke) {

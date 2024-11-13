@@ -82,13 +82,8 @@ class MapInteractions(private val activity: Activity, private val activityContex
                     appViewModel.updateSingleRestaurantColorAndBorder(restaurantList, 0, appViewModel.getColorTheme.selectedRestaurantSquare, heavyCuisineSelectionBorderStroke)
                     appViewModel.restaurantStringUri = restaurantList[0].name.toString() + " " + restaurantList[0].address
                 }
-
-//                for (i in restaurantList) {
-//                    showLog("test", "restaurants are ${i.name}")
-//                }
                 appViewModel.updateRestaurantsList(restaurantList)
             }
-
             appViewModel.updateRestaurantQueryFinished(true)
         }
     }
@@ -106,7 +101,6 @@ class MapInteractions(private val activity: Activity, private val activityContex
                 }
             }
         }
-
         return newList
     }
 
