@@ -13,4 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
-Keys.kt
+/app/src/main/java/meal/decider/Keys.kt
