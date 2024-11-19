@@ -26,6 +26,7 @@ private var currentLocation: Location = Location("")
 class MapInteractions(private val activity: Activity, private val activityContext: Context, private val appViewModel: AppViewModel) {
 
     val mainScope = CoroutineScope(Dispatchers.Main)
+    val apiKey = googleMapsApiKey
 
     data class PlacesResponse(
         val results: MutableList<Place>,
@@ -40,9 +41,6 @@ class MapInteractions(private val activity: Activity, private val activityContex
         // ... other fields
     )
 
-    fun getJsonFromMapQuery(usingNextPageToken: Boolean) {
-    }
-
     //While this works, we are using the web service method. We may want to switch over to Places object.
     suspend fun mapsApiCall() {
         withContext(Dispatchers.IO) {
@@ -54,10 +52,7 @@ class MapInteractions(private val activity: Activity, private val activityContex
             val rating = appViewModel.minRestaurantRating
             val isOpen = appViewModel.isOpen
 
-            //Without type=restaurant
-//            var uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, opennow, rating&name=$cuisineString&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
-
-            var uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, opennow, rating&type=restaurant&name=$cuisineString&maxprice=$price&rankby=distance&key=AIzaSyBi5VSm6f2mKgNgxaPLfUwV92uPtkYdvVI"
+            var uri = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude},${currentLocation.longitude}&fields=geometry, name, vicinity, price_level, opennow, rating&type=restaurant&name=$cuisineString&maxprice=$price&rankby=distance&key=$apiKey"
 
             val request = Request.Builder()
                 .url(uri)
