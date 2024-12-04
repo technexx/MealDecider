@@ -478,7 +478,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         }
 
         LazyVerticalGrid(state = sectionGridState,
-            columns = GridCells.Adaptive(minSize = 128.dp),
+            columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(
                 start = 12.dp,
                 top = 16.dp,
