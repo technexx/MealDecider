@@ -137,8 +137,10 @@ class MapInteractions(private val activity: Activity, private val activityContex
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location : Location? ->
-                currentLocation = location!!
-                println("location is $location")
+                if (location != null) {
+                    currentLocation = location
+                    println("location is $location")
+                }
             }
             .addOnFailureListener {
                 println("location listener failed!")
