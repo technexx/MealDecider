@@ -288,7 +288,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     Column(modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight()
-//                        .height(screenHeightPct(0.2).dp)
+//                        .height(screenHebightPct(0.2).dp)
                         .background(colorResource(id = colorTheme.value.cuisineInteractionButtonsRow))
                     ) {
                         buttons.InteractionButtons(0)
@@ -349,7 +349,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val selectedCuisineSquare = appViewModel.selectedCuisineSquare.collectAsStateWithLifecycle()
         val restrictionsUi = appViewModel.restrictionsList.collectAsStateWithLifecycle()
-        val coroutineScope = rememberCoroutineScope()
 
         val restrictionsString = foodRestrictionsString(restrictionsUi.value)
         appViewModel.cuisineStringUri = selectedCuisineSquare.value.name + " Food " + restrictionsString
@@ -363,7 +362,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     start = 12.dp,
                     top = 16.dp,
                     end = 12.dp,
-                    bottom = 16.dp,),
+                    bottom = 24.dp,),
                 content = {
                     items(restrictionsUi.value.size) { index ->
                         RestrictionsCards(index) {
