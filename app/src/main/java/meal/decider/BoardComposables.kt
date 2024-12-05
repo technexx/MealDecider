@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -286,6 +287,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     }
                     Column(modifier = Modifier
                         .fillMaxWidth()
+                        .fillMaxHeight()
 //                        .height(screenHeightPct(0.2).dp)
                         .background(colorResource(id = colorTheme.value.cuisineInteractionButtonsRow))
                     ) {
@@ -361,49 +363,15 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     start = 12.dp,
                     top = 16.dp,
                     end = 12.dp,
-                    bottom = 16.dp),
+                    bottom = 16.dp,),
                 content = {
                     items(restrictionsUi.value.size) { index ->
                         RestrictionsCards(index) {
                             appViewModel.toggleRestrictionListItems(index)
-                            //This is to refresh restaurants if we decide to allow restriction toggles while restaurant list is shown.
-//                            if (appViewModel.getRestaurantVisibility == 1) {
-//                                coroutineScope.launch {
-//                                    mapInteractions.mapsApiCall()
-//                                }
-//                            }
                         }
                     }
                 }
             )
-        }
-    }
-
-    @Composable
-    fun DialogCompositions() {
-        val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
-        val restoreDefaults = appViewModel.restoreDefaults.collectAsStateWithLifecycle()
-        val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
-        val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
-
-        if (addMode.value) {
-            dialogComposables.AddDialogBox()
-        }
-
-        if (restoreDefaults.value) {
-            dialogComposables.ConfirmRestoreDefaultsDialog()
-        }
-
-        if (optionsMode.value) {
-            settings.OptionsDialogUi()
-        }
-
-        if (settingsDialogVisibility.value.speeds) {
-            settings.SpeedSettingsDialog()
-        }
-
-        if (settingsDialogVisibility.value.colors) {
-            settings.ColorsSettingDialog()
         }
     }
 
@@ -432,9 +400,36 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                 fontSize = 14,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(6.dp))
+                modifier = Modifier.padding(6.dp))}
+
+    }
+
+    @Composable
+    fun DialogCompositions() {
+        val addMode = appViewModel.addMode.collectAsStateWithLifecycle()
+        val restoreDefaults = appViewModel.restoreDefaults.collectAsStateWithLifecycle()
+        val optionsMode = appViewModel.optionsMode.collectAsStateWithLifecycle()
+        val settingsDialogVisibility = appViewModel.settingsDialogVisibility.collectAsStateWithLifecycle()
+
+        if (addMode.value) {
+            dialogComposables.AddDialogBox()
         }
 
+        if (restoreDefaults.value) {
+            dialogComposables.ConfirmRestoreDefaultsDialog()
+        }
+
+        if (optionsMode.value) {
+            settings.OptionsDialogUi()
+        }
+
+        if (settingsDialogVisibility.value.speeds) {
+            settings.SpeedSettingsDialog()
+        }
+
+        if (settingsDialogVisibility.value.colors) {
+            settings.ColorsSettingDialog()
+        }
     }
 
     @Composable
