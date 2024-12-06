@@ -15,9 +15,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/dice_icon"
+        android:icon="@mipmap/meal_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/dice_icon"
+        android:roundIcon="@mipmap/meal_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.MealDecider"
         tools:targetApi="31">
