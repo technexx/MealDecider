@@ -365,7 +365,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     start = 12.dp,
                     top = 16.dp,
                     end = 12.dp,
-                    bottom = 24.dp,),
+                    bottom = 20.dp,),
                 content = {
                     items(restrictionsUi.value.size) { index ->
                         RestrictionsCards(index) {
@@ -398,11 +398,15 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     }
                 ),
         ) {
-            RegText(text = restrictionsList[index].name,
-                fontSize = 14,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(6.dp))}
+            Column(modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center) {
+                RegText(text = restrictionsList[index].name,
+                    fontSize = 14,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(6.dp))}
+            }
+
 
     }
 
