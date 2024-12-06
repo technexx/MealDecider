@@ -110,6 +110,8 @@ class MainActivity : ComponentActivity() {
 
             appViewModel.updateColorTheme(roomInteractions.retrieveColorThemeFromSharedPref())
 //            appViewModel.updateColorSettingsSelectionList()
+//            appViewModel.updateRestaurantsList(mapInteractions.dummyRestaurantList())
+
         }
 
         val boardComposables = BoardComposables(

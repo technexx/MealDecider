@@ -280,32 +280,30 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                     }
                     Column(modifier = Modifier
                         .height(screenHeightPct(0.7).dp)) {
-                        Box(contentAlignment = Alignment.Center) {
+                        Box() {
                             CuisineLayout()
                             IndeterminateCircularIndicator()
+                            if (restaurantVisibility.value == 1) {
+                                val rollEngaged = appViewModel.getRollEngaged
+                                AnimatedComposable(rollEngaged, false,
+                                    modifier = Modifier.fillMaxSize(),
+                                    backHandler = {
+                                        appViewModel.updateRestaurantVisibility(0)
+                                    }) {
+                                    RestaurantListContent()
+                                    appViewModel.updateMapQueryInProgress(false)
+                                }
+                            }
                         }
                     }
                     Column(modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight()
-//                        .height(screenHebightPct(0.2).dp)
                         .background(colorResource(id = colorTheme.value.cuisineInteractionButtonsRow))
                     ) {
                         buttons.InteractionButtons(0)
                     }
 
-                }
-            }
-
-            if (restaurantVisibility.value == 1) {
-                val rollEngaged = appViewModel.getRollEngaged
-                AnimatedComposable(rollEngaged, false,
-                    modifier = Modifier.fillMaxSize(),
-                    backHandler = {
-                        appViewModel.updateRestaurantVisibility(0)
-                    }) {
-                    RestaurantListContent()
-                    appViewModel.updateMapQueryInProgress(false)
                 }
             }
 
@@ -569,7 +567,6 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
             ) {
                 Column(modifier = Modifier
                     .fillMaxWidth()
-                    .height(screenHeightPct(0.8).dp)
                     .background(colorResource(id = colorTheme.value.restaurantBoard))
                 ) {
                     RestaurantFilterBar()
