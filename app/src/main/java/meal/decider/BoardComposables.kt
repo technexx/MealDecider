@@ -282,7 +282,12 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         .height(screenHeightPct(0.7).dp)) {
                         Box() {
                             CuisineLayout()
-                            IndeterminateCircularIndicator()
+                            Column(modifier = Modifier
+                                .fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center) {
+                                IndeterminateCircularIndicator()
+                            }
                             if (restaurantVisibility.value == 1) {
                                 val rollEngaged = appViewModel.getRollEngaged
                                 AnimatedComposable(rollEngaged, false,
