@@ -76,12 +76,12 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun GlobalUi() {
+        val boardUiState = appViewModel.boardUiState.collectAsStateWithLifecycle()
         val colorTheme = appViewModel.colorTheme.collectAsStateWithLifecycle()
         val coroutineScope = rememberCoroutineScope()
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         val editMode = appViewModel.editMode.collectAsStateWithLifecycle()
         val buttonsEnabled = !appViewModel.getRollEngaged
-        val cuisinesToEdit = appViewModel.listOfCuisineSquaresToEdit.collectAsStateWithLifecycle()
 
         Scaffold(
             modifier = Modifier
@@ -96,7 +96,7 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                         Text("Meal Decider")
                     },
                     actions = {
-                        if (editMode.value && cuisinesToEdit.value.isNotEmpty()) {
+                        if (editMode.value && appViewModel.areAnyCuisinesHighlighted()) {
                             MaterialIconButton(
                                 icon = Icons.Filled.Delete,
                                 description = "delete",

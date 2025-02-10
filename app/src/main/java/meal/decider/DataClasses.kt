@@ -31,7 +31,8 @@ data class BoardValues(
 data class SquareValues(
     var name: String = "",
     var color: Int = 0,
-    var border: BorderStroke = defaultCuisineBorderStroke
+    var border: BorderStroke = defaultCuisineBorderStroke,
+    var isHighlighted: Boolean = false
 )
 
 data class RestrictionsValues(

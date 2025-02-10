@@ -315,15 +315,6 @@ class AppViewModel : ViewModel() {
         return listToReturn
     }
 
-
-    fun getListOfSquaresToEditNames(): List<String> {
-        val listToReturn = mutableListOf<String>()
-        for (i in getListOfCuisineSquaresToEdit) {
-            listToReturn.add(i.name)
-        }
-        return listToReturn
-    }
-
     fun toggleAddCuisineSelections(cuisine: String) {
         val listToAdd = getListOfCuisinesToAdd.toMutableList()
 
@@ -338,21 +329,26 @@ class AppViewModel : ViewModel() {
     fun toggleEditCuisineHighlightAndAddHighlightedCuisinesToEditList(index: Int) {
         val tempSquareList = getSquareList
 
-        if (!getListOfSquaresToEditNames().contains(getListOfSquareNames()[index])) {
-            tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.selectedEditSquareColor, getColorTheme.cuisineEditModeBorderStroke)
-
-            addSquareToListOfCuisineSquaresToEdit(index)
+        if (!tempSquareList[index].isHighlighted) {
+            tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.selectedEditSquareColor, getColorTheme.cuisineEditModeBorderStroke, true)
+            showLog("test", "adding")
         } else {
+            //If selected square name matches square selected, apply a border stroke. Otherwise do not.
             if (tempSquareList[index].name == getSelectedCuisineSquare.name) {
-                tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.selectedCuisineSquare, getColorTheme.cuisineEditModeBorderStroke)
+                tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.selectedCuisineSquare, getColorTheme.cuisineEditModeBorderStroke, false)
             } else {
-                tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.cuisineSquares, getColorTheme.cuisineEditModeBorderStroke)
+                tempSquareList[index] = SquareValues(tempSquareList[index].name, getColorTheme.cuisineSquares, getColorTheme.cuisineEditModeBorderStroke, false)
             }
-            removeSquareFromListOfSquareIndicesToUpdate()
-
+            showLog("test", "removing")
         }
-
         updateSquareList(tempSquareList)
+    }
+
+    fun areAnyCuisinesHighlighted(): Boolean {
+        for (i in getSquareList) {
+            if (i.isHighlighted) return true
+        }
+        return false
     }
 
     fun updateSingleCuisineSquareColorAndBorder(index: Int, color: Int, border: BorderStroke) {
@@ -379,19 +375,6 @@ class AppViewModel : ViewModel() {
         updateSquareList(newList)
     }
 
-    private fun addSquareToListOfCuisineSquaresToEdit(index: Int) {
-        val tempList = getListOfCuisineSquaresToEdit.toMutableList()
-        val currentList = getSquareList
-        tempList.add(currentList[index])
-        updateListOfCuisineSquaresToEdit(tempList)
-    }
-
-    private fun removeSquareFromListOfSquareIndicesToUpdate() {
-        val tempList = getListOfCuisineSquaresToEdit.toMutableList()
-        tempList.removeLast()
-        updateListOfCuisineSquaresToEdit(tempList)
-    }
-
     fun addMultipleSquaresToList(squares: List<String>, listIsEmpty: Boolean) {
         val squareList = getSquareList
         for (i in squares) {
@@ -415,16 +398,17 @@ class AppViewModel : ViewModel() {
 
     //With SnapShotStateLists, our contains() conditional is true, but not with regular Lists.
     fun deleteSelectedCuisines() {
-        val listOfCuisineSquaresToEdit = getListOfCuisineSquaresToEdit
         val currentSquaresList = getSquareList
+        val newList: SnapshotStateList<SquareValues> = mutableStateListOf()
 
-        for (i in listOfCuisineSquaresToEdit) {
-            if (currentSquaresList.contains(i)) {
-                currentSquaresList.remove(i)
+        for (i in currentSquaresList) {
+            newList.add(i)
+            if (i.isHighlighted) {
+                newList.remove(i)
             }
         }
 
-        updateSquareList(currentSquaresList)
+        updateSquareList(newList)
 
         if (!getSquareList.isEmpty()) {
             resetSquareColors()
