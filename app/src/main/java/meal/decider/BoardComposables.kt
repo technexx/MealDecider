@@ -101,18 +101,22 @@ class BoardComposables (private val appViewModel: AppViewModel, private val appD
                                 icon = Icons.Filled.Delete,
                                 description = "delete",
                                 tint = colorTheme.value.cuisineIconButtons) {
-                                appViewModel.deleteSelectedCuisines()
-                                appViewModel.updateEditMode(false)
-
-                                if (!appViewModel.getSquareList.isEmpty()) {
-                                    appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
-                                    appViewModel.updateSingleCuisineSquareColorAndBorder(
-                                        0,
-                                        appViewModel.getSquareList[appViewModel.rolledSquareIndex].color, heavyCuisineSelectionBorderStroke)
-                                }
 
                                 coroutineScope.launch {
+                                    //Deletes highlighted items from our SquareList from database.
                                     roomInteractions.deleteMultipleCuisines()
+
+                                    //Deletes items from our SquareList. This must occur after the database deletion, since that uses SquareList.
+                                    appViewModel.deleteSelectedCuisinesFromLocalList()
+
+                                    appViewModel.updateEditMode(false)
+
+                                    if (!appViewModel.getSquareList.isEmpty()) {
+                                        appViewModel.updateAllCuisineBorders(colorTheme.value.defaultCuisineBorderStroke)
+                                        appViewModel.updateSingleCuisineSquareColorAndBorder(
+                                            0,
+                                            appViewModel.getSquareList[appViewModel.rolledSquareIndex].color, heavyCuisineSelectionBorderStroke)
+                                    }
                                 }
                             }
                         }

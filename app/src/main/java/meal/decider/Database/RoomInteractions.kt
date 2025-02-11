@@ -13,6 +13,7 @@ import meal.decider.ColorTheme
 import meal.decider.SquareValues
 import meal.decider.Theme
 import meal.decider.milesToMeters
+import meal.decider.showLog
 
 class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private val appViewModel: AppViewModel, private val activity: Activity) {
     private val ioScope = CoroutineScope(Job() + Dispatchers.IO)
@@ -78,9 +79,19 @@ class RoomInteractions (cuisineDatabase: CuisineDatabase.AppDatabase, private va
 
     suspend fun deleteMultipleCuisines() {
         withContext(Dispatchers.IO) {
-            val listOfNames = appViewModel.getListOfCuisineSquaresToEdit
-            for (i in listOfNames) {
-                cuisineDao.deleteCuisineFromName(i.name)
+            val squareList = appViewModel.getSquareList
+
+            showLog("test", "list size in db function is ${appViewModel.getSquareList.size}")
+
+            for (i in appViewModel.getSquareList) {
+                showLog("test", "db function is ${i.name + " ${i.isHighlighted}"}")
+            }
+
+            //TODO: Item already deleted from squareList when this executes.
+            for (i in squareList) {
+                if (i.isHighlighted) {
+                    cuisineDao.deleteCuisineFromName(i.name)
+                }
             }
         }
     }
