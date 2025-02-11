@@ -342,9 +342,6 @@ class AppViewModel : ViewModel() {
             showLog("test", "removing")
         }
         updateSquareList(tempSquareList)
-
-        showLog("test", "square list in highlight is ${getSquareList.toList()}")
-        showLog("test"," list size in highlight is ${getSquareList.size}")
     }
 
     fun areAnyCuisinesHighlighted(): Boolean {
